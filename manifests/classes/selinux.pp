@@ -44,10 +44,23 @@ class selinux::base {
       require => File["/var/puppet/lib/puppet/facter/issue1963fixed.rb"],
     }
 
+    file { "/tmp/issue1963.patch": ensure => absent }
+
   }
   else {
     package {["libselinux-ruby-puppet", "libselinux-ruby", "libselinux-ruby1.8", "libselinux-puppet-ruby1.8"]:
       ensure => absent
+    }
+
+    file { "/tmp/issue1963.patch":
+      source => "puppet:///selinux/changeset_r0e467869f4d427a8c42e1c2ff6a0bb215f288b09.diff",
+      ensure => present,
+    }
+
+    exec { "patch selinux.rb with issue1963.patch":
+      command => "cat /tmp/issue1963.patch | patch -p0 ${rubysitedir}/puppet/util/selinux.rb",
+      unless => "grep -q 'File.open(\"/proc/mounts\", NONBLOCK)' ${rubysitedir}/puppet/util/selinux.rb",
+      require => File["/tmp/issue1963.patch"],
     }
   }
 }

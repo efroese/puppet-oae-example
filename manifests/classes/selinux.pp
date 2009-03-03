@@ -9,58 +9,68 @@
 
 class selinux::base {
 
-  # should be pushed with "factsync = true"
-  file { "/var/puppet/lib/puppet/facter/issue1963fixed.rb": }
-
-  if $issue1963fixed {
-
-    case $operatingsystem {
-      RedHat: {
-        case $lsbdistcodename {
-          Tikanga: { $rubypkg_alias = "libselinux-ruby-puppet" }
-          default: { $rubypkg_alias = "libselinux-ruby-puppet" }
-        }
+  case $operatingsystem {
+    RedHat: {
+      case $lsbdistcodename {
+        Tikanga: { $rubypkg_alias = "libselinux-ruby-puppet" }
+        default: { $rubypkg_alias = "libselinux-ruby-puppet" }
       }
-
-      Fedora: {
-        case $lsbdistcodename {
-          Cambridge: { $rubypkg_alias = "libselinux-ruby" }
-          default: { $rubypkg_alias = "libselinux-ruby-puppet" }
-        }
-      }
-
-      Debian: {
-        case $lsbdistcodename {
-          sid: { $rubypkg_alias = "libselinux-ruby1.8" }
-          default: { $rubypkg_alias = "libselinux-puppet-ruby1.8" }
-        }
-      }
-
     }
 
-    package { "$rubypkg_alias":
-      ensure => present,
-      alias => "selinux-ruby-bindings",
-      require => File["/var/puppet/lib/puppet/facter/issue1963fixed.rb"],
+    Fedora: {
+      case $lsbdistcodename {
+        Cambridge: { $rubypkg_alias = "libselinux-ruby" }
+        default: { $rubypkg_alias = "libselinux-ruby-puppet" }
+      }
     }
 
-    file { "/tmp/issue1963.patch": ensure => absent }
+    Debian: {
+      case $lsbdistcodename {
+        sid: { $rubypkg_alias = "libselinux-ruby1.8" }
+        default: { $rubypkg_alias = "libselinux-puppet-ruby1.8" }
+      }
+    }
 
   }
-  else {
-    package {["libselinux-ruby-puppet", "libselinux-ruby", "libselinux-ruby1.8", "libselinux-puppet-ruby1.8"]:
-      ensure => absent
+
+  @package { "$rubypkg_alias":
+    ensure => present,
+    alias => "selinux-ruby-bindings",
+  }
+
+  case $puppetversion {
+
+    "0.24.7": {
+
+      if $issue1963fixed {
+
+        realize(Package[$rubypkg_alias])
+
+        file { "/tmp/issue1963.patch": ensure => absent }
+
+      }
+      else {
+
+        file { "/tmp/issue1963.patch":
+          source => "puppet:///selinux/changeset_r0e467869f4d427a8c42e1c2ff6a0bb215f288b09.diff",
+          ensure => present,
+        }
+
+        exec { "patch selinux.rb with issue1963.patch":
+          command => "cat /tmp/issue1963.patch | patch -p0 ${rubysitedir}/puppet/util/selinux.rb",
+          unless => "grep -q 'File.open(\"/proc/mounts\", NONBLOCK)' ${rubysitedir}/puppet/util/selinux.rb",
+          require => File["/tmp/issue1963.patch"],
+        }
+      }
     }
 
-    file { "/tmp/issue1963.patch":
-      source => "puppet:///selinux/changeset_r0e467869f4d427a8c42e1c2ff6a0bb215f288b09.diff",
-      ensure => present,
+    "0.24.6","0.24.5","0.24.4": {
+      # no ruby-selinux implementation in older versions
     }
 
-    exec { "patch selinux.rb with issue1963.patch":
-      command => "cat /tmp/issue1963.patch | patch -p0 ${rubysitedir}/puppet/util/selinux.rb",
-      unless => "grep -q 'File.open(\"/proc/mounts\", NONBLOCK)' ${rubysitedir}/puppet/util/selinux.rb",
-      require => File["/tmp/issue1963.patch"],
+    default: {
+      realize(Package[$rubypkg_alias])
     }
+
   }
 }

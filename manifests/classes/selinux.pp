@@ -33,18 +33,17 @@ class selinux::base {
 
   }
 
-  @package { "$rubypkg_alias":
-    ensure => present,
-    alias => "selinux-ruby-bindings",
-  }
 
   case $puppetversion {
 
     "0.24.7": {
 
-      if $issue1963fixed {
+      if $issue1963fixed == "yes" {
 
-        realize(Package[$rubypkg_alias])
+        package { "$rubypkg_alias":
+          ensure => present,
+          alias => "selinux-ruby-bindings",
+        }
 
         file { "/tmp/issue1963.patch": ensure => absent }
 
@@ -68,8 +67,11 @@ class selinux::base {
       # no ruby-selinux implementation in older versions
     }
 
-    default: {
-      realize(Package[$rubypkg_alias])
+    "0.24.8": {
+      package { "$rubypkg_alias":
+        ensure => present,
+        alias => "selinux-ruby-bindings",
+      }
     }
 
   }

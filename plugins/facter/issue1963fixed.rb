@@ -23,10 +23,14 @@ Facter.add("issue1963fixed") do
         end
       end
 
-      hash_func.hexdigest == sha1sum
+      if hash_func.hexdigest == sha1sum
+        response = "yes"
+      else
+        response = "no"
+      end
 
     else
-      false
+      response = "no"
     end
 
   end

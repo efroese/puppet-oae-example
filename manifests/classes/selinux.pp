@@ -9,6 +9,9 @@
 
 class selinux::base {
 
+  # required to build custom policy modules.
+  package { ["checkpolicy", "policycoreutils"]: ensure => present }
+
   case $operatingsystem {
     RedHat: {
       case $lsbdistcodename {

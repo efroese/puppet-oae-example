@@ -24,7 +24,6 @@ define selinux::package ($workdir="/tmp/", $dest="/usr/share/selinux/targeted/",
   exec { "build selinux policy module ${name}":
     cwd => $workdir,
     command => "checkmodule -M -m ${name}.te -o ${name}.mod",
-    creates => "${workdir}/${name}.mod",
     refreshonly => true,
     require => [File["${workdir}/${name}.te"], Package["checkpolicy"]],
     notify => Exec["build selinux policy package ${name}"],
@@ -33,7 +32,6 @@ define selinux::package ($workdir="/tmp/", $dest="/usr/share/selinux/targeted/",
   exec { "build selinux policy package ${name}":
     cwd => $workdir,
     command => "semodule_package -o ${dest}/${name}.pp -m ${name}.mod",
-    creates => "${dest}/${name}.pp",
     refreshonly => true,
     require => [Exec["build selinux policy module ${name}"], Package["policycoreutils"]],
   } 

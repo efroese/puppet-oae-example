@@ -23,7 +23,7 @@ define postgres::role($ensure, $password = false) {
             exec { "Create $name postgres role":
                 command => "/usr/bin/psql -c \"CREATE ROLE $name $passtext\"",
                 user => "postgres",
-                unless => "/usr/bin/psql -c '\\du' | grep '^  *$name'"
+                unless => "/usr/bin/psql -c '\\du' | grep '^  *$name  *|'"
             }
         }
         absent:  {

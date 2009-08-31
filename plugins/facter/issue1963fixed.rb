@@ -9,29 +9,34 @@ Facter.add("issue1963fixed") do
       Facter.loadfacts()
     end
 
-    rubysitedir = Facter.value('rubysitedir')
-    file = rubysitedir + "/puppet/util/selinux.rb"
+    if Facter.value('puppetversion') != '0.24.7'
+      response = "yes"
+    else
 
-    if FileTest.exists?(file) and FileTest.file?(file)
+      rubysitedir = Facter.value('rubysitedir')
+      file = rubysitedir + "/puppet/util/selinux.rb"
 
-      require 'digest/sha1'
-      hash_func = Digest::SHA1.new
-      open(file, "r") do |io|
-        while (!io.eof)
-          readBuf = io.readpartial(1024)
-          hash_func.update(readBuf)
+      if FileTest.exists?(file) and FileTest.file?(file)
+
+        require 'digest/sha1'
+        hash_func = Digest::SHA1.new
+        open(file, "r") do |io|
+          while (!io.eof)
+            readBuf = io.readpartial(1024)
+            hash_func.update(readBuf)
+          end
         end
-      end
 
-      if hash_func.hexdigest == sha1sum
-        response = "yes"
+        if hash_func.hexdigest == sha1sum
+          response = "yes"
+        else
+          response = "no"
+        end
+
       else
         response = "no"
       end
 
-    else
-      response = "no"
     end
-
   end
 end

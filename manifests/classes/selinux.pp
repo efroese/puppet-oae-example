@@ -14,8 +14,14 @@ class selinux::base {
 
   case $operatingsystem {
     RedHat: {
-      case $lsbdistcodename {
-        Tikanga: { $rubypkg_alias = "libselinux-ruby-puppet" }
+      case $lsbdistrelease {
+        "5.4", "5.5", "5.6", "5.7", "5.8", "5.9": {
+          package { "libselinux-ruby-puppet":
+            ensure => absent,
+            before => Package["libselinux-ruby"],
+          }
+          $rubypkg_alias = "libselinux-ruby"
+        }
         default: { $rubypkg_alias = "libselinux-ruby-puppet" }
       }
     }

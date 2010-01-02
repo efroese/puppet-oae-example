@@ -76,7 +76,8 @@ class selinux::base {
       # no ruby-selinux implementation in older versions
     }
 
-    "0.24.8", "0.25.0", "0.25.1": {
+    # TODO: /0\.2(4\.8|5\..*)/
+    "0.24.8", "0.25.0", "0.25.1", "0.25.2": {
       package { "$rubypkg_alias":
         ensure => present,
         alias => "selinux-ruby-bindings",

@@ -77,7 +77,7 @@ class selinux::base {
     }
 
     # TODO: /0\.2(4\.8|5\..*)/
-    "0.24.8", "0.25.0", "0.25.1", "0.25.2": {
+    "0.24.8", "0.24.9", "0.25.0", "0.25.1", "0.25.2", "0.25.3", "0.25.4": {
       package { "$rubypkg_alias":
         ensure => present,
         alias => "selinux-ruby-bindings",

@@ -1,5 +1,10 @@
 class selinux::base {
 
+  service { "auditd":
+    enable => true,
+    ensure => running,
+  }
+
   # required to build custom policy modules.
   package { ["checkpolicy", "policycoreutils"]: ensure => present }
 

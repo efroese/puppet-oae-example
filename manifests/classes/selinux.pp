@@ -1,3 +1,11 @@
+/*
+== Class: selinux::base
+
+This class ensures selinux utilities and services are installed and running.
+It will also install the ruby bindings which are required to use puppet's
+selinux resource types.
+
+*/
 class selinux::base {
 
   service { "auditd":
@@ -38,6 +46,8 @@ class selinux::base {
 
   }
 
+  # if needed, you can fetch and build libselinux-ruby-puppet from
+  # http://github.com/twpayne/libselinux-ruby-puppet
   package { "$rubypkg_alias":
     ensure => present,
     alias => "selinux-ruby-bindings",

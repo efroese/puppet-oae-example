@@ -13,8 +13,8 @@ define selinux::seport($ensure='present', $proto='tcp', $port) {
   }
 
   exec { "semanage port ${port}, proto ${proto}, type ${name}":
-    command => "semanage port ${semanage} --tyle ${name} --proto ${proto} ${port}",
-    onlyif  => "semanage port --list | $( ${grep} '${proto}' )", # subshell required to invert return status with !
+    command => "semanage port ${semanage} --type ${name} --proto ${proto} ${port}",
+    unless  => "semanage port --list | ( ${grep} '${re}' )", # subshell required to invert return status with !
   }
 
 

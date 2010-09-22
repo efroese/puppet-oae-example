@@ -1,9 +1,11 @@
-define selinux::module ($workdir="/tmp/selinux", $dest="/usr/share/selinux/targeted/", $content=undef, $source=undef) {
+define selinux::module ($workdir="/etc/puppet/selinux", $dest="/usr/share/selinux/targeted/", $content=undef, $source=undef) {
 
-  file { "$workdir":
-    ensure => directory,
-    mode   => 0700,
-    owner  => "root",
+  if !defined(File[$workdir]) {
+    file { "$workdir":
+      ensure => directory,
+      mode   => 0700,
+      owner  => "root",
+    }
   }
 
   if $content {

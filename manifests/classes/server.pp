@@ -1,11 +1,19 @@
+/*
+
+==Class: mysql::server
+
+Parameters:
+ $mysql_data_dir:
+   set the data directory path, which is used to store all the databases
+
+   If set, copies the content of the default mysql data location. This is
+   necessary on Debian systems because the package installation script
+   creates a special user used by the init scripts.
+
+*/
 class mysql::server {
 
-  $mycnf = $operatingsystem ? {
-    /RedHat|Fedora|CentOS/ => "/etc/my.cnf",
-    default => "/etc/mysql/my.cnf",
-  }
-
-  $mycnfctx = "/files/${mycnf}"
+  include mysql::params
 
   user { "mysql":
     ensure => present,
@@ -16,9 +24,19 @@ class mysql::server {
     ensure => installed,
   }
 
+  file { "${mysql::params::data_dir}":
+    ensure  => directory,
+    source  => "/var/lib/mysql",
+    recurse => true,
+    replace => false,
+    owner   => "mysql",
+    group   => "mysql",
+    require => Package["mysql-server"],
+  }
+
   file { "/etc/mysql/my.cnf":
     ensure => present,
-    path => $mycnf,
+    path => $mysql::params::mycnf,
     owner => root,
     group => root,
     mode => 644,
@@ -32,13 +50,14 @@ class mysql::server {
   }
 
   augeas { "my.cnf/mysqld":
-    context => "$mycnfctx/mysqld/",
+    context => "${mysql::params::mycnfctx}/mysqld/",
     load_path => "/usr/share/augeas/lenses/contrib/",
     changes => [
       "set pid-file /var/run/mysqld/mysqld.pid",
       "set old_passwords 0",
       "set character-set-server utf8",
       "set log-warnings 1",
+      "set datadir ${mysql::params::data_dir}",
       $operatingsystem ? {
         /RedHat|Fedora|CentOS/ => "set log-error /var/log/mysqld.log",
         default => "set log-error /var/log/mysql.err",
@@ -53,13 +72,13 @@ class mysql::server {
         default => "set socket /var/run/mysqld/mysqld.sock",
       }
     ],
-    require => File["/etc/mysql/my.cnf"],
+    require => [ File["/etc/mysql/my.cnf"],   file ["${mysql::params::data_dir}"] ],
     notify => Service["mysql"],
   }
 
   # by default, replication is disabled
   augeas { "my.cnf/replication":
-    context => "$mycnfctx/mysqld/",
+    context => "${mysql::params::mycnfctx}/mysqld/",
     load_path => "/usr/share/augeas/lenses/contrib/",
     changes => [
       "rm log-bin",
@@ -74,7 +93,7 @@ class mysql::server {
   }
 
   augeas { "my.cnf/mysqld_safe":
-    context => "$mycnfctx/mysqld_safe/",
+    context => "${mysql::params::mycnfctx}/mysqld_safe/",
     load_path => "/usr/share/augeas/lenses/contrib/",
     changes => [
       "set pid-file /var/run/mysqld/mysqld.pid",
@@ -89,7 +108,7 @@ class mysql::server {
 
   # force use of system defaults
   augeas { "my.cnf/performance":
-    context => "$mycnfctx/",
+    context => "${mysql::params::mycnfctx}/",
     load_path => "/usr/share/augeas/lenses/contrib/",
     changes => [
      "rm mysqld/key_buffer",
@@ -119,7 +138,7 @@ class mysql::server {
   }
 
   augeas { "my.cnf/client":
-    context => "$mycnfctx/client/",
+    context => "${mysql::params::mycnfctx}/client/",
     load_path => "/usr/share/augeas/lenses/contrib/",
     changes => [
       $operatingsystem ? {

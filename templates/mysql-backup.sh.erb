@@ -18,13 +18,13 @@ case "$1" in
 esac
 
 PATH="/bin:/sbin:/usr/bin:/usr/sbin"
-MYDIR="/var/lib/mysql"
-BKPDIR="/var/backups/mysql"
+MYDIR="<%= data_dir %>"
+BKPDIR="<%= backup_dir %>"
 
 # Installed ?
 if [ -e /usr/bin/mysqladmin ] && [ -e /usr/bin/mysqldump ]; then
   # used ?
-  if [ -d /var/lib/mysql ] && [ -n "$(find /var/lib/mysql -maxdepth 1 -type d ! -iname mysql ! -iname test )" ]; then
+  if [ -d $MYDIR ] && [ -n "$(find $MYDIR -maxdepth 1 -type d ! -iname mysql ! -iname test )" ]; then
     # Running ?
     if /usr/bin/mysqladmin -s ping > /dev/null; then
       /usr/bin/mysqldump --all-database --extended-insert > $BKPDIR/mysql.sql && nice -n 19 gzip -9 $BKPDIR/mysql.sql && mv -f $BKPDIR/mysql.sql.gz $BKPDIR/mysql-$DAY.sql.gz

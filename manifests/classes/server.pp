@@ -72,7 +72,7 @@ class mysql::server {
         default => "set socket /var/run/mysqld/mysqld.sock",
       }
     ],
-    require => [ File["/etc/mysql/my.cnf"],   file ["${mysql::params::data_dir}"] ],
+    require => [ File["/etc/mysql/my.cnf"], File["${mysql::params::data_dir}"] ],
     notify => Service["mysql"],
   }
 

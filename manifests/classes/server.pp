@@ -31,6 +31,7 @@ class mysql::server {
     replace => false,
     owner   => "mysql",
     group   => "mysql",
+    seltype => "mysqld_db_t",
     require => Package["mysql-server"],
   }
 
@@ -205,15 +206,6 @@ class mysql::server {
     command     => "echo -e \"[mysql]\nuser=${mysql_user}\npassword=${mysql_password}\n[mysqladmin]\nuser=${mysql_user}\npassword=${mysql_password}\n[mysqldump]\nuser=${mysql_user}\npassword=${mysql_password}\n[mysqlshow]\nuser=${mysql_user}\npassword=${mysql_password}\n\" > /root/.my.cnf",
     refreshonly => true,
     creates     => "/root/.my.cnf",
-  }
-
-  file { "/var/lib/mysql":
-    ensure  => directory,
-    owner   => "mysql",
-    group   => "mysql",
-    mode    => 755,
-    seltype => "mysqld_db_t",
-    require => Package["mysql-server"],
   }
 
   file { "/etc/logrotate.d/mysql-server":

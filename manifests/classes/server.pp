@@ -31,6 +31,7 @@ class mysql::server {
     replace => false,
     owner   => "mysql",
     group   => "mysql",
+    mode    => undef,
     seltype => "mysqld_db_t",
     require => Package["mysql-server"],
   }

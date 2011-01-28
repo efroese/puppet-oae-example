@@ -9,11 +9,6 @@ class mysql::administration {
     ensure => present,
   }
 
-  $distro_specific_mysql_sudo = $operatingsystem ? {
-    Debian => "/etc/init.d/mysql",
-    RedHat => "/etc/init.d/mysqld, /sbin/service mysqld"
-  }
-
   common::concatfilepart { "sudoers.mysql":
     ensure => present,
     file => "/etc/sudoers",

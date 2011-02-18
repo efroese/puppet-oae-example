@@ -27,7 +27,7 @@ class mysql::server {
   file { "${mysql::params::data_dir}":
     ensure  => directory,
     source  => "/var/lib/mysql",
-    recurse => true,
+    recurse => false,
     replace => false,
     owner   => "mysql",
     group   => "mysql",

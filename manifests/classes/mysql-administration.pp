@@ -9,9 +9,8 @@ class mysql::administration {
     ensure => present,
   }
 
-  common::concatfilepart { "sudoers.mysql":
-    ensure => present,
-    file => "/etc/sudoers",
+  sudo::directive { "mysql-administration":
+    ensure  => present,
     content => template("mysql/sudoers.mysql.erb"),
     require => Group["mysql-admin"],
   }

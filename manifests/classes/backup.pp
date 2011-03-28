@@ -31,7 +31,7 @@ class mysql::backup {
     group   => "mysql-admin",
     mode    => 750,
     require => Group["mysql-admin"]
-  } 
+  }
 
   file { "/usr/local/bin/mysql-backup.sh":
     ensure  => present,

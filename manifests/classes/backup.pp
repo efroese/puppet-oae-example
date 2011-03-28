@@ -21,12 +21,17 @@ class mysql::backup {
   $data_dir = $mysql::params::data_dir
   $backup_dir = $mysql::params::backup_dir
 
+  if !defined(Group["mysql-admin"]) {
+    group { "mysql-admin": ensure => present,}
+  }
+
   file { "${backup_dir}":
     ensure  => directory,
     owner   => "root",
-    group   => "root",
+    group   => "mysql-admin",
     mode    => 750,
-  }
+    require => Group["mysql-admin"]
+  } 
 
   file { "/usr/local/bin/mysql-backup.sh":
     ensure  => present,

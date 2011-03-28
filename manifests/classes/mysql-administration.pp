@@ -5,8 +5,8 @@ class mysql::administration {
 #   modules/cognac/manifests/classes/mysql-slave.pp)
 # - .my.cnf for people in %mysql-admin
 
-  group { "mysql-admin":
-    ensure => present,
+  if !defined(Group["mysql-admin"]) {
+    group { "mysql-admin": ensure => present,}
   }
 
   sudo::directive { "mysql-administration":

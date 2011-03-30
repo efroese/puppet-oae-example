@@ -26,13 +26,18 @@ class mysql::server {
 
   file { "${mysql::params::data_dir}":
     ensure  => directory,
-    source  => "/var/lib/mysql",
-    recurse => true,
-    replace => false,
     owner   => "mysql",
     group   => "mysql",
     seltype => "mysqld_db_t",
     require => Package["mysql-server"],
+  }
+
+  if( "${mysql::params::data_dir}" != "/var/lib/mysql" ) {
+    File["${mysql::params::data_dir}"]{
+      source  => "/var/lib/mysql",
+      recurse => true,
+      replace => false,
+    }
   }
 
   file { "/etc/mysql/my.cnf":

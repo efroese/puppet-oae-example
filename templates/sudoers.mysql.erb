@@ -9,7 +9,7 @@ Cmnd_Alias MYSQL_ADMIN_CMND = <%= sudo_mysql_admin_cmnd %>
 <% elsif operatingsystem == "Debian" -%>
 Cmnd_Alias MYSQL_ADMIN_CMND = /etc/init.d/mysql
 <% elsif operatingsystem == "RedHat" -%>
-Cmnd_Alias MYSQL_ADMIN_CMND  = /etc/init.d/mysld, /sbin/service mysqld
+Cmnd_Alias MYSQL_ADMIN_CMND  = /etc/init.d/mysqld, /sbin/service mysqld
 <% end -%>
 MYSQL_ADMIN_USER ALL=(root) MYSQL_ADMIN_CMND
 ##

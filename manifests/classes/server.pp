@@ -70,7 +70,7 @@ class mysql::server {
       },
       $operatingsystem ? {
         /RedHat|Fedora|CentOS/ => "set log-slow-queries /var/log/mysql-slow-queries.log",
-        default => "set set log-slow-queries /var/log/mysql/mysql-slow.log",
+        default => "set log-slow-queries /var/log/mysql/mysql-slow.log",
       },
       #"ins log-slow-admin-statements after log-slow-queries", # BUG: not implemented in puppet yet
       $operatingsystem ? {

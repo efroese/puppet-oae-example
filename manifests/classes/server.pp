@@ -221,4 +221,16 @@ class mysql::server {
     }
   }
 
+  file { "mysql-slow-queries.log":
+    ensure  => present,
+    owner   => mysql,
+    group   => mysql,
+    mode    => 640,
+    seltype => mysqld_log_t,
+    path    => $operatingsystem ? {
+      /RedHat|Fedora|CentOS/ => "/var/log/mysql-slow-queries.log",
+      default => "/var/log/mysql/mysql-slow-queries.log",
+    };
+  }
+
 }

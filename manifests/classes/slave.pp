@@ -1,7 +1,7 @@
 class mysql::slave inherits mysql::master {
 
   augeas { "my.cnf/slave-replication":
-    context => "$mycnfctx/mysqld/",
+    context => "${mysql::params::mycnfctx}/mysqld/",
     load_path => "/usr/share/augeas/lenses/contrib/",
     changes => [
       "set relay-log /var/lib/mysql/mysql-relay-bin",

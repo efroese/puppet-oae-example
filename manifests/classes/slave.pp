@@ -12,7 +12,8 @@ class mysql::slave inherits mysql::master {
       "set master-host ${mysql_masterhost}",
       "set master-user ${mysql_masteruser}",
       "set master-password ${mysql_masterpw}",
-      "set report-host ${hostname}"
+      "set report-host ${hostname}",
+      "set binlog_format ${mysql::params::replication_binlog_format}"
     ],
   }
 

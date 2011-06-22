@@ -17,4 +17,9 @@ class mysql::params {
     default => $mysql_backupdir,
   }
 
+  $replication_binlog_format = $replication_binlog_format ? {
+    "" => "STATEMENT",
+    default => $replication_binlog_format,
+  }
+
 }

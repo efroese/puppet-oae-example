@@ -1,21 +1,48 @@
-class mysql::slave inherits mysql::master {
+/*
 
-  augeas { "my.cnf/slave-replication":
-    context => "${mysql::params::mycnfctx}/mysqld/",
-    load_path => "/usr/share/augeas/lenses/contrib/",
-    changes => [
-      "set relay-log /var/lib/mysql/mysql-relay-bin",
-      "set relay-log-index /var/lib/mysql/mysql-relay-bin.index",
-      "set relay-log-info-file /var/lib/mysql/relay-log.info",
-      "set relay_log_space_limit 2048M",
-      "set max_relay_log_size 100M",
-      "set master-host ${mysql_masterhost}",
-      "set master-user ${mysql_masteruser}",
-      "set master-password ${mysql_masterpw}",
-      "set report-host ${hostname}",
-      "set binlog_format ${mysql::params::replication_binlog_format}"
-    ],
-  }
+== Class: mysql::slave
+
+Define a MySQL slave server
+
+*/
+class mysql::slave inherits mysql::slave::common {
+
+  # binlog_format comes with MySQL 5.1+
+  # RHEL6+, Debian6+
+  case  $operatingsystem {
+
+    Debian: {
+      case $lsbmajdistrelease {
+
+        "4","5": { }
+
+        default: {
+          Augeas["my.cnf/slave-replication"] {
+            changes => [
+              "set binlog_format ${mysql::params::replication_binlog_format}"
+            ]
+          }
+        }
+      }
+
+    } # Debian
+
+    RedHat,CentOS: {
+      case $lsbmajdistrelease {
+
+        "4","5": { }
+
+        default: {
+          Augeas["my.cnf/slave-replication"] {
+            changes => [
+              "set binlog_format ${mysql::params::replication_binlog_format}"
+            ]
+          }
+        }
+      }
+
+    } # RedHat,CentOS
+
+  } # case $operatingsystem
 
 }
-

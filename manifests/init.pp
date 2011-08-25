@@ -16,16 +16,21 @@ class wget {
 #
 ################################################################################
 define wget::fetch($source,$destination) {
+
+	# using "unless" with /usr/bin/test instead of "creates" to re-attempt download
+	# on empty files.
+	# wget creates an empty file when a download fails, and then it wouldn't try
+	# again to download the file
 	if $http_proxy {
 		exec { "wget-$name":
 			command => "/usr/bin/wget --output-document=$destination $source",
-			creates => "$destination",
+			unless => "/usr/bin/test -s $destination",
 			environment => [ "HTTP_PROXY=$http_proxy", "http_proxy=$http_proxy" ],
 		}
-        } else {
+	} else {
 		exec { "wget-$name":
 			command => "/usr/bin/wget --output-document=$destination $source",
-			creates => "$destination",
+			unless => "/usr/bin/test -s $destination",
 		}
 	}
 }
@@ -42,15 +47,15 @@ define wget::authfetch($source,$destination,$user,$timeout="0") {
 	if $http_proxy {
 		exec { "wget-$name":
 			command => "/usr/bin/wget --user=$user --output-document=$destination $source",
-      timeout => "$timeout",
-			creates => "$destination",
+			timeout => "$timeout",
+			unless => "/usr/bin/test -s $destination",
 			environment => [ "HTTP_PROXY=$http_proxy", "http_proxy=$http_proxy" ],
 		}
-  } else {
+	} else {
 		exec { "wget-$name":
 			command => "/usr/bin/wget --user=$user --output-document=$destination $source",
-      timeout => "$timeout",
-			creates => "$destination",
+			timeout => "$timeout",
+			unless => "/usr/bin/test -s $destination",
 		}
 	}
 }

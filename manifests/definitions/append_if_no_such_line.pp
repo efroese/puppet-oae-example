@@ -3,6 +3,6 @@ define common::append_if_no_such_line($file, $line, $refreshonly = 'false') {
       unless => "/bin/grep -Fxqe '$line' '$file'",
       path => "/bin",
       refreshonly => $refreshonly,
-      notify => File[$file],
+      subscribe => File[$file],
    }
 }

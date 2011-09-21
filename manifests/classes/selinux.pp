@@ -26,7 +26,16 @@ class selinux::base {
           }
           $rubypkg_alias = "libselinux-ruby"
         }
+
+        /^6/: {
+          package { "policycoreutils-python":
+            ensure => present,
+          }
+          $rubypkg_alias = "libselinux-ruby"
+        }
+
         default: { $rubypkg_alias = "libselinux-ruby-puppet" }
+
       }
     }
 
@@ -39,7 +48,7 @@ class selinux::base {
 
     Debian: {
       case $lsbdistcodename {
-        sid: { $rubypkg_alias = "libselinux-ruby1.8" }
+        sid, squeeze: { $rubypkg_alias = "libselinux-ruby1.8" }
         default: { $rubypkg_alias = "libselinux-puppet-ruby1.8" }
       }
     }

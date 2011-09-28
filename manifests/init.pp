@@ -15,7 +15,7 @@ class wget {
 # using $http_proxy if necessary.
 #
 ################################################################################
-define wget::fetch($source,$destination) {
+define wget::fetch($source,$destination,$timeout="0") {
 
 	# using "unless" with /usr/bin/test instead of "creates" to re-attempt download
 	# on empty files.
@@ -24,12 +24,14 @@ define wget::fetch($source,$destination) {
 	if $http_proxy {
 		exec { "wget-$name":
 			command => "/usr/bin/wget --output-document=$destination $source",
+			timeout => $timeout,
 			unless => "/usr/bin/test -s $destination",
 			environment => [ "HTTP_PROXY=$http_proxy", "http_proxy=$http_proxy" ],
 		}
 	} else {
 		exec { "wget-$name":
 			command => "/usr/bin/wget --output-document=$destination $source",
+			timeout => $timeout,
 			unless => "/usr/bin/test -s $destination",
 		}
 	}
@@ -47,14 +49,14 @@ define wget::authfetch($source,$destination,$user,$timeout="0") {
 	if $http_proxy {
 		exec { "wget-$name":
 			command => "/usr/bin/wget --user=$user --output-document=$destination $source",
-			timeout => "$timeout",
+			timeout => $timeout,
 			unless => "/usr/bin/test -s $destination",
 			environment => [ "HTTP_PROXY=$http_proxy", "http_proxy=$http_proxy" ],
 		}
 	} else {
 		exec { "wget-$name":
 			command => "/usr/bin/wget --user=$user --output-document=$destination $source",
-			timeout => "$timeout",
+			timeout => $timeout,
 			unless => "/usr/bin/test -s $destination",
 		}
 	}

@@ -45,19 +45,25 @@ define wget::fetch($source,$destination,$timeout="0") {
 # password must be stored in the password variable within the .wgetrc file.
 #
 ################################################################################
-define wget::authfetch($source,$destination,$user,$timeout="0") {
+define wget::authfetch($source,$destination,$user,$password="",$timeout="0") {
+	file { "wgetrc":
+		path => "/root/.wgetrc",
+		content => "password=$password",
+	}
 	if $http_proxy {
 		exec { "wget-$name":
 			command => "/usr/bin/wget --user=$user --output-document=$destination $source",
 			timeout => $timeout,
 			unless => "/usr/bin/test -s $destination",
 			environment => [ "HTTP_PROXY=$http_proxy", "http_proxy=$http_proxy" ],
+			require => File["wgetrc"],
 		}
 	} else {
 		exec { "wget-$name":
 			command => "/usr/bin/wget --user=$user --output-document=$destination $source",
 			timeout => $timeout,
 			unless => "/usr/bin/test -s $destination",
+			require => File["wgetrc"],
 		}
 	}
 }

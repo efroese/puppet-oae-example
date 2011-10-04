@@ -22,18 +22,16 @@ define wget::fetch($source,$destination,$timeout="0") {
 	# wget creates an empty file when a download fails, and then it wouldn't try
 	# again to download the file
 	if $http_proxy {
-		exec { "wget-$name":
-			command => "/usr/bin/wget --output-document=$destination $source",
-			timeout => $timeout,
-			unless => "/usr/bin/test -s $destination",
-			environment => [ "HTTP_PROXY=$http_proxy", "http_proxy=$http_proxy" ],
-		}
-	} else {
-		exec { "wget-$name":
-			command => "/usr/bin/wget --output-document=$destination $source",
-			timeout => $timeout,
-			unless => "/usr/bin/test -s $destination",
-		}
+		$environment = [ "HTTP_PROXY=$http_proxy", "http_proxy=$http_proxy" ]
+	}
+	else {
+		$environment = []
+	}
+	exec { "wget-$name":
+		command => "/usr/bin/wget --output-document=$destination $source",
+		timeout => $timeout,
+		unless => "/usr/bin/test -s $destination",
+		environment => $environment,
 	}
 }
 
@@ -46,25 +44,21 @@ define wget::fetch($source,$destination,$timeout="0") {
 #
 ################################################################################
 define wget::authfetch($source,$destination,$user,$password="",$timeout="0") {
-	file { "wgetrc":
+	file { "wgetrc-$name":
 		path => "/root/.wgetrc",
 		content => "password=$password",
 	}
 	if $http_proxy {
-		exec { "wget-$name":
-			command => "/usr/bin/wget --user=$user --output-document=$destination $source",
-			timeout => $timeout,
-			unless => "/usr/bin/test -s $destination",
-			environment => [ "HTTP_PROXY=$http_proxy", "http_proxy=$http_proxy" ],
-			require => File["wgetrc"],
-		}
-	} else {
-		exec { "wget-$name":
-			command => "/usr/bin/wget --user=$user --output-document=$destination $source",
-			timeout => $timeout,
-			unless => "/usr/bin/test -s $destination",
-			require => File["wgetrc"],
-		}
+		$environment = [ "HTTP_PROXY=$http_proxy", "http_proxy=$http_proxy" ]
+	}
+	else {
+		$environment = []
+	}
+	exec { "wget-$name":
+		command => "/usr/bin/wget --user=$user --output-document=$destination $source",
+		timeout => $timeout,
+		unless => "/usr/bin/test -s $destination",
+		environment => $environment,
 	}
 }
 

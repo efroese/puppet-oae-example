@@ -45,13 +45,18 @@ define wget::fetch($source,$destination,$timeout="0") {
 ################################################################################
 define wget::authfetch($source,$destination,$user,$password="",$timeout="0") {
 	if $http_proxy {
-		$environment = [ "HTTP_PROXY=$http_proxy", "http_proxy=$http_proxy" ]
+		$environment = [ "HTTP_PROXY=$http_proxy", "http_proxy=$http_proxy", "WGETRC=/tmp/wgetrc-$name" ]
 	}
 	else {
-		$environment = []
+		$environment = [ "WGETRC=/tmp/wgetrc-$name" ]
 	}
+	file { "/tmp/wgetrc-$name":
+		owner => root,
+		mode => 600,
+		content => "password=$password",
+	} ->
 	exec { "wget-$name":
-		command => "echo password=$password >/root/.wgetrc; /usr/bin/wget --user=$user --output-document=$destination $source",
+		command => "/usr/bin/wget --user=$user --output-document=$destination $source",
 		timeout => $timeout,
 		unless => "/usr/bin/test -s $destination",
 		environment => $environment,

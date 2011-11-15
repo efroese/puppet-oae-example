@@ -11,7 +11,7 @@
 # 		owner  => root,  # default
 #		group  => root,  # default
 # }
-define modules_file (
+define common::modules_file (
 		$source,
 		$mode = 0644, $owner = root, $group = root
 	)

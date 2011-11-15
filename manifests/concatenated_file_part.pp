@@ -1,6 +1,6 @@
 # Add a snippet called $name to the concatenated_file at $dir.
 # The file can be referenced as File["cf_part_${name}"]
-define concatenated_file_part (
+define common::concatenated_file_part (
 	$dir, $content = '', $ensure = present,
 	$mode = 0644, $owner = root, $group = 0 
 	)

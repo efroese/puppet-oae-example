@@ -19,7 +19,7 @@
 # 	replacement => "port $port"
 # }  
 
-define replace($file, $pattern, $replacement) {
+define common::replace($file, $pattern, $replacement) {
 	$pattern_no_slashes = slash_escape($pattern)
 	$replacement_no_slashes = slash_escape($replacement)
 	exec { "replace_${pattern}_${file}":

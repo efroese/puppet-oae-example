@@ -12,7 +12,7 @@
 # 	dir => "/etc/some.conf.d",
 # }
 # Use Exec["concat_$name"] as Semaphor
-define concatenated_file (
+define common::concatenated_file (
 	# where the snippets are located
 	$dir = '',
 	# a file with content to prepend

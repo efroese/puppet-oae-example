@@ -14,7 +14,7 @@
 # 
 # To fail individual resources on a missing lsbdistcodename, require
 # Exec[assert_lsbdistcodename] on the specific resource
-class assert_lsbdistcodename {
+class common::assert_lsbdistcodename {
 
 	case $lsbdistcodename {
 		'': {

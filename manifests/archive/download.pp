@@ -12,6 +12,7 @@ Parameters:
 - *$digest_type: Default value "md5".
 - *$timeout: Default value 120.
 - *$src_target: Default value "/usr/src".
+- *$allow_insecure: Default value false.
 
 Example usage:
 
@@ -35,7 +36,13 @@ define common::archive::download (
   $digest_string="",
   $digest_type="md5",
   $timeout=120,
-  $src_target="/usr/src") {
+  $src_target="/usr/src",
+  $allow_insecure=false) {
+
+  $insecure_arg = $allow_insecure ? {
+    true => "-k",
+    default => "",
+  }
 
   if !defined(Package['curl']) {
     package{'curl':
@@ -68,7 +75,7 @@ define common::archive::download (
             }
     
             exec {"download digest of archive $name":
-              command => "curl -o ${src_target}/${name}.${digest_type} ${digest_src}",
+              command => "curl ${insecure_arg} -o ${src_target}/${name}.${digest_type} ${digest_src}",
               creates => "${src_target}/${name}.${digest_type}",
               timeout => $timeout,
               notify  => Exec["download archive $name and check sum"],
@@ -114,8 +121,8 @@ define common::archive::download (
       $on_error = "(rm -f ${src_target}/${name} ${src_target}/${name}.${digest_type} && exit 1)"
       exec {"download archive $name and check sum":
         command => $checksum ? {
-          true => "(curl -o ${src_target}/${name} ${url} && ${checksum_cmd}) || ${on_error}",
-          false => "curl -o ${src_target}/${name} ${url}",
+          true => "(curl ${insecure_arg} -o ${src_target}/${name} ${url} && ${checksum_cmd}) || ${on_error}",
+          false => "curl ${insecure_arg} -o ${src_target}/${name} ${url}",
           default => fail ( "Unknown checksum value: '${checksum}'" ),
         },
         creates => "${src_target}/${name}",

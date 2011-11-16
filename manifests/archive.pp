@@ -16,6 +16,7 @@ Parameters:
 - *$root_dir: Default value ""
 - *$extension: Default value ".tar.gz"
 - *$timeout: Default value 120
+- *$allow_insecure: Default value false
 
 Example usage:
 
@@ -37,7 +38,8 @@ define common::archive (
   $timeout=120,
   $root_dir='',
   $extension='tar.gz',
-  $src_target='/usr/src'){
+  $src_target='/usr/src',
+  $allow_insecure=false){
 
   common::archive::download {"${name}.${extension}":
     ensure => $ensure,
@@ -48,6 +50,7 @@ define common::archive (
     digest_type => $digest_type,
     timeout => $timeout,
     src_target => $src_target,
+    allow_insecure => $allow_insecure,
   }
 
   common::archive::extract {"${name}":

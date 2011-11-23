@@ -18,7 +18,7 @@ Example usage:
 
   selinux::module { "foobar":
     notify => Selmodule["foobar"],
-    source => "puppet:///myproject/foobar.te",
+    source => "puppet:///modules/myproject/foobar.te",
   }
 
   selmodule { "foobar":

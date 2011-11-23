@@ -26,7 +26,7 @@ define common::concatfilepart (
     file {$dir:
       ensure  => directory,
       mode    => 0600,
-      source  => "puppet:///common/empty/",
+      source  => "puppet:///modules/common/empty/",
       recurse => $manage,
       purge   => $manage,
       force   => $manage,

@@ -22,4 +22,13 @@ class mysql::params {
     default => $replication_binlog_format,
   }
 
+  $logfile_group = $mysql_logfile_group ? {
+    '' => $operatingsystem ? {
+        'RedHat' => 'mysql',
+        'Debian' => 'adm',
+        default  => 'adm',
+      },
+    default => $mysql_logfile_group,
+  }
+
 }

@@ -213,10 +213,12 @@ class mysql::server {
     creates     => "/root/.my.cnf",
   }
 
+  $logfile_group = $mysql::params::logfile_group
+
   file { "/etc/logrotate.d/mysql-server":
     ensure => present,
-    source => $operatingsystem ? {
-      /RedHat|Fedora|CentOS/ => "puppet:///modules/mysql/logrotate.redhat",
+    content => $operatingsystem ? {
+      /RedHat|Fedora|CentOS/ => template('mysql/logrotate.redhat.erb'),
       default => undef,
     }
   }

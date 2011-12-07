@@ -35,7 +35,7 @@ class preview_processor {
     # Create Link /usr/lib/openoffice
     file { '/usr/lib/openoffice':
         ensue => link,
-        target => '/usr/lib64/openoffice.org3'
+        target => '/usr/lib64/openoffice.org3',
         require => Packages['openoffice.org-core'],
     }
     
@@ -57,7 +57,7 @@ class preview_processor {
     package { $ruby_gems: 
         provider => 'gem',
         ensure => installed,
-        require => Package['rubygems']
+        require => Package['rubygems'],
     }
 
     ###########################################################################

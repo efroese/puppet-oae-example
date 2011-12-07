@@ -1,7 +1,7 @@
 class preview_processor {
 
     # Present in the base CentOS repositories
-    $common_packages = ['cpp', 'curl-devel', 'poppler-utils', 'rubygems']
+    $common_packages = ['cpp', 'fontconfig-devel', 'curl-devel', 'poppler-utils', 'rubygems']
 
     # From rpmforge
     $docsplit_packages = ['pdftk', 'tesseract']

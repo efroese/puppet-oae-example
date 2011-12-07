@@ -34,7 +34,7 @@ class preview_processor {
         
     # Create Link /usr/lib/openoffice
     file { '/usr/lib/openoffice':
-        ensue => link,
+        ensure => link,
         target => '/usr/lib64/openoffice.org3',
         require => Packages['openoffice.org-core'],
     }

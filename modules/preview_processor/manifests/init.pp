@@ -7,7 +7,7 @@ class preview_processor {
     $docsplit_packages = ['pdftk', 'tesseract']
     package { $docsplit_packages: ensure => installed }
 
-    if ($operatingsystem == 'CentOS' || $operatingsystem == 'RedHat') && ($lsbmajdistrelease == '5'){
+    if ($operatingsystem == 'CentOS' or $operatingsystem == 'RedHat') and ($lsbmajdistrelease == '5') {
         # CentOS needs updated ImageMagick and Ruby packages
         $centos_packages = ['ImageMagick-6.4.9-10', 'ImageMagick-devel-6.4.9-10', 'ruby1.9.2p0-1.9.2p0-1']
         package { $centos_packages: ensure => installed }

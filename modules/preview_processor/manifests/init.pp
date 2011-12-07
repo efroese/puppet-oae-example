@@ -40,7 +40,7 @@ class preview_processor {
     }
     
     file { '/etc/init.d/soffice':
-        source => 'puppet://modules/preview_processor/soffice.sh'.
+        source => 'puppet://modules/preview_processor/soffice.sh',
         owner  => root,
         group  => root,
         mode   => 755,

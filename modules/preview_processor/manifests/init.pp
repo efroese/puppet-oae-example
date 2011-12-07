@@ -72,7 +72,7 @@ class preview_processor {
     ###########################################################################
     # Drop the script for the cron job
     file { '/usr/local/share/preview_processor/run_preview_processor.sh':
-        source => 'puppet://modules/preview_processor/run_preview_processor.sh'.
+        source => 'puppet://modules/preview_processor/run_preview_processor.sh',
         owner  => root,
         group  => root,
         mode   => 755,

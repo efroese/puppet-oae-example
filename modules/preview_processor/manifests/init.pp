@@ -82,6 +82,5 @@ class preview_processor {
         command => '/usr/local/share/preview_processor/run_preview_processor.sh',
         ensure => present,
         user => root,
-        minute => *,
     }
 }

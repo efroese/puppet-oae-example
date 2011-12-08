@@ -1,7 +1,7 @@
 class preview_processor {
 
     # Present in the base CentOS repositories
-    $common_packages = ['cpp', 'fontconfig-devel', 'curl-devel', 'poppler-utils', 'rubygems']
+    $common_packages = ['cpp', 'fontconfig-devel', 'poppler-utils', 'rubygems']
     package { $common_packages: ensure => installed }
 
     # From rpmforge
@@ -11,7 +11,9 @@ class preview_processor {
     # CentOS 5, RHEL 5
     if ($operatingsystem == 'CentOS' or $operatingsystem == 'RedHat') and ($lsbmajdistrelease == '5') {
         # CentOS needs updated ImageMagick and Ruby packages
-        $centos_packages = ['ImageMagick-6.4.9-10', 'ImageMagick-devel-6.4.9-10', 'ruby1.9.2p0-1.9.2p0-1']
+        $centos_packages = ['ImageMagick-6.4.9-10', 'ImageMagick-devel-6.4.9-10', 
+                            'ruby1.9.2p0-1.9.2p0-1'
+                            'curl-devel']
         package { $centos_packages: ensure => installed }
     }
 
@@ -19,7 +21,7 @@ class preview_processor {
     if ($operatingsystem == 'CentOS' or $operatingsystem == 'RedHat') and ($lsbmajdistrelease == '6') 
         or $operatingsystem == 'Fedora' {
         # Fedora can use the base packages.
-        $fedora_packages = ['cronie', 'ImageMagick', 'ImageMagick-devel', 'ruby-devel']
+        $fedora_packages = ['cronie', 'curlpp-devel', 'ImageMagick', 'ImageMagick-devel', 'ruby-devel']
         package { $fedora_packages: ensure => installed }
     }
 

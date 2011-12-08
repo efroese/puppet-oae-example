@@ -41,7 +41,7 @@ class preview_processor {
     file { '/usr/lib/openoffice':
         ensure => link,
         target => '/usr/lib64/openoffice.org3',
-        require => Packages['openoffice.org-core'],
+        require => Package['openoffice.org-core'],
     }
     
     file { '/etc/init.d/soffice':

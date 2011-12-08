@@ -1,6 +1,6 @@
 class ntp {
     
-    $local_time_zone = '/usr/share/zoneinfo/America/Phoenix';
+    $local_time_zone = '/usr/share/zoneinfo/America/Phoenix'
     
     package { 'ntp': ensure => installed }
     

@@ -6,6 +6,19 @@ class preview_processor::gems {
     package { $ruby_gems:
         provider => 'gem',
         ensure => installed,
-        require => Package['rubygems'],
     }
+
+    if $operatingsystem == 'CentOS' and $lsbmajordistrelease == '6' {
+        package { "curb":
+            provider => 'gem',
+            ensure => installed,
+            version => '0.7.15',
+        }
+    } else {
+        package { "curb":
+            provider => 'gem',
+            ensure => installed,
+        }
+    }
+        
 }

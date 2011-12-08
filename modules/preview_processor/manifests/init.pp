@@ -16,7 +16,7 @@ class preview_processor {
 
     # CentOS 6, RHEL 6, Fedora
     if ($operatingsystem == 'CentOS' or $operatingsystem == 'RedHat') and ($lsbmajdistrelease == '6') 
-        || $operatingsystem == 'Fedora' {
+        or $operatingsystem == 'Fedora' {
         # Fedora can use the base packages.
         $fedora_packages = ['cron', 'ImageMagick', 'ImageMagick-devel']
         package { $fedora_packages: ensure => installed }

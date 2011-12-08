@@ -7,21 +7,25 @@ class preview_processor {
     $docsplit_packages = ['pdftk', 'tesseract']
     package { $docsplit_packages: ensure => installed }
 
+    # CentOS 5, RHEL 5
     if ($operatingsystem == 'CentOS' or $operatingsystem == 'RedHat') and ($lsbmajdistrelease == '5') {
         # CentOS needs updated ImageMagick and Ruby packages
         $centos_packages = ['ImageMagick-6.4.9-10', 'ImageMagick-devel-6.4.9-10', 'ruby1.9.2p0-1.9.2p0-1']
         package { $centos_packages: ensure => installed }
     }
 
-    if $operatingsystem == 'Fedora' {
+    # CentOS 6, RHEL 6, Fedora
+    if ($operatingsystem == 'CentOS' or $operatingsystem == 'RedHat') and ($lsbmajdistrelease == '6') 
+        || $operatingsystem == 'Fedora' {
         # Fedora can use the base packages.
-        $fedora_packages = ['ImageMagick', 'ImageMagick-devel']
+        $fedora_packages = ['cron', 'ImageMagick', 'ImageMagick-devel']
         package { $fedora_packages: ensure => installed }
     }
 
     ###########################################################################
     # Run the OpenOffice service to convert docs
-    $ooo_packages = ['openoffice.org-core', 
+    $ooo_packages = [
+            'openoffice.org-core',
             'openoffice.org-javafilter', 
             'openoffice.org-headless', 
             'openoffice.org-writer.x86_64',

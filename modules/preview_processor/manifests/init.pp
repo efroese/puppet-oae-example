@@ -19,7 +19,7 @@ class preview_processor {
     if ($operatingsystem == 'CentOS' or $operatingsystem == 'RedHat') and ($lsbmajdistrelease == '6') 
         or $operatingsystem == 'Fedora' {
         # Fedora can use the base packages.
-        $fedora_packages = ['cronie', 'ImageMagick', 'ImageMagick-devel']
+        $fedora_packages = ['cronie', 'ImageMagick', 'ImageMagick-devel', 'ruby-devel']
         package { $fedora_packages: ensure => installed }
     }
 

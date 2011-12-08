@@ -1,7 +1,15 @@
 class preview_processor {
 
+    $processor_user = "sakai"
+    realize(Group[$processor_user])
+    realize(User[$processor_user])
+
+    $ruby_bin="/usr/bin/ruby"
+    $basedir="/home/$processor_user"
+    $ppath = ""
+
     # Present in the base CentOS repositories
-    $common_packages = ['cpp', 'fontconfig-devel', 'poppler-utils', 'rubygems']
+    $common_packages = ['cpp', 'gcc', 'fontconfig-devel', 'java-1.6.0-openjdk', 'poppler-utils', 'rubygems']
     package { $common_packages: ensure => installed }
 
     # From rpmforge
@@ -15,11 +23,11 @@ class preview_processor {
                             'curl-devel',]
         package { $centos_packages: ensure => installed }
 	$docsplit_packages = [ $docsplit_packages, 'tesseract']
+        $ppath ="/opt/local/bin:\$PATH"
     }
 
     # CentOS 6, RHEL 6, Fedora
-    if ($operatingsystem == 'CentOS' or $operatingsystem == 'RedHat') and ($lsbmajdistrelease == '6') 
-        or $operatingsystem == 'Fedora' {
+    if ($operatingsystem == 'CentOS' or $operatingsystem == 'RedHat') and ($lsbmajdistrelease == '6') {
         # Fedora can use the base packages.
         $fedora_packages = ['cronie', 'curlpp-devel', 'ImageMagick', 'ImageMagick-devel', 'ruby-devel']
         package { $fedora_packages: ensure => installed }
@@ -37,8 +45,9 @@ class preview_processor {
     }
     
     cron { 'run_preview_processor':
-        command => '/usr/local/share/preview_processor/run_preview_processor.sh',
+        command => "$ppath /usr/local/share/preview_processor/run_preview_processor.sh",
+        user => $processor_user,
         ensure => present,
-        user => root,
+	minute => '*',
     }
 }

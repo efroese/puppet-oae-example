@@ -7,7 +7,6 @@
 SCRIPT_DIR="/home/rsmart/nakamura/scripts";
 PASSWORD_FILE="/home/rsmart/.acad_credentials.txt";
 PROCESSING_URL="var/search/needsprocessing.json";
-RUBY="/opt/local/bin/ruby"
 ##############################################################################
 
 # Treat unset variables as an error when performing parameter expansion
@@ -78,13 +77,13 @@ check_processing_url=`curl --insecure --head --silent ${SAKAIOAE_URL}${PROCESSIN
 
 if [ "${?}" = "0" ] ; then
     # Run the preview processol:
-    $RUBY ${SCRIPT_DIR}/preview_processor.rb ${SAKAIOAE_URL} ${PASSWORD} | grep -v "^I,";
-    # $RUBY scripts return 1 on success:
+    ruby ${SCRIPT_DIR}/preview_processor.rb ${SAKAIOAE_URL} ${PASSWORD} | grep -v "^I,";
+    # ruby scripts return 1 on success:
     ruby_return_code=${?};
     if [ "${ruby_return_code}" = "1" ] ; then
         touch ${SCRIPT_DIR}/.contentpreview.success;
     else
-        echo "ERROR: $RUBY ${SCRIPT_DIR}/preview_processor.rb returned non-one exit code: '${ruby_return_code}'";
+        echo "ERROR: ruby ${SCRIPT_DIR}/preview_processor.rb returned non-one exit code: '${ruby_return_code}'";
         rm -f ${SCRIPT_DIR}/.contentpreview.lock;
         exit 7;
     fi

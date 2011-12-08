@@ -22,7 +22,7 @@ class preview_processor::openoffice {
     }
     
     file { '/etc/init.d/soffice':
-        source => 'puppet:///modules/preview_processor/soffice.sh',
+        content => template('preview_processor/soffice.sh.erb'),
         owner  => root,
         group  => root,
         mode   => 755,

@@ -7,6 +7,7 @@ stage { 'last': require => Stage['main'] }
 
 class {
       'centos': stage => init;
+      'users': stage => init;
       'preview_processor': stage => first;
       'preview_processor::openoffice': stage => main;
       'preview_processor::gems':   stage => last;

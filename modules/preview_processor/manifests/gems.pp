@@ -8,7 +8,7 @@ class preview_processor::gems {
         ensure => installed,
     }
 
-    if $operatingsystem == 'CentOS' and $lsbmajordistrelease == '6' {
+    if $operatingsystem == 'CentOS' and $lsbmajordistrelease == '5' {
         package { "curb":
             provider => 'gem',
             ensure => installed,

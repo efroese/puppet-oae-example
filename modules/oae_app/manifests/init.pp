@@ -29,7 +29,7 @@ class oae_app {
         ensure  => link,
         owner   => $oae_user,
         group   => $oae_group,
-        target  => "${basedir}/sling/logs",
+        target  => "${logdir}",
     }
 
     file { "${basedir}/sling/nakamura.properties":

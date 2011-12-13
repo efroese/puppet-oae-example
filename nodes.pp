@@ -10,13 +10,15 @@ node basenode {
 
 }
 
-node 'centos5-oae-preview0.localdomain' inherits basenode {
-    include preview_processor
+node preview_processor_node inherits basenode {
+    class {'preview_processor':}
+    class {'preview_processor::gems':}
+    class {'preview_processor::openoffice':}
 }
 
-node 'centos6-oae-preview0.localdomain' inherits basenode {
-    include preview_processor
-}
+node 'centos5-oae-preview0.localdomain' inherits preview_processor_node { }
+
+node 'centos6-oae-preview0.localdomain' inherits preview_processor_node { }
 
 node 'centos5-oae-app0.localdomain' inherits basenode {
 
@@ -46,7 +48,7 @@ node 'centos5-oae-app0.localdomain' inherits basenode {
 
     $install_http_admin = false
 
-    include oae_app
+    class { 'oae_app': }
 }
 
 node 'centos6-oae-app0.localdomain' inherits basenode {
@@ -77,5 +79,5 @@ node 'centos6-oae-app0.localdomain' inherits basenode {
 
     $install_http_admin = false
 
-    include oae_app
+    class { 'oae_app': }
 }

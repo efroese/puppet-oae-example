@@ -6,7 +6,7 @@ class preview_processor::gems {
     if $operatingsystem == 'CentOS' and $lsbmajdistrelease == '5' {
 
         exec { 'gem-install-curb':
-            command => '/opt/local/bin/gem -v 0.7.15 install curb',
+            command => '/opt/local/bin/gem install -v 0.7.15 curb',
             unless => 'stat /opt/local/lib64/ruby/gems/1.9.1/gems/curb-0.7.15',
         }
 

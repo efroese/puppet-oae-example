@@ -1,11 +1,14 @@
 node basenode {
     include users
     include git
-    include ntp
     include java
 
     if $operatingsystem == 'CentOS' {
         include centos
+    }
+
+    class { 'ntp':
+        time_zone =>  '/usr/share/zoneinfo/America/Phoenix',
     }
 
 }

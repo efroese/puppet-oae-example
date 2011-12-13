@@ -40,7 +40,11 @@ class preview_processor::redhat {
             content => '/opt/local/lib64',
             notify => Exec['ldconfig-ruby19'],
         }
-        exec { 'ldconfig-ruby19': command => "/sbin/ldconfig" } 
+
+        exec { 'ldconfig-ruby19':
+            command => "/sbin/ldconfig",
+            unless  => 'ldd /opt/local/bin/ruby  | grep libruby.so.1.9'
+        } 
 
         cron { 'run_preview_processor':
             command => "PATH=/opt/local/bin:$PATH ${preview_processor::basedir}/bin/run_preview_processor.sh",
@@ -57,7 +61,7 @@ class preview_processor::redhat {
         package { $centos6_pkgs: ensure => installed }
 
         cron { 'run_preview_processor':
-            command => "$basedir/bin/run_preview_processor.sh",
+            command => "${preview_processor::basedir}/bin/run_preview_processor.sh",
             user   => $preview_processor::oae_user,
             ensure => present,
             minute => '*',

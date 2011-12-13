@@ -7,4 +7,11 @@ class preview_processor::debian {
     ]
 
     package { $packagelist: ensure => installed }
+
+    cron { 'run_preview_processor':
+        command => "${preview_processor::basedir}/bin/run_preview_processor.sh",
+        user => $preview_processor::oae_user,
+        ensure => present,
+        minute => '*',
+    }
 }

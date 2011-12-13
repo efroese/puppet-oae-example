@@ -9,7 +9,7 @@ class preview_processor {
     $ppath = ""
 
     # Present in the base CentOS repositories
-    $common_packages = ['cpp', 'gcc', 'fontconfig-devel', 'java-1.6.0-openjdk', 'poppler-utils', 'rubygems']
+    $common_packages = ['cpp', 'gcc', 'fontconfig-devel', 'poppler-utils', 'rubygems']
     package { $common_packages: ensure => installed }
 
     # From rpmforge
@@ -69,6 +69,6 @@ class preview_processor {
         command => "PATH=$ppath:$PATH $ppath $basedir/bin/run_preview_processor.sh",
         user => $processor_user,
         ensure => present,
-	minute => '*',
+        minute => '*',
     }
 }

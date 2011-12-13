@@ -1,9 +1,9 @@
 class users { 
-	@group { 'sakai':
+	@group { 'sakaioae':
 		gid => 8080,
 	}
 
-	@user { 'sakai':
+	@user { 'sakaioae':
 		ensure => present,
 		uid => 8080,
 		gid => 8080,

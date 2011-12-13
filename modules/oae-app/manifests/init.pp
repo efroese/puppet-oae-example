@@ -1,5 +1,5 @@
 class oae-app(  $oae_user="sakaioae", $basedir="/usr/local/sakaioae", 
-                $version_oae, $version_sparse,
+                $version_oae,
                 $downloaddir, $jarfile,
                 $javamemorymax, $javapermsize) {
    

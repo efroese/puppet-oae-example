@@ -1,15 +1,11 @@
-class oae_app {
+class oae_app($oae_user="sakaioae", $basedir="/usr/local/sakaioae") {
    
     $required_pkgs = ['curl', ]
     package { $required_pkgs: ensure => installed }
 
-    $oae_user  = "sakai"
-    $oae_group = "sakai"
-
-    realize(Group[$oae_group])
+    realize(Group[$oae_user])
     realize(User[$oae_user])
 
-    $basedir = "/usr/local/sakaioae"
     $logdir  = "/var/log/sakaioae"
     $etcdir = "/etc/sakaioae"
 
@@ -21,21 +17,21 @@ class oae_app {
     file { [$app_dirs, $logdir, $etcdir, $solrdir, $sparse_store_dir]:
         ensure => directory,
         owner  => $oae_user,
-        group  => $oae_group,
+        group  => $oae_user,
         mode   => 0775,
     }
 
     file {"${basedir}/sling/logs":
         ensure  => link,
         owner   => $oae_user,
-        group   => $oae_group,
+        group   => $oae_user,
         target  => "${logdir}",
     }
 
     file { "${basedir}/sling/nakamura.properties":
         ensure => present,
         owner   => $oae_user,
-        group   => $oae_group,
+        group   => $oae_user,
         mode    => '0644',
         source  => "puppet:///modules/oae_app/nakamura.properties",
     }
@@ -61,20 +57,20 @@ class oae_app {
     file { $confdirs:
         ensure  => directory,
         owner   => $oae_user,
-        group   => $oae_group,
+        group   => $oae_user,
         mode    => '0755';
     }
 
     file { "${confdir}/org/sakaiproject/nakamura/http/usercontent/ServerProtectionServiceImpl.config":
         owner   => $oae_user,
-        group   => $oae_group,
+        group   => $oae_user,
         mode    => '0440',
         content => template('oae_app/config/org/sakaiproject/nakamura/http/usercontent/ServerProtectionServiceImpl.config.erb');
     }
 
     file { "${confdir}/org/sakaiproject/nakamura/lite/storage/jdbc/JDBCStorageClientPool.config":
         owner   => $oae_user,
-        group   => $oae_group,
+        group   => $oae_user,
         mode    => '0440',
         content => template('oae_app/config/org/sakaiproject/nakamura/lite/storage/jdbc/JDBCStorageClientPool.config.erb');
     }

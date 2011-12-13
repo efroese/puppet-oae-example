@@ -1,20 +1,15 @@
-class preview_processor {
+class preview_processor($oae_user="sakaioae", $basedir="/usr/local/sakaioae") {
 
-    $processor_user = "sakai"
-    realize(Group[$processor_user])
-    realize(User[$processor_user])
+    realize(Group[$oae_user])
+    realize(User[$oae_user])
 
-    $ruby_bin="/usr/bin/ruby"
-    $basedir="/home/$processor_user"
-
-    $common_packages = ['cpp', 'gcc', 'fontconfig-devel', 'java-1.6.0-openjdk', 
-			'poppler-utils', 'pdftk', 'rubygems', 'tk']
+    $common_packages = ['cpp', 'gcc', 'fontconfig-devel', 'poppler-utils', 'pdftk', 'rubygems', 'tk']
     package { $common_packages: ensure => installed }
 
     file { "$basedir/bin":
         ensure => directory,
-        owner  => $processor_user,
-        group  => $processor_user,
+        owner  => $oae_user,
+        group  => $oae_user,
         mode   => 750,
     }
 
@@ -58,21 +53,20 @@ class preview_processor {
 
         cron { 'run_preview_processor':
             command => "PATH=/opt/local/bin:$PATH $basedir/bin/run_preview_processor.sh",
-            user => $processor_user,
+            user => $oae_user,
             ensure => present,
             minute => '*',
         }
     } 
 
-    # CentOS 6, RHEL 6, Fedora
+    # CentOS 6, RHEL 6
     if ($operatingsystem == 'CentOS' or $operatingsystem == 'RedHat') and ($lsbmajdistrelease == '6') {
-        # Fedora can use the base packages.
         $centos6_pkgs = ['cronie', 'curlpp-devel', 'ImageMagick', 'ImageMagick-devel', 'ruby-devel']
         package { $centos6_pkgs: ensure => installed }
 
        cron { 'run_preview_processor':
             command => "$basedir/bin/run_preview_processor.sh",
-            user => $processor_user,
+            user => $oae_user,
             ensure => present,
             minute => '*',
         }

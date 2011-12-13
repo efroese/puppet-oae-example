@@ -6,14 +6,10 @@ class preview_processor {
 
     $ruby_bin="/usr/bin/ruby"
     $basedir="/home/$processor_user"
-    $ppath = ""
 
-    # Present in the base CentOS repositories
-    $common_packages = ['cpp', 'gcc', 'fontconfig-devel', 'poppler-utils', 'rubygems']
+    $common_packages = ['cpp', 'gcc', 'fontconfig-devel', 'java-1.6.0-openjdk', 
+			'poppler-utils', 'pdftk', 'rubygems', 'tk']
     package { $common_packages: ensure => installed }
-
-    # From rpmforge
-    $docsplit_packages = ['pdftk']
 
     file { "$basedir/bin":
         ensure => directory,
@@ -22,29 +18,50 @@ class preview_processor {
         mode   => 750,
     }
 
+    define upgrade_local_rpm() {
+        file { "/tmp/$name":
+            source => "puppet:///modules/preview_processor/$name.rpm",
+            ensure => present,
+            owner => root,
+            group => root,
+        }
+
+        package { $name:
+             name   => $name, 
+             source => "/tmp/$name.rpm",
+             ensure => latest,
+             provider => 'rpm',
+        }
+    }
+
     # CentOS 5, RHEL 5
     if ($operatingsystem == 'CentOS' or $operatingsystem == 'RedHat') and ($lsbmajdistrelease == '5') {
         # CentOS needs updated ImageMagick and Ruby packages
-        $centos5_pkgs = ['curl-devel',]
+        $centos5_pkgs = ['curl-devel', 'tesseract', 'bzip2-devel', 'ghostscript-devel', 'jasper-devel',
+			'lcms-devel', 'libX11-devel', 'libXext-devel', 'libXt-devel', 'libjpeg-devel', 
+			'libtiff-devel', 'djvulibre', 'librsvg2', 'libwmf',]
         package { $centos5_pkgs: ensure => installed }
-	$docsplit_packages = [ $docsplit_packages, 'tesseract']
-        $ppath ="/opt/local/bin"
 
-        package { "https://github.com/efroese/rpms/blob/master/RPMS/x86_64/ruby1.9.2p0-1.9.2p0-1.x86_64.rpm":
-             ensure => installed,
-             provider => 'rpm',
-        }
+	$pkgs = ['ruby1.9.2p0-1.9.2p0-1.x86_64', 'ImageMagick-6.4.9-10.x86_64', 'ImageMagick-devel-6.4.9-10.x86_64']
+        upgrade_local_rpm { $pkgs: }
 
-        package { "https://github.com/efroese/rpms/raw/master/RPMS/x86_64/ImageMagick-6.4.9-10.x86_64.rpm":
-             ensure => installed,
-             provider => 'rpm',
+        file { "/etc/ld.so.conf.d/optlocal.conf":
+            owner => root, 
+            group => root, 
+            mode  => 750,
+            content => '/opt/local/lib64',
+            notify => Exec['ldconfig-ruby19'],
+	}
+        exec { 'ldconfig-ruby19':
+            command => "/sbin/ldconfig",
+        } 
+
+        cron { 'run_preview_processor':
+            command => "PATH=/opt/local/bin:$PATH $basedir/bin/run_preview_processor.sh",
+            user => $processor_user,
+            ensure => present,
+            minute => '*',
         }
-        
-        package { "https://github.com/efroese/rpms/raw/master/RPMS/x86_64/ImageMagick-devel-6.4.9-10.x86_64.rpm":
-             ensure => installed,
-             provider => 'rpm',
-        }
-		
     } 
 
     # CentOS 6, RHEL 6, Fedora
@@ -52,9 +69,14 @@ class preview_processor {
         # Fedora can use the base packages.
         $centos6_pkgs = ['cronie', 'curlpp-devel', 'ImageMagick', 'ImageMagick-devel', 'ruby-devel']
         package { $centos6_pkgs: ensure => installed }
-    }
 
-    package { $docsplit_packages: ensure => installed }
+       cron { 'run_preview_processor':
+            command => "$basedir/bin/run_preview_processor.sh",
+            user => $processor_user,
+            ensure => present,
+            minute => '*',
+        }
+    }
 
     ###########################################################################
     # Drop the script for the cron job
@@ -63,12 +85,5 @@ class preview_processor {
         owner  => root,
         group  => root,
         mode   => 755,
-    }
-    
-    cron { 'run_preview_processor':
-        command => "PATH=$ppath:$PATH $ppath $basedir/bin/run_preview_processor.sh",
-        user => $processor_user,
-        ensure => present,
-        minute => '*',
     }
 }

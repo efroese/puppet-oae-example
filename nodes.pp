@@ -22,13 +22,6 @@ node 'centos6-oae-preview0.localdomain' inherits preview_processor_node { }
 
 node 'centos5-oae-app0.localdomain' inherits basenode {
 
-    $downloaddir = 'http://source.sakaiproject.org/maven2-snapshots/org/sakaiproject/nakamura/org.sakaiproject.nakamura.app/1.1-SNAPSHOT/'
-    $jarfile = 'org.sakaiproject.nakamura.app-1.1-SNAPSHOT.jar'
-
-    $javamemorymax = '1000'
-    $javapermsize = '512'
-
-    $version_nakcore = '1.2-SNAPSHOT'
     $sparseurl  = "jdbc:mysql://localhost:3306/nakamura"
     $sparsedriver = "com.mysql.jdbc.Driver"
     $sparseuser = 'nakamura'
@@ -48,16 +41,17 @@ node 'centos5-oae-app0.localdomain' inherits basenode {
 
     $install_http_admin = false
 
-    class { 'oae-app': }
+    class { 'oae-app':
+        version_oae    => '1.1-SNAPSHOT',
+        version_sparse => '1.2-SNAPSHOT',
+        downloaddir    => 'http://source.sakaiproject.org/maven2-snapshots/org/sakaiproject/nakamura/org.sakaiproject.nakamura.app/1.1-SNAPSHOT/',
+        jarfile        => 'org.sakaiproject.nakamura.app-1.1-SNAPSHOT.jar',
+        javamemorymax  => '1000',
+        javapermsize   => '512',
+    }
 }
 
 node 'centos6-oae-app0.localdomain' inherits basenode {
-
-    $downloaddir = 'http://source.sakaiproject.org/maven2-snapshots/org/sakaiproject/nakamura/org.sakaiproject.nakamura.app/1.1-SNAPSHOT/'
-    $jarfile = 'org.sakaiproject.nakamura.app-1.1-SNAPSHOT.jar'
-
-    $javamemorymax = '1000'
-    $javapermsize = '512'
 
     $version_nakcore = '1.2-SNAPSHOT'
     $sparseurl  = "jdbc:mysql://localhost:3306/nakamura"
@@ -79,5 +73,12 @@ node 'centos6-oae-app0.localdomain' inherits basenode {
 
     $install_http_admin = false
 
-    class { 'oae-app': }
+    class { 'oae-app':
+        version_oae => '1.1-SNAPSHOT',
+        version_sparse => '1.2-SNAPSHOT',
+        downloaddir    => 'http://source.sakaiproject.org/maven2-snapshots/org/sakaiproject/nakamura/org.sakaiproject.nakamura.app/1.1-SNAPSHOT/',
+        jarfile        => 'org.sakaiproject.nakamura.app-1.1-SNAPSHOT.jar',
+        javamemorymax  => '1000',
+        javapermsize   => '512',
+    }
 }

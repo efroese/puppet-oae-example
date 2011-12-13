@@ -1,4 +1,7 @@
-class oae-app($oae_user="sakaioae", $basedir="/usr/local/sakaioae") {
+class oae-app(  $oae_user="sakaioae", $basedir="/usr/local/sakaioae", 
+                $version_oae, $version_sparse,
+                $downloaddir, $jarfile,
+                $javamemorymax, $javapermsize) {
    
     $required_pkgs = ['curl', ]
     package { $required_pkgs: ensure => installed }
@@ -74,7 +77,6 @@ class oae-app($oae_user="sakaioae", $basedir="/usr/local/sakaioae") {
         mode    => '0440',
         content => template('oae-app/config/org/sakaiproject/nakamura/lite/storage/jdbc/JDBCStorageClientPool.config.erb');
     }
-
 
     exec { 'fetch-package':
         command => "curl --silent ${downloaddir}${jarfile} --output ${basedir}/jars/${jarfile}",

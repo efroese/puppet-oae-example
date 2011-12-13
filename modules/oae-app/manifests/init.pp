@@ -1,4 +1,4 @@
-class oae_app($oae_user="sakaioae", $basedir="/usr/local/sakaioae") {
+class oae-app($oae_user="sakaioae", $basedir="/usr/local/sakaioae") {
    
     $required_pkgs = ['curl', ]
     package { $required_pkgs: ensure => installed }
@@ -33,7 +33,7 @@ class oae_app($oae_user="sakaioae", $basedir="/usr/local/sakaioae") {
         owner   => $oae_user,
         group   => $oae_user,
         mode    => '0644',
-        source  => "puppet:///modules/oae_app/nakamura.properties",
+        source  => "puppet:///modules/oae-app/nakamura.properties",
     }
 
     $confdir = "${basedir}/sling/config"
@@ -65,14 +65,14 @@ class oae_app($oae_user="sakaioae", $basedir="/usr/local/sakaioae") {
         owner   => $oae_user,
         group   => $oae_user,
         mode    => '0440',
-        content => template('oae_app/config/org/sakaiproject/nakamura/http/usercontent/ServerProtectionServiceImpl.config.erb');
+        content => template('oae-app/config/org/sakaiproject/nakamura/http/usercontent/ServerProtectionServiceImpl.config.erb');
     }
 
     file { "${confdir}/org/sakaiproject/nakamura/lite/storage/jdbc/JDBCStorageClientPool.config":
         owner   => $oae_user,
         group   => $oae_user,
         mode    => '0440',
-        content => template('oae_app/config/org/sakaiproject/nakamura/lite/storage/jdbc/JDBCStorageClientPool.config.erb');
+        content => template('oae-app/config/org/sakaiproject/nakamura/lite/storage/jdbc/JDBCStorageClientPool.config.erb');
     }
 
 
@@ -103,7 +103,7 @@ class oae_app($oae_user="sakaioae", $basedir="/usr/local/sakaioae") {
     file { '/etc/init.d/sakaioae':
         ensure  => present,
         mode    => '0755',
-        content => template('oae_app/sakaioae.sh.erb'),
+        content => template('oae-app/sakaioae.sh.erb'),
         notify  => Service['sakaioae'],
     }
 

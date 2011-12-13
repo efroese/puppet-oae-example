@@ -48,7 +48,7 @@ node 'centos5-oae-app0.localdomain' inherits basenode {
 
     $install_http_admin = false
 
-    class { 'oae_app': }
+    class { 'oae-app': }
 }
 
 node 'centos6-oae-app0.localdomain' inherits basenode {
@@ -79,5 +79,5 @@ node 'centos6-oae-app0.localdomain' inherits basenode {
 
     $install_http_admin = false
 
-    class { 'oae_app': }
+    class { 'oae-app': }
 }

@@ -1,24 +1,35 @@
 class preview_processor::gems {
 
     # Ruby Gems for the preview_processor.rb script
-    $ruby_gems = ['json', 'docsplit', 'rmagick']
+    $ruby_gems = ['curb', 'json', 'docsplit', 'rmagick']
 
-    package { $ruby_gems:
-        provider => 'gem',
-        ensure => installed,
-    }
+    if $operatingsystem == 'CentOS' and $lsbmajdistrelease == '5' {
 
-    if $operatingsystem == 'CentOS' and $lsbmajordistrelease == '5' {
-        package { "curb":
-            provider => 'gem',
-            ensure => installed,
-            version => '0.7.15',
+        exec { 'gem-install-curb':
+            command => '/opt/local/bin/gem -v 0.7.15 install curb',
+            unless => 'stat /opt/local/lib64/ruby/gems/1.9.1/gems/curb-0.7.15',
         }
+
+        exec { 'gem-install-json':
+            command => '/opt/local/bin/gem install json',
+            unless => 'stat /opt/local/lib64/ruby/gems/1.9.1/gems/json-*',
+        }
+
+        exec { 'gem-install-docsplit':
+            command => '/opt/local/bin/gem install docsplit',
+            unless => 'stat /opt/local/lib64/ruby/gems/1.9.1/gems/docsplit-*',
+        }
+
+        exec { 'gem-install-rmagick':
+            command => '/opt/local/bin/gem install rmagick',
+            unless => 'stat /opt/local/lib64/ruby/gems/1.9.1/gems/rmagick-*',
+        }
+
     } else {
-        package { "curb":
+
+        package { $ruby_gems:
             provider => 'gem',
             ensure => installed,
         }
     }
-        
 }

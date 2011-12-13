@@ -1,0 +1,80 @@
+#!/bin/bash
+# This is the startup/shutdown script for SakaiOAE
+# Global, editable VARS
+SAKAIOAE_JAVA_OPTS="-Xmx<%= javamemorymax %>m -server -XX:PermSize=<%= javapermsize %>m -Dcom.sun.management.jmxremote -Djava.awt.headless=true"
+SAKAIOAE_USER="<%= oae_user %>"
+SAKAIOAE_HOME=<%= basedir %>
+SAKAIOAE_JAR="<%= basedir %>/jars/<%= jarfile %>"
+JAVA_BIN="/usr/bin/java"
+
+INIT_PID="/var/run/${SAKAIOAE_USER}.pid"
+
+help() {
+echo "$0 INVALID SYNTAX ::  Use:"
+echo "$0 {stop | start | restart | status}"
+}
+
+start() {
+echo -n "Starting SakaiOAE: "
+su --login --command "${JAVA_BIN} ${SAKAIOAE_JAVA_OPTS} -jar ${SAKAIOAE_JAR} > /dev/null 2>&1 &" ${SAKAIOAE_USER}
+echo $$ > ${INIT_PID};
+echo "done.";
+}
+
+stop() {
+echo "Stopping SakaiOAE: "
+PROCESS=`ps auxwww | grep "^${SAKAIOAE_USER}" | perl -pe 's/^\S*\s*([0-9]+).*\n/\1 /'`
+if [ "${PROCESS}" != "" ] ; then
+  su -c "kill ${PROCESS}" ${SAKAIOAE_USER}
+  sleep 5;
+  PROCESS=`ps auxwww | grep "^${SAKAIOAE_USER}" | perl -pe 's/^\S*\s*([0-9]+).*\n/\1 /'`
+  if [ "${PROCESS}" != "" ] ; then
+    su -c "kill -9 ${PROCESS}" ${SAKAIOAE_USER}
+    sleep 5;
+    PROCESS=`ps auxwww | grep "^${SAKAIOAE_USER}" | perl -pe 's/^\S*\s*([0-9]+).*\n/\1 /'`
+    if [ "${PROCESS}" != "" ] ; then
+      echo "failed.";
+      exit 1;
+    fi
+  fi
+fi
+rm -f ${INIT_PID};
+echo "done.";
+}
+
+restart() {
+stop
+start
+}
+
+status() {
+if [ -f ${INIT_PID} ]; then
+  echo "It seems that the SakaiOAE app is still running.  If you have issued a stop command already, please wait." ;
+  exit 0;
+else
+  echo "SakaiOAE is not running" ;
+  exit 2;
+fi
+}
+
+if [ "${1}" = "start" ]; then
+start ;
+fi
+if [ "${1}" = "stop" ]; then
+stop ;
+fi
+if [ "${1}" = "restart" ]; then
+restart ;
+fi
+if [ "${1}" = "status" ]; then
+status ;
+fi
+if [ "${1}" = "help" ]; then
+help ;
+fi
+if [ "${1}" = "" ]; then
+help ;
+exit 1;
+fi
+
+exit 0;

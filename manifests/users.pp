@@ -7,7 +7,7 @@ class users {
 		ensure => present,
 		uid => 8080,
 		gid => 8080,
-		home       => '/home/sakai',
+		home => '/usr/local/sakaioae',
 		managehome => true
 	}
 	

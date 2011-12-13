@@ -1,11 +1,10 @@
-class ntp {
-    
-    $local_time_zone = '/usr/share/zoneinfo/America/Phoenix'
+class ntp($time_zone) {
     
     package { 'ntp': ensure => installed }
     
     file { '/etc/localtime':
-        target => $local_time_zone,
+        ensure => link,
+        target => $time_zone,
     }
 
     service { 'ntpd':

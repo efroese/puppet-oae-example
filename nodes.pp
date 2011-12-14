@@ -82,3 +82,10 @@ node 'centos6-oae-app0.localdomain' inherits basenode {
         javapermsize   => '512',
     }
 }
+
+node 'centos5-solr0.localdomain' inherits basenode {
+    class { 'oae-solr': 
+        oae_version => '1.1-SNAPSHOT',
+    }
+    class { 'oae-solr::master': }
+}

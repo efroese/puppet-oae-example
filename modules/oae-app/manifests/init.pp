@@ -39,43 +39,12 @@ class oae-app(  $oae_user="sakaioae", $basedir="/usr/local/sakaioae",
         source  => "puppet:///modules/oae-app/nakamura.properties",
     }
 
-    $confdir = "${basedir}/sling/config"
 
-    # Create the configuration directory heirarchy for sling:
-    $confdirs = [
-        "${confdir}/",
-        "${confdir}/org/",
-        "${confdir}/org/sakaiproject/",
-        "${confdir}/org/sakaiproject/nakamura/",
-        "${confdir}/org/sakaiproject/nakamura/auth/",
-        "${confdir}/org/sakaiproject/nakamura/http/",
-        "${confdir}/org/sakaiproject/nakamura/lite/",
-        "${confdir}/org/sakaiproject/nakamura/auth/trusted/",
-        "${confdir}/org/sakaiproject/nakamura/http/usercontent/",
-        "${confdir}/org/sakaiproject/nakamura/lite/storage/",
-        "${confdir}/org/sakaiproject/nakamura/lite/storage/jdbc/",
-        "${confdir}/org/sakaiproject/nakamura/proxy/",
-    ]
-
-    file { $confdirs:
+    file { "${basedir}/sling/config":
         ensure  => directory,
         owner   => $oae_user,
         group   => $oae_user,
         mode    => '0755';
-    }
-
-    file { "${confdir}/org/sakaiproject/nakamura/http/usercontent/ServerProtectionServiceImpl.config":
-        owner   => $oae_user,
-        group   => $oae_user,
-        mode    => '0440',
-        content => template('oae-app/config/org/sakaiproject/nakamura/http/usercontent/ServerProtectionServiceImpl.config.erb');
-    }
-
-    file { "${confdir}/org/sakaiproject/nakamura/lite/storage/jdbc/JDBCStorageClientPool.config":
-        owner   => $oae_user,
-        group   => $oae_user,
-        mode    => '0440',
-        content => template('oae-app/config/org/sakaiproject/nakamura/lite/storage/jdbc/JDBCStorageClientPool.config.erb');
     }
 
     exec { 'fetch-package':
@@ -92,8 +61,6 @@ class oae-app(  $oae_user="sakaioae", $basedir="/usr/local/sakaioae",
         require => [
             File["${basedir}/sling/nakamura.properties"],
             File["/etc/init.d/sakaioae"],
-            File["${basedir}/sling/config/org/sakaiproject/nakamura/lite/storage/jdbc/JDBCStorageClientPool.config"],
-            File["${basedir}/sling/config/org/sakaiproject/nakamura/http/usercontent/ServerProtectionServiceImpl.config"],
             File["${basedir}/store"],
             File["${basedir}/sling/solr"],
             File["/var/log/sakaioae/"],

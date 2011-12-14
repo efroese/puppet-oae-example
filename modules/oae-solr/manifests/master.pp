@@ -1,0 +1,3 @@
+class oae-solr::master {
+
+}

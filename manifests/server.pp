@@ -219,6 +219,7 @@ class mysql::server {
     ensure => present,
     content => $operatingsystem ? {
       /RedHat|Fedora|CentOS/ => template('mysql/logrotate.redhat.erb'),
+                    /Debian/ => template('mysql/logrotate.debian.erb'),
       default => undef,
     }
   }

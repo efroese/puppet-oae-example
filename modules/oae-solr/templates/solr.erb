@@ -1,5 +1,8 @@
 #!/bin/bash
-# This is the startup/shutdown script for SakaiOAE
+#
+# chkconfig: 2345 01 99
+# description: Solr cluster node.
+
 # Global, editable VARS
 SOLR_JAVA_OPTS=" -Dsolr.solr.home=<%= solr_app %> -Djetty.port=8983 "
 SAKAIOAE_USER="<%= oae_user %>"
@@ -8,20 +11,22 @@ JAVA_BIN="/usr/bin/java"
 
 INIT_PID="/var/run/oae.solr.pid"
 
+PROG="solr"
+
 help() {
 echo "$0 INVALID SYNTAX ::  Use:"
 echo "$0 {stop | start | restart | status}"
 }
 
 start() {
-echo -n "Starting OAE Solr: "
+echo -n "Starting $PROG: "
 su --login --command "(cd ${SOLR_HOME} && ${JAVA_BIN} ${SOLR_JAVA_OPTS} -jar ${SOLR_HOME}/start.jar > /dev/null 2>&1 &)" ${SAKAIOAE_USER}
 echo $$ > ${INIT_PID};
 echo "done.";
 }
 
 stop() {
-echo "Stopping SakaiOAE: "
+echo "Stopping $PROG: "
 PROCESS=`ps auxwww | grep "^${SAKAIOAE_USER}" | perl -pe 's/^\S*\s*([0-9]+).*\n/\1 /'`
 if [ "${PROCESS}" != "" ] ; then
   su -c "kill ${PROCESS}" ${SAKAIOAE_USER}
@@ -48,7 +53,7 @@ start
 
 status() {
 if [ -f ${INIT_PID} ]; then
-  echo "It seems that the SakaiOAE app is still running.  If you have issued a stop command already, please wait." ;
+  echo "It seems that the $SOLR app is still running.  If you have issued a stop command already, please wait." ;
   exit 0;
 else
   echo "SakaiOAE is not running" ;
@@ -56,24 +61,22 @@ else
 fi
 }
 
-if [ "${1}" = "start" ]; then
-start ;
-fi
-if [ "${1}" = "stop" ]; then
-stop ;
-fi
-if [ "${1}" = "restart" ]; then
-restart ;
-fi
-if [ "${1}" = "status" ]; then
-status ;
-fi
-if [ "${1}" = "help" ]; then
-help ;
-fi
-if [ "${1}" = "" ]; then
-help ;
-exit 1;
-fi
+case $1 in
+    "start")
+        start;
+        ;;
+    "stop")
+        stop;
+        ;;
+    "status")
+        status;
+        ;;
+    "help")
+        help;
+        ;;
+    *)
+        help
+        ;;
+esac
 
 exit 0;

@@ -51,6 +51,21 @@ node 'centos5-oae-app0.localdomain' inherits basenode {
         javamemorymax  => '1000',
         javapermsize   => '512',
     }
+
+    oae::sling_config { "org/sakaiproject/nakamura/solr/MultiMasterRemoteSolrClient.config":
+        config => {
+            "service.pid" => '"org.sakaiproject.nakamura.solr.MultiMasterRemoteSolrClient"',
+            "query-urls" => '"http://192.168.1.70:8983/solr|http://192.168.1.71:8983/solr"',
+        }
+    }
+
+    oae::sling_config { "org/sakaiproject/nakamura/solr/SolrServerServiceImpl.config":
+        config => {
+            "service.pid" => '"org.sakaiproject.nakamura.solr.SolrServerServiceImpl"',
+            "solr-impl" => '"multiremote"',
+        }
+    }
+
 }
 
 node 'centos6-oae-app0.localdomain' inherits basenode {
@@ -81,11 +96,25 @@ node 'centos6-oae-app0.localdomain' inherits basenode {
         javamemorymax  => '1000',
         javapermsize   => '512',
     }
+
 }
 
 node 'centos5-solr0.localdomain' inherits basenode {
+
+    include oae
+
     class { 'oae-solr': 
         oae_version => '1.1-SNAPSHOT',
+        role => 'master',
     }
-    class { 'oae-solr::master': }
+}
+
+node 'centos5-solr1.localdomain' inherits basenode {
+
+    include oae
+
+    class { 'oae-solr': 
+        oae_version => '1.1-SNAPSHOT',
+        role => 'slave',
+    }
 }

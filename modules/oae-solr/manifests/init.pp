@@ -1,5 +1,5 @@
 class oae-solr($oae_user = 'sakaioae', $basedir = '/usr/local/sakaioae', $oae_version,
-        $solr_git = 'http://github.com/sakaiproject/solr.git') {
+        $solr_git = 'http://github.com/sakaiproject/solr.git', $role) {
 
     realize(Group[$oae_user])
     realize(User[$oae_user])
@@ -57,8 +57,20 @@ class oae-solr($oae_user = 'sakaioae', $basedir = '/usr/local/sakaioae', $oae_ve
 
     exec { 'copy-solr-resources':
         command => "cp ${solr_basedir}/solr-bundle/src/main/resources/* ${solr_conf}",
-        creates => "${solr_bundle}/schema.xml",
+        creates => "${solr_conf}/schema.xml",
         require => [ Exec['clone-solr'], File[$solr_conf], ],
+    }
+
+    case $role {
+        "master|slave" : {
+            file { "${oae-solr::solr_conf}/solrconfig.xml":
+                owner  => $oae-solr::oae_user,
+                group  => $oae-solr::oae_user,
+                mode   => "0644",
+                source => "file://${oae-solr::solr_bundle}/src/main/resources/${role}-solrconfig.xml",
+                notify => Service['solr'],
+            }
+        }
     }
 
     file { '/etc/init.d/solr':

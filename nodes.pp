@@ -112,10 +112,10 @@ node /centos5-oae-app[0-1].localdomain/ inherits basenode {
     }
 
     class { 'oae::core':
-         $driver = "jdbc:mysql://192.168.1.250:3306/nakamura?autoReconnectForPools\\=true",
-         $url    = 'com.mysql.jdbc.Driver',
-         $user   = 'nakamura',
-         $pass   = 'ironchef',
+         driver => "jdbc:mysql://192.168.1.250:3306/nakamura?autoReconnectForPools\\=true",
+         url    => 'com.mysql.jdbc.Driver',
+         user   => 'nakamura',
+         pass   => 'ironchef',
     }
 
     oae::sling_config { "org/sakaiproject/nakamura/http/usercontent/ServerProtectionServiceImpl.config":

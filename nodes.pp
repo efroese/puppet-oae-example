@@ -1,3 +1,7 @@
+###########################################################################
+#
+# Node Type Definitions
+#
 node basenode {
     include users
     include git
@@ -13,10 +17,40 @@ node basenode {
 
 }
 
+#
+# Sakai OAE Content Preview Processor
+#
 node preview_processor_node inherits basenode {
     class {'preview_processor':}
     class {'preview_processor::gems':}
     class {'preview_processor::openoffice':}
+}
+
+###########################################################################
+#
+# Nodes
+#
+
+#
+# MySQL Database Server
+#
+node 'centos5-oae-db0.localdomain' inherits basenode {
+
+    $mysql_password = 'seequelle'
+
+    include augeas
+    include mysql::server
+
+    mysql::database{ 'nakamura':
+        ensure   => present
+    }
+
+    mysql::rights{"Set rights for puppet database":
+        ensure   => present,
+        database => 'nakamura',
+        user     => 'nakamura',
+        password => 'ironchef'
+    }
 }
 
 node 'centos5-oae-preview0.localdomain' inherits preview_processor_node { }
@@ -83,39 +117,6 @@ node 'centos5-oae-app0.localdomain' inherits basenode {
             'username'    => "\"${oae::params::sparseuser}\"",
             'password'    => "\"${oae::params::sparsepass}\"",
         }
-    }
-
-}
-
-node 'centos6-oae-app0.localdomain' inherits basenode {
-
-    $sparseurl  = "jdbc:mysql://localhost:3306/nakamura"
-    $sparsedriver = "com.mysql.jdbc.Driver"
-    $sparseuser = 'nakamura'
-    $sparsepass = 'ironchef'
-
-    # is the version of the server protection jar
-    $version_http = '1.1'
-    $serverprotectsec = 'thisisasecret'
-    # is the content node url as seen by jetty (protocol will be as proxied to - probably http);
-    $httpd_name_content = 'centos5-oae-app.localdomain'
-    # is the external protocol of the content node url
-    $http_content = 'http'
-    # is the app node url (minus the protocol)
-    $httpd_name = 'centos5-oae-app.localdomain'
-    # is the app node ip address
-    $ipaddress = '192.168.1.60'
-
-    $install_http_admin = false
-
-    include oae::params
-
-    class { 'oae-app':
-        version_oae    => '1.1-SNAPSHOT',
-        downloaddir    => 'http://source.sakaiproject.org/maven2-snapshots/org/sakaiproject/nakamura/org.sakaiproject.nakamura.app/1.1-SNAPSHOT/',
-        jarfile        => 'org.sakaiproject.nakamura.app-1.1-SNAPSHOT.jar',
-        javamemorymax  => '1000',
-        javapermsize   => '512',
     }
 
 }

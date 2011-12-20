@@ -1,4 +1,6 @@
-class preview_processor::redhat {
+class oae::preview_processor::redhat {
+
+    Class['oae::params'] -> Class['oae::preview_processor::redhat']
 
     $common_packages = ['cpp', 'gcc', 'fontconfig-devel', 'poppler-utils', 'pdftk', 'rubygems', 'tk']
     package { $common_packages: ensure => installed }
@@ -48,7 +50,7 @@ class preview_processor::redhat {
 
         cron { 'run_preview_processor':
             command => "PATH=/opt/local/bin:$PATH ${preview_processor::basedir}/bin/run_preview_processor.sh",
-            user => $preview_processor::oae_user,
+            user => $oae::params::user,
             ensure => present,
             minute => '*',
         }
@@ -62,7 +64,7 @@ class preview_processor::redhat {
 
         cron { 'run_preview_processor':
             command => "${preview_processor::basedir}/bin/run_preview_processor.sh",
-            user   => $preview_processor::oae_user,
+            user   => $oae::params::user,
             ensure => present,
             minute => '*',
         }

@@ -1,4 +1,4 @@
-class preview_processor::openoffice {
+class oae::preview_processor::openoffice {
 
     ###########################################################################
     # Run the OpenOffice service to convert docs
@@ -22,7 +22,7 @@ class preview_processor::openoffice {
     }
     
     file { '/etc/init.d/soffice':
-        content => template('preview_processor/soffice.sh.erb'),
+        content => template('oae/soffice.sh.erb'),
         owner  => root,
         group  => root,
         mode   => 755,

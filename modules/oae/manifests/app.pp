@@ -2,6 +2,8 @@ class oae::app(  $oae_user="sakaioae", $basedir="/usr/local/sakaioae",
                 $version_oae,
                 $downloaddir, $jarfile,
                 $javamemorymax, $javapermsize) {
+
+    Class['oae::core'] -> Class['oae:app']
    
     $required_pkgs = ['curl', ]
     package { $required_pkgs: ensure => installed }

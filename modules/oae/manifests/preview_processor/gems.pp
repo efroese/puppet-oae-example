@@ -1,4 +1,4 @@
-class preview_processor::gems {
+class oae::preview_processor::gems {
 
     # Ruby Gems for the preview_processor.rb script
     $ruby_gems = ['curb', 'json', 'docsplit', 'rmagick']

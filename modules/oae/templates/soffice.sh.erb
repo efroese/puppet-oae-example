@@ -14,7 +14,7 @@ RETVAL=0
 SOFFICE_PATH='/usr/lib64/openoffice.org3/program'
 SOFFICE_ARGS='-accept="socket,host=localhost,port=8100;urp" -headless -nofirststartwizard'
 SOFFICE_PIDFILE=/var/run/soffice.bin.pid
-OAE_USER=<%= scope.lookupvar('preview_processor::oae_user') %>
+OAE_USER=<%= scope.lookupvar('oae::params::user') %>
 
 start_soffice() {
        echo -n $"Starting OpenOffice.org"

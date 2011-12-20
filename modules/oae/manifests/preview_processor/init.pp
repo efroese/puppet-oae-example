@@ -1,4 +1,4 @@
-class preview_processor($oae_user="sakaioae", $basedir="/usr/local/sakaioae") {
+class oae::preview_processor($oae_user="sakaioae", $basedir="/usr/local/sakaioae") {
 
     realize(Group[$oae_user])
     realize(User[$oae_user])
@@ -11,14 +11,14 @@ class preview_processor($oae_user="sakaioae", $basedir="/usr/local/sakaioae") {
     }
 
     case $operatingsystem {
-        /RedHat|CentOS/:   { include preview_processor::redhat }
-        /Debian|Ubuntu/:  { include preview_processor::debian }
+        /RedHat|CentOS/:   { include oae::preview_processor::redhat }
+        /Debian|Ubuntu/:  { include oae::preview_processor::debian }
     }
 
     ###########################################################################
     # Drop the script for the cron job
     file { "${basedir}/bin/run_preview_processor.sh":
-        source => 'puppet:///modules/preview_processor/run_preview_processor.sh',
+        source => 'puppet:///modules/oae/run_preview_processor.sh',
         owner  => root,
         group  => root,
         mode   => 755,

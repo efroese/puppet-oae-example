@@ -1,5 +1,7 @@
 class oae::core {
 
+    Class['oae::params'] -> Class['oae::core']
+
     oae::sling_config { "org/sakaiproject/nakamura/lite/storage/jdbc/JDBCStorageClientPool.config":
         dirname => "org/sakaiproject/nakamura/lite/storage/jdbc",
         pid     => '"org.sakaiproject.nakamura.lite.storage.jdbc.JDBCStorageClientPool"',

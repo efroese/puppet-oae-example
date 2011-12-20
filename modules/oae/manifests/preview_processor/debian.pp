@@ -1,4 +1,4 @@
-class preview_processor::debian {
+class oae::preview_processor::debian {
 
     $packagelist = [
         'graphicsmagick', 'pdftk', 'poppler-utils', 'tesseract-ocr',
@@ -9,8 +9,8 @@ class preview_processor::debian {
     package { $packagelist: ensure => installed }
 
     cron { 'run_preview_processor':
-        command => "${preview_processor::basedir}/bin/run_preview_processor.sh",
-        user => $preview_processor::oae_user,
+        command => "${oae::preview_processor::basedir}/bin/run_preview_processor.sh",
+        user => $oae::params::user,
         ensure => present,
         minute => '*',
     }

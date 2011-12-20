@@ -1,8 +1,8 @@
-class oae-solr($oae_user = 'sakaioae', $basedir = '/usr/local/sakaioae', $oae_version,
+class oae::solr($oae::params::user = 'sakaioae', $basedir = '/usr/local/sakaioae', $oae_version,
         $solr_git = 'http://github.com/sakaiproject/solr.git', $role) {
 
-    realize(Group[$oae_user])
-    realize(User[$oae_user])
+    realize(Group[$oae::params::user])
+    realize(User[$oae::params::user])
 
     # Home for standalone solr servers
     $solr_basedir= "${basedir}/solr"
@@ -18,8 +18,8 @@ class oae-solr($oae_user = 'sakaioae', $basedir = '/usr/local/sakaioae', $oae_ve
 
     file { $basedir:
         ensure => directory,
-        owner => $oae_user,
-        group => $oae_user,
+        owner => $oae::params::user,
+        group => $oae::params::user,
         mode  => 0755,
     }
 
@@ -36,8 +36,8 @@ class oae-solr($oae_user = 'sakaioae', $basedir = '/usr/local/sakaioae', $oae_ve
     }
 
     exec { 'chown-solr':
-        command => "chown -R ${$oae_user}:${$oae_group} ${solr_basedir}/example",
-        unless  => "[ `stat --printf='%U'  ${solr_basedir}/example` == '${$oae_user}' ]",
+        command => "chown -R ${$oae::params::user}:${$oae::params::group} ${solr_basedir}/example",
+        unless  => "[ `stat --printf='%U'  ${solr_basedir}/example` == '${$oae::params::user}' ]",
         require => Exec['unpack-solr'],
     }
 
@@ -55,8 +55,8 @@ class oae-solr($oae_user = 'sakaioae', $basedir = '/usr/local/sakaioae', $oae_ve
 
     file { $solr_conf:
         ensure => directory,
-        owner  => $oae_user,
-        group  => $oae_user,
+        owner  => $oae::params::user,
+        group  => $oae::params::user,
         mode   => 755,
         require => Exec['copy-solr-app'],
     }
@@ -67,13 +67,13 @@ class oae-solr($oae_user = 'sakaioae', $basedir = '/usr/local/sakaioae', $oae_ve
         require => [ Exec['clone-solr'], File[$solr_conf], ],
     }
 
-    file { "${oae-solr::solr_conf}/solrconfig.xml":
-        owner  => $oae-solr::oae_user,
-        group  => $oae-solr::oae_user,
+    file { "${oae::solr::solr_conf}/solrconfig.xml":
+        owner  => $oae::params::user,
+        group  => $oae::params::user,
         mode   => "0644",
         source => $role ? {
-            '/master/slave' => "file://${oae-solr::solr_bundle}/src/main/resources/${role}-solrconfig.xml",
-            default         => "file://${oae-solr::solr_bundle}/src/main/resources/solrconfig.xml",
+            '/master/slave' => "file://${oae::solr::solr_bundle}/src/main/resources/${role}-solrconfig.xml",
+            default         => "file://${oae::solr::solr_bundle}/src/main/resources/solrconfig.xml",
         },
         notify => Service['solr'],
         require => Exec['copy-solr-resources'],
@@ -81,14 +81,14 @@ class oae-solr($oae_user = 'sakaioae', $basedir = '/usr/local/sakaioae', $oae_ve
 
     file { '/etc/init.d/solr':
         ensure => present,
-        owner  => $oae_user,
-        group  => $oae_user,
+        owner  => $oae::params::user,
+        group  => $oae::params::user,
         mode   => 0755,
-        content => template("oae-solr/solr.erb"),
+        content => template("oae/solr.erb"),
     }
 
     service { 'solr':
         ensure => running,
-        require => File["${oae-solr::solr_conf}/solrconfig.xml"],
+        require => File["${oae::solr::solr_conf}/solrconfig.xml"],
     }
 }

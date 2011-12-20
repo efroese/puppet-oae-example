@@ -1,6 +1,7 @@
 class oae {
 
-    Class['aoe'] -> Class['oae::params']
+    # Load the oae::params class before the oae class
+    Class['oae::params'] -> Class['oae']
 
     define sling_config($dirname, $pid, $config){
 
@@ -9,14 +10,16 @@ class oae {
         if !defined(Exec["mkdir_${sling_config}/${dirname}"]) {
             exec { "mkdir_${sling_config}/${dirname}":
                 command => "mkdir -p ${sling_config}/${dirname}",
-                require => Class['oae-app'],
+                creates => "${sling_config}/${dirname}",
+                require => Class['oae::app'],
             }
         }
 
         if !defined(Exec["chown_${sling_config}/${dirname}"]) {
             exec { "chown_${sling_config}/${dirname}":
                 command => "chown -R ${oae::params::user}:${oae::params::group} ${sling_config}/${dirname}",
-                require => Class['oae-app'],
+                require => Exec["mkdir_${sling_config}/${dirname}"],
+                unless  => "[ `stat --printf='%U' ${sling_config}/${dirname}` == '${$oae::params::user}' ]"
             }
         }
 

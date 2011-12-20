@@ -2,7 +2,7 @@
 # This is the startup/shutdown script for SakaiOAE
 # Global, editable VARS
 SAKAIOAE_JAVA_OPTS="-Xmx<%= javamemorymax %>m -server -XX:PermSize=<%= javapermsize %>m -Dcom.sun.management.jmxremote -Djava.awt.headless=true"
-SAKAIOAE_USER="<%= oae_user %>"
+SAKAIOAE_USER="<%= scope.lookupvar('oae::params::user')  %>"
 SAKAIOAE_HOME=<%= basedir %>
 SAKAIOAE_JAR="<%= basedir %>/jars/<%= jarfile %>"
 JAVA_BIN="/usr/bin/java"

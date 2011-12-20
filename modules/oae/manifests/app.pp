@@ -1,4 +1,4 @@
-class oae-app(  $oae_user="sakaioae", $basedir="/usr/local/sakaioae", 
+class oae::app(  $oae_user="sakaioae", $basedir="/usr/local/sakaioae", 
                 $version_oae,
                 $downloaddir, $jarfile,
                 $javamemorymax, $javapermsize) {
@@ -36,7 +36,7 @@ class oae-app(  $oae_user="sakaioae", $basedir="/usr/local/sakaioae",
         owner   => $oae_user,
         group   => $oae_user,
         mode    => '0644',
-        source  => "puppet:///modules/oae-app/nakamura.properties",
+        source  => "puppet:///modules/oae/nakamura.properties",
     }
 
 
@@ -72,7 +72,7 @@ class oae-app(  $oae_user="sakaioae", $basedir="/usr/local/sakaioae",
     file { '/etc/init.d/sakaioae':
         ensure  => present,
         mode    => '0755',
-        content => template('oae-app/sakaioae.sh.erb'),
+        content => template('oae/sakaioae.sh.erb'),
         notify  => Service['sakaioae'],
     }
 

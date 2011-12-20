@@ -77,8 +77,10 @@ node 'centos6-oae-preview0.localdomain' inherits preview_processor_node { }
 node /centos5-oae-app[0-9].localdomain/ inherits basenode {
 
     include oae::params
+    include oae
+    include oae::core
 
-    class { 'oae-app':
+    class { 'oae::app':
         version_oae    => '1.1',
         downloaddir    => 'http://192.168.1.124/jars/',
         jarfile        => 'org.sakaiproject.nakamura.app-1.1-mysql.jar',
@@ -117,17 +119,6 @@ node /centos5-oae-app[0-9].localdomain/ inherits basenode {
         pid     => '"org.sakaiproject.nakamura.solr.SolrServerServiceImpl"',
         config => {
             "solr-impl" => '"multiremote"',
-        }
-    }
-
-    oae::sling_config { "org/sakaiproject/nakamura/lite/storage/jdbc/JDBCStorageClientPool.config":
-        dirname => "org/sakaiproject/nakamura/lite/storage/jdbc",
-        pid     => '"org.sakaiproject.nakamura.lite.storage.jdbc.JDBCStorageClientPool"',
-        config => {
-            'jdbc-driver' => "\"${oae::params::sparsedriver}\"",
-            'jdbc-url'    => "\"${oae::params::sparseurl}\"",
-            'username'    => "\"${oae::params::sparseuser}\"",
-            'password'    => "\"${oae::params::sparsepass}\"",
         }
     }
 }

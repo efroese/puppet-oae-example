@@ -10,7 +10,7 @@ class oae {
             exec { "mkdir_${sling_config}/${dirname}":
                 command => "mkdir -p ${sling_config}/${dirname}",
                 creates => "${sling_config}/${dirname}",
-                require => Class['oae-app'],
+                require => Class['oae::app'],
             }
         }
 

@@ -1,52 +1,47 @@
-class oae::app(  $oae_user="sakaioae", $basedir="/usr/local/sakaioae", 
+class oae::app( $basedir="/usr/local/sakaioae", 
                 $version_oae,
                 $downloaddir, $jarfile,
                 $javamemorymax, $javapermsize) {
 
-    Class['oae::core'] -> Class['oae:app']
-   
+#    Class['oae::core'] -> Class['oae:app']
+
     $required_pkgs = ['curl', ]
     package { $required_pkgs: ensure => installed }
 
-    realize(Group[$oae_user])
-    realize(User[$oae_user])
+    realize(Group[$oae::params::user])
+    realize(User[$oae::params::user])
 
-    $logdir  = "/var/log/sakaioae"
-    $etcdir = "/etc/sakaioae"
+    $log_dir  = "/var/log/sakaioae"
+    $jar_dir  = "${basedir}/jars"
 
-    $solrdir = "$basedir/sling/solr"
-    $sparse_store_dir = "$basedir/store"
+    $sling_dir  = "${basedir}/sling"
+    $config_dir = "${sling_dir}/config"
+    $solr_dir   = "${sling_dir}/solr"
 
-    $app_dirs = [ $basedir, "${basedir}/jars", "${basedir}/sling"]
+    # TODO this needs to become a mount
+    $sparse_store_dir = "${basedir}/store"
 
-    file { [$app_dirs, $logdir, $etcdir, $solrdir, $sparse_store_dir]:
+    $app_dirs = [ $basedir, $jar_dir, $sling_dir, $config_dir, $log_dir, $solr_dir, $sparse_store_dir]
+    file { [$app_dirs]:
         ensure => directory,
-        owner  => $oae_user,
-        group  => $oae_user,
+        owner  => $oae::params::user,
+        group  => $oae::params::user,
         mode   => 0775,
     }
 
     file {"${basedir}/sling/logs":
         ensure  => link,
-        owner   => $oae_user,
-        group   => $oae_user,
-        target  => "${logdir}",
+        owner   => $oae::params::user,
+        group   => $oae::params::user,
+        target  => "${log_dir}",
     }
 
     file { "${basedir}/sling/nakamura.properties":
         ensure => present,
-        owner   => $oae_user,
-        group   => $oae_user,
+        owner   => $oae::params::user,
+        group   => $oae::params::user,
         mode    => '0644',
         source  => "puppet:///modules/oae/nakamura.properties",
-    }
-
-
-    file { "${basedir}/sling/config":
-        ensure  => directory,
-        owner   => $oae_user,
-        group   => $oae_user,
-        mode    => '0755';
     }
 
     exec { 'fetch-package':
@@ -63,10 +58,7 @@ class oae::app(  $oae_user="sakaioae", $basedir="/usr/local/sakaioae",
         require => [
             File["${basedir}/sling/nakamura.properties"],
             File["/etc/init.d/sakaioae"],
-            File["${basedir}/store"],
-            File["${basedir}/sling/solr"],
-            File["/var/log/sakaioae/"],
-            File["${basedir}/sling/logs/"]
+            File[ [$app_dirs] ],
         ],
         notify  => Service['sakaioae'],
     }

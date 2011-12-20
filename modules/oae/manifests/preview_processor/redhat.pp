@@ -2,7 +2,7 @@ class oae::preview_processor::redhat {
 
     Class['oae::params'] -> Class['oae::preview_processor::redhat']
 
-    $common_packages = ['cpp', 'gcc', 'fontconfig-devel', 'poppler-utils', 'pdftk', 'rubygems', 'tk']
+    $common_packages = ['cpp', 'gcc', 'fontconfig-devel', 'poppler-utils', 'pdftk', 'rubygems', 'tk', 'GraphicsMagick']
     package { $common_packages: ensure => installed }
 
     define upgrade_local_rpm() {

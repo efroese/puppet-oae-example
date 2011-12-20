@@ -1,5 +1,30 @@
 ###########################################################################
 #
+# Nodes
+#
+# This is an example of how to set up a Sakai OAE Cluster with puppet.
+#
+# This is still a work in progress.
+#
+# One Apache HTTPD load balancer in front of two OAE app nodes.
+# centos5-oae-lb - 192.168.1.40
+# centos5-oae-app0 - 192.168.1.50
+# centos5-oae-app1 - 192.168.1.51
+#
+# A pair of solr nodes, one master and one slave.
+# centos5-solr0    - 192.168.1.70 (master)
+# centos5-solr1    - 192.168.1.71 (slave)
+#
+# One MySQL database node.
+# (MySQL replication is not one of my priorities right now)
+# centos5-db0    - 192.168.1.250
+#
+# One OAE Content Preview Processor
+# centos5-oae-preview0 - 192.168.1.80
+#
+
+###########################################################################
+#
 # Node Type Definitions
 #
 node basenode {
@@ -25,60 +50,20 @@ node basenode {
 # Sakai OAE Content Preview Processor
 #
 node preview_processor_node inherits basenode {
-    class {'preview_processor':}
-    class {'preview_processor::gems':}
-    class {'preview_processor::openoffice':}
+    class {'oae::preview_processor':}
+    class {'oae::preview_processor::gems':}
+    class {'oae::preview_processor::openoffice':}
 }
 
 ###########################################################################
 #
-# Nodes
+# OAE app nodes
 #
-
-#
-# MySQL Database Server
-#
-node 'centos5-oae-db0.localdomain' inherits basenode {
-
-    $mysql_password = 'seequelle'
-
-    include augeas
-    include mysql::server
-
-    mysql::database{ 'nakamura':
-        ensure   => present
-    }
-
-    mysql::rights {"Set rights for puppet database":
-        ensure   => present,
-        database => 'nakamura',
-        user     => 'nakamura',
-        password => 'ironchef'
-    }
-
-    mysql::rights { "centos5-oae-app0": 
-        ensure   => present,
-        database => 'nakamura',
-        user     => 'nakamura@192.68.1.50',
-        password => 'ironchef'
-    }
-    mysql::rights { "centos5-oae-app1": 
-        ensure   => present,
-        database => 'nakamura',
-        user     => 'nakamura@192.68.1.51',
-        password => 'ironchef'
-    }
-}
-
-node 'centos5-oae-preview0.localdomain' inherits preview_processor_node { }
-
-node 'centos6-oae-preview0.localdomain' inherits preview_processor_node { }
-
-node /centos5-oae-app[0-9].localdomain/ inherits basenode {
+node /centos5-oae-app[0-1].localdomain/ inherits basenode {
 
     include oae::params
-    include oae
     include oae::core
+    include oae
 
     class { 'oae::app':
         version_oae    => '1.1',
@@ -123,6 +108,10 @@ node /centos5-oae-app[0-9].localdomain/ inherits basenode {
     }
 }
 
+###########################################################################
+#
+# OAE Solr Nodes
+#
 node 'centos5-solr0.localdomain' inherits basenode {
 
     include oae::params
@@ -142,5 +131,49 @@ node 'centos5-solr1.localdomain' inherits basenode {
     class { 'oae::solr': 
         oae_version => '1.1-SNAPSHOT',
         role => 'slave',
+    }
+}
+
+###########################################################################
+#
+# OAE Content Preview Processor Node
+#
+node 'centos5-oae-preview0.localdomain' inherits preview_processor_node { }
+
+###########################################################################
+#
+# MySQL Database Server
+#
+node 'centos5-oae-db0.localdomain' inherits basenode {
+
+    $mysql_password = 'seequelle'
+
+    include augeas
+    include mysql::server
+
+    mysql::database{ 'nakamura':
+        ensure   => present
+    }
+
+    mysql::rights {"Set rights for puppet database":
+        ensure   => present,
+        database => 'nakamura',
+        user     => 'nakamura',
+        password => 'ironchef'
+    }
+
+    # R/W from the app nodes
+    mysql::rights { "centos5-oae-app0": 
+        ensure   => present,
+        database => 'nakamura',
+        user     => 'nakamura@192.68.1.50',
+        password => 'ironchef'
+    }
+
+    mysql::rights { "centos5-oae-app1": 
+        ensure   => present,
+        database => 'nakamura',
+        user     => 'nakamura@192.68.1.51',
+        password => 'ironchef'
     }
 }

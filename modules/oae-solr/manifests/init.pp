@@ -68,8 +68,8 @@ class oae-solr($oae::params::user = 'sakaioae', $basedir = '/usr/local/sakaioae'
     }
 
     file { "${oae-solr::solr_conf}/solrconfig.xml":
-        owner  => $oae-solr::oae::params::user,
-        group  => $oae-solr::oae::params::user,
+        owner  => $oae::params::user,
+        group  => $oae::params::user,
         mode   => "0644",
         source => $role ? {
             '/master/slave' => "file://${oae-solr::solr_bundle}/src/main/resources/${role}-solrconfig.xml",

@@ -9,6 +9,10 @@ node basenode {
 
     if $operatingsystem == 'CentOS' {
         include centos
+
+        if $virtual == "virtualbox" {
+            include centos_minimal
+        }
     }
 
     class { 'ntp':

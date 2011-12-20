@@ -5,7 +5,7 @@
 
 # Global, editable VARS
 SOLR_JAVA_OPTS=" -Dsolr.solr.home=<%= solr_app %> -Djetty.port=8983 "
-SAKAIOAE_USER="<%= oae_user %>"
+SAKAIOAE_USER="<%= scope.lookupvar('oae::params::user') %>"
 SOLR_HOME=<%= solr_app %>
 JAVA_BIN="/usr/bin/java"
 

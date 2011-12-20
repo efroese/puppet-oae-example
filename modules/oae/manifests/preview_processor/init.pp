@@ -18,7 +18,7 @@ class oae::preview_processor($oae_user="sakaioae", $basedir="/usr/local/sakaioae
     ###########################################################################
     # Drop the script for the cron job
     file { "${basedir}/bin/run_preview_processor.sh":
-        source => 'puppet:///modules/oae/run_preview_processor.sh',
+        content => template('oae/run_preview_processor.sh.erb'),
         owner  => root,
         group  => root,
         mode   => 755,

@@ -4,8 +4,9 @@
 # SCRIPT_DIR: path to directory containing preview_processor.rb, mime types
 # PASSWORD_FILE: path to file containing: system_url admin_password
 # PROCESSING_URL: url path to json containing items to be processed
-SCRIPT_DIR="/home/rsmart/nakamura/scripts";
-PASSWORD_FILE="/home/rsmart/.acad_credentials.txt";
+BASE_DIR="<%= scope.lookupvar('oae::params::basedir') %>"
+SCRIPT_DIR="${BASE_DIR}/nakamura/scripts";
+PASSWORD_FILE="${BASE_DIR}/.acad_credentials.txt";
 PROCESSING_URL="var/search/needsprocessing.json";
 ##############################################################################
 

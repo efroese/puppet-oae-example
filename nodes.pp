@@ -61,11 +61,10 @@ node preview_processor_node inherits basenode {
 #
 node /centos5-oae-app[0-1].localdomain/ inherits basenode {
 
-    include oae::params
-    include oae::core
-    include oae
-
-    class { 'oae::app':
+    class { 'oae::params': }
+    class { 'oae::core': }
+    class { 'oae': }
+    class { 'oae::app::server':
         version_oae    => '1.1',
         downloaddir    => 'http://192.168.1.124/jars/',
         jarfile        => 'org.sakaiproject.nakamura.app-1.1-mysql.jar',

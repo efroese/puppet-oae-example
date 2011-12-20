@@ -1,6 +1,7 @@
 class oae {
 
-    Class['oae'] -> Class['oae::params']
+    # Load the oae::params class before the oae class
+    Class['oae::params'] -> Class['oae']
 
     define sling_config($dirname, $pid, $config){
 

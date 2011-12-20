@@ -128,7 +128,7 @@ node 'centos5-solr0.localdomain' inherits basenode {
     include oae::params
     include oae
 
-    class { 'oae-solr': 
+    class { 'oae::solr': 
         oae_version => '1.1-SNAPSHOT',
         role => 'master',
     }
@@ -139,7 +139,7 @@ node 'centos5-solr1.localdomain' inherits basenode {
     include oae::params
     include oae
 
-    class { 'oae-solr': 
+    class { 'oae::solr': 
         oae_version => '1.1-SNAPSHOT',
         role => 'slave',
     }

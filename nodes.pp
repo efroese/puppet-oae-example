@@ -45,10 +45,23 @@ node 'centos5-oae-db0.localdomain' inherits basenode {
         ensure   => present
     }
 
-    mysql::rights{"Set rights for puppet database":
+    mysql::rights {"Set rights for puppet database":
         ensure   => present,
         database => 'nakamura',
         user     => 'nakamura',
+        password => 'ironchef'
+    }
+
+    mysql::rights { "centos5-oae-app0": 
+        ensure   => present,
+        database => 'nakamura',
+        user     => 'nakamura@192.68.1.50',
+        password => 'ironchef'
+    }
+    mysql::rights { "centos5-oae-app1": 
+        ensure   => present,
+        database => 'nakamura',
+        user     => 'nakamura@192.68.1.51',
         password => 'ironchef'
     }
 }
@@ -57,18 +70,17 @@ node 'centos5-oae-preview0.localdomain' inherits preview_processor_node { }
 
 node 'centos6-oae-preview0.localdomain' inherits preview_processor_node { }
 
-node 'centos5-oae-app0.localdomain' inherits basenode {
+node /centos5-oae-app[0-9].localdomain/ inherits basenode {
 
     include oae::params
 
     class { 'oae-app':
-        version_oae    => '1.1-SNAPSHOT',
-        downloaddir    => 'http://source.sakaiproject.org/maven2-snapshots/org/sakaiproject/nakamura/org.sakaiproject.nakamura.app/1.1-SNAPSHOT/',
-        jarfile        => 'org.sakaiproject.nakamura.app-1.1-SNAPSHOT.jar',
-        javamemorymax  => '1000',
-        javapermsize   => '512',
+        version_oae    => '1.1',
+        downloaddir    => 'http://192.168.1.124/jars/',
+        jarfile        => 'org.sakaiproject.nakamura.app-1.1-mysql.jar',
+        javamemorymax  => '512',
+        javapermsize   => '256',
     }
-
 
     oae::sling_config { "org/sakaiproject/nakamura/http/usercontent/ServerProtectionServiceImpl.config":
         dirname => "org/sakaiproject/nakamura/http/usercontent",
@@ -79,15 +91,11 @@ node 'centos5-oae-app0.localdomain' inherits basenode {
             'untrusted.redirect.host' => "\"${oae::params::http_content}://${oae::params::httpd_name_content}\"",
             'trusted.postwhitelist'   => "[\"/system/console\"]",
             'disable.protection.for.dev.mode' => 'B"false"',
+            'trusted.hosts'           => " $ipaddress:8080 = https://192.168.1.40:443 ", 
 
             'trusted.referer'         => $oae::params::install_http_admin ? {
-                true     => "[\"http://${oae::params::httpd_name}\",\"https://${oae::params::httpd_name}\",\"http://${oae::params::ipaddress}\",\"https://${oae::params::ipaddress}\",\"http://${oae::params::ipaddress}:8080\",\"http://${oae::params::httpd_name_admin}\",\"https://${oae::params::httpd_name_admin}:${oae::params::admin_port}\",\"http://localhost:8080\",\"/\"]",
-                default  => "[\"http://${oae::params::httpd_name}\",\"https://${oae::params::httpd_name}\",\"http://${oae::params::ipaddress}\",\"https://${oae::params::ipaddress}\",\"http://${oae::params::ipaddress}:8080\",\"http://localhost:8080\",\"/\"]",
-            },
-            
-            'trusted.hosts'           =>  $oae::params::install_http_admin ? { 
-                true    => "[\"http://${oae::params::httpd_name}:80\",\"https://${oae::params::httpd_name}:443\",\"http://${oae::params::ipaddress}:80\",\"https://${oae::params::ipaddress}:443\",\"http://${oae::params::ipaddress}:8080\",\"http://${oae::params::httpd_name_admin}:80\",\"http://${oae::params::httpd_name_admin}:${oae::params::admin_port}\",\"http://localhost:8080\"]",
-                default => "[\"http://${oae::params::httpd_name}:80\",\"https://${oae::params::httpd_name}:443\",\"http://${oae::params::ipaddress}:80\",\"https://${oae::params::ipaddress}:443\",\"http://${oae::params::ipaddress}:8080\",\"http://localhost:8080\"]",
+                true     => "[\"http://${oae::params::httpd_name}\",\"https://${oae::params::httpd_name}\",\"http://${ipaddress_eth0}\",\"https://${ipaddress_eth0}\",\"http://${ipaddress_eth0}:8080\",\"http://${oae::params::httpd_name_admin}\",\"https://${oae::params::httpd_name_admin}:${oae::params::admin_port}\",\"http://localhost:8080\",\"/\"]",
+                default  => "[\"http://${oae::params::httpd_name}\",\"https://${oae::params::httpd_name}\",\"http://${ipaddress_eth0}\",\"https://${ipaddress_eth0}\",\"http://${ipaddress_eth0}:8080\",\"http://localhost:8080\",\"/\"]",
             },
         }
     }
@@ -118,7 +126,6 @@ node 'centos5-oae-app0.localdomain' inherits basenode {
             'password'    => "\"${oae::params::sparsepass}\"",
         }
     }
-
 }
 
 node 'centos5-solr0.localdomain' inherits basenode {

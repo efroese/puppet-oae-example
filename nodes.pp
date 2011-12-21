@@ -76,16 +76,29 @@ node /centos5-oae-app[0-1].localdomain/ inherits basenode {
         dirname => "org/sakaiproject/nakamura/http/usercontent",
         pid     => '"org.sakaiproject.nakamura.http.usercontent.ServerProtectionServiceImpl"',
         config => {
-            'trusted.secret'          => "\"${oae::params::serverprotectsec}\"",
-            'untrusted.contenturl'    => "\"http://${oae::params::httpd_name_content}\"",
-            'untrusted.redirect.host' => "\"${oae::params::http_content}://${oae::params::httpd_name_content}\"",
-            'trusted.postwhitelist'   => "[\"/system/console\"]",
-            'disable.protection.for.dev.mode' => 'B"false"',
-            'trusted.hosts'           => " $ipaddress:8080 = https://192.168.1.40:443 ", 
-
-            'trusted.referer'         => $oae::params::install_http_admin ? {
-                true     => "[\"http://${oae::params::httpd_name}\",\"https://${oae::params::httpd_name}\",\"http://${ipaddress_eth0}\",\"https://${ipaddress_eth0}\",\"http://${ipaddress_eth0}:8080\",\"http://${oae::params::httpd_name_admin}\",\"https://${oae::params::httpd_name_admin}:${oae::params::admin_port}\",\"http://localhost:8080\",\"/\"]",
-                default  => "[\"http://${oae::params::httpd_name}\",\"https://${oae::params::httpd_name}\",\"http://${ipaddress_eth0}\",\"https://${ipaddress_eth0}\",\"http://${ipaddress_eth0}:8080\",\"http://localhost:8080\",\"/\"]",
+            'trusted.secret'                  => $oae::params::serverprotectsec,
+            'untrusted.contenturl'            => "http://${oae::params::httpd_name_content}",
+            'untrusted.redirect.host'         => "${oae::params::http_content}://${oae::params::httpd_name_content}",
+            'trusted.postwhitelist'           => [ "/system/console", ],
+            'disable.protection.for.dev.mode' => false,
+            'trusted.hosts'                   => " centos5-oae:8080 = https://centos5-oae:443 ", 
+            'trusted.referer'                 => $oae::params::install_http_admin ? {
+                true     => [ "http://${oae::params::httpd_name}",
+                    "https://${oae::params::httpd_name}",
+                    "http://${ipaddress_eth0}",
+                    "https://${ipaddress_eth0}",
+                    "http://${ipaddress_eth0}:8080",
+                    "http://${oae::params::httpd_name_admin}",
+                    "https://${oae::params::httpd_name_admin}:${oae::params::admin_port}",
+                    "http://localhost:8080",
+                    "/"],
+                default  => [ "http://${oae::params::httpd_name}",
+                    "https://${oae::params::httpd_name}",
+                    "http://${ipaddress_eth0}",
+                    "https://${ipaddress_eth0}",
+                    "http://${ipaddress_eth0}:8080",
+                    "http://localhost:8080",
+                    "/"],
             },
         }
     }
@@ -94,7 +107,8 @@ node /centos5-oae-app[0-1].localdomain/ inherits basenode {
         dirname => "org/sakaiproject/nakamura/solr",
         pid     => '"org.sakaiproject.nakamura.solr.MultiMasterRemoteSolrClient"',
         config => {
-            "query-urls" => '"http://192.168.1.70:8983/solr|http://192.168.1.71:8983/solr"',
+            "remoteurl"  => "http://192.168.1.70:8983/solr",
+            "query-urls" => "http://192.168.1.71:8983/solr",
         }
     }
 
@@ -102,7 +116,7 @@ node /centos5-oae-app[0-1].localdomain/ inherits basenode {
         dirname => "org/sakaiproject/nakamura/solr",
         pid     => '"org.sakaiproject.nakamura.solr.SolrServerServiceImpl"',
         config => {
-            "solr-impl" => '"multiremote"',
+            "solr-impl" => "multiremote",
         }
     }
 }

@@ -1,3 +1,2 @@
-service.pid=<%= pid %>
-<% config.each_pair do |key, value| %>
-<%= key %>=<%= value %><% end %>
+service.pid=<%= pid %><% config.each_pair do |key, value| %>
+<% if value.is_a? String or value.is_a? Numeric %><%= key %>=<%= "\"#{value}\"" %><% end %><% if value.is_a? TrueClass or value.is_a? FalseClass %><%= key %>=<%= "B\"#{value}\"" %><% end %><% if value.is_a? Array %><%= key %>=[<%= value.map { |v| '"' + "#{v}"+ '"' }.join(",") %>]<% end %><% end %>

@@ -1,11 +1,10 @@
-class oae::solr($oae::params::user = 'sakaioae', $basedir = '/usr/local/sakaioae', $oae_version,
-        $solr_git = 'http://github.com/sakaiproject/solr.git', $role) {
+class oae::solr($solr_git = 'http://github.com/sakaiproject/solr.git', $role) {
 
     realize(Group[$oae::params::user])
     realize(User[$oae::params::user])
 
     # Home for standalone solr servers
-    $solr_basedir= "${basedir}/solr"
+    $solr_basedir= "${oae::params::basedir}/solr"
 
     # A git clone of the sakaiproject/solr
     $solr_bundle = "${solr_basedir}/solr-bundle"

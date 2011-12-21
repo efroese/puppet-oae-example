@@ -6,7 +6,7 @@ class oae::params {
     $basedir = '/usr/local/sakaioae'
 
     # SparseMapContent (Core)
-    $sparseurl  = "jdbc:mysql://192.168.1.250:3306/nakamura"
+    $sparseurl  = "jdbc:mysql://192.168.1.250:3306/nakamura?autoReconnectForPools\\=true"
     $sparsedriver = "com.mysql.jdbc.Driver"
     $sparseuser = 'nakamura'
     $sparsepass = 'ironchef'

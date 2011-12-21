@@ -12,4 +12,4 @@
 	url = http://github.com/camptocamp/puppet-common.git
 [submodule "modules/pacemaker"]
 	path = modules/pacemaker
-	url = http://github.com/camptocamp/puppet-pacemaker.git
+	url = http://github.com/efroese/puppet-pacemaker.git

@@ -15,6 +15,7 @@ class oae::app::server($version_oae,
     }
 
     $jar_dest = "${oae::params::basedir}/jars/${jarfile}"
+    $app_jar = "${oae::params::basedir}/sakaioae.jar"
 
     exec { 'fetch-package':
         command => "curl --silent ${downloaddir}${jarfile} --output ${jar_dest}",
@@ -23,15 +24,10 @@ class oae::app::server($version_oae,
         require => [ File["${oae::params::basedir}/jars/"], Package['curl'] ],
     }
 
-    exec { 'link-package':
-        command => "/bin/ln -s ${oae::params::basedir}/jars/${jarfile} ${oae::params::basedir}/sakaioae.jar",
-        creates => $jar_dest,
-        unless  => '/usr/bin/stat ${oae::params::basedir}/sakaioae.jar',
-        require => [
-            File["${oae::params::basedir}/sling/nakamura.properties"],
-            File["/etc/init.d/sakaioae"],
-            File[ $oae::app::setup::app_dirs ],
-        ],
+    file { $app_jar:
+        ensure  => link,
+        target  => $jar_dest,
+        require => Exec['fetch-package'],
         notify  => Service['sakaioae'],
     }
 

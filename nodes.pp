@@ -74,7 +74,6 @@ node /centos5-oae-app[0-1].localdomain/ inherits basenode {
 
     oae::sling_config { "org/sakaiproject/nakamura/http/usercontent/ServerProtectionServiceImpl.config":
         dirname => "org/sakaiproject/nakamura/http/usercontent",
-        pid     => '"org.sakaiproject.nakamura.http.usercontent.ServerProtectionServiceImpl"',
         config => {
             'disable.protection.for.dev.mode' => false,
             'trusted.hosts'                   => " ${oae::params::http_name}:8080 = https://${oae::params::http_name}:443 ", 
@@ -84,7 +83,6 @@ node /centos5-oae-app[0-1].localdomain/ inherits basenode {
 
     oae::sling_config { "org/sakaiproject/nakamura/solr/MultiMasterRemoteSolrClient.config":
         dirname => "org/sakaiproject/nakamura/solr",
-        pid     => '"org.sakaiproject.nakamura.solr.MultiMasterRemoteSolrClient"',
         config => {
             "remoteurl"  => "http://192.168.1.70:8983/solr",
             "query-urls" => "http://192.168.1.71:8983/solr",
@@ -93,7 +91,6 @@ node /centos5-oae-app[0-1].localdomain/ inherits basenode {
 
     oae::sling_config { "org/sakaiproject/nakamura/solr/SolrServerServiceImpl.config":
         dirname => "org/sakaiproject/nakamura/solr",
-        pid     => '"org.sakaiproject.nakamura.solr.SolrServerServiceImpl"',
         config => {
             "solr-impl" => "multiremote",
         }

@@ -14,16 +14,18 @@ class oae::app::server($version_oae,
         source  => "puppet:///modules/oae/nakamura.properties",
     }
 
+    $jar_dest = "${oae::params::basedir}/jars/${jarfile}"
+
     exec { 'fetch-package':
-        command => "curl --silent ${downloaddir}${jarfile} --output ${oae::params::basedir}/jars/${jarfile}",
+        command => "curl --silent ${downloaddir}${jarfile} --output ${jar_dest}",
         cwd     => "${oae::params::basedir}/jars/",
-        unless  => "stat ${oae::params::basedir}/jars/${jarfile}",
+        creates => "${jar_dest}",
         require => [ File["${oae::params::basedir}/jars/"], Package['curl'] ],
     }
 
     exec { 'link-package':
         command => "/bin/ln -s ${oae::params::basedir}/jars/${jarfile} ${oae::params::basedir}/sakaioae.jar",
-        onlyif  => "stat ${oae::params::basedir}/jars/${jarfile}",
+        creates => $jar_dest,
         unless  => '/usr/bin/stat ${oae::params::basedir}/sakaioae.jar',
         require => [
             File["${oae::params::basedir}/sling/nakamura.properties"],

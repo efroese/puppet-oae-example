@@ -76,30 +76,9 @@ node /centos5-oae-app[0-1].localdomain/ inherits basenode {
         dirname => "org/sakaiproject/nakamura/http/usercontent",
         pid     => '"org.sakaiproject.nakamura.http.usercontent.ServerProtectionServiceImpl"',
         config => {
-            'trusted.secret'                  => $oae::params::serverprotectsec,
-            'untrusted.contenturl'            => "http://${oae::params::httpd_name_content}",
-            'untrusted.redirect.host'         => "${oae::params::http_content}://${oae::params::httpd_name_content}",
-            'trusted.postwhitelist'           => [ "/system/console", ],
             'disable.protection.for.dev.mode' => false,
-            'trusted.hosts'                   => " centos5-oae:8080 = https://centos5-oae:443 ", 
-            'trusted.referer'                 => $oae::params::install_http_admin ? {
-                true     => [ "http://${oae::params::httpd_name}",
-                    "https://${oae::params::httpd_name}",
-                    "http://${ipaddress_eth0}",
-                    "https://${ipaddress_eth0}",
-                    "http://${ipaddress_eth0}:8080",
-                    "http://${oae::params::httpd_name_admin}",
-                    "https://${oae::params::httpd_name_admin}:${oae::params::admin_port}",
-                    "http://localhost:8080",
-                    "/"],
-                default  => [ "http://${oae::params::httpd_name}",
-                    "https://${oae::params::httpd_name}",
-                    "http://${ipaddress_eth0}",
-                    "https://${ipaddress_eth0}",
-                    "http://${ipaddress_eth0}:8080",
-                    "http://localhost:8080",
-                    "/"],
-            },
+            'trusted.hosts'                   => " ${oae::params::http_name}:8080 = https://${oae::params::http_name}:443 ", 
+            'trusted.secret'                  => $oae::params::serverprotectsec,
         }
     }
 

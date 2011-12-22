@@ -6,8 +6,12 @@
 #
 # This is still a work in progress.
 #
-# One Apache HTTPD load balancer in front of two OAE app nodes.
-# centos5-oae-lb - 192.168.1.40
+# A pair of highly available Apache HTTPD load balancers 
+# centos5-oae     - 192.168.1.40 (floating ip address)
+# centos5-oae-lb1 - 192.168.1.41
+# centos5-oae-lb2 - 192.168.1.42
+#
+# A pair of OAE app nodes.
 # centos5-oae-app0 - 192.168.1.50
 # centos5-oae-app1 - 192.168.1.51
 #
@@ -57,6 +61,38 @@ node preview_processor_node inherits basenode {
 
 ###########################################################################
 #
+# Apache Load Balancer
+#
+node /centos5-oae-lb[1-2].localdomain/ inherits basenode {
+
+    class { 'oae::params': }
+
+    # Pacemaker manages which machine is the active LB
+    $pacemaker_authkey = 'oaehb'
+    $pacemaker_interface = 'eth0'
+
+    include apache
+    include pacemaker
+    include pacemaker::corosync
+    include pacemaker::apache
+    apache::vhost { $oae::params::http_name: }
+ 
+    apache::balancer { "apache-balancer-oae-app":
+        location   => "/",
+        proto      => "http",
+        members    => [
+          "192.168.1.50:8080",
+          "192.168.1.51:8080",
+        ],
+        params     => ["retry=20", "min=3", "flushpackets=auto"],
+        standbyurl => "http://sorryserver.cluster/",
+        vhost      => $oae::params::http_name,
+    }
+
+}
+
+###########################################################################
+#
 # OAE app nodes
 #
 node /centos5-oae-app[0-1].localdomain/ inherits basenode {
@@ -76,8 +112,8 @@ node /centos5-oae-app[0-1].localdomain/ inherits basenode {
         dirname => "org/sakaiproject/nakamura/http/usercontent",
         config => {
             'disable.protection.for.dev.mode' => false,
-            'trusted.hosts'                   => " ${oae::params::http_name}:8080 = https://${oae::params::http_name}:443 ", 
-            'trusted.secret'                  => $oae::params::serverprotectsec,
+            'trusted.hosts'  => " ${oae::params::http_name}:8080 = https://${oae::params::http_name}:443 ", 
+            'trusted.secret' => $oae::params::serverprotectsec,
         }
     }
 

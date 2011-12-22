@@ -73,7 +73,6 @@ node /centos5-oae-lb[1-2].localdomain/ inherits basenode {
 
     include apache
     include pacemaker
-    include pacemaker::corosync
     include pacemaker::apache
     apache::vhost { $oae::params::http_name: }
  

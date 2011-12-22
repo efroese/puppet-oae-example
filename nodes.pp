@@ -68,8 +68,10 @@ node /centos5-oae-lb[1-2].localdomain/ inherits basenode {
     class { 'oae::params': }
 
     # Pacemaker manages which machine is the active LB
-    $pacemaker_authkey = 'oaehb'
+    $pacemaker_authkey   = 'oaehb'
     $pacemaker_interface = 'eth0'
+    $pacemaker_hacf      = 'oae/ha.cf.erb'
+    $pacemaker_nodes     = [ '192.168.1.41', '192.168.1.42']
 
     include apache
     include pacemaker

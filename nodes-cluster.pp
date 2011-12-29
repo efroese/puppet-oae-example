@@ -53,9 +53,9 @@ node /oae-lb[1-2].localdomain/ inherits oaenode {
 
     # Pacemaker manages which machine is the active LB
     # TODO: parameterize the pacemaker module.
-    $pacemaker_authkey   = $localconfig::apache_pacemaker_authkey
-    $pacemaker_interface = $localconfig::apache_pacemaker_interface
-    $pacemaker_nodes     = $localconfig::apache_pacemaker_nodes
+    $pacemaker_authkey   = $localconfig::apache_lb_pacemaker_authkey
+    $pacemaker_interface = $localconfig::apache_lb_pacemaker_interface
+    $pacemaker_nodes     = $localconfig::apache_lb_pacemaker_nodes
     $pacemaker_hacf      = 'localconfig/ha.cf.erb'
     $pacemaker_crmcli    = 'localconfig/crm-config.cli.erb'
     include pacemaker

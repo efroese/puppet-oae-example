@@ -32,6 +32,7 @@
 # Node Type Definitions
 #
 node basenode {
+    include hosts 
     include users
     include git
     include java
@@ -67,15 +68,9 @@ node /centos5-oae-lb[1-2].localdomain/ inherits basenode {
 
     class { 'oae::params': }
 
-    # Pacemaker manages which machine is the active LB
-    $pacemaker_authkey   = 'oaehb'
-    $pacemaker_interface = 'eth0'
-    $pacemaker_hacf      = 'oae/ha.cf.erb'
-    $pacemaker_nodes     = [ '192.168.1.41', '192.168.1.42']
-
     include apache
-    include pacemaker
     include pacemaker::apache
+
     apache::vhost { $oae::params::http_name: }
  
     apache::balancer { "apache-balancer-oae-app":
@@ -90,6 +85,13 @@ node /centos5-oae-lb[1-2].localdomain/ inherits basenode {
         vhost      => $oae::params::http_name,
     }
 
+    # Pacemaker manages which machine is the active LB
+    $pacemaker_authkey   = 'oaehb'
+    $pacemaker_interface = 'eth0'
+    $pacemaker_hacf      = 'files/ha.cf.erb'
+    $pacemaker_crmcli    = 'files/crm-config.cli.erb'
+    $pacemaker_nodes     = [ '192.168.1.41', '192.168.1.42']
+    include pacemaker
 }
 
 ###########################################################################

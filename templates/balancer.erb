@@ -10,9 +10,9 @@ ProxyPassReverse <%= location %> <%= balancer %>/
 
 <Proxy <%= balancer %>>
 
-<% members.each do |member| -%>
+<% members.each do |member| %>
     BalancerMember <%= proto %>://<%= member %><% params.each do |param| -%> <%= param %><% end -%>
-<% end -%>
+<% end %>
 
 <% if standbyurl != "" -%>
     # this is our hot standby:

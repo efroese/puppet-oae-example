@@ -6,7 +6,7 @@
 	url = http://github.com/camptocamp/puppet-augeas.git
 [submodule "modules/apache"]
 	path = modules/apache
-	url = http://github.com/camptocamp/puppet-apache.git
+	url = http://github.com/efroese/puppet-apache.git
 [submodule "modules/common"]
 	path = modules/common
 	url = http://github.com/camptocamp/puppet-common.git

@@ -1,0 +1,2 @@
+service.pid="<%= name[0..-8].gsub('/', '.') %>"<% config.each_pair do |key, value| %>
+<%= key %>=<% if value.is_a? String or value.is_a? Numeric %><%= "\"#{value}\"" %><% end %><% if value.is_a? TrueClass or value.is_a? FalseClass %><%= "B\"#{value}\"" %><% end %><% if value.is_a? Array %>[<%= value.map { |v| '"' + "#{v}"+ '"' }.join(",") %>]<% end %><% end %>

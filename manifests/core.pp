@@ -1,0 +1,15 @@
+class oae::core {
+
+    Class['oae::params'] -> Class['oae::core'] 
+
+    oae::sling_config { "org/sakaiproject/nakamura/lite/storage/jdbc/JDBCStorageClientPool.config":
+        dirname => "org/sakaiproject/nakamura/lite/storage/jdbc",
+        config => {
+            'jdbc-driver' => $oae::params::sparsedriver,
+            'jdbc-url'    => $oae::params::sparseurl,
+            'username'    => $oae::params::sparseuser,
+            'password'    => $oae::params::sparsepass,
+        }
+    }
+    
+}

@@ -1,0 +1,50 @@
+#!/bin/bash
+# chkconfig: 345 20 80
+# description: init.d script for headless openoffice.org (2.3+ for RHEL5 32bit)
+#
+# processname: soffice
+#
+# source function library
+. /etc/rc.d/init.d/functions
+
+# Treat unset variables as an error when performing parameter expansion
+set -o nounset
+ 
+RETVAL=0
+SOFFICE_PATH='/usr/lib64/openoffice.org3/program'
+SOFFICE_ARGS='-accept="socket,host=localhost,port=8100;urp" -headless -nofirststartwizard'
+SOFFICE_PIDFILE=/var/run/soffice.bin.pid
+OAE_USER=<%= scope.lookupvar('oae::params::user') %>
+
+start_soffice() {
+       echo -n $"Starting OpenOffice.org"
+       su - -c "$SOFFICE_PATH/soffice.bin $SOFFICE_ARGS >/dev/null 2>&1 &" $OAE_USER
+       [ $? -eq 0 ] && echo_success || echo_failure
+       pidof soffice.bin > $SOFFICE_PIDFILE
+       echo
+}
+start() {
+       start_soffice
+}
+stop() {
+       echo -n $"Stopping OpenOffice"
+       killproc soffice.bin
+       echo
+}
+case "$1" in
+       start)
+               start
+               ;;
+       stop)
+               stop
+               ;;
+       status)
+               status soffice.bin
+               ;;       
+       restart)
+               stop
+               start
+               ;;
+       *)
+               echo $"Usage: $0 {start|stop|status|restart}"
+esac

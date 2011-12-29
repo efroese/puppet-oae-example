@@ -1,0 +1,4 @@
+This is a puppet module to help you set up Sakai OAE.
+
+This is not a fully featured puppet setup. For an example check out
+http://github.com/efroese/puppet-oae-example

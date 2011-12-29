@@ -41,7 +41,9 @@ node /oae-lb[1-2].localdomain/ inherits oaenode {
     $virtual_netmask     = $localconfig::apache_lb_virtual_netmask
     $apache_lb_hostnames = $localconfig::apache_lb_hostnames
 
-    apache::vhost { $http_name: }
+    apache::vhost { $http_name:
+        enable_default => false,
+    }
     apache::balancer { "apache-balancer-oae-app":
         location   => "/",
         proto      => "http",
@@ -49,6 +51,7 @@ node /oae-lb[1-2].localdomain/ inherits oaenode {
         params     => ["retry=20", "min=3", "flushpackets=auto"],
         standbyurl => $localconfig::apache_lb_standbyurl,
         vhost      => $http_name,
+        template   => 'localconfig/balancer.erb',
     }
 
     # Pacemaker manages which machine is the active LB

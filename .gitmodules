@@ -13,3 +13,6 @@
 [submodule "modules/pacemaker"]
 	path = modules/pacemaker
 	url = http://github.com/efroese/puppet-pacemaker.git
+[submodule "modules/oae"]
+	path = modules/oae
+	url = http://github.com/efroese/puppet-oae.git

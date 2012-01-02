@@ -22,7 +22,9 @@
 #   }
 #
 
-class oae::solr($solr_tarball = "http://source.sakaiproject.org/release/oae/solr/solr-example.tar.gz",
+class oae::solr($solr_git     = "http://github.com/sakaiproject/solr.git",
+                $solr_tag     = "",
+                $solr_tarball = "http://source.sakaiproject.org/release/oae/solr/solr-example.tar.gz",
                 $solrconfig   = 'oae/solrconfig.xml.erb', 
                 $schema       = 'oae/schema.xml.erb') {
 
@@ -43,6 +45,14 @@ class oae::solr($solr_tarball = "http://source.sakaiproject.org/release/oae/solr
         owner => $oae::params::user,
         group => $oae::params::user,
         mode  => 0755,
+    }
+    
+    file { $solr_conf_dir:
+        ensure => directory,
+        owner  => $oae::params::user,
+        group  => $oae::params::user,
+        mode   => 755,
+        require => Exec['copy-solr-app'],
     }
 
     exec { 'download-solr':
@@ -65,16 +75,27 @@ class oae::solr($solr_tarball = "http://source.sakaiproject.org/release/oae/solr
 
     exec { 'copy-solr-app':
         command => "cp -a ${solr_basedir}/example ${solr_app}",
-        creates => "${solr_app}",
+        creates => $solr_app,
         require => Exec['chown-solr'],
     }
 
-    file { $solr_conf_dir:
-        ensure => directory,
-        owner  => $oae::params::user,
-        group  => $oae::params::user,
-        mode   => 755,
-        require => Exec['copy-solr-app'],
+    exec { 'clone-solr':
+        command => "git clone ${solr_git} ${solr_basedir}/solr-git",
+        creates => "${$solr_basedir}/solr-git",
+        require => File[$solr_basedir],
+    }
+
+    if $solr_tag {
+        exec { 'switch-solr-tag':
+            command => "(cd ${solr_basedir}/solr-git && git checkout origin/$solr_tag)",
+        }
+    }
+
+    # Copy stopwords.txt and synonmns.txt and the like from the Sakai solr repository
+    exec { 'copy-solr-resources':
+        command => "cp ${solr_basedir}/solr-git/src/main/resources/*.txt ${solr_conf_dir}",
+        creates => "${solr_conf}/stopwords.txt",
+        require => [ Exec['clone-solr'], File[$solr_conf_dir], ],
     }
     
     file { "${solr_conf_dir}/solrconfig.xml":
@@ -108,3 +129,4 @@ class oae::solr($solr_tarball = "http://source.sakaiproject.org/release/oae/solr
         require => [ File["${solr_conf_dir}/solrconfig.xml"], File["${solr_conf_dir}/schema.xml"], ]
     }
 }
+

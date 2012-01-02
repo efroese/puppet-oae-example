@@ -46,9 +46,9 @@ class oae::solr($solr_tarball = "http://source.sakaiproject.org/release/oae/solr
     }
 
     exec { 'download-solr':
-        command => "curl -o ${solr_basedir}/solr.tgz  $solr_tarball",
+        command => "curl -o ${solr_basedir}/solr.tgz  ${solr_tarball}",
         creates => "${solr_basedir}/solr.tgz",
-        require => File[$basedir],
+        require => File[$solr_basedir],
     }
 
     exec { 'unpack-solr':

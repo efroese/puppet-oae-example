@@ -92,7 +92,7 @@ class oae::solr($solr_tarball = "http://source.sakaiproject.org/release/oae/solr
         mode   => "0644",
         content => template($schema),
         notify => Service['solr'],
-        require => File[$solr_conf_dir'],
+        require => File[$solr_conf_dir],
     }
 
     file { '/etc/init.d/solr':

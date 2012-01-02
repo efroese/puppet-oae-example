@@ -1,4 +1,4 @@
-# = Class: users
+# = Class: oae::solr
 #
 # This class installs a solr master or slave for Sakai OAE
 #

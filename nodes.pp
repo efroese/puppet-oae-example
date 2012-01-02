@@ -101,14 +101,21 @@ node /centos5-oae-lb[1-2].localdomain/ inherits basenode {
 node /centos5-oae-app[0-1].localdomain/ inherits basenode {
 
     class { 'oae::params': }
-    class { 'oae::core': }
     class { 'oae': }
+
     class { 'oae::app::server':
         version_oae    => '1.1',
         downloaddir    => 'http://192.168.1.124/jars/',
         jarfile        => 'org.sakaiproject.nakamura.app-1.1-mysql.jar',
         javamemorymax  => '512',
         javapermsize   => '256',
+    }
+
+    class { 'oae::core':
+         $driver = "jdbc:mysql://192.168.1.250:3306/nakamura?autoReconnectForPools\\=true",
+         $url    = 'com.mysql.jdbc.Driver',
+         $user   = 'nakamura',
+         $pass   = 'ironchef',
     }
 
     oae::sling_config { "org/sakaiproject/nakamura/http/usercontent/ServerProtectionServiceImpl.config":
@@ -146,7 +153,7 @@ node 'centos5-solr0.localdomain' inherits basenode {
     include oae
 
     class { 'oae::solr': 
-        role => 'master',
+        solrconfig => 'localconfig/master-solrconfig.xml.erb',
     }
 }
 
@@ -156,7 +163,7 @@ node 'centos5-solr1.localdomain' inherits basenode {
     include oae
 
     class { 'oae::solr': 
-        role => 'slave',
+        solrconfig => 'localconfig/slave-solrconfig.xml.erb',
     }
 }
 

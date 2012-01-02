@@ -105,6 +105,6 @@ class oae::solr($solr_tarball = "http://source.sakaiproject.org/release/oae/solr
 
     service { 'solr':
         ensure => running,
-        require => [ File["${solr_conf}/solrconfig.xml"], File["${solr_conf}/schema.xml"], ]
+        require => [ File["${solr_conf_dir}/solrconfig.xml"], File["${solr_conf_dir}/schema.xml"], ]
     }
 }

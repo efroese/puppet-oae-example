@@ -15,6 +15,9 @@ class oae::preview_processor($oae_user="sakaioae", $basedir="/usr/local/sakaioae
         /Debian|Ubuntu/:  { include oae::preview_processor::debian }
     }
 
+    include oae::preview_processor::openoffice
+    include oae::preview_processor::gems
+
     ###########################################################################
     # Drop the script for the cron job
     file { "${basedir}/bin/run_preview_processor.sh":

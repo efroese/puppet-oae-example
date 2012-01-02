@@ -5,22 +5,6 @@ class oae::preview_processor::redhat {
     $common_packages = ['cpp', 'gcc', 'fontconfig-devel', 'poppler-utils', 'pdftk', 'rubygems', 'tk', 'GraphicsMagick']
     package { $common_packages: ensure => installed }
 
-    define upgrade_local_rpm() {
-        file { "/tmp/$name":
-            source => "puppet:///modules/preview_processor/$name.rpm",
-            ensure => present,
-            owner => root,
-            group => root,
-        }
-
-        package { $name:
-             name   => $name, 
-             source => "/tmp/$name.rpm",
-             ensure => latest,
-             provider => 'rpm',
-        }
-    }
-
     # CentOS 5, RHEL 5
     if  $lsbmajdistrelease == '5' {
 
@@ -30,10 +14,14 @@ class oae::preview_processor::redhat {
         package { $centos5_pkgs: ensure => installed }
 
         # CentOS needs updated ImageMagick and Ruby packages
-        $upgraded_pkgs = ['ruby1.9.2p0-1.9.2p0-1.x86_64', 
-            'ImageMagick-6.4.9-10.x86_64', 
-            'ImageMagick-devel-6.4.9-10.x86_64']
-        upgrade_local_rpm { $upgraded_pkgs: }
+        package { ['ruby1.9.2p0-1.9.2p0-1.x86_64', 'ImageMagick-6.4.9-10.x86_64', 'ImageMagick-devel-6.4.9-10.x86_64']:
+             ensure   => present,
+             name     => $name, 
+             # This is efroese's personal dropbox
+             # TODO find a better place to host these files.
+             source   => "http://dl.dropbox.com/u/24606888/puppet-oae-files/$name/",
+             provider => 'rpm',
+        }
 
         file { "/etc/ld.so.conf.d/optlocal.conf":
             owner => root, 

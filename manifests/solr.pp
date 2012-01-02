@@ -28,8 +28,8 @@
 #   }
 #
 
-class oae::solr($solr_tag     = "http://github.com/sakaiproject/solr.git",
-                $solr_tag,
+class oae::solr($solr_git     = "http://github.com/sakaiproject/solr.git",
+                $solr_tag     = "",
                 $solr_tarball = "http://source.sakaiproject.org/release/oae/solr/solr-example.tar.gz",
                 $solrconfig   = 'oae/solrconfig.xml.erb', 
                 $schema       = 'oae/schema.xml.erb',
@@ -92,7 +92,7 @@ class oae::solr($solr_tag     = "http://github.com/sakaiproject/solr.git",
         require => File[$solr_basedir],
     }
 
-    if $solr_tag {
+    if $solr_tag != undef and $solr_tag != "" {
         exec { 'switch-solr-tag':
             command => "(cd ${solr_basedir}/solr-git && git checkout origin/$solr_tag)",
         }

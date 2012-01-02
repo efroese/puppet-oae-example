@@ -51,15 +51,6 @@ node basenode {
 
 }
 
-#
-# Sakai OAE Content Preview Processor
-#
-node preview_processor_node inherits basenode {
-    class {'oae::preview_processor':}
-    class {'oae::preview_processor::gems':}
-    class {'oae::preview_processor::openoffice':}
-}
-
 ###########################################################################
 #
 # Apache Load Balancer
@@ -112,10 +103,10 @@ node /oae-app[0-1].localdomain/ inherits basenode {
     }
 
     class { 'oae::core':
-         $driver = "jdbc:mysql://192.168.1.250:3306/nakamura?autoReconnectForPools\\=true",
-         $url    = 'com.mysql.jdbc.Driver',
-         $user   = 'nakamura',
-         $pass   = 'ironchef',
+         driver => "jdbc:mysql://192.168.1.250:3306/nakamura?autoReconnectForPools\\=true",
+         url    => 'com.mysql.jdbc.Driver',
+         user   => 'nakamura',
+         pass   => 'ironchef',
     }
 
     oae::sling_config { "org/sakaiproject/nakamura/http/usercontent/ServerProtectionServiceImpl.config":
@@ -171,7 +162,9 @@ node 'solr1.localdomain' inherits basenode {
 #
 # OAE Content Preview Processor Node
 #
-node 'oae-preview0.localdomain' inherits preview_processor_node { }
+node 'oae-preview0.localdomain' inherits basenode {
+    class {'oae::preview_processor':}
+}
 
 ###########################################################################
 #

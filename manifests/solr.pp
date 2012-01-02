@@ -10,21 +10,21 @@
 #
 # $schema::         A template to render the schema.xml file.
 #
-# solr_git::        The url for the solr git repository
+# $solr_git::        The url for the solr git repository
 #
-# solr_tag::        The tag to checkout (optional)
+# $solr_tag::        The tag to checkout (optional)
 #
-# master_url::      The master url for solr clustering (necessary for slave configurations)
+# $master_url::      The master url for solr clustering (necessary for slave configurations)
 #
 # == Actions:
 #   Install a solr server.
 #
 # == Sample Usage:
 # 
-#   class {'solr':
-#     $solr_tarball = "http://source.sakaiproject.org/release/oae/solr/solr-example.tar.gz",
-#     $solrconfig   = 'myconfig/solrconfig.xml.erb',
-#     $schema       = 'myconfig/schema.xml.erb',
+#   class { 'oae::solr':
+#     solr_tarball => "http://source.sakaiproject.org/release/oae/solr/solr-example.tar.gz",
+#     solrconfig   => 'myconfig/solrconfig.xml.erb',
+#     schema       => 'myconfig/schema.xml.erb',
 #   }
 #
 

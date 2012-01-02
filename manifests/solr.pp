@@ -10,6 +10,12 @@
 #
 # $schema::         A template to render the schema.xml file.
 #
+# solr_git::        The url for the solr git repository
+#
+# solr_tag::        The tag to checkout (optional)
+#
+# master_url::      The master url for solr clustering (necessary for slave configurations)
+#
 # == Actions:
 #   Install a solr server.
 #
@@ -22,11 +28,12 @@
 #   }
 #
 
-class oae::solr($solr_git     = "http://github.com/sakaiproject/solr.git",
-                $solr_tag     = "",
+class oae::solr($solr_tag     = "http://github.com/sakaiproject/solr.git",
+                $solr_tag,
                 $solr_tarball = "http://source.sakaiproject.org/release/oae/solr/solr-example.tar.gz",
                 $solrconfig   = 'oae/solrconfig.xml.erb', 
-                $schema       = 'oae/schema.xml.erb') {
+                $schema       = 'oae/schema.xml.erb',
+                $master_url) {
 
     realize(Group[$oae::params::user])
     realize(User[$oae::params::user])

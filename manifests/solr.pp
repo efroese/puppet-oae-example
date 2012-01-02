@@ -1,4 +1,30 @@
-class oae::solr($solr_git = 'http://github.com/sakaiproject/solr.git', $role) {
+# = Class: users
+#
+# This class installs a solr master or slave for Sakai OAE
+#
+# == Parameters:
+#
+# $solr_tarball::   A URL to a tarball of the solr build.
+#
+# $solrconfig::     A template to render the solrconfig.xml file.
+#
+# $schema::         A template to render the schema.xml file.
+#
+# == Actions:
+#   Install a solr server.
+#
+# == Sample Usage:
+# 
+#   class {'solr':
+#     $solr_tarball = "http://source.sakaiproject.org/release/oae/solr/solr-example.tar.gz",
+#     $solrconfig   = 'myconfig/solrconfig.xml.erb',
+#     $schema       = 'myconfig/schema.xml.erb',
+#   }
+#
+
+class oae::solr($solr_tarball = "http://source.sakaiproject.org/release/oae/solr/solr-example.tar.gz",
+                $solrconfig   = 'oae/solrconfig.xml.erb', 
+                $schema       = 'oae/schema.xml.erb') {
 
     realize(Group[$oae::params::user])
     realize(User[$oae::params::user])
@@ -6,14 +32,11 @@ class oae::solr($solr_git = 'http://github.com/sakaiproject/solr.git', $role) {
     # Home for standalone solr servers
     $solr_basedir= "${oae::params::basedir}/solr"
 
-    # A git clone of the sakaiproject/solr
-    $solr_bundle = "${solr_basedir}/solr-bundle"
-
     # Solr installation
     $solr_app    = "${solr_basedir}/solr-app"
 
     # Solr node config
-    $solr_conf   = "${solr_app}/conf"
+    $solr_conf_dir   = "${solr_app}/conf"
 
     file { $basedir:
         ensure => directory,
@@ -23,7 +46,7 @@ class oae::solr($solr_git = 'http://github.com/sakaiproject/solr.git', $role) {
     }
 
     exec { 'download-solr':
-        command => "curl -o ${solr_basedir}/solr.tgz  http://source.sakaiproject.org/release/oae/solr/solr-example.tar.gz",
+        command => "curl -o ${solr_basedir}/solr.tgz  $solr_tarball",
         creates => "${solr_basedir}/solr.tgz",
         require => File[$basedir],
     }
@@ -46,34 +69,28 @@ class oae::solr($solr_git = 'http://github.com/sakaiproject/solr.git', $role) {
         require => Exec['chown-solr'],
     }
 
-    exec { 'clone-solr':
-        command => "git clone ${solr_git} ${solr_bundle}",
-        creates => "${solr_bundle}",
-        require => File[$basedir],
-    }
-
-    file { $solr_conf:
+    file { $solr_conf_dir:
         ensure => directory,
         owner  => $oae::params::user,
         group  => $oae::params::user,
         mode   => 755,
         require => Exec['copy-solr-app'],
     }
-
-    exec { 'copy-solr-resources':
-        command => "cp ${solr_basedir}/solr-bundle/src/main/resources/* ${solr_conf}",
-        creates => "${solr_conf}/schema.xml",
-        require => [ Exec['clone-solr'], File[$solr_conf], ],
+    
+    file { "${solr_conf_dir}/solrconfig.xml":
+        owner   => $oae::params::user,
+        group   => $oae::params::user,
+        mode    => "0644",
+        content => template($solrconfig),
+        require => File[$solr_conf_dir],
+        notify  => Service['solr'],
     }
 
-    file { "${oae::solr::solr_conf}/solrconfig.xml":
+    file { "${solr_conf_dir}/schema.xml":
         owner  => $oae::params::user,
         group  => $oae::params::user,
         mode   => "0644",
-        source => $role ? {
-            '/master/slave' => "file://${oae::solr::solr_bundle}/src/main/resources/${role}-solrconfig.xml",
-            default         => "file://${oae::solr::solr_bundle}/src/main/resources/solrconfig.xml",
-        },
+        content => template($schema),
         notify => Service['solr'],
         require => Exec['copy-solr-resources'],
     }

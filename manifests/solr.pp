@@ -30,7 +30,7 @@ class oae::solr($solr_tarball = "http://source.sakaiproject.org/release/oae/solr
     realize(User[$oae::params::user])
 
     # Home for standalone solr servers
-    $solr_basedir= "${oae::params::basedir}/solr"
+    $solr_basedir = "${oae::params::basedir}/solr"
 
     # Solr installation
     $solr_app    = "${solr_basedir}/solr-app"
@@ -38,7 +38,7 @@ class oae::solr($solr_tarball = "http://source.sakaiproject.org/release/oae/solr
     # Solr node config
     $solr_conf_dir   = "${solr_app}/conf"
 
-    file { $basedir:
+    file { $solr_basedir:
         ensure => directory,
         owner => $oae::params::user,
         group => $oae::params::user,
@@ -92,7 +92,7 @@ class oae::solr($solr_tarball = "http://source.sakaiproject.org/release/oae/solr
         mode   => "0644",
         content => template($schema),
         notify => Service['solr'],
-        require => Exec['copy-solr-resources'],
+        require => File[$solr_conf_dir'],
     }
 
     file { '/etc/init.d/solr':
@@ -105,6 +105,7 @@ class oae::solr($solr_tarball = "http://source.sakaiproject.org/release/oae/solr
 
     service { 'solr':
         ensure => running,
-        require => File["${oae::solr::solr_conf}/solrconfig.xml"],
+        require => File["${solr_conf}/solrconfig.xml"],
+        require => File["${solr_conf}/schema.xml"],
     }
 }

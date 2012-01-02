@@ -19,7 +19,7 @@ class oae::app::setup {
 
     $app_dirs = [ $oae::params::basedir, $jar_dir, $sling_dir, $config_dir, $log_dir, $solr_dir, $sparse_store_dir ]
 
-    file { [ $oae::params::basedir, $jar_dir, $sling_dir, $config_dir, $log_dir, $solr_dir, $sparse_store_dir ]:
+    file { [ $jar_dir, $sling_dir, $config_dir, $log_dir, $solr_dir, $sparse_store_dir ]:
         ensure => directory,
         owner  => $oae::params::user,
         group  => $oae::params::user,

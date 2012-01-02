@@ -5,6 +5,13 @@ class oae::params {
 
     $basedir = '/usr/local/sakaioae'
 
+    file { $basedir:
+        ensure => directory,
+        owner  => $oae::params::user,
+        group  => $oae::params::group,
+        mode   => 750,
+    }
+
     $virtual_ip         = '192.168.1.40'
     $virtual_ip_netmask = '255.255.255.0'
     $http_hosts         = ['centos5-oae-lb1.localdomain', 'centos5-oae-lb2.localdomain']

@@ -7,24 +7,24 @@
 # This is still a work in progress.
 #
 # A pair of highly available Apache HTTPD load balancers 
-# centos5-oae     - 192.168.1.40 (floating ip address)
-# centos5-oae-lb1 - 192.168.1.41
-# centos5-oae-lb2 - 192.168.1.42
+# oae     - 192.168.1.40 (floating ip address)
+# oae-lb1 - 192.168.1.41
+# oae-lb2 - 192.168.1.42
 #
 # A pair of OAE app nodes.
-# centos5-oae-app0 - 192.168.1.50
-# centos5-oae-app1 - 192.168.1.51
+# oae-app0 - 192.168.1.50
+# oae-app1 - 192.168.1.51
 #
 # A pair of solr nodes, one master and one slave.
-# centos5-solr0    - 192.168.1.70 (master)
-# centos5-solr1    - 192.168.1.71 (slave)
+# oae-solr0    - 192.168.1.70 (master)
+# oae-solr1    - 192.168.1.71 (slave)
 #
 # One MySQL database node.
 # (MySQL replication is not one of my priorities right now)
-# centos5-db0    - 192.168.1.250
+# oae-db0    - 192.168.1.250
 #
 # One OAE Content Preview Processor
-# centos5-oae-preview0 - 192.168.1.80
+# oae-preview0 - 192.168.1.80
 #
 
 ###########################################################################
@@ -64,7 +64,7 @@ node preview_processor_node inherits basenode {
 #
 # Apache Load Balancer
 #
-node /centos5-oae-lb[1-2].localdomain/ inherits basenode {
+node /oae-lb[1-2].localdomain/ inherits basenode {
 
     class { 'oae::params': }
 
@@ -98,7 +98,7 @@ node /centos5-oae-lb[1-2].localdomain/ inherits basenode {
 #
 # OAE app nodes
 #
-node /centos5-oae-app[0-1].localdomain/ inherits basenode {
+node /oae-app[0-1].localdomain/ inherits basenode {
 
     class { 'oae::params': }
     class { 'oae': }
@@ -147,7 +147,7 @@ node /centos5-oae-app[0-1].localdomain/ inherits basenode {
 #
 # OAE Solr Nodes
 #
-node 'centos5-solr0.localdomain' inherits basenode {
+node 'solr0.localdomain' inherits basenode {
 
     include oae::params
     include oae
@@ -157,7 +157,7 @@ node 'centos5-solr0.localdomain' inherits basenode {
     }
 }
 
-node 'centos5-solr1.localdomain' inherits basenode {
+node 'solr1.localdomain' inherits basenode {
 
     include oae::params
     include oae
@@ -171,20 +171,20 @@ node 'centos5-solr1.localdomain' inherits basenode {
 #
 # OAE Content Preview Processor Node
 #
-node 'centos5-oae-preview0.localdomain' inherits preview_processor_node { }
+node 'oae-preview0.localdomain' inherits preview_processor_node { }
 
 ###########################################################################
 #
 # MySQL Database Server
 #
-node 'centos5-oae-db0.localdomain' inherits basenode {
+node 'oae-db0.localdomain' inherits basenode {
 
     $mysql_password = 'seequelle'
 
     include augeas
     include mysql::server
 
-    mysql::database{ 'nakamura':
+    mysql::database { 'nakamura':
         ensure   => present
     }
 
@@ -196,14 +196,14 @@ node 'centos5-oae-db0.localdomain' inherits basenode {
     }
 
     # R/W from the app nodes
-    mysql::rights { "centos5-oae-app0": 
+    mysql::rights { "oae-app0":
         ensure   => present,
         database => 'nakamura',
         user     => 'nakamura@192.68.1.50',
         password => 'ironchef'
     }
 
-    mysql::rights { "centos5-oae-app1": 
+    mysql::rights { "oae-app1":
         ensure   => present,
         database => 'nakamura',
         user     => 'nakamura@192.68.1.51',

@@ -1,20 +1,20 @@
 # = Class: oae::solr
 #
-# This class installs a solr master or slave for Sakai OAE
+# This class installs a standalone solr master or slave for Sakai OAE
 #
 # == Parameters:
 #
-# $solr_tarball::   A URL to a tarball of the solr build.
+# $solr_tarball:: A URL to a tarball of the solr build.
 #
-# $solrconfig::     A template to render the solrconfig.xml file.
+# $solrconfig::   A template to render the solrconfig.xml file.
 #
-# $schema::         A template to render the schema.xml file.
+# $schema::       A template to render the schema.xml file.
 #
-# $solr_git::        The url for the solr git repository
+# $solr_git::     The url for the solr git repository
 #
-# $solr_tag::        The tag to checkout (optional)
+# $solr_tag::     The tag to checkout (optional)
 #
-# $master_url::      The master url for solr clustering (necessary for slave configurations)
+# $master_url::   The master url for solr clustering (necessary for slave configurations)
 #
 # == Actions:
 #   Install a solr server.
@@ -34,9 +34,6 @@ class oae::solr($solr_git     = "http://github.com/sakaiproject/solr.git",
                 $solrconfig   = 'oae/solrconfig.xml.erb', 
                 $schema       = 'oae/schema.xml.erb',
                 $master_url) {
-
-    realize(Group[$oae::params::user])
-    realize(User[$oae::params::user])
 
     # Home for standalone solr servers
     $solr_basedir = "${oae::params::basedir}/solr"

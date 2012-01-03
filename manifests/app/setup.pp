@@ -4,9 +4,6 @@ class oae::app::setup {
 
     package { 'curl': ensure => installed }
 
-    realize(Group[$oae::params::user])
-    realize(User[$oae::params::user])
-
     $log_dir  = "/var/log/sakaioae"
     $jar_dir  = "${oae::params::basedir}/jars"
 

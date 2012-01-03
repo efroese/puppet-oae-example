@@ -1,8 +1,5 @@
 class oae::preview_processor($oae_user="sakaioae", $basedir="/usr/local/sakaioae") {
 
-    realize(Group[$oae_user])
-    realize(User[$oae_user])
-
     file { "${basedir}/bin":
         ensure => directory,
         owner  => $oae_user,

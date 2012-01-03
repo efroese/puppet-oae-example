@@ -112,8 +112,12 @@ node /oae-app[0-1].localdomain/ inherits basenode {
          pass   => 'ironchef',
     }
 
-    $serverprotectsec = 'shh-its@secret'
+    class { 'oae::app::ehcache':
+        mcast_address => '230.0.0.2',
+        mcast_port    => '8450',
+    }
 
+    $serverprotectsec = 'shh-its@secret'
     oae::sling_config { "org/sakaiproject/nakamura/http/usercontent/ServerProtectionServiceImpl.config":
         dirname => "org/sakaiproject/nakamura/http/usercontent",
         config => {
@@ -143,7 +147,7 @@ node /oae-app[0-1].localdomain/ inherits basenode {
 #
 # OAE Solr Nodes
 #
-node 'solr0.localdomain' inherits basenode {
+node 'oae-solr0.localdomain' inherits basenode {
 
     include oae::params
     include oae
@@ -153,7 +157,7 @@ node 'solr0.localdomain' inherits basenode {
     }
 }
 
-node 'solr1.localdomain' inherits basenode {
+node 'oae-solr1.localdomain' inherits basenode {
 
     include oae::params
     include oae

@@ -27,7 +27,7 @@ class oae {
         # Create the folders for the config file
         if !defined(Exec["chown_${sling_config}/${dirname}"]) {
             exec { "chown_${sling_config}/${dirname}":
-                command => "chown -R ${oae::params::user}:${oae::params::group} ${sling_config}/${dirname}",
+                command => "chown ${oae::params::user}:${oae::params::group} ${sling_config}/${dirname}",
                 require => Exec["mkdir_${sling_config}/${dirname}"],
                 unless  => "[ `stat --printf='%U' ${sling_config}/${dirname}` == '${$oae::params::user}' ]"
             }
@@ -40,7 +40,6 @@ class oae {
             mode  => 0440,
             content => template("oae/sling_config.erb"),
             require => Exec["mkdir_${sling_config}/${dirname}"],
-            notify  => Exec["chown_${sling_config}/${dirname}"],
         }
 
     }

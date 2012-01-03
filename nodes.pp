@@ -47,21 +47,27 @@ node basenode {
     }
 }
 
+node oaenode inherits basenode {
+    # OAE cluster-specific configuration
+    class { 'localconfig': }
+}
+
 ###########################################################################
 #
 # Apache Load Balancer
 #
-node /oae-lb[1-2].localdomain/ inherits basenode {
+node /oae-lb[1-2].localdomain/ inherits oaenode {
 
     class { 'oae::params': }
+    
     class { 'apache': }
     class { 'pacemaker::apache': }
 
     # The HA master will respond to the VIP
-    $http_name = 'oae.localdomain'
-    $virtual_ip = '192.168.1.40'
-    $virtual_netmask = '255.255.255.0'
-    $apache_lb_hostnames = ['oae-lb1.localdomain', 'oae-lb2.localdomain']
+    $http_name           = $localconfig::apache_lb_http_name
+    $virtual_ip          = $localconfig::apache_lb_virtual_ip
+    $virtual_netmask     = $localconfig::apache_lb_virtual_netmask
+    $apache_lb_hostnames = $localconfig::apache_lb_hostnames
 
     apache::vhost { $http_name: }
     apache::balancer { "apache-balancer-oae-app":
@@ -72,17 +78,17 @@ node /oae-lb[1-2].localdomain/ inherits basenode {
           "192.168.1.51:8080",
         ],
         params     => ["retry=20", "min=3", "flushpackets=auto"],
-        standbyurl => "http://sorryserver.cluster/",
+        standbyurl => $localconfig::apache_lb_standbyurl,
         vhost      => $http_name,
     }
 
     # Pacemaker manages which machine is the active LB
     # TODO: parameterize the pacemaker module.
-    $pacemaker_authkey   = 'oaehbkey'
-    $pacemaker_interface = 'eth0'
+    $pacemaker_authkey   = $localconfig::apache_pacemaker_authkey
+    $pacemaker_interface = $localconfig::apache_pacemaker_interface
+    $pacemaker_nodes     = $localconfig::apache_pacemaker_nodes
     $pacemaker_hacf      = 'localconfig/ha.cf.erb'
     $pacemaker_crmcli    = 'localconfig/crm-config.cli.erb'
-    $pacemaker_nodes     = [ '192.168.1.41', '192.168.1.42']
     include pacemaker
 }
 
@@ -90,9 +96,9 @@ node /oae-lb[1-2].localdomain/ inherits basenode {
 #
 # OAE app nodes
 #
-node /oae-app[0-1].localdomain/ inherits basenode {
+node /oae-app[0-1].localdomain/ inherits oaenode {
 
-    $http_name = 'oae.localdomain'
+    $http_name = $localconfig::apache_lb_http_name
 
     class { 'oae::params': }
     class { 'oae': }
@@ -106,32 +112,31 @@ node /oae-app[0-1].localdomain/ inherits basenode {
     }
 
     class { 'oae::core':
-         driver => "jdbc:mysql://192.168.1.250:3306/nakamura?autoReconnectForPools\\=true",
-         url    => 'com.mysql.jdbc.Driver',
-         user   => 'nakamura',
-         pass   => 'ironchef',
+         url    => $localconfig::db_url,
+         driver => $localconfig::db_driver,
+         user   => $localconfig::db_user,
+         pass   => $localconfig::db_password,
     }
 
     class { 'oae::app::ehcache':
-        mcast_address => '230.0.0.2',
-        mcast_port    => '8450',
+        mcast_address => $localconfig::mcast_address,
+        mcast_port    => $localconfig::mcast_port,
     }
 
-    $serverprotectsec = 'shh-its@secret'
     oae::sling_config { "org/sakaiproject/nakamura/http/usercontent/ServerProtectionServiceImpl.config":
         dirname => "org/sakaiproject/nakamura/http/usercontent",
         config => {
             'disable.protection.for.dev.mode' => false,
             'trusted.hosts'  => " ${http_name}:8080 = https://${http_name}:443 ", 
-            'trusted.secret' => $serverprotectsec,
+            'trusted.secret' => $localconfig::serverprotectsec,
         }
     }
 
     oae::sling_config { "org/sakaiproject/nakamura/solr/MultiMasterRemoteSolrClient.config":
         dirname => "org/sakaiproject/nakamura/solr",
         config => {
-            "remoteurl"  => "http://192.168.1.70:8983/solr",
-            "query-urls" => "http://192.168.1.71:8983/solr",
+            "remoteurl"  => $localconfig::solr_remoteurl,
+            "query-urls" => $localconfig::solr_queryurls,
         }
     }
 
@@ -147,7 +152,8 @@ node /oae-app[0-1].localdomain/ inherits basenode {
 #
 # OAE Solr Nodes
 #
-node 'oae-solr0.localdomain' inherits basenode {
+
+node 'oae-solr0.localdomain' inherits oaenode {
 
     include oae::params
     include oae
@@ -157,7 +163,7 @@ node 'oae-solr0.localdomain' inherits basenode {
     }
 }
 
-node 'oae-solr1.localdomain' inherits basenode {
+node 'oae-solr1.localdomain' inherits oaenode {
 
     include oae::params
     include oae
@@ -171,7 +177,7 @@ node 'oae-solr1.localdomain' inherits basenode {
 #
 # OAE Content Preview Processor Node
 #
-node 'oae-preview0.localdomain' inherits basenode {
+node 'oae-preview0.localdomain' inherits oaenode {
     class { 'oae::preview_processor': }
 }
 
@@ -179,36 +185,34 @@ node 'oae-preview0.localdomain' inherits basenode {
 #
 # MySQL Database Server
 #
-node 'oae-db0.localdomain' inherits basenode {
-
-    $mysql_password = 'seequelle'
+node 'oae-db0.localdomain' inherits oaenode {
 
     include augeas
     include mysql::server
 
-    mysql::database { 'nakamura':
+    mysql::database { "${localconfig::db}":
         ensure   => present
     }
 
-    mysql::rights {"Set rights for puppet database":
+    mysql::rights { "Set rights for puppet database":
         ensure   => present,
-        database => 'nakamura',
-        user     => 'nakamura',
-        password => 'ironchef'
+        database => $localconfig::db,
+        user     => $localconfig::db_user,
+        password => $localconfig::db_password,
     }
 
     # R/W from the app nodes
     mysql::rights { "oae-app0-nakamura":
         ensure   => present,
-        database => 'nakamura',
-        user     => 'nakamura@192.68.1.50',
-        password => 'ironchef'
+        database => $localconfig::db_user,
+        user     => "${localconfig::db_user}@${localconfig::app_server0}",
+        password => $localconfig::db_password
     }
 
     mysql::rights { "oae-app1-nakamura":
         ensure   => present,
-        database => 'nakamura',
-        user     => 'nakamura@192.68.1.51',
-        password => 'ironchef'
+        database => $localconfig::db_user,
+        user     => "${localconfig::db_user}@${localconfig::app_server0}",
+        password => $localconfig::db_password,
     }
 }

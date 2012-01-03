@@ -21,9 +21,9 @@
 #     mcast_port    => '5509',
 #   }
 #
-class oae::app::ehcache($config_xml = 'oae/ehcacheConfig.xml.erb',
-                        $mcast_address,
-                        $mcast_port) {
+class oae::app::ehcache ($config_xml = 'oae/ehcacheConfig.xml.erb',
+                         $mcast_address,
+                         $mcast_port) {
 
     Class['oae::params'] -> Class['oae::app::ehcache']
 

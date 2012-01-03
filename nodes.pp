@@ -29,7 +29,6 @@
 # Node Type Definitions
 #
 node basenode {
-    include hosts 
     include users
     include git
     include java
@@ -50,6 +49,7 @@ node basenode {
 node oaenode inherits basenode {
     # OAE cluster-specific configuration
     class { 'localconfig': }
+    class { 'localconfig::hosts': }
 }
 
 ###########################################################################

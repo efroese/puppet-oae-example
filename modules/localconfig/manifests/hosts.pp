@@ -1,4 +1,4 @@
-class hosts { 
+class localconfig::hosts {
 
     host { 'oae':          ip => '192.168.1.40', comment => 'HA Apache virtual IP', ensure => present }
     host { 'oae-lb1':      ip => '192.168.1.41', comment => 'Apache LB primary.', ensure => present }

@@ -4,9 +4,7 @@
 #
 # This is an example of how to set up a Sakai OAE Cluster with puppet.
 #
-# This is still a work in progress.
-#
-# A pair of highly available Apache HTTPD load balancers 
+# A pair of highly available Apache HTTPd load balancers
 # oae     - 192.168.1.40 (floating ip address)
 # oae-lb1 - 192.168.1.41
 # oae-lb2 - 192.168.1.42
@@ -16,12 +14,11 @@
 # oae-app1 - 192.168.1.51
 #
 # A pair of solr nodes, one master and one slave.
-# oae-solr0    - 192.168.1.70 (master)
-# oae-solr1    - 192.168.1.71 (slave)
+# oae-solr0 - 192.168.1.70 (master)
+# oae-solr1 - 192.168.1.71 (slave)
 #
 # One MySQL database node.
-# (MySQL replication is not one of my priorities right now)
-# oae-db0    - 192.168.1.250
+# oae-db0 - 192.168.1.250
 #
 # One OAE Content Preview Processor
 # oae-preview0 - 192.168.1.80
@@ -48,7 +45,6 @@ node basenode {
     class { 'ntp':
         time_zone =>  '/usr/share/zoneinfo/America/Phoenix',
     }
-
 }
 
 ###########################################################################
@@ -58,12 +54,16 @@ node basenode {
 node /oae-lb[1-2].localdomain/ inherits basenode {
 
     class { 'oae::params': }
+    class { 'apache': }
+    class { 'pacemaker::apache': }
 
-    include apache
-    include pacemaker::apache
+    # The HA master will respond to the VIP
+    $http_name = 'oae.localdomain'
+    $virtual_ip = '192.168.1.40'
+    $virtual_netmask = '255.255.255.0'
+    $apache_lb_hostnames = ['oae-lb1.localdomain', 'oae-lb2.localdomain']
 
-    apache::vhost { $oae::params::http_name: }
- 
+    apache::vhost { $http_name: }
     apache::balancer { "apache-balancer-oae-app":
         location   => "/",
         proto      => "http",
@@ -73,11 +73,12 @@ node /oae-lb[1-2].localdomain/ inherits basenode {
         ],
         params     => ["retry=20", "min=3", "flushpackets=auto"],
         standbyurl => "http://sorryserver.cluster/",
-        vhost      => $oae::params::http_name,
+        vhost      => $http_name,
     }
 
     # Pacemaker manages which machine is the active LB
-    $pacemaker_authkey   = 'oaehb'
+    # TODO: parameterize the pacemaker module.
+    $pacemaker_authkey   = 'oaehbkey'
     $pacemaker_interface = 'eth0'
     $pacemaker_hacf      = 'localconfig/ha.cf.erb'
     $pacemaker_crmcli    = 'localconfig/crm-config.cli.erb'
@@ -90,6 +91,8 @@ node /oae-lb[1-2].localdomain/ inherits basenode {
 # OAE app nodes
 #
 node /oae-app[0-1].localdomain/ inherits basenode {
+
+    $http_name = 'oae.localdomain'
 
     class { 'oae::params': }
     class { 'oae': }
@@ -109,12 +112,14 @@ node /oae-app[0-1].localdomain/ inherits basenode {
          pass   => 'ironchef',
     }
 
+    $serverprotectsec = 'shh-its@secret'
+
     oae::sling_config { "org/sakaiproject/nakamura/http/usercontent/ServerProtectionServiceImpl.config":
         dirname => "org/sakaiproject/nakamura/http/usercontent",
         config => {
             'disable.protection.for.dev.mode' => false,
-            'trusted.hosts'  => " ${oae::params::http_name}:8080 = https://${oae::params::http_name}:443 ", 
-            'trusted.secret' => $oae::params::serverprotectsec,
+            'trusted.hosts'  => " ${http_name}:8080 = https://${http_name}:443 ", 
+            'trusted.secret' => $serverprotectsec,
         }
     }
 
@@ -163,7 +168,7 @@ node 'solr1.localdomain' inherits basenode {
 # OAE Content Preview Processor Node
 #
 node 'oae-preview0.localdomain' inherits basenode {
-    class {'oae::preview_processor':}
+    class { 'oae::preview_processor': }
 }
 
 ###########################################################################
@@ -189,14 +194,14 @@ node 'oae-db0.localdomain' inherits basenode {
     }
 
     # R/W from the app nodes
-    mysql::rights { "oae-app0":
+    mysql::rights { "oae-app0-nakamura":
         ensure   => present,
         database => 'nakamura',
         user     => 'nakamura@192.68.1.50',
         password => 'ironchef'
     }
 
-    mysql::rights { "oae-app1":
+    mysql::rights { "oae-app1-nakamura":
         ensure   => present,
         database => 'nakamura',
         user     => 'nakamura@192.68.1.51',

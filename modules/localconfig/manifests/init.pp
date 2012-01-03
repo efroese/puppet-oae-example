@@ -1,2 +1,2 @@
-class files {
+class localconfig {
 }

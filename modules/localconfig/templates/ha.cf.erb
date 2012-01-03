@@ -23,6 +23,7 @@ initdead     <%= pacemaker_initdead %>
 # use heartbeat v2/pacemaker
 crm yes
 
-<% pacemaker_nodes.each do |nodename| %>node <%= nodename %>
-<% end %>
+<% pacemaker_nodes.each do |nodename| %>
+node <%= nodename %>
+<% end -%>
 

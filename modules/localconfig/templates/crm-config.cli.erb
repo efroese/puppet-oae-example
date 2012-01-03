@@ -3,9 +3,9 @@ primitive P_APACHE ocf:heartbeat:apache \
 	params configfile="/etc/httpd/conf/httpd.conf" statusurl="http://localhost/server-status" \
 	op monitor interval="40s"
 primitive P_IP ocf:heartbeat:IPaddr2 \
-	params ip="<%= scope.lookupvar('oae::params::virtual_ip') %>" cidr_netmask="<%= scope.lookupvar('oae::params::virtual_netmask') %>" \
+	params ip="<%= virtual_ip %>" cidr_netmask="<%= virtual_netmask %>" \
 	op monitor interval="5s"
-<% scope.lookupvar('oae::params::http_hosts').each_with_index do |lbhost, i| %>
+<% apache_lb_hostnames.each_with_index do |lbhost, i| %>
 location L_IP_LB<%= i %> P_IP 100: <%= lbhost %>
 <% end %>
 colocation WEB_SITE inf: P_APACHE P_IP

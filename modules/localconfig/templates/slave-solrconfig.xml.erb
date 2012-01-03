@@ -531,7 +531,7 @@
 <!-- remove  the <lst name="slave"> section if this is just a master -->
 <requestHandler name="/replication" class="solr.ReplicationHandler" >
     <lst name="slave">
-      <str name="masterUrl">http://localhost:9090/solr/replication</str>
+      <str name="masterUrl"><%= master_url %></str>
       <str name="pollInterval">00:00:05</str>
     </lst>
 </requestHandler>

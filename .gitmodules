@@ -1,6 +1,6 @@
 [submodule "modules/mysql"]
 	path = modules/mysql
-	url = http://github.com/camptocamp/puppet-mysql.git
+	url = http://github.com/efroese/puppet-mysql.git
 [submodule "modules/augeas"]
 	path = modules/augeas
 	url = http://github.com/camptocamp/puppet-augeas.git

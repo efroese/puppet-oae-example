@@ -28,7 +28,7 @@ class oae::core($driver, $url, $user, $pass) {
 
     Class['oae::params'] -> Class['oae::core'] 
 
-    oae::app::sling_config { "org/sakaiproject/nakamura/lite/storage/jdbc/JDBCStorageClientPool.config":
+    oae::app::server::sling_config { "org/sakaiproject/nakamura/lite/storage/jdbc/JDBCStorageClientPool.config":
         dirname => "org/sakaiproject/nakamura/lite/storage/jdbc",
         config => {
             'jdbc-driver' => $driver,

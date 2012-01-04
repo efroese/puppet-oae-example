@@ -16,13 +16,13 @@ class oae::preview_processor::redhat {
         # CentOS needs updated ImageMagick and Ruby packages
         package { ['ruby1.9.2p0-1.9.2p0-1.x86_64', 'ImageMagick-6.4.9-10.x86_64', 'ImageMagick-devel-6.4.9-10.x86_64']:
              ensure   => present,
-             name     => $name, 
              # This is efroese's personal dropbox
              # TODO find a better place to host these files.
              source   => "http://dl.dropbox.com/u/24606888/puppet-oae-files/$name/",
              provider => 'rpm',
         }
 
+        # Reconfigure the library loader to look in /opt/local/lib64
         file { "/etc/ld.so.conf.d/optlocal.conf":
             owner => root, 
             group => root, 
@@ -37,7 +37,7 @@ class oae::preview_processor::redhat {
         } 
 
         cron { 'run_preview_processor':
-            command => "PATH=/opt/local/bin:$PATH ${preview_processor::basedir}/bin/run_preview_processor.sh",
+            command => "PATH=/opt/local/bin:\\$PATH ${oae::preview_processor::init::basedir}/bin/run_preview_processor.sh",
             user => $oae::params::user,
             ensure => present,
             minute => '*',
@@ -51,7 +51,7 @@ class oae::preview_processor::redhat {
         package { $centos6_pkgs: ensure => installed }
 
         cron { 'run_preview_processor':
-            command => "${preview_processor::basedir}/bin/run_preview_processor.sh",
+            command => "${oae::preview_processor::init::basedir}/bin/run_preview_processor.sh",
             user   => $oae::params::user,
             ensure => present,
             minute => '*',

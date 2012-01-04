@@ -1,4 +1,4 @@
-class oae::preview_processor($oae_user="sakaioae", $basedir="/usr/local/sakaioae") {
+class oae::preview_processor::init ($oae_user="sakaioae", $basedir="/usr/local/sakaioae") {
 
     file { "${basedir}/bin":
         ensure => directory,

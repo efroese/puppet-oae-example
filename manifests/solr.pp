@@ -98,7 +98,7 @@ class oae::solr($solr_git     = "http://github.com/sakaiproject/solr.git",
     # Copy stopwords.txt and synonmns.txt and the like from the Sakai solr repository
     exec { 'copy-solr-resources':
         command => "cp ${solr_basedir}/solr-git/src/main/resources/*.txt ${solr_conf_dir}",
-        creates => "${solr_conf}/stopwords.txt",
+        creates => "${solr_conf_dir}/stopwords.txt",
         require => [ Exec['clone-solr'], File[$solr_conf_dir], ],
     }
     

@@ -136,7 +136,7 @@ node /oae-solr[1-3].localdomain/ inherits oaenode {
 # OAE Content Preview Processor Node
 #
 node 'oae-preview0.localdomain' inherits oaenode {
-    class { 'oae::preview_processor': }
+    class { 'oae::preview_processor::init': }
 }
 
 ###########################################################################

@@ -1,13 +1,9 @@
 import 'manifests/*'
+import 'nodetypes'
 import 'nodes'
 
-stage { 'init': before => Stage['first'] }
-stage { 'first': before => Stage['main'] }
-stage { 'last': require => Stage['main'] }
-
+# Set the default path for exec resources
 Exec { path => '/usr/local/sbin:/usr/local/bin:/sbin:/bin:/usr/sbin:/usr/bin:/root/bin' }
 
-class {
-      'centos': stage => init;
-      'users': stage => init;
-}
+# set up a run stage that executes before main
+stage { 'init': before => Stage['main'] }

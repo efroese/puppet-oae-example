@@ -5,11 +5,12 @@
 class localconfig {
     
     # apache load balancer
-    $apache_lb_http_name = 'oae.localdomain'
-    $apache_lb_virtual_ip = '192.168.1.40'
+    $apache_lb_http_name       = 'oae.localdomain'
+    $apache_lb_virtual_ip      = '192.168.1.40'
     $apache_lb_virtual_netmask = '255.255.255.0'
-    $apache_lb_hostnames = ['oae-lb1.localdomain', 'oae-lb2.localdomain']
-    $apache_lb_standbyurl = 'http://sorry.localdomain'
+    $apache_lb_hostnames       = ['oae-lb1.localdomain', 'oae-lb2.localdomain']
+    $apache_lb_members         = ['oae-lb1.localdomain:8080', 'oae-lb2.localdomain:8080']
+    $apache_lb_standbyurl      = 'http://sorry.localdomain'
 
     # heartbeat/pacemaker for HA apache load balancers
     $apache_lb_pacemaker_authkey = 'apachehbauthkey'
@@ -23,6 +24,15 @@ class localconfig {
     $db_user     = 'nakamura'
     $db_password = 'ironchef'
 
+    ###########################################################################
+    # App servers
+    
+    $version_oae   = '1.1'
+    $downloaddir   = 'http://192.168.1.124/jars/'
+    $jarfile       = 'org.sakaiproject.nakamura.app-1.1-mysql.jar'
+    $javamemorymax = '512'
+    $javapermsize  = '256'
+    
     # oae server protection service
     $serverprotectsec = 'shhh-its@secret'
     
@@ -36,6 +46,8 @@ class localconfig {
     # solr
     $solr_master = '192.168.1.70'
     $solr_slave0 = '192.168.1.71'
+    $solr_slave1 = '192.168.1.72'
+    $solr_slave2 = '192.168.1.73'
     $solr_remoteurl = "http://${solr_master}:8983/solr"
-    $solr_queryurls = "http://${solr_slave0}:8983/solr"
+    $solr_queryurls = "http://${solr_slave0}:8983/solr|http://${solr_slave1}:8983/solr|http://${solr_slave2}:8983/solr"
 }

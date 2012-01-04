@@ -16,6 +16,8 @@
 # A pair of solr nodes, one master and one slave.
 # oae-solr0 - 192.168.1.70 (master)
 # oae-solr1 - 192.168.1.71 (slave)
+# oae-solr2 - 192.168.1.72 (slave)
+# oae-solr3 - 192.168.1.73 (slave)
 #
 # One MySQL database node.
 # oae-db0 - 192.168.1.250
@@ -23,34 +25,6 @@
 # One OAE Content Preview Processor
 # oae-preview0 - 192.168.1.80
 #
-
-###########################################################################
-#
-# Node Type Definitions
-#
-node basenode {
-    include users
-    include git
-    include java
-
-    if $operatingsystem == 'CentOS' {
-        include centos
-
-        if $virtual == "virtualbox" {
-            include centos_minimal
-        }
-    }
-
-    class { 'ntp':
-        time_zone =>  '/usr/share/zoneinfo/America/Phoenix',
-    }
-}
-
-node oaenode inherits basenode {
-    # OAE cluster-specific configuration
-    class { 'localconfig': }
-    class { 'localconfig::hosts': }
-}
 
 ###########################################################################
 #
@@ -73,10 +47,7 @@ node /oae-lb[1-2].localdomain/ inherits oaenode {
     apache::balancer { "apache-balancer-oae-app":
         location   => "/",
         proto      => "http",
-        members    => [
-          "192.168.1.50:8080",
-          "192.168.1.51:8080",
-        ],
+        members    => $localconfig::apache_lb_members,
         params     => ["retry=20", "min=3", "flushpackets=auto"],
         standbyurl => $localconfig::apache_lb_standbyurl,
         vhost      => $http_name,
@@ -104,11 +75,11 @@ node /oae-app[0-1].localdomain/ inherits oaenode {
     class { 'oae': }
 
     class { 'oae::app::server':
-        version_oae    => '1.1',
-        downloaddir    => 'http://192.168.1.124/jars/',
-        jarfile        => 'org.sakaiproject.nakamura.app-1.1-mysql.jar',
-        javamemorymax  => '512',
-        javapermsize   => '256',
+        version_oae    => $localconfig::version_oae,
+        downloaddir    => $localconfig::downloaddir,
+        jarfile        => $localconfig::jarfile,
+        javamemorymax  => $localconfig::javamemorymax,
+        javapermsize   => $localconfig::javapermsize,
     }
 
     class { 'oae::core':
@@ -163,7 +134,7 @@ node 'oae-solr0.localdomain' inherits oaenode {
     }
 }
 
-node 'oae-solr1.localdomain' inherits oaenode {
+node /oae-solr[1-3].localdomain/ inherits oaenode {
 
     include oae::params
     include oae

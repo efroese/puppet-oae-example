@@ -24,6 +24,10 @@ class mysql::server {
     ensure => installed,
   }
 
+  package { "pwgen":
+    ensure => installed,
+  }
+
   file { "${mysql::params::data_dir}":
     ensure  => directory,
     owner   => "mysql",

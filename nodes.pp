@@ -89,7 +89,7 @@ node /oae-app[0-1].localdomain/ inherits oaenode {
         mcast_port    => $localconfig::mcast_port,
     }
 
-    oae::app::sling_config { "org/sakaiproject/nakamura/http/usercontent/ServerProtectionServiceImpl.config":
+    oae::app::server::sling_config { "org/sakaiproject/nakamura/http/usercontent/ServerProtectionServiceImpl.config":
         dirname => "org/sakaiproject/nakamura/http/usercontent",
         config => {
             'disable.protection.for.dev.mode' => false,
@@ -98,7 +98,7 @@ node /oae-app[0-1].localdomain/ inherits oaenode {
         }
     }
 
-    oae::app::sling_config { "org/sakaiproject/nakamura/solr/MultiMasterRemoteSolrClient.config":
+    oae::app::server::sling_config { "org/sakaiproject/nakamura/solr/MultiMasterRemoteSolrClient.config":
         dirname => "org/sakaiproject/nakamura/solr",
         config => {
             "remoteurl"  => $localconfig::solr_remoteurl,
@@ -106,7 +106,7 @@ node /oae-app[0-1].localdomain/ inherits oaenode {
         }
     }
 
-    oae::app::sling_config { "org/sakaiproject/nakamura/solr/SolrServerServiceImpl.config":
+    oae::app::server::sling_config { "org/sakaiproject/nakamura/solr/SolrServerServiceImpl.config":
         dirname => "org/sakaiproject/nakamura/solr",
         config => {
             "solr-impl" => "multiremote",

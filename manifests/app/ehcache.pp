@@ -27,7 +27,7 @@ class oae::app::ehcache ($config_xml = 'oae/ehcacheConfig.xml.erb',
 
     Class['oae::params'] -> Class['oae::app::ehcache']
 
-    file { "${oae::params::basedir}/sling/ehcacheConfig.xml",
+    file { "${oae::params::basedir}/sling/ehcacheConfig.xml":
         owner => $oae::params::user,
         group => $oae::params::group,
         mode  => 0440,

@@ -136,7 +136,10 @@ node /oae-solr[1-3].localdomain/ inherits oaenode {
 # OAE Content Preview Processor Node
 #
 node 'oae-preview0.localdomain' inherits oaenode {
-    class { 'oae::preview_processor::init': }
+    class { 'oae::preview_processor::init': 
+        nakamura_git => $localconfig::nakamura_git,
+        nakamura_tag => $localconfig::nakamura_tag,
+    }
 }
 
 ###########################################################################

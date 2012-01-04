@@ -25,6 +25,11 @@ class localconfig {
     $db_password = 'ironchef'
 
     ###########################################################################
+    # Git
+    $nakamura_git = "http://github.com/sakaiproject/nakamura"
+    $nakamura_tag = "1.1"
+
+    ###########################################################################
     # App servers
     
     $version_oae   = '1.1'

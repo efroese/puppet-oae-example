@@ -103,11 +103,11 @@ class oae::app::server($version_oae, $downloaddir, $jarfile,
 
        # Write the config file and trigger a chown
        file { "${sling_config}/${name}":
-           owner => $oae::params::user,
-           group => $oae::params::group,
-           mode  => 0440,
+           owner => root,
+           group => root,
+           mode  => 0444,
            content => template("oae/sling_config.erb"),
-           require => Exec["mkdir_${sling_config}/${dirname}"],
+           require => Exec["chown_{sling_config}/${dirname}"],
        }
     }
 }

@@ -32,8 +32,6 @@
 #
 node /oae-lb[1-2].localdomain/ inherits oaenode {
 
-    class { 'oae::params': }
-    
     class { 'apache': }
     class { 'pacemaker::apache': }
 
@@ -71,9 +69,6 @@ node /oae-app[0-1].localdomain/ inherits oaenode {
 
     $http_name = $localconfig::apache_lb_http_name
 
-    class { 'oae::params': }
-    class { 'oae': }
-
     class { 'oae::app::server':
         version_oae    => $localconfig::version_oae,
         downloaddir    => $localconfig::downloaddir,
@@ -94,7 +89,7 @@ node /oae-app[0-1].localdomain/ inherits oaenode {
         mcast_port    => $localconfig::mcast_port,
     }
 
-    oae::sling_config { "org/sakaiproject/nakamura/http/usercontent/ServerProtectionServiceImpl.config":
+    oae::app::sling_config { "org/sakaiproject/nakamura/http/usercontent/ServerProtectionServiceImpl.config":
         dirname => "org/sakaiproject/nakamura/http/usercontent",
         config => {
             'disable.protection.for.dev.mode' => false,
@@ -103,7 +98,7 @@ node /oae-app[0-1].localdomain/ inherits oaenode {
         }
     }
 
-    oae::sling_config { "org/sakaiproject/nakamura/solr/MultiMasterRemoteSolrClient.config":
+    oae::app::sling_config { "org/sakaiproject/nakamura/solr/MultiMasterRemoteSolrClient.config":
         dirname => "org/sakaiproject/nakamura/solr",
         config => {
             "remoteurl"  => $localconfig::solr_remoteurl,
@@ -111,7 +106,7 @@ node /oae-app[0-1].localdomain/ inherits oaenode {
         }
     }
 
-    oae::sling_config { "org/sakaiproject/nakamura/solr/SolrServerServiceImpl.config":
+    oae::app::sling_config { "org/sakaiproject/nakamura/solr/SolrServerServiceImpl.config":
         dirname => "org/sakaiproject/nakamura/solr",
         config => {
             "solr-impl" => "multiremote",
@@ -125,20 +120,12 @@ node /oae-app[0-1].localdomain/ inherits oaenode {
 #
 
 node 'oae-solr0.localdomain' inherits oaenode {
-
-    include oae::params
-    include oae
-
     class { 'oae::solr': 
         solrconfig => 'localconfig/master-solrconfig.xml.erb',
     }
 }
 
 node /oae-solr[1-3].localdomain/ inherits oaenode {
-
-    include oae::params
-    include oae
-
     class { 'oae::solr': 
         solrconfig => 'localconfig/slave-solrconfig.xml.erb',
     }

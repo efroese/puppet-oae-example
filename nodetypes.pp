@@ -20,6 +20,8 @@ node basenode {
 }
 
 node oaenode inherits basenode {
+    # OAE module configuration
+    class { 'oae::params': }
     # OAE cluster-specific configuration
     class { 'localconfig': }
     class { 'localconfig::hosts': }

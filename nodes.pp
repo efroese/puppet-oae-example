@@ -166,14 +166,16 @@ node 'oae-db0.localdomain' inherits oaenode {
     mysql::rights { "oae-app0-nakamura":
         ensure   => present,
         database => $localconfig::db_user,
-        user     => "${localconfig::db_user}@${localconfig::app_server0}",
+        user     => $localconfig::db_user,
+        host     => $localconfig::app_server0,
         password => $localconfig::db_password
     }
 
     mysql::rights { "oae-app1-nakamura":
         ensure   => present,
         database => $localconfig::db_user,
-        user     => "${localconfig::db_user}@${localconfig::app_server0}",
+        user     => $localconfig::db_user,
+        host     => $localconfig::app_server1,
         password => $localconfig::db_password,
     }
 }

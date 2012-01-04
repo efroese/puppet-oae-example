@@ -37,7 +37,7 @@ class oae::preview_processor::redhat {
         } 
 
         cron { 'run_preview_processor':
-            command => "PATH=/opt/local/bin:\\$PATH ${oae::preview_processor::init::basedir}/bin/run_preview_processor.sh",
+            command => "PATH=/opt/local/bin:\$PATH ${oae::preview_processor::init::basedir}/bin/run_preview_processor.sh",
             user => $oae::params::user,
             ensure => present,
             minute => '*',

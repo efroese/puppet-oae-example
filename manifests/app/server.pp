@@ -84,7 +84,7 @@ class oae::app::server($version_oae, $downloaddir, $jarfile,
     define mkdir_p($owner, $group, $mode) {
         # Create the folders for the config file
         if !defined(Exec["mkdir_p_${name}"]) {
-            exec { "mkdir_p_${path}":
+            exec { "mkdir_p_${name}":
                 command => "mkdir -p ${name}",
                 creates => "${name}",
             }

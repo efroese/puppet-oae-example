@@ -120,7 +120,7 @@ class oae::app::server($version_oae, $downloaddir, $jarfile,
             # create the config file destination
             mkdir_p { $config_dir:
                 owner => $oae::params::user,
-                grouper => $oae::params::group,
+                group => $oae::params::group,
                 mode => 0644
             }
         }

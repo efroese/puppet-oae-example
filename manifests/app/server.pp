@@ -115,14 +115,6 @@ class oae::app::server($version_oae, $downloaddir, $jarfile,
 
         $sling_config = "${oae::params::basedir}/sling/config"
         $config_dir   = "${sling_config}/${dirname}"
-        
-        # chown -R root:root sling/config
-        if !defined(Exec["chown_r_${sling_config}"]){
-            exec { "chown_r_${sling_config}":
-                command => "chown -R root:root ${sling_config}",
-                refreshonly => true,
-            }
-        }
 
         if !defined(Mkdir_p[$config_dir]){
             # create the config file destination
@@ -140,7 +132,6 @@ class oae::app::server($version_oae, $downloaddir, $jarfile,
             mode  => 0444,
             content => template("oae/sling_config.erb"),
             require => Mkdir_p[$config_dir],
-            notify  => Exec["chown_r_${sling_config}"],
         }
     }
 }

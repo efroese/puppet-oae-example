@@ -70,11 +70,42 @@ class oae::app::server($version_oae, $downloaddir, $jarfile,
     service { 'sakaioae':
         ensure => running,
     }
+
+    #
+    # Create a directory and its parent path if necessary
+    #
+    # == Parameters
+    #
+    # $path  = The path to the directory
+    # $user  = The owner for the directory
+    # $group = The group for the directory
+    # $mode  = The mode for the directory
+    #
+    define mkdir_p($owner, $group, $mode) {
+        # Create the folders for the config file
+        if !defined(Exec["mkdir_p_${name}"]) {
+            exec { "mkdir_p_${path}":
+                command => "mkdir -p ${name}",
+                creates => "${name}",
+            }
+        }
+
+        # Ensure correct perms and ownership.
+        if !defined(File[$name]) {
+            file { $name:
+                ensure => directory,
+                owner  => $owner,
+                group  => $group,
+                mode   => $mode,
+                require => Exec["mkdir_p_${name}"],
+            }
+        }
+    }
     
     #
     # Configure a sling service by placing a file in sling/config/part/of/service/pid.config
     #
-    # == Parameters 
+    # == Parameters
     #
     # $dirname = The path below sling/config where the config file will be placed.
     # $config  = A hash of configkey => value to configure the service
@@ -82,32 +113,25 @@ class oae::app::server($version_oae, $downloaddir, $jarfile,
     #
     define sling_config($dirname, $config){
 
-       $sling_config = "${oae::params::basedir}/sling/config"
+        $sling_config = "${oae::params::basedir}/sling/config"
+        $config_dir   = "${sling_config}/${dirname}"
+        
+        if !defined(Mkdir_p[$config_dir]){
+            # create the config file destination
+            mkdir_p { $config_dir:
+                owner => $oae::params::user,
+                grouper => $oae::params::group,
+                mode => 0644
+            }
+        }
 
-       # Create the folders for the config file
-       if !defined(Exec["mkdir_${sling_config}/${dirname}"]) {
-           exec { "mkdir_${sling_config}/${dirname}":
-               command => "mkdir -p ${sling_config}/${dirname}",
-               creates => "${sling_config}/${dirname}",
-           }
-       }
-
-       # Create the folders for the config file
-       if !defined(Exec["chown_${sling_config}/${dirname}"]) {
-           exec { "chown_${sling_config}/${dirname}":
-               command => "chown ${oae::params::user}:${oae::params::group} ${sling_config}/${dirname}",
-               require => Exec["mkdir_${sling_config}/${dirname}"],
-               unless  => "[ `stat --printf='%U' ${sling_config}/${dirname}` == '${$oae::params::user}' ]"
-           }
-       }
-
-       # Write the config file and trigger a chown
-       file { "${sling_config}/${name}":
-           owner => root,
-           group => root,
-           mode  => 0444,
-           content => template("oae/sling_config.erb"),
-           require => Exec["chown_{sling_config}/${dirname}"],
-       }
+        # Write the config file and trigger a chown
+        file { "${sling_config}/${name}":
+            owner => root,
+            group => root,
+            mode  => 0444,
+            content => template("oae/sling_config.erb"),
+            require => File[$config_dir],
+        }
     }
 }

@@ -4,13 +4,13 @@ class oae::preview_processor::gems {
         if $version == "" {
             exec { "gem-install-${name}":
                 command => "/opt/local/bin/gem install ${name}",
-                unless => "stat /opt/local/lib64/ruby/gems/1.9.1/gems/${name}-*",
+                unless => "/opt/local/bin/gem list --local | grep ${name}",
             }
         }
         else {
             exec { "gem-install-${name}":
                 command => "/opt/local/bin/gem install ${name} -v ${version}",
-                unless => "stat /opt/local/lib64/ruby/gems/1.9.1/gems/${name}-${version}",
+                unless => "/opt/local/bin/gem list --local ${name} | grep '(${version})'",
             }
         }
     }
@@ -23,34 +23,41 @@ class oae::preview_processor::gems {
         }
     }
 
+    $curb_gem_version     = '0.7.15'
+    $docsplit_gem_version = '0.6.3'
+    $json_gem_version     = '1.6.3'
+    $rmagick_gem_version  = '2.13.1'
+    $getopt_gem_version   = '1.4.1'
+    $daemons_gem_version  = '1.1.5'
+
     if $operatingsystem == 'CentOS' and $lsbmajdistrelease == '5' {
-        opt_gem { 'curb':     version => '0.7.15' }
-        opt_gem { 'docsplit': version => '0.6.3' }
-        opt_gem { 'json':     version => '1.6.3' }
-        opt_gem { 'rmagick':  version => '2.13.1' }
-        opt_gem { 'getopt':   version => '1.4.1' }
-        opt_gem { 'daemons':  version => '1.1.5' }
+        opt_gem { 'curb':     version => $curb_gem_version }
+        opt_gem { 'docsplit': version => $docsplit_gem_version}
+        opt_gem { 'json':     version => $json_gem_version }
+        opt_gem { 'rmagick':  version => $rmagick_gem_version }
+        opt_gem { 'getopt':   version => $getopt_gem_version }
+        opt_gem { 'daemons':  version => $daemons_gem_version }
 
         exec { 'patch-docsplit':
             command => "patch -p0 < ${oae::params::basedir}/patches/info_extractor.rb.patch info_extractor.rb",
             cwd     => "/opt/local/lib64/ruby/gems/1.9.1/gems/docsplit-0.6.3/lib/docsplit/",
-            require => File["${oae::params::basedir}/patches/info_extractor.rb.patch"],
+            require => [File["${oae::params::basedir}/patches/info_extractor.rb.patch"], Gem['docsplit']],
             unless  => 'grep Iconv /opt/local/lib64/ruby/gems/1.9.1/gems/docsplit-0.6.3/lib/docsplit/info_extractor.rb'
         }
 
     } 
     else {
-        gem { 'curb':     version => '0.7.15' }
-        gem { 'docsplit': version => '0.6.3' }
-        gem { 'json':     version => '1.6.3' }
-        gem { 'rmagick':  version => '2.13.1' }
-        gem { 'getopt':   version => '1.4.1' }
-        gem { 'daemons':  version => '1.1.5' }
+        gem { 'curb':     version => $curb_gem_version }
+        gem { 'docsplit': version => $docsplit_gem_version }
+        gem { 'json':     version => $json_gem_version }
+        gem { 'rmagick':  version => $rmagick_gem_version }
+        gem { 'getopt':   version => $getopt_gem_version }
+        gem { 'daemons':  version => $daemons_gem_version }
         
         exec { 'patch-docsplit': 
             command => "patch -p0 < ${oae::params::basedir}/patches/info_extractor.rb.patch info_extractor.rb",
-            cwd     => "/usr/lib/ruby/gems/1.8/gems/docsplit-0.6.3/lib/docsplit",
-            require => File["${oae::params::basedir}/patches/info_extractor.rb.patch"],
+            cwd     => "/usr/lib/ruby/gems/1.8/gems/docsplit-${docsplit_gem_version}lib/docsplit",
+            require => [File["${oae::params::basedir}/patches/info_extractor.rb.patch"], Gem['docsplit']],
             unless  => 'grep Iconv /usr/lib/ruby/gems/1.8/gems/docsplit-0.6.3/lib/docsplit/info_extractor.rb'
         }
     }

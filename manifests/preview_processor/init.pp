@@ -17,24 +17,33 @@ class oae::preview_processor::init ($nakamura_git, $nakamura_tag="") {
         mode   => 750,
     }
 
-    # clone a copy of nakamura to /usr/local/sakaioae/nakamura.
-    # technically we only need the preview_processor
-    exec { "clone nakamura":
-        command => "git clone ${nakamura_git} ${oae::params::basedir}/nakamura",
-        creates => "${oae::params::basedir}/nakamura",
-        require => Package['git'],
-        notify  => $nakamura_tag ? {
-                /.+/ => Exec['checkout nakamura tag'],
-            } 
-    }
+
 
     # Checkout a specific tag if specified
     if $nakamura_tag != "" {
+        # clone a copy of nakamura to /usr/local/sakaioae/nakamura.
+        # technically we only need the preview_processor
+        exec { "clone nakamura":
+            command => "git clone ${nakamura_git} ${oae::params::basedir}/nakamura",
+            creates => "${oae::params::basedir}/nakamura",
+            require => Package['git'],
+            notify  => Exec['checkout nakamura tag'],
+        }
+        
         exec { "checkout nakamura tag":
             command => "git checkout ${nakamura_tag}",
             cwd     => "${oae::params::basedir}/nakamura",
             require => [ Package['git'], Exec['clone nakamura'], ],
             refreshonly => true, # only do this when notified, not on every run
+        }
+    }
+    else {
+        # clone a copy of nakamura to /usr/local/sakaioae/nakamura.
+        # technically we only need the preview_processor
+        exec { "clone nakamura":
+            command => "git clone ${nakamura_git} ${oae::params::basedir}/nakamura",
+            creates => "${oae::params::basedir}/nakamura",
+            require => Package['git'],
         }
     }
 

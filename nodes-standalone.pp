@@ -13,6 +13,9 @@
 node 'oae-app0' inherits oaenode {
 
     $http_name = 'qa20-us.sakaiproject.org'
+    $db          = 'nakamura'
+    $db_user     = 'oae'
+    $db_password = 'oae'
 
     class { 'oae::app::server':
         version_oae    => '1.1',
@@ -23,10 +26,10 @@ node 'oae-app0' inherits oaenode {
     }
 
     class { 'oae::core':
-         url    => 'jdbc:mysql://localhost/nakamura?autoReconnectForPools=true',
+         url    => "jdbc:mysql://localhost/${db}?autoReconnectForPools=true",
          driver => 'com.mysql.jdbc.Driver',
-         user   => 'oae',
-         pass   => 'oae',
+         user   => $db_user,
+         pass   => $db_password,
     }
 
     oae::app::server::sling_config { "org/sakaiproject/nakamura/http/usercontent/ServerProtectionServiceImpl.config":
@@ -83,19 +86,11 @@ node 'oae-app0' inherits oaenode {
         ensure   => present
     }
 
-    mysql::rights { "Set rights for puppet database":
+    mysql::rights { "Set rights for ${db}":
         ensure   => present,
-        database => 'nakamura',
-        user     => 'oae',
-        password => 'oae',
-    }
-
-    # R/W from the app nodes
-    mysql::rights { "oae-app0-nakamura":
-        ensure   => present,
-        database => 'oae',
-        user     => 'oae',
+        database => $db,
+        user     => $db_user,
+        password => $db_password,
         host     => 'localhost',
-        password => 'oae',
     }
 }

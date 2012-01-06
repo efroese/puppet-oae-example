@@ -23,7 +23,9 @@ class oae::preview_processor::init ($nakamura_git, $nakamura_tag="") {
         command => "git clone ${nakamura_git} ${oae::params::basedir}/nakamura",
         creates => "${oae::params::basedir}/nakamura",
         require => Package['git'],
-        notify  => Exec['checkout nakamura tag'],
+        notify  => $nakamura_tag ? {
+                /.+/ => Exec['checkout nakamura tag'],
+            } 
     }
 
     # Checkout a specific tag if specified

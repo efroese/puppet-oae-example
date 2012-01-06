@@ -8,6 +8,8 @@ class localconfig {
     # OS
     user    = 'sakaioae'
     group   = 'sakaioae'
+    uid     = 8080
+    gid     = 8080
     basedir = '/usr/local/sakaioae'
 
     ###########################################################################
@@ -19,8 +21,8 @@ class localconfig {
     $db_password = 'ironchef'
 
     ###########################################################################
-    # Git
-    $nakamura_git = "http://github.com/sakaiproject/nakamura"
+    # Git (Preview processor)
+    $nakamura_git = "http://github.com/sakaiproject/nakamura.git"
     $nakamura_tag = "1.1"
 
     ###########################################################################

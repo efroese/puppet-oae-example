@@ -1,31 +1,32 @@
 class oae::preview_processor::gems {
 
-    # Ruby Gems for the preview_processor.rb script
-    $ruby_gems = ['curb', 'json', 'docsplit', 'rmagick']
+    define opt_gem($version = ""){
+        if $version == "" {
+            exec { "gem-install-${name}":
+                command => "/opt/local/bin/gem install ${name}",
+                unless => "stat /opt/local/lib64/ruby/gems/1.9.1/gems/${name}-*",
+            }
+        }
+        else {
+            exec { "gem-install-${name}":
+                command => "/opt/local/bin/gem install ${name}",
+                unless => "stat /opt/local/lib64/ruby/gems/1.9.1/gems/${name}-${version}",
+            }
+        }
+    }
 
     if $operatingsystem == 'CentOS' and $lsbmajdistrelease == '5' {
 
-        exec { 'gem-install-curb':
-            command => '/opt/local/bin/gem install -v 0.7.15 curb',
-            unless => 'stat /opt/local/lib64/ruby/gems/1.9.1/gems/curb-0.7.15',
-        }
-
-        exec { 'gem-install-json':
-            command => '/opt/local/bin/gem install json',
-            unless => 'stat /opt/local/lib64/ruby/gems/1.9.1/gems/json-*',
-        }
-
-        exec { 'gem-install-docsplit':
-            command => '/opt/local/bin/gem install docsplit',
-            unless => 'stat /opt/local/lib64/ruby/gems/1.9.1/gems/docsplit-*',
-        }
-
-        exec { 'gem-install-rmagick':
-            command => '/opt/local/bin/gem install rmagick',
-            unless => 'stat /opt/local/lib64/ruby/gems/1.9.1/gems/rmagick-*',
-        }
+        opt_gem { 'curb': version => '0.7.15' }
+        opt_gem { 'docsplit': }
+        opt_gem { 'rmagick': }
+        opt_gem { 'getopt': }
+        opt_gem { 'daemons': }
 
     } else {
+
+        # Ruby Gems for the preview_processor.rb script
+        $ruby_gems = ['curb', 'json', 'docsplit', 'rmagick', 'getopt', 'daemons']
 
         package { $ruby_gems:
             provider => 'gem',

@@ -1,6 +1,14 @@
-class oae::preview_processor::init ($nakamura_git, $nakamura_tag) {
+class oae::preview_processor::init ($nakamura_git, $nakamura_tag="") {
 
     Class['oae::params'] -> Class['oae::preview_processor::init']
+
+    case $operatingsystem {
+        /RedHat|CentOS/:   { include oae::preview_processor::redhat }
+        /Debian|Ubuntu/:   { include oae::preview_processor::debian }
+    }
+
+    class { 'oae::preview_processor::openoffice': }
+    class { 'oae::preview_processor::gems': }
 
     file { "${oae::params::basedir}/bin":
         ensure => directory,
@@ -9,14 +17,8 @@ class oae::preview_processor::init ($nakamura_git, $nakamura_tag) {
         mode   => 750,
     }
 
-    case $operatingsystem {
-        /RedHat|CentOS/:   { include oae::preview_processor::redhat }
-        /Debian|Ubuntu/:   { include oae::preview_processor::debian }
-    }
-
-    include oae::preview_processor::openoffice
-    include oae::preview_processor::gems
-
+    # clone a copy of nakamura to /usr/local/sakaioae/nakamura.
+    # technically we only need the preview_processor
     exec { "clone nakamura":
         command => "git clone ${nakamura_git} ${oae::params::basedir}/nakamura",
         creates => "${oae::params::basedir}/nakamura",
@@ -24,10 +26,14 @@ class oae::preview_processor::init ($nakamura_git, $nakamura_tag) {
         notify  => Exec['checkout nakamura tag'],
     }
 
-    exec { "checkout nakamura tag":
-        command => "cd ${oae::params::basedir}/nakamura && git checkout ${nakamura_tag}",
-        require => [ Package['git'], Exec['clone nakamura'], ],
-        refreshonly => true,
+    # Checkout a specific tag if specified
+    if $nakamura_tag != "" {
+        exec { "checkout nakamura tag":
+            command => "git checkout ${nakamura_tag}",
+            cwd     => "${oae::params::basedir}/nakamura",
+            require => [ Package['git'], Exec['clone nakamura'], ],
+            refreshonly => true, # only do this when notified, not on every run
+        }
     }
 
     ###########################################################################

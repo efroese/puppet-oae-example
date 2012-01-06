@@ -4,19 +4,13 @@
 #
 class localconfig {
     
-    # apache load balancer
-    $apache_lb_http_name       = 'oae.localdomain'
-    $apache_lb_virtual_ip      = '192.168.1.40'
-    $apache_lb_virtual_netmask = '255.255.255.0'
-    $apache_lb_hostnames       = ['oae-lb1.localdomain', 'oae-lb2.localdomain']
-    $apache_lb_members         = ['oae-lb1.localdomain:8080', 'oae-lb2.localdomain:8080']
-    $apache_lb_standbyurl      = 'http://sorry.localdomain'
+    ###########################################################################
+    # OS
+    user    = 'sakaioae'
+    group   = 'sakaioae'
+    basedir = '/usr/local/sakaioae'
 
-    # heartbeat/pacemaker for HA apache load balancers
-    $apache_lb_pacemaker_authkey = 'apachehbauthkey'
-    $apache_lb_pacemaker_interface = 'eth0'
-    $apache_lb_pacemaker_nodes = [ '192.168.1.41', '192.168.1.42']
-    
+    ###########################################################################
     # Database setup
     $db          = 'nakamura'
     $db_url      = "jdbc:mysql://192.168.1.250:3306/${db}?autoReconnectForPools\\=true"
@@ -30,17 +24,30 @@ class localconfig {
     $nakamura_tag = "1.1"
 
     ###########################################################################
+    # HA apache load balancer
+    $apache_lb_http_name       = 'oae.localdomain'
+    $apache_lb_virtual_ip      = '192.168.1.40'
+    $apache_lb_virtual_netmask = '255.255.255.0'
+    $apache_lb_hostnames       = ['oae-lb1.localdomain', 'oae-lb2.localdomain']
+    $apache_lb_members         = ['oae-lb1.localdomain:8080', 'oae-lb2.localdomain:8080']
+    $apache_lb_standbyurl      = 'http://sorry.localdomain'
+
+    # heartbeat/pacemaker for HA apache load balancers
+    $apache_lb_pacemaker_authkey = 'apachehbauthkey'
+    $apache_lb_pacemaker_interface = 'eth0'
+    $apache_lb_pacemaker_nodes = [ '192.168.1.41', '192.168.1.42']
+
+    ###########################################################################
     # App servers
-    
     $version_oae   = '1.1'
     $downloaddir   = 'http://192.168.1.124/jars/'
     $jarfile       = 'org.sakaiproject.nakamura.app-1.1-mysql.jar'
     $javamemorymax = '512'
     $javapermsize  = '256'
-    
+
     # oae server protection service
     $serverprotectsec = 'shhh-its@secret'
-    
+
     $app_server0 = '192.168.1.50'
     $app_server1 = '192.168.1.51'
 

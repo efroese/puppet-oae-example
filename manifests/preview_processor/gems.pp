@@ -9,7 +9,7 @@ class oae::preview_processor::gems {
         }
         else {
             exec { "gem-install-${name}":
-                command => "/opt/local/bin/gem install ${name}",
+                command => "/opt/local/bin/gem install ${name} -v ${version}",
                 unless => "stat /opt/local/lib64/ruby/gems/1.9.1/gems/${name}-${version}",
             }
         }
@@ -19,6 +19,7 @@ class oae::preview_processor::gems {
 
         opt_gem { 'curb': version => '0.7.15' }
         opt_gem { 'docsplit': }
+        opt_gem { 'json': }
         opt_gem { 'rmagick': }
         opt_gem { 'getopt': }
         opt_gem { 'daemons': }

@@ -63,7 +63,7 @@ class oae::preview_processor::redhat {
         package { $centos6_pkgs: ensure => installed }
 
         cron { 'run_preview_processor':
-            command => "${oae::preview_processor::init::basedir}/bin/run_preview_processor.sh",
+            command => "${oae::params::basedir}/bin/run_preview_processor.sh",
             user   => $oae::params::user,
             ensure => present,
             minute => '*',

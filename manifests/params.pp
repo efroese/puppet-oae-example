@@ -1,19 +1,22 @@
-class oae::params {
+# Configuration for Sakai OAE
+# 
+# == Parameters
+# $user:: the user sakai will run as
+#
+# $group:: the group sakai will run as
+#
+# $basedir:: where all of the sakai oae artifacts will live
+class oae::params(  $user='sakaioae',
+                    $group='sakaioae',
+                    $basedir='/usr/local/sakaioae') {
 
-    ###########################################################################
-    # Basic system stuff
-    $user = 'sakaioae'
-    $group = 'sakaioae'
-
-    realize(Group[$oae::params::user])
-    realize(User[$oae::params::user])
-
-    $basedir = '/usr/local/sakaioae'
+    realize(Group[$group])
+    realize(User[$user])
 
     file { $basedir:
         ensure => directory,
-        owner  => $oae::params::user,
-        group  => $oae::params::group,
+        owner  => $user,
+        group  => $group,
         mode   => 750,
     }
 }

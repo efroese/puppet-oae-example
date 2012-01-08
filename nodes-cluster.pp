@@ -124,14 +124,14 @@ node /oae-app[0-1].localdomain/ inherits oaenode {
 
 node 'oae-solr0.localdomain' inherits oaenode {
     class { 'oae::solr': 
-        master_url => $localconfig::solr_remoteurl,
+        master_url => "$localconfig::solr_remoteurl/replication",
         solrconfig => 'localconfig/master-solrconfig.xml.erb',
     }
 }
 
 node /oae-solr[1-3].localdomain/ inherits oaenode {
     class { 'oae::solr': 
-        master_url => $localconfig::solr_remoteurl,
+        master_url => "$localconfig::solr_remoteurl/replication",
         solrconfig => 'localconfig/slave-solrconfig.xml.erb',
     }
 }

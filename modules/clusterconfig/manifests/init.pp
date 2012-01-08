@@ -4,7 +4,29 @@
 #
 class localconfig {
     
-    # apache load balancer
+    ###########################################################################
+    # OS
+    user    = 'sakaioae'
+    group   = 'sakaioae'
+    uid     = 8080
+    gid     = 8080
+    basedir = '/usr/local/sakaioae'
+
+    ###########################################################################
+    # Database setup
+    $db          = 'nakamura'
+    $db_url      = "jdbc:mysql://192.168.1.250:3306/${db}?autoReconnectForPools\\=true"
+    $db_driver   = 'com.mysql.jdbc.Driver'
+    $db_user     = 'nakamura'
+    $db_password = 'ironchef'
+
+    ###########################################################################
+    # Git (Preview processor)
+    $nakamura_git = "http://github.com/sakaiproject/nakamura.git"
+    $nakamura_tag = "1.1"
+
+    ###########################################################################
+    # HA apache load balancer
     $apache_lb_http_name       = 'oae.localdomain'
     $apache_lb_virtual_ip      = '192.168.1.40'
     $apache_lb_virtual_netmask = '255.255.255.0'
@@ -16,31 +38,18 @@ class localconfig {
     $apache_lb_pacemaker_authkey = 'apachehbauthkey'
     $apache_lb_pacemaker_interface = 'eth0'
     $apache_lb_pacemaker_nodes = [ '192.168.1.41', '192.168.1.42']
-    
-    # Database setup
-    $db          = 'nakamura'
-    $db_url      = "jdbc:mysql://192.168.1.250:3306/${db}?autoReconnectForPools\\=true"
-    $db_driver   = 'com.mysql.jdbc.Driver'
-    $db_user     = 'nakamura'
-    $db_password = 'ironchef'
-
-    ###########################################################################
-    # Git
-    $nakamura_git = "http://github.com/sakaiproject/nakamura"
-    $nakamura_tag = "1.1"
 
     ###########################################################################
     # App servers
-    
     $version_oae   = '1.1'
     $downloaddir   = 'http://192.168.1.124/jars/'
     $jarfile       = 'org.sakaiproject.nakamura.app-1.1-mysql.jar'
     $javamemorymax = '512'
     $javapermsize  = '256'
-    
+
     # oae server protection service
     $serverprotectsec = 'shhh-its@secret'
-    
+
     $app_server0 = '192.168.1.50'
     $app_server1 = '192.168.1.51'
 

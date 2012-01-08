@@ -77,19 +77,22 @@ node /oae-app[0-1].localdomain/ inherits oaenode {
         javapermsize   => $localconfig::javapermsize,
     }
 
-    class { 'oae::core':
-         url    => $localconfig::db_url,
-         driver => $localconfig::db_driver,
-         user   => $localconfig::db_user,
-         pass   => $localconfig::db_password,
-    }
-
     class { 'oae::app::ehcache':
         mcast_address => $localconfig::mcast_address,
         mcast_port    => $localconfig::mcast_port,
     }
+    
+    oae::app::server::sling_config { "org/sakaiproject/nakamura/lite/storage/jdbc/JDBCStorageClientPool.config":
+           dirname => "org/sakaiproject/nakamura/lite/storage/jdbc",
+           config => {
+               'jdbc-url'    => $localconfig::db_url,
+               'jdbc-driver' => $localconfig::db_driver,
+               'username'    => $localconfig::db_user,
+               'password'    => $localconfig::db_password,
+           }
+       }
 
-    oae::app::sling_config { "org/sakaiproject/nakamura/http/usercontent/ServerProtectionServiceImpl.config":
+    oae::app::server::sling_config { "org/sakaiproject/nakamura/http/usercontent/ServerProtectionServiceImpl.config":
         dirname => "org/sakaiproject/nakamura/http/usercontent",
         config => {
             'disable.protection.for.dev.mode' => false,
@@ -98,7 +101,7 @@ node /oae-app[0-1].localdomain/ inherits oaenode {
         }
     }
 
-    oae::app::sling_config { "org/sakaiproject/nakamura/solr/MultiMasterRemoteSolrClient.config":
+    oae::app::server::sling_config { "org/sakaiproject/nakamura/solr/MultiMasterRemoteSolrClient.config":
         dirname => "org/sakaiproject/nakamura/solr",
         config => {
             "remoteurl"  => $localconfig::solr_remoteurl,
@@ -106,7 +109,7 @@ node /oae-app[0-1].localdomain/ inherits oaenode {
         }
     }
 
-    oae::app::sling_config { "org/sakaiproject/nakamura/solr/SolrServerServiceImpl.config":
+    oae::app::server::sling_config { "org/sakaiproject/nakamura/solr/SolrServerServiceImpl.config":
         dirname => "org/sakaiproject/nakamura/solr",
         config => {
             "solr-impl" => "multiremote",

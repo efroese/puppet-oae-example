@@ -11,7 +11,6 @@ node basenode {
         }
     }
 
-    class { 'users': }
     class { 'git': }
     class { 'java': }   
     class { 'ntp':
@@ -20,9 +19,16 @@ node basenode {
 }
 
 node oaenode inherits basenode {
-    # OAE module configuration
-    class { 'oae::params': }
+
     # OAE cluster-specific configuration
     class { 'localconfig': }
     class { 'localconfig::hosts': }
+    class { 'localconfig::users': }
+
+    # OAE module configuration
+    class { 'oae::params':
+        user    => $localconfig::user,
+        group   => $localconfig::group,
+        basedir => $localconfig::basedir,
+    }
 }

@@ -55,3 +55,4 @@ class localconfig {
     $solr_slave0 = '10.50.10.47' # TODO fix!
     $solr_remoteurl = "http://${solr_master}:8983/solr"
     $solr_queryurls = "http://${solr_master}:8983/solr|http://${solr_slave0}:8983/solr|"
+}

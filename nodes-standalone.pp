@@ -28,11 +28,14 @@ node 'oae-app0' inherits basenode {
         javapermsize   => '256',
     }
 
-    class { 'oae::core':
-         url    => "jdbc:mysql://localhost/${db}?autoReconnectForPools=true",
-         driver => 'com.mysql.jdbc.Driver',
-         user   => $db_user,
-         pass   => $db_password,
+    oae::app::server::sling_config { "org/sakaiproject/nakamura/lite/storage/jdbc/JDBCStorageClientPool.config":
+        dirname => "org/sakaiproject/nakamura/lite/storage/jdbc",
+        config => {
+            'jdbc-url'    => "jdbc:mysql://localhost/${db}?autoReconnectForPools=true",
+            'jdbc-driver' => 'com.mysql.jdbc.Driver',
+            'username'    => $db_user,
+            'password'    => $db_password,
+        }
     }
 
     oae::app::server::sling_config { "org/sakaiproject/nakamura/http/usercontent/ServerProtectionServiceImpl.config":

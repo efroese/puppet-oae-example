@@ -16,3 +16,6 @@
 [submodule "modules/oae"]
 	path = modules/oae
 	url = http://github.com/efroese/puppet-oae.git
+[submodule "modules/tomcat"]
+	path = modules/tomcat
+	url = http://github.com/camptocamp/puppet-tomcat.git

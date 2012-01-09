@@ -29,7 +29,7 @@ class localconfig {
 
     ###########################################################################
     # Apache load balancer
-    $http_name       = 'ec2-50-18-192-33.us-west-1.compute.amazonaws.com.'
+    $http_name       = 'dev.academic.rsmart.com'
 
     ###########################################################################
     # App servers
@@ -43,8 +43,7 @@ class localconfig {
     # oae server protection service
     $serverprotectsec = 'shhh-its@secret'
 
-    $app_server0 = '192.168.1.50'
-    $app_server1 = '192.168.1.51'
+    $app_server0 = '10.50.9.40'
 
     # ehcache
     $mcast_address = '230.0.0.2'

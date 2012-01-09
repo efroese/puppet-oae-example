@@ -125,7 +125,7 @@ class oae::app::server($version_oae, $downloaddir, $jarfile,
             }
         }
 
-        # Write the config file and trigger a chown
+        # Write the config file
         file { "${sling_config}/${name}":
             owner => root,
             group => root,

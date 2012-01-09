@@ -3,6 +3,16 @@
 # Nodes
 #
 # make sure that modules/localconfig -> modules/rsmart-config-m1
+# see modules/rsmart-config-m1/manifests.init.pp for the config.
+
+
+###########################################################################
+#
+# Apache load balancer
+#
+
+node 'ip-10-50-9-41.localdomain' inherits oaenode {
+}
 
 ###########################################################################
 #

@@ -127,11 +127,10 @@ node solrnode inherits oaenode {
         parentdir => "${localconfig::basedir}/solr",
         tomcat_user  => $localconfig::user,
         tomcat_group => $localconfig::group,
-        tomcat_users_template => 'localconfig/tomcat-users.xml.erb'
     }
 }
 
-node 'oae-solr0.localdomain' inherits oaenode {
+node 'oae-solr0.localdomain' inherits solrnode {
 
     class { 'oae::solr::common': 
         master_url => "$localconfig::solr_remoteurl/replication",

@@ -43,7 +43,7 @@ class oae::preview_processor::gems {
             command => "patch -p0 < ${oae::params::basedir}/patches/info_extractor.rb.patch info_extractor.rb",
             cwd     => "/opt/local/lib64/ruby/gems/1.9.1/gems/docsplit-${docsplit_gem_version}/lib/docsplit/",
             require => [File["${oae::params::basedir}/patches/info_extractor.rb.patch"], Opt_gem['docsplit']],
-            unless  => 'grep Iconv /opt/local/lib64/ruby/gems/1.9.1/gems/docsplit-${docsplit_gem_version}/lib/docsplit/info_extractor.rb'
+            unless  => "grep Iconv /opt/local/lib64/ruby/gems/1.9.1/gems/docsplit-${docsplit_gem_version}/lib/docsplit/info_extractor.rb"
         }
 
     } 
@@ -59,7 +59,7 @@ class oae::preview_processor::gems {
             command => "patch -p0 < ${oae::params::basedir}/patches/info_extractor.rb.patch info_extractor.rb",
             cwd     => "/usr/lib/ruby/gems/1.8/gems/docsplit-${docsplit_gem_version}lib/docsplit",
             require => [File["${oae::params::basedir}/patches/info_extractor.rb.patch"], Gem['docsplit']],
-            unless  => 'grep Iconv /usr/lib/ruby/gems/1.8/gems/docsplit-${docsplit_gem_version}/lib/docsplit/info_extractor.rb'
+            unless  => "grep Iconv /usr/lib/ruby/gems/1.8/gems/docsplit-${docsplit_gem_version}/lib/docsplit/info_extractor.rb"
         }
     }
 

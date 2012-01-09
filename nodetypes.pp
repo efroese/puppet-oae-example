@@ -22,8 +22,8 @@ node oaenode inherits basenode {
 
     # OAE cluster-specific configuration
     class { 'localconfig': }
-    class { 'localconfig::hosts': stage => 'init' }
-    class { 'localconfig::users': stage => 'init' }
+    class { 'localconfig::hosts': }
+    class { 'localconfig::users': }
 
     # OAE module configuration
     class { 'oae::params':

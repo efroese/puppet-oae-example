@@ -16,8 +16,8 @@ class localconfig {
 
     ###########################################################################
     # Database setup
-    $db          = 'nakamura'
-    $db_url      = "jdbc:mysql://oae-qa-db0:3306/${db}"
+    $db          = 'nak'
+    $db_url      = "jdbc:postgresql://10.50.10.40/${db}?charSet\=UTF-8"
     $db_driver   = 'org.postgresql.Driver'
     $db_user     = 'nakamura'
     $db_password = 'ironchef'

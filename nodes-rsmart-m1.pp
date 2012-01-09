@@ -41,12 +41,25 @@ node /rsmart-oae-app[0-1].localdomain/ inherits oaenode {
         mcast_address => $localconfig::mcast_address,
         mcast_port    => $localconfig::mcast_port,
     }
+    
+    oae::app::server::sling_config { "org/sakaiproject/nakamura/lite/storage/jdbc/JDBCStorageClientPool.config":
+            dirname => "org/sakaiproject/nakamura/lite/storage/jdbc",
+            config => {
+                'jdbc-driver' => $localconfig::db_driver,
+                'jdbc-url'    => $localconfig::db_url,
+                'username'    => $localconfig::db_user,
+                'password'    => $localconfig::db_password,
+                'long-string-size' => 16384
+                'store-base-dir'   => "save/files"
+            }
+        }
 
     oae::app::server::sling_config { "org/sakaiproject/nakamura/http/usercontent/ServerProtectionServiceImpl.config":
         dirname => "org/sakaiproject/nakamura/http/usercontent",
         config => {
             'disable.protection.for.dev.mode' => false,
-            'trusted.hosts'  => " ${http_name}:8080 = https://${http_name}:443 ", 
+            'trusted.hosts'  => [ "localhost:8080\ \=\ http://localhost:8082",
+                                " ${http_name} = https://${http_name}:8443"],
             'trusted.secret' => $localconfig::serverprotectsec,
         }
     }
@@ -63,6 +76,15 @@ node /rsmart-oae-app[0-1].localdomain/ inherits oaenode {
         dirname => "org/sakaiproject/nakamura/solr",
         config => {
             "solr-impl" => "multiremote",
+        }
+    }
+
+    oae::app::server::sling_config { "org/sakaiproject/nakamura/basiclti/CLEVirtualToolDataProvider.config":
+        dirname => "org/sakaiproject/nakamura/basiclti",
+        config => {
+            'sakai.cle.basiclti.secret' => "secret"
+            'sakai.cle.server.url'      => "https://${http_name}"
+            'sakai.cle.basiclti.key'    => "12345"
         }
     }
 }

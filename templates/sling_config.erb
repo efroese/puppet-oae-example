@@ -1,7 +1,13 @@
 service.pid="<%= name[0..-8].gsub('/', '.') %>"
 <% config.each_pair do |key, value| -%>
-<% if value.is_a? String or value.is_a? Numeric -%>
+<% if value.is_a? String -%>
 <%= key %>=<%= "\"#{value}\"" %>
+<% end -%>
+<% if value.is_a? Integer -%>
+<%= key %>=<%= "I\"#{value}\"" %>
+<% end -%>
+<% if value.is_a? Float -%>
+<%= key %>=<%= "F\"#{value}\"" %>
 <% end -%>
 <% if value.is_a? TrueClass or value.is_a? FalseClass -%>
 <%= key %>=<%= "B\"#{value}\"" %>

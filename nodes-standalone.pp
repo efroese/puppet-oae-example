@@ -10,12 +10,15 @@
 # - one java process running OAE
 #
 
-node 'oae-app0' inherits oaenode {
+node 'oae-app0' inherits basenode {
 
     $http_name = 'qa20-us.sakaiproject.org'
     $db          = 'nakamura'
     $db_user     = 'oae'
     $db_password = 'oae'
+
+# OAE module configuration
+    class { 'oae::params': }
 
     class { 'oae::app::server':
         version_oae    => '1.1',
@@ -82,7 +85,7 @@ node 'oae-app0' inherits oaenode {
     include augeas
     include mysql::server
 
-    mysql::database { "${localconfig::db}":
+    mysql::database { $db:
         ensure   => present
     }
 

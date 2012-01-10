@@ -62,6 +62,6 @@ class localconfig {
     $solr_slave0 = '192.168.1.71'
     $solr_slave1 = '192.168.1.72'
     $solr_slave2 = '192.168.1.73'
-    $solr_remoteurl = "http://${solr_master}:8983/solr"
-    $solr_queryurls = "http://${solr_slave0}:8983/solr|http://${solr_slave1}:8983/solr|http://${solr_slave2}:8983/solr"
+    $solr_remoteurl = "http://${solr_master}:8080/solr"
+    $solr_queryurls = "http://${solr_slave0}:8080/solr|http://${solr_slave1}:8983/solr|http://${solr_slave2}:8983/solr"
 }

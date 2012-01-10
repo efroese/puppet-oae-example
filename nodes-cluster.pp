@@ -122,17 +122,38 @@ node /oae-app[0-1].localdomain/ inherits oaenode {
 # OAE Solr Nodes
 #
 
-node 'oae-solr0.localdomain' inherits oaenode {
-    class { 'oae::solr': 
-        master_url => "$localconfig::solr_remoteurl/replication",
-        solrconfig => 'localconfig/master-solrconfig.xml.erb',
+node solrnode inherits oaenode {
+    class { 'tomcat6':
+        parentdir => "${localconfig::basedir}/solr",
+        tomcat_user  => $localconfig::user,
+        tomcat_group => $localconfig::group,
+        tomcat_users_template => 'localconfig/tomcat-users.xml.erb'
     }
 }
 
-node /oae-solr[1-3].localdomain/ inherits oaenode {
-    class { 'oae::solr': 
+node 'oae-solr0.localdomain' inherits oaenode {
+
+    class { 'oae::solr::common': 
+        master_url => "$localconfig::solr_remoteurl/replication",
+        solrconfig => 'localconfig/master-solrconfig.xml.erb',
+    }
+
+    class { 'oae::solr::tomcat':
+        tomcat_user  => $localconfig::user,
+        tomcat_group => $localconfig::group, 
+    }
+}
+
+node /oae-solr[1-3].localdomain/ inherits solrnode {
+
+    class { 'oae::solr::common': 
         master_url => "$localconfig::solr_remoteurl/replication",
         solrconfig => 'localconfig/slave-solrconfig.xml.erb',
+    }
+
+    class { 'oae::solr::tomcat':
+        tomcat_user  => $localconfig::user,
+        tomcat_group => $localconfig::group, 
     }
 }
 

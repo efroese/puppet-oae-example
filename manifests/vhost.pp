@@ -246,7 +246,7 @@ define apache::vhost (
           File["${apache::params::root}/${name}/logs"],
           File["${apache::params::root}/${name}/conf"]
         ],
-        unless  => "/bin/sh -c '[ -L ${apache::params::conf}/sites-enabled/${name} ] \\
+        onlyif  => "/bin/sh -c '[ -L ${apache::params::conf}/sites-enabled/${name} ] \\
           && [ ${apache::params::conf}/sites-enabled/${name} -ef ${apache::params::conf}/sites-available/${name} ]'",
       }
     }

@@ -67,13 +67,6 @@ class oae::solr::common (
         unless  => "[ `stat --printf='%U'  ${solr_basedir}/home0` == '${$oae::params::user}' ]",
         requires => Exec['unpack-solr-home'],
     }
-    
-    file { $solr_basedir:
-       ensure => directory,
-       owner => $oae::params::user,
-       group => $oae::params::user,
-       mode  => 0755,
-    }
 
     exec { 'clone-solr':
        command => "git clone ${solr_git} ${solr_basedir}/solr-git",

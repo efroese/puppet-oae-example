@@ -72,7 +72,7 @@ class tomcat6 (  $parentdir      = '/usr/local',
 
     service { 'tomcat':
         ensure  => running,
-        enabled => true,
+        enable => true,
         require => File["${basedir}/conf/tomcat-users.xml"]
     }
 }

@@ -1,4 +1,4 @@
-class tomcat (  $parentdir      = '/usr/local',
+class tomcat6 (  $parentdir      = '/usr/local',
                 $tomcat_version = '6.0.35',
                 $mirror         = 'http://archive.apache.org/dist/tomcat',
                 $tomcat_users_template = 'tomcat/tomcat-users.xml.erb',

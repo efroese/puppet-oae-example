@@ -1,7 +1,7 @@
 class tomcat6 (  $parentdir      = '/usr/local',
                 $tomcat_version = '6.0.35',
                 $mirror         = 'http://archive.apache.org/dist/tomcat',
-                $tomcat_users_template = 'tomcat/tomcat-users.xml.erb',
+                $tomcat_users_template = 'tomcat6/tomcat-users.xml.erb',
                 $tomcat_user='root',
                 $tomcat_group='root',
                 $admin_user = 'tomcat',

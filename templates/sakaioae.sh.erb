@@ -1,6 +1,10 @@
 #!/bin/bash
 # This is the startup/shutdown script for SakaiOAE
 # Global, editable VARS
+#
+# chkconfig: 2345 99 01
+# description: Sakai OAE app server.
+#
 SAKAIOAE_JAVA_OPTS="-Xmx<%= javamemorymax %>m -server -XX:PermSize=<%= javapermsize %>m -Dcom.sun.management.jmxremote -Djava.awt.headless=true"
 SAKAIOAE_USER="<%= scope.lookupvar('oae::params::user')  %>"
 SAKAIOAE_HOME=<%= scope.lookupvar('oae::params::basedir') %>

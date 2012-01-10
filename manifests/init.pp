@@ -52,6 +52,22 @@ class tomcat6 (  $parentdir      = '/usr/local',
         require => Exec["unpack-apache-tomcat-${tomcat_version}"],
     }
 
+    file { "${basedir}/conf/Catalina":
+        ensure => directory,
+        owner  => $tomcat_user,
+        group  => $tomcat_group,
+        mode   => 0744,
+        require => Exec["unpack-apache-tomcat-${tomcat_version}"],
+    }
+
+    file { "${basedir}/conf/Catalina/localhost":
+        ensure => directory,
+        owner  => $tomcat_user,
+        group  => $tomcat_group,
+        mode   => 0744,
+        require => File["${basedir}/conf/Catalina"],
+    }
+
     service { 'tomcat':
         ensure => running,
         require => File["${basedir}/conf/tomcat-users.xml"]

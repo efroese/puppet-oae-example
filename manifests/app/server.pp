@@ -68,6 +68,7 @@ class oae::app::server($version_oae, $downloaddir, $jarfile,
     }
 
     service { 'sakaioae':
+        enabled => true,
         ensure => running,
     }
 

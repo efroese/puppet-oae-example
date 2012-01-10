@@ -40,6 +40,7 @@ class oae::solr::jetty() {
 
     service { 'solr':
         ensure => running,
+        enabled => true,
         subscribe => [ 
             File["${solr_conf_dir}/solrconfig.xml"], 
             File["${solr_conf_dir}/schema.xml"], 

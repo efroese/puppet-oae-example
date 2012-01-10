@@ -30,5 +30,6 @@ class oae::preview_processor::openoffice {
     
     service { 'soffice':
         ensure => running,
+        enabled => true,
     }
 }

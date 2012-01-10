@@ -56,7 +56,7 @@ class oae::solr::common (
         owner => $oae::params::user,
         group => $oae::params::user,
         mode  => 0755,
-        require => File[$solr_basedir],
+        require => Exec['unpack-solr-home'],
     }
 
     exec { 'download-solr-home':

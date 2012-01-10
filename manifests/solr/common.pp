@@ -50,6 +50,14 @@ class oae::solr::common (
         group => $oae::params::user,
         mode  => 0755,
     }
+    
+    file { $solr_confdir:
+        ensure => directory,
+        owner => $oae::params::user,
+        group => $oae::params::user,
+        mode  => 0755,
+        require => $solr_basedir,
+    }
 
     exec { 'download-solr-home':
         command => "curl -o ${solr_basedir}/home0.tgz ${solr_home_tarball}",

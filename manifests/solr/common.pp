@@ -59,13 +59,13 @@ class oae::solr::common (
     exec { 'unpack-solr-home':
         command => "tar xzvf ${solr_basedir}/home0.tgz -C ${solr_basedir}",
         creates => $solr_home,
-        requires => Exec['download-solr-home'],
+        require => Exec['download-solr-home'],
     }
 
     exec { 'chown-solr-home':
         command => "chown -R ${oae::params::user}:${oae::params::group} ${solr_basedir}/home0",
         unless  => "[ `stat --printf='%U'  ${solr_basedir}/home0` == '${$oae::params::user}' ]",
-        requires => Exec['unpack-solr-home'],
+        require => Exec['unpack-solr-home'],
     }
 
     exec { 'clone-solr':

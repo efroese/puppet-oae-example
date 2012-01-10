@@ -6,11 +6,11 @@ class localconfig {
     
     ###########################################################################
     # OS
-    user    = 'sakaioae'
-    group   = 'sakaioae'
-    uid     = 8080
-    gid     = 8080
-    basedir = '/usr/local/sakaioae'
+    $user    = 'sakaioae'
+    $group   = 'sakaioae'
+    $uid     = 8080
+    $gid     = 8080
+    $basedir = '/usr/local/sakaioae'
 
     ###########################################################################
     # Database setup

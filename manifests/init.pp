@@ -40,7 +40,7 @@ class tomcat6 (  $parentdir      = '/usr/local',
         owner  => root,
         group  => root,
         mode   => 0755,
-        content => template('tomcat/tomcat.init.erb'),
+        content => template('tomcat6/tomcat.init.erb'),
     }
 
     file { "${basedir}/conf/tomcat-users.xml": 

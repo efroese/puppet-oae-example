@@ -52,6 +52,7 @@ define apache::balancer (
   $standbyurl="",
   $params=["retry=5"],
   $filename="",
+  $template="apache/balancer.erb",
   $vhost
 ) {
 
@@ -87,7 +88,7 @@ define apache::balancer (
 
   file{ "${name} balancer on ${vhost}":
     ensure  => $ensure,
-    content => template("apache/balancer.erb"),
+    content => template($template),
     seltype => $operatingsystem ? {
       "RedHat" => "httpd_config_t",
       "CentOS" => "httpd_config_t",

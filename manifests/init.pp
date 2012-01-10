@@ -22,11 +22,13 @@ class tomcat6 (  $parentdir      = '/usr/local',
     exec { "unpack-apache-tomcat-${tomcat_version}":
         command => "tar xzf ${parentdir}/apache-tomcat-${tomcat_version}.tar.gz -C ${parentdir}",
         creates => "${parentdir}/apache-tomcat-${tomcat_version}",
+        require => Exec["download-apache-tomcat-${tomcat_version}"],
     }
 
     exec { "chown-apache-tomcat-${tomcat_version}":
         command => "chown -R ${tomcat_user}:${tomcat_group} ${parentdir}/apache-tomcat-${tomcat_version}",
         unless  => "[ stat -c %U ${parentdir}/apache-tomcat-${tomcat_version} == ${tomcat_user}]",
+        require => Exec["unpack-apache-tomcat-${tomcat_version}"],
     }
 
     file { $basedir: 

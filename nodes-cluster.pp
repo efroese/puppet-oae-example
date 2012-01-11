@@ -129,8 +129,8 @@ node /oae-app[0-1].localdomain/ inherits oaenode {
         config => {
             'disable.protection.for.dev.mode' => false,
             'trusted.hosts'  => [
-                " localhost = https://localhost:8443 ", 
-                " ${http_name} = https://${http_name}:8443 ",
+                "localhost\\ \\=\\ https://localhost:8443", 
+                "${http_name}\\ \\=\\ https://${http_name}:8443",
             ],
             'trusted.secret' => $localconfig::serverprotectsec,
         }

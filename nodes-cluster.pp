@@ -104,6 +104,7 @@ node /oae-app[0-1].localdomain/ inherits oaenode {
         }
     }
 
+    # Solr Client
     oae::app::server::sling_config { "org/sakaiproject/nakamura/solr/MultiMasterRemoteSolrClient.config":
         dirname => "org/sakaiproject/nakamura/solr",
         config => {
@@ -116,6 +117,21 @@ node /oae-app[0-1].localdomain/ inherits oaenode {
         dirname => "org/sakaiproject/nakamura/solr",
         config => {
             "solr-impl" => "multiremote",
+        }
+    }
+
+    # Clustering
+    oae::app::server::sling_config { "org/sakaiproject/nakamura/cluster/ClusterTrackingServiceImpl.config":
+        dirname => 'org/sakaiproject/nakamura/cluster',
+        config => {
+            'secure-host-url' => "http://${ipaddress}:8081",
+        }
+    }
+
+    oae::app::server::sling_config { "org/sakaiproject/nakamura/memory/CacheManagerServiceImpl.config":
+        dirname => 'org/sakaiproject/nakamura/memory',
+        config => {
+            'bind-address' => $ipaddress,
         }
     }
 }

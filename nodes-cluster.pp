@@ -32,26 +32,49 @@
 #
 node /oae-lb[1-2].localdomain/ inherits oaenode {
 
-    class { 'apache': }
+    $http_name            = $localconfig::apache_lb_http_name    
+    $sslcert_country      = "US"
+    $sslcert_state        = "NY"
+    $sslcert_locality     = "New York"
+    $sslcert_organisation = "Compu-Global-Hyper-Mega-Net."
+
+    class { 'apache::ssl': }
     class { 'pacemaker::apache': }
 
-    # The HA master will respond to the VIP
-    $http_name           = $localconfig::apache_lb_http_name
-    $virtual_ip          = $localconfig::apache_lb_virtual_ip
-    $virtual_netmask     = $localconfig::apache_lb_virtual_netmask
-    $apache_lb_hostnames = $localconfig::apache_lb_hostnames
-
-    apache::vhost { $http_name:
-        enable_default => false,
+    apache::listen { "8443": }
+    apache::namevhost { "*:8443": }
+      
+    # Server trusted content on 443
+    apache::vhost-ssl { "${http_name}:443":
+        sslonly  => true,
     }
+
+    # Serve untrusted content from 8443
+    apache::vhost-ssl { "${http_name}:8443": 
+        sslonly  => true,
+        sslports => ['*:8443'],
+    }
+
+    # Server pool for trusted content
     apache::balancer { "apache-balancer-oae-app":
+        vhost      => "${http_name}:443",
         location   => "/",
+        locations_noproxy => ['/server-status', '/balancer-manager'],
         proto      => "http",
         members    => $localconfig::apache_lb_members,
         params     => ["retry=20", "min=3", "flushpackets=auto"],
         standbyurl => $localconfig::apache_lb_standbyurl,
-        vhost      => $http_name,
         template   => 'localconfig/balancer.erb',
+    }
+
+    # Server pool for untrusted content
+    apache::balancer { "apache-balancer-oae-app-untrusted":
+        vhost      => "${http_name}:8443",
+        location   => "/",
+        proto      => "http",
+        members    => $localconfig::apache_lb_members_untrusted,
+        params     => ["retry=20", "min=3", "flushpackets=auto"],
+        standbyurl => $localconfig::apache_lb_standbyurl,
     }
 
     # Pacemaker manages which machine is the active LB
@@ -61,7 +84,13 @@ node /oae-lb[1-2].localdomain/ inherits oaenode {
     $pacemaker_nodes     = $localconfig::apache_lb_pacemaker_nodes
     $pacemaker_hacf      = 'localconfig/ha.cf.erb'
     $pacemaker_crmcli    = 'localconfig/crm-config.cli.erb'
-    include pacemaker
+
+    # The HA master will respond to the VIP
+    $virtual_ip          = $localconfig::apache_lb_virtual_ip
+    $virtual_netmask     = $localconfig::apache_lb_virtual_netmask
+    $apache_lb_hostnames = $localconfig::apache_lb_hostnames
+
+    class { 'pacemaker': }
 }
 
 ###########################################################################
@@ -99,7 +128,10 @@ node /oae-app[0-1].localdomain/ inherits oaenode {
         dirname => "org/sakaiproject/nakamura/http/usercontent",
         config => {
             'disable.protection.for.dev.mode' => false,
-            'trusted.hosts'  => " ${http_name}:8080 = https://${http_name}:443 ", 
+            'trusted.hosts'  => [
+                " localhost = https://localhost:8443 ", 
+                " ${http_name} = https://${http_name}:8443 ",
+            ],
             'trusted.secret' => $localconfig::serverprotectsec,
         }
     }

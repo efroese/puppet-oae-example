@@ -32,6 +32,7 @@ class localconfig {
     $apache_lb_virtual_netmask = '255.255.255.0'
     $apache_lb_hostnames       = ['oae-lb1.localdomain', 'oae-lb2.localdomain']
     $apache_lb_members         = ['192.168.1.50:8080', '192.168.1.51:8080']
+    $apache_lb_members_untrusted = ['192.168.1.50:8082', '192.168.1.51:8082']
     $apache_lb_standbyurl      = 'http://sorry.localdomain'
 
     # heartbeat/pacemaker for HA apache load balancers

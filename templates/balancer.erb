@@ -8,6 +8,10 @@
 ProxyPass <%= location %> <%= balancer %>/
 ProxyPassReverse <%= location %> <%= balancer %>/
 
+<% locations_noproxy.each do |noproxy| %>
+ProxyPass <%= noproxy %> !
+<% end %>
+
 <Proxy <%= balancer %>>
 
 <% members.each do |member| %>

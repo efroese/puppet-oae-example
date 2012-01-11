@@ -47,6 +47,7 @@ Example usage:
 define apache::balancer (
   $ensure="present",
   $location="",
+  $locations_noproxy=[],
   $proto="http",
   $members=[],
   $standbyurl="",

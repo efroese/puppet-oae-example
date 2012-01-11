@@ -6,11 +6,11 @@ class localconfig {
     
     ###########################################################################
     # OS
-    user    = 'sakaioae'
-    group   = 'sakaioae'
-    uid     = 8080
-    gid     = 8080
-    basedir = '/usr/local/sakaioae'
+    $user    = 'sakaioae'
+    $group   = 'sakaioae'
+    $uid     = 8080
+    $gid     = 8080
+    $basedir = '/usr/local/sakaioae'
 
     ###########################################################################
     # Database setup
@@ -31,7 +31,8 @@ class localconfig {
     $apache_lb_virtual_ip      = '192.168.1.40'
     $apache_lb_virtual_netmask = '255.255.255.0'
     $apache_lb_hostnames       = ['oae-lb1.localdomain', 'oae-lb2.localdomain']
-    $apache_lb_members         = ['oae-lb1.localdomain:8080', 'oae-lb2.localdomain:8080']
+    $apache_lb_members         = ['192.168.1.50:8080', '192.168.1.51:8080']
+    $apache_lb_members_untrusted = ['192.168.1.50:8082', '192.168.1.51:8082']
     $apache_lb_standbyurl      = 'http://sorry.localdomain'
 
     # heartbeat/pacemaker for HA apache load balancers
@@ -62,6 +63,6 @@ class localconfig {
     $solr_slave0 = '192.168.1.71'
     $solr_slave1 = '192.168.1.72'
     $solr_slave2 = '192.168.1.73'
-    $solr_remoteurl = "http://${solr_master}:8983/solr"
-    $solr_queryurls = "http://${solr_slave0}:8983/solr|http://${solr_slave1}:8983/solr|http://${solr_slave2}:8983/solr"
+    $solr_remoteurl = "http://${solr_master}:8080/solr"
+    $solr_queryurls = "http://${solr_slave0}:8080/solr|http://${solr_slave1}:8983/solr|http://${solr_slave2}:8983/solr"
 }

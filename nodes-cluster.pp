@@ -4,35 +4,43 @@
 #
 # This is an example of how to set up a Sakai OAE Cluster with puppet.
 #
-# A pair of highly available Apache HTTPd load balancers
-# oae     - 192.168.1.40 (floating ip address)
-# oae-lb1 - 192.168.1.41
-# oae-lb2 - 192.168.1.42
+# The example cluster consists of the following:
 #
-# A pair of OAE app nodes.
-# oae-app0 - 192.168.1.50
-# oae-app1 - 192.168.1.51
+# Web tier - A highly available Apache HTTPd load balancer
+# oae.localdomain     - 192.168.1.40 (floating ip address)
+# oae-lb1.localdomain - 192.168.1.41
+# oae-lb2.localdomain - 192.168.1.42
 #
-# A pair of solr nodes, one master and one slave.
-# oae-solr0 - 192.168.1.70 (master)
-# oae-solr1 - 192.168.1.71 (slave)
-# oae-solr2 - 192.168.1.72 (slave)
-# oae-solr3 - 192.168.1.73 (slave)
+# App tier - 2 OAE application nodes. 1 preview processor.
+# oae-app0.localdomain - 192.168.1.50
+# oae-app1.localdomain - 192.168.1.51
+# oae-preview0.localdomain - 192.168.1.80
 #
-# One MySQL database node.
-# oae-db0 - 192.168.1.250
+# Search tier - 1 solr master and 3 slaves.
+# oae-solr0.localdomain - 192.168.1.70 (master)
+# oae-solr1.localdomain - 192.168.1.71 (slave)
+# oae-solr2.localdomain - 192.168.1.72 (slave)
+# oae-solr3.localdomain - 192.168.1.73 (slave)
 #
-# One OAE Content Preview Processor
-# oae-preview0 - 192.168.1.80
+# Storage tier - One MySQL database node.
+# oae-db0.localdomain - 192.168.1.250
+# oae-content.localdomain - 192.168.1.240 # TODO: Create an nfs server.
 #
 
 ###########################################################################
 #
 # Apache Load Balancer
 #
+# The only active shared state between the load balancers is the virtual IP.
+# Both of the servers have full copies of the apache configurations managed
+# by puppet. As long as github is up and they each pull before they run
+# puppet they'll both have the same configs. 
+#
+# Heartbeat and Pacemaker collaborate to manage the virtual ip.
+#
 node /oae-lb[1-2].localdomain/ inherits oaenode {
 
-    $http_name            = $localconfig::apache_lb_http_name    
+    $http_name            = $localconfig::apache_lb_http_name
     $sslcert_country      = "US"
     $sslcert_state        = "NY"
     $sslcert_locality     = "New York"
@@ -41,15 +49,15 @@ node /oae-lb[1-2].localdomain/ inherits oaenode {
     class { 'apache::ssl': }
     class { 'pacemaker::apache': }
 
-    apache::listen { "8443": }
-    apache::namevhost { "*:8443": }
-      
     # Server trusted content on 443
     apache::vhost-ssl { "${http_name}:443":
         sslonly  => true,
     }
 
     # Serve untrusted content from 8443
+    # The puppet module takes care of 80 and 443 automatically.
+    apache::listen { "8443": }
+    apache::namevhost { "*:8443": }
     apache::vhost-ssl { "${http_name}:8443": 
         sslonly  => true,
         sslports => ['*:8443'],
@@ -82,7 +90,9 @@ node /oae-lb[1-2].localdomain/ inherits oaenode {
     $pacemaker_authkey   = $localconfig::apache_lb_pacemaker_authkey
     $pacemaker_interface = $localconfig::apache_lb_pacemaker_interface
     $pacemaker_nodes     = $localconfig::apache_lb_pacemaker_nodes
+    # Configure heartbeat to monitor the health of the lb servers
     $pacemaker_hacf      = 'localconfig/ha.cf.erb'
+    # Configure Pacemaker to manage the VIP and Apache
     $pacemaker_crmcli    = 'localconfig/crm-config.cli.erb'
 
     # The HA master will respond to the VIP
@@ -124,18 +134,20 @@ node /oae-app[0-1].localdomain/ inherits oaenode {
            }
        }
 
+    # Separates trusted vs untusted content.
     oae::app::server::sling_config { "org/sakaiproject/nakamura/http/usercontent/ServerProtectionServiceImpl.config":
         dirname => "org/sakaiproject/nakamura/http/usercontent",
         config => {
             'disable.protection.for.dev.mode' => false,
             'trusted.hosts'  => [
-                " localhost = https://localhost:8443 ", 
-                " ${http_name} = https://${http_name}:8443 ",
+                "localhost\\ \\=\\ https://localhost:8443", 
+                "${http_name}\\ \\=\\ https://${http_name}:8443",
             ],
             'trusted.secret' => $localconfig::serverprotectsec,
         }
     }
 
+    # Solr Client
     oae::app::server::sling_config { "org/sakaiproject/nakamura/solr/MultiMasterRemoteSolrClient.config":
         dirname => "org/sakaiproject/nakamura/solr",
         config => {
@@ -144,10 +156,27 @@ node /oae-app[0-1].localdomain/ inherits oaenode {
         }
     }
 
+    # Specify the client type
     oae::app::server::sling_config { "org/sakaiproject/nakamura/solr/SolrServerServiceImpl.config":
         dirname => "org/sakaiproject/nakamura/solr",
         config => {
             "solr-impl" => "multiremote",
+        }
+    }
+
+    # Clustering
+    oae::app::server::sling_config { "org/sakaiproject/nakamura/cluster/ClusterTrackingServiceImpl.config":
+        dirname => 'org/sakaiproject/nakamura/cluster',
+        config => {
+            'secure-host-url' => "http://${ipaddress}:8081",
+        }
+    }
+
+    # Clustered Cache
+    oae::app::server::sling_config { "org/sakaiproject/nakamura/memory/CacheManagerServiceImpl.config":
+        dirname => 'org/sakaiproject/nakamura/memory',
+        config => {
+            'bind-address' => $ipaddress,
         }
     }
 }
@@ -223,7 +252,7 @@ node 'oae-db0.localdomain' inherits oaenode {
     }
 
     # R/W from the app nodes
-    mysql::rights { "oae-app0-nakamura":
+    mysql::rights { "oae-app0-${localconfig::db}":
         ensure   => present,
         database => $localconfig::db_user,
         user     => $localconfig::db_user,
@@ -231,7 +260,7 @@ node 'oae-db0.localdomain' inherits oaenode {
         password => $localconfig::db_password
     }
 
-    mysql::rights { "oae-app1-nakamura":
+    mysql::rights { "oae-app1-${localconfig::db}":
         ensure   => present,
         database => $localconfig::db_user,
         user     => $localconfig::db_user,

@@ -20,7 +20,7 @@ Contains hard coded IP addresses and port numbers that may need changing. -->
 
 	<cacheManagerPeerListenerFactory
 		class="net.sf.ehcache.distribution.RMICacheManagerPeerListenerFactory"
-		properties="hostName=${bind-address},
+		properties="hostName=<%= ipaddress %>,
                     port=40001,
                     socketTimeoutMillis=120000"
 		propertySeparator="," />

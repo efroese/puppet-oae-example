@@ -5,7 +5,7 @@ class localconfig::hosts {
         # 50.18.195.239  -> 10.53.9.10      load balancer (apache)
         ensure => present,
         ip => '10.53.9.10',
-        host_aliases => 'staging-lb0.rsmart.local',
+        host_aliases => 'staging-apache1.rsmart.local',
         comment => 'Apache load balancer'
     }
 
@@ -13,7 +13,14 @@ class localconfig::hosts {
         ensure => present,
         ip => '10.53.10.16',
         host_aliases => 'staging-app1.rsmart.local',
-        comment => 'OAE server'
+        comment => 'OAE app server'
+    }
+
+    host { 'staging-app2':
+        ensure => present,
+        ip => '10.53.10.20',
+        host_aliases => 'staging-app2.rsmart.local',
+        comment => 'OAE app server'
     }
 
     host { 'staging-cle':
@@ -37,10 +44,10 @@ class localconfig::hosts {
         comment => 'Database slave',
     }
 
-    host { 'staging-solr0':
+    host { 'staging-solr1':
         ensure => present,
         ip => '10.53.10.21',
-        host_aliases => 'staging-solr0.rsmart.local',
+        host_aliases => 'staging-solr1.rsmart.local',
         comment => 'Solr master',
     }
     host { 'staging-nfs':

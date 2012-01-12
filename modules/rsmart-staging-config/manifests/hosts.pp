@@ -39,8 +39,8 @@ class localconfig::hosts {
 
     host { 'staging-dbserv2':
         ensure => present,
-		ip => '10.53.10.11',
-		host_aliases => 'staging-dbserv2.rsmart.local',
+        ip => '10.53.10.11',
+        host_aliases => 'staging-dbserv2.rsmart.local',
         comment => 'Database slave',
     }
 
@@ -50,17 +50,21 @@ class localconfig::hosts {
         host_aliases => 'staging-solr1.rsmart.local',
         comment => 'Solr master',
     }
+
     host { 'staging-nfs':
         ensure => present,
         ip => '10.53.10.13',
+        host_aliases => 'staging-nfs.rsmart.local',
         comment => 'NFS server',
     }
+
     host { 'staging-preview':
-        ensure => present,
-		ip => '10.53.10.14',
-		host_aliases => 'staging-preview.rsmart.local',
+    ensure => present,
+        ip => '10.53.10.14',
+        host_aliases => 'staging-preview.rsmart.local',
         comment => 'Preview processor',
     }
+
     host { 'staging-appdyn':
         ensure => present,
         ip => '10.53.10.18',

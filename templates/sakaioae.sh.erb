@@ -15,7 +15,7 @@ INIT_PID="/var/run/${SAKAIOAE_USER}.pid"
 
 help() {
 echo "$0 INVALID SYNTAX ::  Use:"
-echo "$0 {stop | start | restart | status}"
+echo "$0 {stop | start | debug | restart | status}"
 }
 
 start() {
@@ -23,6 +23,14 @@ echo -n "Starting SakaiOAE: "
 su --login --command "${JAVA_BIN} ${SAKAIOAE_JAVA_OPTS} -jar ${SAKAIOAE_JAR} > /dev/null 2>&1 &" ${SAKAIOAE_USER}
 echo $$ > ${INIT_PID};
 echo "done.";
+}
+
+debug() {
+    echo -n "Starting SakaiOAE with JVM remote debugging port 8500: "
+    SAKAIOAE_JAVA_DEBUG_OPTS="-Xdebug -Xrunjdwp:transport=dt_socket,address=8500,server=y,suspend=n"
+    su --login --command "${JAVA_BIN} ${SAKAIOAE_JAVA_OPTS} ${SAKAIOAE_JAVA_DEBUG_OPTS} -jar ${SAKAIOAE_JAR} > /dev/null 2>&1 &" ${SAKAIOAE_USER}
+    echo $$ > ${INIT_PID};
+    echo "done.";
 }
 
 stop() {
@@ -63,6 +71,9 @@ fi
 
 if [ "${1}" = "start" ]; then
 start ;
+fi
+if [ "${1}" = "debug" ]; then
+debug ;
 fi
 if [ "${1}" = "stop" ]; then
 stop ;

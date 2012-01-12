@@ -22,7 +22,7 @@ echo "$0 {stop | start | debug | restart | status}"
 
 start() {
 echo -n "Starting SakaiOAE: "
-su --login --command "${JAVA_BIN} ${SAKAIOAE_JAVA_OPTS} -jar ${SAKAIOAE_JAR} > /dev/null 2>&1 &" ${SAKAIOAE_USER}
+su --login --command "${JAVA_BIN} ${SAKAIOAE_JAVA_OPTS} ${SAKAIOAE_CLUSTER_JAVA_OPTS} -jar ${SAKAIOAE_JAR} > /dev/null 2>&1 &" ${SAKAIOAE_USER}
 echo $$ > ${INIT_PID};
 echo "done.";
 }

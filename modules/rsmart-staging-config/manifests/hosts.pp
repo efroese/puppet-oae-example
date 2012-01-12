@@ -1,13 +1,63 @@
 class localconfig::hosts {
-    # rSmart OAE 1.1 dev cluster 
-    # 50.18.192.33  -> 10.50.9.41      load balancer (apache)
-    # 50.18.193.154 -> 10.50.9.40      OAE
-    host { 'dev-lb0':    ip => '10.50.9.41',  ensure => present, comment => 'Apache load balancer' }
-    host { 'dev-app0':   ip => '10.50.9.40',  ensure => present, comment => 'OAE server' }
-    host { 'dev-cle':    ip => '10.50.9.55',  ensure => present, comment => 'CLE server' }
-    host { 'dev-db0':    ip => '10.50.10.40', ensure => present, comment => 'Database master' }
-    host { 'dev-db1':    ip => '10.50.10.41', ensure => present, comment => 'Database slave' }
-    host { 'dev-solr0':  ip => '10.50.10.42', ensure => present, comment => 'Solr master' }
-    host { 'dev-nfs0':   ip => '10.50.10.43', ensure => present, comment => 'NFS server' }
-    host { 'dev-pp0':    ip => '10.50.10.44', ensure => present, comment => 'Preview processor' }
+    # rSmart OAE 1.1 staging cluster 
+
+    host { 'staging-lb0':
+        # 50.18.195.239  -> 10.53.9.10      load balancer (apache)
+        ensure => present,
+        ip => '10.53.9.10',
+        host_aliases => 'staging-lb0.rsmart.local',
+        comment => 'Apache load balancer'
+    }
+
+    host { 'staging-app1':
+        ensure => present,
+        ip => '10.53.10.16',
+        host_aliases => 'staging-app1.rsmart.local',
+        comment => 'OAE server'
+    }
+
+    host { 'staging-cle':
+        ensure => present,
+        ip => '10.53.10.17',
+        host_aliases => 'staging-cle.rsmart.local',
+        comment => 'CLE server'
+    }
+
+    host { 'staging-dbserv1':
+        ensure => present,
+        ip => '10.53.10.10',
+        host_aliases => 'staging-dbserv1.rsmart.local',
+        comment => 'Database master',
+    }
+
+    host { 'staging-dbserv2':
+        ensure => present,
+		ip => '10.53.10.11',
+		host_aliases => 'staging-dbserv2.rsmart.local',
+        comment => 'Database slave',
+    }
+
+    host { 'staging-solr0':
+        ensure => present,
+        ip => '10.53.10.21',
+        host_aliases => 'staging-solr0.rsmart.local',
+        comment => 'Solr master',
+    }
+    host { 'staging-nfs':
+        ensure => present,
+        ip => '10.53.10.13',
+        comment => 'NFS server',
+    }
+    host { 'staging-preview':
+        ensure => present,
+		ip => '10.53.10.14',
+		host_aliases => 'staging-preview.rsmart.local',
+        comment => 'Preview processor',
+    }
+    host { 'staging-appdyn':
+        ensure => present,
+        ip => '10.53.10.18',
+        host_aliases => 'staging-appdyn.rsmart.local',
+        comment => 'AppDynamics Controller/Hyperic',
+    }
 }

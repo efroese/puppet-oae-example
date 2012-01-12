@@ -43,7 +43,7 @@ class localconfig {
     ###########################################################################
     # App servers
     $version_oae   = '1.1'
-    $downloaddir   = 'http://192.168.1.124/jars/'
+    $downloadurl   = 'http://192.168.1.124/jars/org.sakaiproject.nakamura.app-1.1-mysql.jar'
     $jarfile       = 'org.sakaiproject.nakamura.app-1.1-mysql.jar'
     $javamemorymax = '512'
     $javapermsize  = '256'

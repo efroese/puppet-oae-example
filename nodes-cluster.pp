@@ -113,7 +113,7 @@ node /oae-app[0-1].localdomain/ inherits oaenode {
 
     class { 'oae::app::server':
         version_oae    => $localconfig::version_oae,
-        downloaddir    => $localconfig::downloaddir,
+        downloadurl    => $localconfig::downloadurl,
         jarfile        => $localconfig::jarfile,
         javamemorymax  => $localconfig::javamemorymax,
         javapermsize   => $localconfig::javapermsize,

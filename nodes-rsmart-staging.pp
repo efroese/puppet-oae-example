@@ -11,7 +11,7 @@
 # Apache load balancer
 #
 
-node 'staging-apache[1-2].rsmart.local' inherits oaenode {
+node /staging-apache[1-2].rsmart.local/ inherits oaenode {
 }
 
 ###########################################################################
@@ -20,21 +20,14 @@ node 'staging-apache[1-2].rsmart.local' inherits oaenode {
 #
 node /staging-app[1-2].rsmart.local/ inherits oaenode {
 
-    $http_name = $localconfig::apache_lb_http_name
+    $http_name = $localconfig::http_name
 
     class { 'oae::app::server':
         version_oae    => $localconfig::version_oae,
-        downloaddir    => $localconfig::downloaddir,
+        jarsource      => $localconfig::jarsource,
         jarfile        => $localconfig::jarfile,
         javamemorymax  => $localconfig::javamemorymax,
         javapermsize   => $localconfig::javapermsize,
-    }
-
-    class { 'oae::core':
-         url    => $localconfig::db_url,
-         driver => $localconfig::db_driver,
-         user   => $localconfig::db_user,
-         pass   => $localconfig::db_password,
     }
 
     class { 'oae::app::ehcache':
@@ -49,12 +42,12 @@ node /staging-app[1-2].rsmart.local/ inherits oaenode {
                 'jdbc-url'    => $localconfig::db_url,
                 'username'    => $localconfig::db_user,
                 'password'    => $localconfig::db_password,
-                'long-string-size' => 16384
+                'long-string-size' => 16384,
                 'store-base-dir'   => "save/files"
             }
         }
 
-        # Separates trusted vs untusted content.
+        # Separates trusted vs untrusted content.
         oae::app::server::sling_config { "org/sakaiproject/nakamura/http/usercontent/ServerProtectionServiceImpl.config":
             dirname => "org/sakaiproject/nakamura/http/usercontent",
             config => {
@@ -103,9 +96,9 @@ node /staging-app[1-2].rsmart.local/ inherits oaenode {
     oae::app::server::sling_config { "org/sakaiproject/nakamura/basiclti/CLEVirtualToolDataProvider.config":
         dirname => "org/sakaiproject/nakamura/basiclti",
         config => {
-            'sakai.cle.basiclti.secret' => "secret"
-            'sakai.cle.server.url'      => "https://${http_name}"
-            'sakai.cle.basiclti.key'    => "12345"
+            'sakai.cle.basiclti.secret' => "secret",
+            'sakai.cle.server.url'      => "https://${http_name}",
+            'sakai.cle.basiclti.key'    => "12345",
         }
     }
 }

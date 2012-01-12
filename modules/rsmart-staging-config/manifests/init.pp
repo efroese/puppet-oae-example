@@ -10,14 +10,14 @@ class localconfig {
     # OS
     $user    = 'rsmart'
     $group   = 'rsmart'
-    $uid     = 500
-    $gid     = 500
+    $uid     = 8080
+    $gid     = 8080
     $basedir = '/home/rsmart'
 
     ###########################################################################
     # Database setup
     $db          = 'nak'
-    $db_url      = "jdbc:postgresql://10.50.10.40/${db}?charSet\=UTF-8"
+    $db_url      = "jdbc:postgresql://10.50.10.40/${db}?charSet\\=UTF-8"
     $db_driver   = 'org.postgresql.Driver'
     $db_user     = 'nakamura'
     $db_password = 'ironchef'
@@ -29,14 +29,13 @@ class localconfig {
 
     ###########################################################################
     # Apache load balancer
-    $http_name       = 'dev.academic.rsmart.com'
+    $http_name       = 'staging.academic.rsmart.com'
 
     ###########################################################################
     # App servers
     $version_oae   = '1.1'
-    $downloaddir   = 'http://192.168.1.124/jars/'
-    # TODO: Fix app jar and url
-    $jarfile       = 'org.sakaiproject.nakamura.app-1.1-mysql.jar'
+    $jarsource     = '/home/rsmart/com.rsmart.academic.app-1.1.0-M1-QA1.jar'
+    $jarfile       = 'com.rsmart.academic.app-1.1.0-M1-QA1.jar'
     $javamemorymax = '4096'
     $javapermsize  = '256'
 
@@ -53,5 +52,5 @@ class localconfig {
     $solr_master = '10.50.10.42'
     $solr_slave0 = '10.50.10.47' # TODO fix!
     $solr_remoteurl = "http://${solr_master}:8983/solr"
-    $solr_queryurls = "http://${solr_master}:8983/solr|http://${solr_slave0}:8983/solr|"
+    $solr_queryurls = "http://${solr_master}:8983/solr|http://${solr_slave0}:8983/solr"
 }

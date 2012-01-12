@@ -7,8 +7,8 @@ import 'nodetypes'
 # OAE cluster example
 # import 'nodes-cluster'
 
-# rSmart 1.1 QA Cluster
-import 'nodes-rsmart-m1'
+# rSmart 1.1 Staging Cluster
+import 'nodes-rsmart-staging'
 
 # Set the default path for exec resources
 Exec { path => '/usr/local/sbin:/usr/local/bin:/sbin:/bin:/usr/sbin:/usr/bin:/root/bin' }

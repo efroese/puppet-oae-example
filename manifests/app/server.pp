@@ -6,9 +6,11 @@
 #
 # $version_oae::   The version of OAE to run
 #
-# $downloaddir::   The URL to the download directory where the app jar lives
+# $downloadurl::   The URL to the the app jar
 #
-# $jarfile::       The name of the jar file to download
+# $jarsource::     The path to the jar on the local machine.
+#
+# $jarfile::       The name of the jar
 #
 # $javamemorymax:: The max java heap size
 #
@@ -21,18 +23,29 @@
 #
 #   class { 'oae::app::server':
 #     version_oae   => '1.1'
-#     downloaddir   => 'http://192.168.1.124/jars/',
+#     downloadurl   => 'http://192.168.1.124/jars/org.sakaiproject.nakamura.app-1.1-mysql.jar',
 #     jarfile       => 'org.sakaiproject.nakamura.app-1.1-mysql.jar',
 #     javamemorymax => 512,
 #     javapermsize  => 256,
 #   }
 #
-class oae::app::server($version_oae, $downloaddir, $jarfile,
+#   class { 'oae::app::server':
+#     version_oae   => '1.1'
+#     jarsource     => '/home/sakaioae/jars/org.sakaiproject.nakamura.app-1.1-mysql.jar',
+#     jarfile       => 'org.sakaiproject.nakamura.app-1.1-mysql.jar',
+#     javamemorymax => 512,
+#     javapermsize  => 256,
+#   }
+#
+class oae::app::server( $version_oae,
+                        $downloadurl = "",
+                        $jarsource = "",
+                        $jarfile,
                         $javamemorymax, $javapermsize) {
 
-    include oae::app::setup
-
     Class['oae::app::setup'] -> Class['oae::app::server']
+
+    include oae::app::setup
 
     file { "${oae::params::basedir}/sling/nakamura.properties":
         ensure => present,
@@ -46,11 +59,15 @@ class oae::app::server($version_oae, $downloaddir, $jarfile,
     $jar_dest = "${oae::params::basedir}/jars/${jarfile}"
     $app_jar = "${oae::params::basedir}/sakaioae.jar"
 
+
     exec { 'fetch-package':
-        command => "curl --silent ${downloaddir}${jarfile} --output ${jar_dest}",
+        command => $downloadurl ? {
+            "" => "curl --silent ${downloaddir}${jarfile} --output ${jar_dest}",
+            default => "cp ${jarsource} .",
+        },
         cwd     => "${oae::params::basedir}/jars/",
-        creates => "${jar_dest}",
-        require => [ File["${oae::params::basedir}/jars/"], Package['curl'] ],
+        creates => $jar_dest,
+        require => File["${oae::params::basedir}/jars/"],
     }
 
     file { $app_jar:

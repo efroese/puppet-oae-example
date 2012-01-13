@@ -42,12 +42,11 @@ class localconfig {
     # oae server protection service
     $serverprotectsec = 'shhh-its@secret'
 
-    $app_server0 = '10.53.10.16'
-    $app_server1 = '10.53.10.20'
+    $app_server1 = '10.53.10.16'
+    $app_server2 = '10.53.10.20'
 
     # ehcache
-    $mcast_address = '230.0.0.2'
-    $mcast_port = '8450'
+    $ehcache_tcp_port = '40001'
 
     # solr
     $solr_master = '10.50.10.42'

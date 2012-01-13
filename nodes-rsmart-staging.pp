@@ -11,14 +11,14 @@
 # Apache load balancer
 #
 
-node /staging-apache[1-2].rsmart.local/ inherits oaenode {
+node /staging-apache[1-2].academic..rsmart.local/ inherits oaenode {
 }
 
 ###########################################################################
 #
 # OAE app nodes
 #
-node /staging-app[1-2].rsmart.local/ inherits oaenode {
+node oaeappnode inherits oaenode {
 
     $http_name = $localconfig::http_name
 
@@ -29,69 +29,64 @@ node /staging-app[1-2].rsmart.local/ inherits oaenode {
         javamemorymax  => $localconfig::javamemorymax,
         javapermsize   => $localconfig::javapermsize,
     }
-
-    class { 'oae::app::ehcache':
-        mcast_address => $localconfig::mcast_address,
-        mcast_port    => $localconfig::mcast_port,
-    }
     
     oae::app::server::sling_config { "org/sakaiproject/nakamura/lite/storage/jdbc/JDBCStorageClientPool.config":
-            dirname => "org/sakaiproject/nakamura/lite/storage/jdbc",
-            config => {
-                'jdbc-driver' => $localconfig::db_driver,
-                'jdbc-url'    => $localconfig::db_url,
-                'username'    => $localconfig::db_user,
-                'password'    => $localconfig::db_password,
-                'long-string-size' => 16384,
-                'store-base-dir'   => "save/files"
-            }
+        dirname => "org/sakaiproject/nakamura/lite/storage/jdbc",
+        config => {
+            'jdbc-driver' => $localconfig::db_driver,
+            'jdbc-url'    => $localconfig::db_url,
+            'username'    => $localconfig::db_user,
+            'password'    => $localconfig::db_password,
+            'long-string-size' => 16384,
+            'store-base-dir'   => "save/files"
         }
+    }
 
-        # Separates trusted vs untrusted content.
-        oae::app::server::sling_config { "org/sakaiproject/nakamura/http/usercontent/ServerProtectionServiceImpl.config":
-            dirname => "org/sakaiproject/nakamura/http/usercontent",
-            config => {
-                'disable.protection.for.dev.mode' => false,
-                'trusted.hosts'  => [
-                    "localhost\\ \\=\\ https://localhost:8443", 
-                    "${http_name}\\ \\=\\ https://${http_name}:8443",
-                ],
-                'trusted.secret' => $localconfig::serverprotectsec,
-            }
+    # Separates trusted vs untrusted content.
+    oae::app::server::sling_config { "org/sakaiproject/nakamura/http/usercontent/ServerProtectionServiceImpl.config":
+        dirname => "org/sakaiproject/nakamura/http/usercontent",
+        config => {
+            'disable.protection.for.dev.mode' => false,
+            'trusted.hosts'  => [
+                "localhost\\ \\=\\ https://localhost:8443", 
+                "${http_name}\\ \\=\\ https://${http_name}:8443",
+            ],
+            'trusted.secret' => $localconfig::serverprotectsec,
         }
+    }
 
-        # Solr Client
-        oae::app::server::sling_config { "org/sakaiproject/nakamura/solr/MultiMasterRemoteSolrClient.config":
-            dirname => "org/sakaiproject/nakamura/solr",
-            config => {
-                "remoteurl"  => $localconfig::solr_remoteurl,
-                "query-urls" => $localconfig::solr_queryurls,
-            }
+    # Solr Client
+    oae::app::server::sling_config { "org/sakaiproject/nakamura/solr/MultiMasterRemoteSolrClient.config":
+        dirname => "org/sakaiproject/nakamura/solr",
+        config => {
+            "remoteurl"  => $localconfig::solr_remoteurl,
+            "query-urls" => $localconfig::solr_queryurls,
         }
+    }
 
-        # Specify the client type
-        oae::app::server::sling_config { "org/sakaiproject/nakamura/solr/SolrServerServiceImpl.config":
-            dirname => "org/sakaiproject/nakamura/solr",
-            config => {
-                "solr-impl" => "multiremote",
-            }
+    # Specify the client type
+    oae::app::server::sling_config { "org/sakaiproject/nakamura/solr/SolrServerServiceImpl.config":
+        dirname => "org/sakaiproject/nakamura/solr",
+        config => {
+            "solr-impl" => "multiremote",
         }
+    }
 
-        # Clustering
-        oae::app::server::sling_config { "org/sakaiproject/nakamura/cluster/ClusterTrackingServiceImpl.config":
-            dirname => 'org/sakaiproject/nakamura/cluster',
-            config => {
-                'secure-host-url' => "http://${ipaddress}:8081",
-            }
+    # Clustering
+    oae::app::server::sling_config { "org/sakaiproject/nakamura/cluster/ClusterTrackingServiceImpl.config":
+        dirname => 'org/sakaiproject/nakamura/cluster',
+        config => {
+            'secure-host-url' => "http://${ipaddress}:8081",
         }
+    }
 
-        # Clustered Cache
-        oae::app::server::sling_config { "org/sakaiproject/nakamura/memory/CacheManagerServiceImpl.config":
-            dirname => 'org/sakaiproject/nakamura/memory',
-            config => {
-                'bind-address' => $ipaddress,
-            }
+    # Clustered Cache
+    oae::app::server::sling_config { "org/sakaiproject/nakamura/memory/CacheManagerServiceImpl.config":
+        dirname => 'org/sakaiproject/nakamura/memory',
+        config => {
+            'bind-address' => $ipaddress,
         }
+    }
 
     oae::app::server::sling_config { "org/sakaiproject/nakamura/basiclti/CLEVirtualToolDataProvider.config":
         dirname => "org/sakaiproject/nakamura/basiclti",
@@ -103,12 +98,26 @@ node /staging-app[1-2].rsmart.local/ inherits oaenode {
     }
 }
 
+node 'staging-app1.academic.rsmart.local' inherits oaeappnode {
+    class { 'oae::app::ehcache':
+        peers       => [$localconfig::app_server2,],
+        tcp_address => $localconfig::ehcache_tcp_port,
+    }
+}
+
+node 'staging-app2.academic.rsmart.local' inherits oaeappnode {
+    class { 'oae::app::ehcache':
+        peers       => [$localconfig::app_server1,],
+        tcp_address => $localconfig::ehcache_tcp_port,
+    }
+}
+
 ###########################################################################
 #
 # OAE Solr Nodes
 #
 
-node 'staging-solr1.rsmart.local' inherits oaenode {
+node 'staging-solr1.academic.rsmart.local' inherits oaenode {
     class { 'oae::solr': 
         master_url => "${localconfig::solr_remoteurl}/replication",
         solrconfig => 'localconfig/master-solrconfig.xml.erb',
@@ -119,7 +128,7 @@ node 'staging-solr1.rsmart.local' inherits oaenode {
 #
 # OAE Content Preview Processor Node
 #
-node 'staging-preview.rsmart.local' inherits oaenode {
+node 'staging-preview.academic.rsmart.local' inherits oaenode {
     class { 'oae::preview_processor::init': 
         nakamura_git => $localconfig::nakamura_git,
         nakamura_tag => $localconfig::nakamura_tag,

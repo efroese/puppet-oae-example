@@ -12,6 +12,50 @@
 #
 
 node /staging-apache[1-2].academic..rsmart.local/ inherits oaenode {
+
+    class { 'apache::ssl': }
+
+    # Server trusted content on 443
+    apache::vhost-ssl { "${http_name}:443":
+        sslonly  => true,
+        cert     => "/etc/pki/tls/certs/rsmart.com.crt",
+        certkey  => "/etc/pki/tls/private/rsmart.com.key",
+        certchain => "/etc/pki/tls/certs/rsmart.com-intermediate.crt",
+    }
+
+    # Server pool for trusted content
+    apache::balancer { "apache-balancer-oae-app":
+        vhost      => "${http_name}:443",
+        location   => "/",
+        locations_noproxy => ['/server-status', '/balancer-manager'],
+        proto      => "http",
+        members    => $localconfig::apache_lb_members,
+        params     => ["retry=20", "min=3", "flushpackets=auto"],
+        standbyurl => $localconfig::apache_lb_standbyurl,
+        template   => 'localconfig/balancer-trusted.erb',
+    }
+
+    # Serve untrusted content from 8443
+    # The puppet module takes care of 80 and 443 automatically.
+    apache::listen { "8443": }
+    apache::namevhost { "*:8443": }
+    apache::vhost-ssl { "${http_name}:8443": 
+        sslonly  => true,
+        sslports => ['*:8443'],
+        cert     => "/etc/pki/tls/certs/rsmart.com.crt",
+        certkey  => "/etc/pki/tls/private/rsmart.com.key",
+        certchain => "/etc/pki/tls/certs/rsmart.com-intermediate.crt",
+    }
+
+    # Server pool for untrusted content
+    apache::balancer { "apache-balancer-oae-app-untrusted":
+        vhost      => "${http_name}:8443",
+        location   => "/",
+        proto      => "http",
+        members    => $localconfig::apache_lb_members_untrusted,
+        params     => ["retry=20", "min=3", "flushpackets=auto"],
+        standbyurl => $localconfig::apache_lb_standbyurl,
+    }
 }
 
 ###########################################################################
@@ -134,8 +178,18 @@ node 'staging-app2.academic.rsmart.local' inherits oaeappnode {
 # OAE Solr Nodes
 #
 
-node 'staging-solr1.academic.rsmart.local' inherits oaenode {
-    class { 'oae::solr': 
+node solrnode inherits oaenode {
+    class { 'tomcat6':
+            parentdir => "${localconfig::basedir}",
+            tomcat_user           => $localconfig::user,
+            tomcat_group          => $localconfig::group,
+            admin_user            => 'tomcat',
+            admin_password        => 'wolverine',
+    }
+}
+
+node 'staging-solr1.academic.rsmart.local' inherits solrnode {
+    class { 'oae::solr::tomcat': 
         master_url => "${localconfig::solr_remoteurl}/replication",
         solrconfig => 'localconfig/master-solrconfig.xml.erb',
     }

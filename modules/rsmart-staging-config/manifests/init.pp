@@ -42,7 +42,8 @@ class localconfig {
     # oae server protection service
     $serverprotectsec = 'shhh-its@secret'
 
-    $app_server0 = '10.50.9.40'
+    $app_server0 = '10.53.10.16'
+    $app_server1 = '10.53.10.20'
 
     # ehcache
     $mcast_address = '230.0.0.2'

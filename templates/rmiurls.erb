@@ -1,1 +1,1 @@
-<% peers.each |peer| =%><% replicated_caches.each |cachename| -%>//<%= peer %>:<%= echcahce_tcp_port %>/<%= cachename %>|<% end -%><% end -%>
+<% peers.each do |peer| -%><% replicated_caches.each do |cachename| -%>//<%= peer %>:<%= tcp_port %>/<%= cachename %>|<% end -%><% end -%>

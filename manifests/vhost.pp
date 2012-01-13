@@ -14,7 +14,8 @@ define apache::vhost (
   $aliases=[],
   $enable_default=true,
   $ports=['*:80'],
-  $accesslog_format="combined"
+  $accesslog_format="combined",
+  template="apache/vhost.erb"
 ) {
 
   include apache::params
@@ -167,7 +168,7 @@ define apache::vhost (
           } else {
             # default vhost template
             File["${apache::params::conf}/sites-available/${name}"] {
-              content => template("apache/vhost.erb"), 
+              content => template($template),
             }
           }
         }

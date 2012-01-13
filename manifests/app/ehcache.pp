@@ -22,10 +22,28 @@
 #   }
 #
 class oae::app::ehcache ($config_xml = 'oae/ehcacheConfig.xml.erb',
-                         $mcast_address,
-                         $mcast_port) {
+                         $peers,
+                         $tcp_address = "",
+                         $tcp_port = '40001',
+                         $mcast_address = '230.0.0.2',
+                         $mcast_port = '8450') {
 
     Class['oae::params'] -> Class['oae::app::ehcache']
+
+    $replicated_caches = [
+        'org.sakaiproject.nakamura.auth.trusted.TokenStore',
+        'presence.location',
+        'presence.status',
+        'deletedPathQueue',
+        'accessControlCache',
+        'authorizableCache',
+        'contentCache',
+        'lockmanager.lockmap',
+        'server-tracking-cache', ]
+
+    if $tcp_address != "" {
+        $rmiurls = template('oae/rmiurls.erb')
+    }
 
     file { "${oae::params::basedir}/sling/ehcacheConfig.xml":
         owner => $oae::params::user,

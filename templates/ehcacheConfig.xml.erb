@@ -13,15 +13,20 @@ Contains hard coded IP addresses and port numbers that may need changing. -->
 		be customsed -->
 	<cacheManagerPeerProviderFactory
 		class="net.sf.ehcache.distribution.RMICacheManagerPeerProviderFactory"
-		properties="peerDiscovery=automatic,
+		<% if has_variable?("rmiurls") %>
+		    properties="peerDiscovery=manual,   
+                                rmiUrls=<%= rmiurls %>"
+        <% else %>
+		    properties="peerDiscovery=automatic,
                         multicastGroupAddress=<%= mcast_address %>,
                         multicastGroupPort=<%= mcast_port %>, timeToLive=1"
-		propertySeparator="," />
+		    propertySeparator="," />
+		<% end %>
 
 	<cacheManagerPeerListenerFactory
 		class="net.sf.ehcache.distribution.RMICacheManagerPeerListenerFactory"
-		properties="hostName=<%= ipaddress %>,
-                    port=40001,
+		properties="hostName=<%= tcp_address %>,
+                    port=<%= tcp_port %>,
                     socketTimeoutMillis=120000"
 		propertySeparator="," />
 	<!-- Mandatory Default Cache configuration. These settings will be applied

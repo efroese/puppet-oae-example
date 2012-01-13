@@ -30,6 +30,22 @@ node oaeappnode inherits oaenode {
         javapermsize   => $localconfig::javapermsize,
     }
     
+    # NFS mounted shated storage for content bodies
+    file { $localconfig::storedir:
+        ensure => directory,
+        owner => root,
+        group => root,
+    }
+
+    mount { $localconfig::storedir:
+        ensure => 'mounted',
+        fstype => 'nfs',
+        device => "${localconfig::nfs_server}:${localconfig::nfs_share}",
+        options => $localconfig::nfs_options,
+        atboot => true,
+    }
+
+    # Connect OAE to the DB
     oae::app::server::sling_config { "org/sakaiproject/nakamura/lite/storage/jdbc/JDBCStorageClientPool.config":
         dirname => "org/sakaiproject/nakamura/lite/storage/jdbc",
         config => {
@@ -38,7 +54,7 @@ node oaeappnode inherits oaenode {
             'username'    => $localconfig::db_user,
             'password'    => $localconfig::db_password,
             'long-string-size' => 16384,
-            'store-base-dir'   => "save/files"
+            'store-base-dir'   => $localconfig::storedir,
         }
     }
 
@@ -73,6 +89,7 @@ node oaeappnode inherits oaenode {
     }
 
     # Clustering
+    # Note that IP address will be evaluated ON the node. Not in this nodetype
     oae::app::server::sling_config { "org/sakaiproject/nakamura/cluster/ClusterTrackingServiceImpl.config":
         dirname => 'org/sakaiproject/nakamura/cluster',
         config => {

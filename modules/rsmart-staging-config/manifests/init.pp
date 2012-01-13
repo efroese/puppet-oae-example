@@ -22,6 +22,11 @@ class localconfig {
     $db_user     = 'nakamura'
     $db_password = 'ironchef'
 
+    $storedir    = "${basedir}/store"
+    $nfs_server  = 'staging-nfs'
+    $nfs_share   = '/export/oae-staging'
+    $nfs_options = 'defaults'
+
     ###########################################################################
     # Git (Preview processor)
     $nakamura_git = "http://github.com/rsmart/nakamura.git"

@@ -13,7 +13,17 @@
 
 node /staging-apache[1-2].academic..rsmart.local/ inherits oaenode {
 
+    $http_name = $localconfig::http_name
+
     class { 'apache::ssl': }
+
+    # Headers is not in the default set of enabled modules
+    apache::module { 'headers': }
+
+    # Simple vhost to redirect to 443
+    apache::vhost {
+        template => 'localconfig/vhost-80.conf.erb',
+    }
 
     # Server trusted content on 443
     apache::vhost-ssl { "${http_name}:443":
@@ -55,6 +65,13 @@ node /staging-apache[1-2].academic..rsmart.local/ inherits oaenode {
         members    => $localconfig::apache_lb_members_untrusted,
         params     => ["retry=20", "min=3", "flushpackets=auto"],
         standbyurl => $localconfig::apache_lb_standbyurl,
+    }
+
+    file { "/etc/httpd/conf.d/traceenable.conf":
+        owner => root,
+        group => root,
+        mode  => 644,
+        content => 'TraceEnable Off',
     }
 }
 

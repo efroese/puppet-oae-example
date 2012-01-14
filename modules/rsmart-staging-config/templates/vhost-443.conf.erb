@@ -20,6 +20,7 @@
     SSLEngine On
     SSLCipherSuite HIGH:MEDIUM
     SSLProtocol all -SSLv2
+    SSLCryptoDevice builtin
 
     SSLCertificateFile <%= certfile %>
     SSLCertificateKeyFile <%= certkeyfile %>

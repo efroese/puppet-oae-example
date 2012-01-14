@@ -1,6 +1,6 @@
 # = Class: oae::app::ehcache
 #
-# This class installs a solr master or slave for Sakai OAE
+# Configure ehcache replicated to OAE app servers in a cluster
 #
 # == Parameters:
 #
@@ -9,6 +9,12 @@
 # $mcast_address::  The multicast address to use for cluster communication
 #
 # $mcast_port::     The multicast port to use for cluster communication
+#
+# $peers::          A list of peers. Required only for tcp communication
+#
+# $tcp_address::    Tcp address for cluster communication
+#
+# $tcp_port::       Tcp port for cluster communication
 #
 # == Actions:
 #   Configure ehCache on an OAE server
@@ -21,15 +27,22 @@
 #     mcast_port    => '5509',
 #   }
 #
+#   # Some environments don't allow multicat. Use tcp instead.
+#   class { 'oae::app::ehcache':
+#     config_xml    => 'localconfig/ehcacheConfig.xml.erb'
+#     tcp_address => '192.168.1.50',
+#     tcp_port    => '40001',
+#   }
 class oae::app::ehcache ($config_xml = 'oae/ehcacheConfig.xml.erb',
                          $peers,
-                         $tcp_address = "",
+                         $tcp_address = '',
                          $tcp_port = '40001',
                          $mcast_address = '230.0.0.2',
                          $mcast_port = '8450') {
 
     Class['oae::params'] -> Class['oae::app::ehcache']
 
+    # OAE 1.1
     $replicated_caches = [
         'org.sakaiproject.nakamura.auth.trusted.TokenStore',
         'presence.location',
@@ -41,7 +54,7 @@ class oae::app::ehcache ($config_xml = 'oae/ehcacheConfig.xml.erb',
         'lockmanager.lockmap',
         'server-tracking-cache', ]
 
-    if $tcp_address != "" {
+    if $tcp_address != '' {
         $rmiurls = template('oae/rmiurls.erb')
     }
 

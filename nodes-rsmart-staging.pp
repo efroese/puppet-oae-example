@@ -84,7 +84,6 @@ node oaeappnode inherits oaenode {
     $http_name = $localconfig::http_name
 
     class { 'oae::app::server':
-        version_oae    => $localconfig::version_oae,
         jarsource      => $localconfig::jarsource,
         jarfile        => $localconfig::jarfile,
         javamemorymax  => $localconfig::javamemorymax,

@@ -21,7 +21,6 @@ node 'oae-app0' inherits basenode {
     class { 'oae::params': }
 
     class { 'oae::app::server':
-        version_oae    => '1.1',
         downloaddir    => 'http://source.sakaiproject.org/maven2/org/sakaiproject/nakamura/org.sakaiproject.nakamura.app/1.1/',
         jarfile        => 'org.sakaiproject.nakamura.app-1.1.jar',
         javamemorymax  => '512',

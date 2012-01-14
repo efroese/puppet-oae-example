@@ -4,8 +4,6 @@
 #
 # == Parameters:
 #
-# $version_oae::   The version of OAE to run
-#
 # $downloadurl::   The URL to the the app jar
 #
 # $jarsource::     The path to the jar on the local machine.
@@ -22,7 +20,6 @@
 # == Sample Usage:
 #
 #   class { 'oae::app::server':
-#     version_oae   => '1.1'
 #     downloadurl   => 'http://192.168.1.124/jars/org.sakaiproject.nakamura.app-1.1-mysql.jar',
 #     jarfile       => 'org.sakaiproject.nakamura.app-1.1-mysql.jar',
 #     javamemorymax => 512,
@@ -30,15 +27,13 @@
 #   }
 #
 #   class { 'oae::app::server':
-#     version_oae   => '1.1'
 #     jarsource     => '/home/sakaioae/jars/org.sakaiproject.nakamura.app-1.1-mysql.jar',
 #     jarfile       => 'org.sakaiproject.nakamura.app-1.1-mysql.jar',
 #     javamemorymax => 512,
 #     javapermsize  => 256,
 #   }
 #
-class oae::app::server( $version_oae,
-                        $downloadurl = "",
+class oae::app::server( $downloadurl = "",
                         $jarsource = "",
                         $jarfile,
                         $javamemorymax, $javapermsize) {

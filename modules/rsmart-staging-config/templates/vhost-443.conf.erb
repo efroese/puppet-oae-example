@@ -41,36 +41,15 @@
     <Location /system/console>
         Order deny,allow
         deny from all
-        allow from 72.44.192.164
+        <% scope.lookupvar('localconfig::oae_admin_hosts').each do |admin_host| -%>
+        allow from <%= admin_host %>
+        <%= end -%>
     </Location>
     
     # /dav and /sakai-axis go to utility server
     # ignore |sakai-axis.* for now to work around LTI webservices.allow=.+ issue
     <LocationMatch "^/(dav.*)">
-        ProxyPassMatch ajp://10.53.10.19/$1
-    </LocationMatch>
-    
-    <Proxy balancer://sakai_cle>
-        BalancerMember ajp://10.53.10.17:8009 timeout=300 loadfactor=100 route=cle1
-        BalancerMember ajp://10.53.10.17:8010 timeout=300 loadfactor=100 route=cle2
-    </Proxy>
-
-    # All of the required Sakai 2 URLs
-    <LocationMatch "^/(xsl-portal.*|access.*|courier.*|dav.*|direct.*|imsblti.*|library.*|messageforums-tool.*|osp-common-tool.*|polls-tool.*|portal.*|profile-tool.*|profile2-tool.*|sakai.*|samigo-app.*|scheduler-tool.*|rsmart-customizer-tool.*|oauth-tool.*|emailtemplateservice-tool.*|sitestats-tool.*|rsmart-support-tool.*|mailsender-tool.*|tool.css|portool_base.css)">
-        ProxyPassMatch balancer://sakai_cle/$1 nofailover=On stickysession=SAKAI2SESSIONID lbmethod=byrequests
-        ProxyPassReverse balancer://sakai_cle/
-
-        SetOutputFilter DEFLATE
-        # Netscape 4.x has some problems...
-        BrowserMatch ^Mozilla/4 gzip-only-text/html
-        # Netscape 4.06-4.08 have some more problems
-        BrowserMatch ^Mozilla/4\.0[678] no-gzip
-        # MSIE masquerades as Netscape, but it is fine
-        BrowserMatch \bMSIE !no-gzip !gzip-only-text/html
-        # Don't compress images
-        SetEnvIfNoCase Request_URI \.(?:gif|jpe?g|png)$ no-gzip dont-vary
-        # Make sure proxies don't deliver the wrong content
-        Header append Vary User-Agent env=!dont-vary
+        ProxyPassMatch ajp://<%= scope.lookupvar('localconfig::cle_dav_server0') %>/$1
     </LocationMatch>
 
     ErrorDocument 503 http://feynman.rsmart.com/downtime.html

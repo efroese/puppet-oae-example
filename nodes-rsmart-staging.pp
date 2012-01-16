@@ -45,6 +45,16 @@ node /staging-apache[1-2].academic..rsmart.local/ inherits oaenode {
         template   => 'localconfig/balancer-trusted.erb',
     }
 
+    # Server pool for trusted content
+    apache::balancer { "apache-balancer-cle":
+        vhost      => "${http_name}:443",
+        proto      => "ajp",
+        members    => $localconfig::apache_cle_lb_members,
+        params     => [ "timeout=300", "loadfactor=100" ],
+        standbyurl => $localconfig::apache_lb_standbyurl,
+        template   => 'localconfig/balancer-cle.erb',
+    }
+
     # Serve untrusted content from 8443
     # The puppet module takes care of 80 and 443 automatically.
     apache::listen { "8443": }

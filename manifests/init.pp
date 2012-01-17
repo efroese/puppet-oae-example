@@ -9,8 +9,6 @@ class tomcat6 (  $parentdir      = '/usr/local',
              ) {
                     
     $tomcat_url  = "${mirror}/tomcat-6/v${tomcat_version}/bin/apache-tomcat-${tomcat_version}.tar.gz"
-    notice($tomcat_url)
-    $tomcat_name = "localhost"
     $basedir     = "${parentdir}/tomcat"
     $javahome    = "/usr/lib/jvm/java"
 

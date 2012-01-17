@@ -10,6 +10,10 @@
 #
 # $jarfile::       The name of the jar
 #
+# $jav::           The path to java
+#
+# $javamemorymin:: The min java heap size
+#
 # $javamemorymax:: The max java heap size
 #
 # $javapermsize::  The max java perm gen space
@@ -36,6 +40,7 @@
 class oae::app::server( $downloadurl = "",
                         $jarsource = "",
                         $jarfile,
+                        $java="usr/bin/java",
                         $javamemorymax,
                         $javamemorymin,
                         $javapermsize,

@@ -4,7 +4,7 @@ class oae::solr::tomcat (
                     $webapp_url            = 'http://dl.dropbox.com/u/24606888/puppet-oae-files/apache-solr-4.0-SNAPSHOT.war',
                     $solr_context_template = 'oae/solr-context.xml.erb'
                     ){
-    Class['tomcat6'] -> Class['oae::solr::tomcat']
+    Class['tomcat6'] -> Class['oae::solr::commmon'] -> Class['oae::solr::tomcat']
 
     exec { 'download-war':
         cwd => "${oae::params::basedir}/solr/",

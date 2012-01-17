@@ -13,7 +13,7 @@ class localconfig::users {
 		ensure => present,
 		uid    => $localconfig::uid,
 		gid    => $localconfig::gid,
-		home   => $localconfig::basedir,
+		home   => '/home/rsmart',
 		managehome => true
 	}
 	

@@ -21,7 +21,7 @@ node /staging-apache[1-2].academic..rsmart.local/ inherits oaenode {
     apache::module { 'headers': }
 
     # Simple vhost to redirect to 443
-    apache::vhost {
+    apache::vhost { "${http_name}:80":
         template => 'localconfig/vhost-80.conf.erb',
     }
 
@@ -99,7 +99,7 @@ node oaeappnode inherits oaenode {
         javamemorymin  => $localconfig::javamemorymin,
         javamemorymax  => $localconfig::javamemorymax,
         javapermsize   => $localconfig::javapermsize,
-        setenv_template => 'localconfig/stenv.sh.erb',
+        setenv_template => 'localconfig/setenv.sh.erb',
     }
     
     # NFS mounted shated storage for content bodies

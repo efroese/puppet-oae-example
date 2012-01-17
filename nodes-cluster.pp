@@ -195,12 +195,9 @@ node solrnode inherits oaenode {
 
 node 'oae-solr0.localdomain' inherits solrnode {
 
-    class { 'oae::solr::common': 
+    class { 'oae::solr::tomcat':
         master_url => "$localconfig::solr_remoteurl/replication",
         solrconfig => 'localconfig/master-solrconfig.xml.erb',
-    }
-
-    class { 'oae::solr::tomcat':
         tomcat_user  => $localconfig::user,
         tomcat_group => $localconfig::group, 
     }
@@ -208,12 +205,9 @@ node 'oae-solr0.localdomain' inherits solrnode {
 
 node /oae-solr[1-3].localdomain/ inherits solrnode {
 
-    class { 'oae::solr::common': 
+    class { 'oae::solr::tomcat':
         master_url => "$localconfig::solr_remoteurl/replication",
         solrconfig => 'localconfig/slave-solrconfig.xml.erb',
-    }
-
-    class { 'oae::solr::tomcat':
         tomcat_user  => $localconfig::user,
         tomcat_group => $localconfig::group, 
     }

@@ -59,10 +59,10 @@ class localconfig {
 
     ###########################################################################
     # App servers
-    $version_oae   = '1.1'
     $jarsource     = '/home/rsmart/com.rsmart.academic.app-1.1.0-M1-QA1.jar'
     $jarfile       = 'com.rsmart.academic.app-1.1.0-M1-QA1.jar'
     $javamemorymax = '4096'
+    $javamemorymin = '4096'
     $javapermsize  = '256'
 
     # These hosts can access /system/console

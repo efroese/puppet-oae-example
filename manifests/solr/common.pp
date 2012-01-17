@@ -33,7 +33,7 @@ class oae::solr::common (
                 $solr_home_tarball = "http://dl.dropbox.com/u/24606888/puppet-oae-files/home0.tgz",
                 $solrconfig        = 'oae/solrconfig.xml.erb', 
                 $schema            = 'oae/schema.xml.erb',
-                $master_url) {
+                $master_url        = 'set the master url') {
 
     # Home for standalone solr servers
     $solr_basedir = "${oae::params::basedir}/solr"

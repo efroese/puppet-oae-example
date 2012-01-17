@@ -28,7 +28,22 @@
 #   }
 #
 
-class oae::solr::jetty() {
+class oae::solr::jetty(
+                    $solr_git          = "http://github.com/sakaiproject/solr.git",
+                    $solr_tag          = "",
+                    $solr_home_tarball = "http://dl.dropbox.com/u/24606888/puppet-oae-files/home0.tgz",
+                    $solrconfig        = 'oae/solrconfig.xml.erb',
+                    $schema            = 'oae/schema.xml.erb',
+                    $master_url        = 'set the master url' ) {
+
+    class { 'oae::solr::common':
+        solr_git => $solr_git,
+        solr_tag => $solr_tag,
+        solr_home_tarball => $solr_home_tarball,
+        solrconfig => $solrconfig,
+        schema => $schema,
+        master_url => $master_url,
+    }
 
     file { '/etc/init.d/solr':
         ensure => present,

@@ -36,7 +36,10 @@
 class oae::app::server( $downloadurl = "",
                         $jarsource = "",
                         $jarfile,
-                        $javamemorymax, $javapermsize) {
+                        $javamemorymax,
+                        $javamemorymin,
+                        $javapermsize,
+                        $setenv_template='oae/setenv.sh.erb') {
 
     Class['oae::app::setup'] -> Class['oae::app::server']
 
@@ -48,6 +51,15 @@ class oae::app::server( $downloadurl = "",
         group   => $oae::params::user,
         mode    => '0644',
         source  => "puppet:///modules/oae/nakamura.properties",
+        notify  => Service['sakaioae']
+    }
+
+    file { "${oae::params::basedir}/bin/setenv.sh":
+        ensure => present,
+        owner   => $oae::params::user,
+        group   => $oae::params::user,
+        mode    => '0755',
+        content  => template($setenv_template),
         notify  => Service['sakaioae']
     }
 

@@ -9,8 +9,9 @@ class oae::app::setup {
 
     $sling_dir  = "${oae::params::basedir}/sling"
     $config_dir = "${sling_dir}/config"
+    $bin_dir    = "${oae::params::basedir}/bin"
 
-    file { [ $jar_dir, $sling_dir, $config_dir, $log_dir,]:
+    file { [ $jar_dir, $sling_dir, $config_dir, $log_dir, $bin_dir]:
         ensure => directory,
         owner  => $oae::params::user,
         group  => $oae::params::user,

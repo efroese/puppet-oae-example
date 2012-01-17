@@ -27,7 +27,7 @@ echo "$0 {stop | start | debug | restart | status}"
 
 start() {
 echo -n "Starting SakaiOAE: "
-su --login --command "${JAVA_BIN} ${JAVA_OPTS} ${SAKAIOAE_JAVA_OPTS} ${SAKAIOAE_CLUSTER_JAVA_OPTS} -jar ${SAKAIOAE_JAR} > /dev/null 2>&1 &" ${SAKAIOAE_USER}
+su --login --command "cd ${SAKAIOAE_HOME} && ${JAVA_BIN} ${JAVA_OPTS} ${SAKAIOAE_JAVA_OPTS} ${SAKAIOAE_CLUSTER_JAVA_OPTS} -jar ${SAKAIOAE_JAR} > /dev/null 2>&1 &" ${SAKAIOAE_USER}
 echo $$ > ${INIT_PID};
 echo "done.";
 }
@@ -35,7 +35,7 @@ echo "done.";
 debug() {
     echo -n "Starting SakaiOAE with JVM remote debugging port 8500: "
     SAKAIOAE_JAVA_DEBUG_OPTS="-Xdebug -Xrunjdwp:transport=dt_socket,address=8500,server=y,suspend=n"
-    su --login --command "${JAVA_BIN} ${JAVA_OPTS} ${SAKAIOAE_JAVA_OPTS} ${SAKAIOAE_JAVA_DEBUG_OPTS} ${SAKAIOAE_CLUSTER_JAVA_OPTS} -jar ${SAKAIOAE_JAR} > /dev/null 2>&1 &" ${SAKAIOAE_USER}
+    su --login --command "cd ${SAKAIOAE_HOME} && ${JAVA_BIN} ${JAVA_OPTS} ${SAKAIOAE_JAVA_OPTS} ${SAKAIOAE_JAVA_DEBUG_OPTS} ${SAKAIOAE_CLUSTER_JAVA_OPTS} -jar ${SAKAIOAE_JAR} > /dev/null 2>&1 &" ${SAKAIOAE_USER}
     echo $$ > ${INIT_PID};
     echo "done.";
 }

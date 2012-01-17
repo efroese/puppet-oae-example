@@ -34,7 +34,7 @@ class tomcat6 (  $parentdir      = '/usr/local',
     file { $basedir: 
         ensure => link,
         target => "${parentdir}/apache-tomcat-${tomcat_version}",
-        require => Exec["unpack-apache-tomcat-${tomcat_version}"],
+        require => Exec["chown-apache-tomcat-${tomcat_version}"],
     }
 
     file { "/etc/init.d/tomcat": 
@@ -43,6 +43,7 @@ class tomcat6 (  $parentdir      = '/usr/local',
         group  => root,
         mode   => 0755,
         content => template('tomcat6/tomcat.init.erb'),
+        require => File[$basedir],
     }
 
     file { "${basedir}/conf/tomcat-users.xml": 
@@ -51,7 +52,7 @@ class tomcat6 (  $parentdir      = '/usr/local',
         group  => root,
         mode   => 0644,
         content => template($tomcat_users_template),
-        require => Exec["unpack-apache-tomcat-${tomcat_version}"],
+        require => Exec["chown-apache-tomcat-${tomcat_version}"],
     }
 
     file { "${basedir}/conf/Catalina":
@@ -59,7 +60,7 @@ class tomcat6 (  $parentdir      = '/usr/local',
         owner  => $tomcat_user,
         group  => $tomcat_group,
         mode   => 0744,
-        require => Exec["unpack-apache-tomcat-${tomcat_version}"],
+        require => Exec["chown-apache-tomcat-${tomcat_version}"],
     }
 
     file { "${basedir}/conf/Catalina/localhost":

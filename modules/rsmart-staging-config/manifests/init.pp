@@ -27,6 +27,10 @@ class localconfig {
     $cle_server  = '10.53.10.17'
     # staging-dbserv1
     $db_server   = '10.53.10.10'
+    # solr master server
+    $solr_master = '10.50.10.42'
+    # solr slave server
+    $solr_slave0 = '10.50.10.47' # TODO fix!
     
 
     ###########################################################################
@@ -38,9 +42,9 @@ class localconfig {
     $db_password = 'ironchef'
 
     ###########################################################################
-    $storedir    = "${basedir}/store"
-    $nfs_share   = '/export/oae-staging'
-    $nfs_options = 'defaults'
+    $storedir    = "/files-academic"
+    $nfs_share   = '/files-academic'
+    $nfs_options = 'rw,rsize=8192,wsize=8192,addr=10.53.10.13'
 
     ###########################################################################
     # Git (Preview processor)
@@ -76,8 +80,6 @@ class localconfig {
     $ehcache_tcp_port = '40001'
 
     # solr
-    $solr_master = '10.50.10.42'
-    $solr_slave0 = '10.50.10.47' # TODO fix!
     $solr_remoteurl = "http://${solr_master}:8983/solr"
     $solr_queryurls = "http://${solr_master}:8983/solr|http://${solr_slave0}:8983/solr"
 }

@@ -118,7 +118,8 @@ define apache::vhost-ssl (
   $enable_default=true,
   $ports=['*:80'],
   $sslports=['*:443'],
-  $accesslog_format="combined"
+  $accesslog_format="combined",
+  $template='apache/vhost.erb'
 ) {
 
   # these 2 values are required to generate a valid SSL certificate.
@@ -192,6 +193,7 @@ define apache::vhost-ssl (
     enable_default => $enable_default,
     ports          => $ports,
     accesslog_format => $accesslog_format,
+    template       => $template,
   }
 
   if $ensure == "present" {

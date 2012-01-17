@@ -45,7 +45,7 @@ node /staging-apache[1-2].academic..rsmart.local/ inherits oaenode {
         template   => 'localconfig/balancer-trusted.erb',
     }
 
-    # Server pool for trusted content
+    # Server pool for CLE
     apache::balancer { "apache-balancer-cle":
         vhost      => "${http_name}:443",
         proto      => "ajp",
@@ -175,6 +175,7 @@ node oaeappnode inherits oaenode {
         }
     }
 
+    # CLE integration
     oae::app::server::sling_config { "org/sakaiproject/nakamura/basiclti/CLEVirtualToolDataProvider.config":
         dirname => "org/sakaiproject/nakamura/basiclti",
         config => {
@@ -183,18 +184,27 @@ node oaeappnode inherits oaenode {
             'sakai.cle.basiclti.key'    => "12345",
         }
     }
+
+    # QoS filter
+    oae::app::server::sling_config { "org/sakaiproject/nakamura/http/qos/QoSFilter.config":
+        dirname => "org/sakaiproject/nakamura/http/qos",
+        config => {
+            'qos.default.limit' => 50,
+        }
+    }
 }
 
 node 'staging-app1.academic.rsmart.local' inherits oaeappnode {
     class { 'oae::app::ehcache':
-        peers       => [$localconfig::app_server2,],
+        # 2 nodes, each others peer.
+        peers       => [ $localconfig::app_server2, ],
         tcp_address => $localconfig::ehcache_tcp_port,
     }
 }
 
 node 'staging-app2.academic.rsmart.local' inherits oaeappnode {
     class { 'oae::app::ehcache':
-        peers       => [$localconfig::app_server1,],
+        peers       => [ $localconfig::app_server1, ],
         tcp_address => $localconfig::ehcache_tcp_port,
     }
 }

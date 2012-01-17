@@ -1,7 +1,7 @@
 class localconfig::hosts {
     # rSmart OAE 1.1 staging cluster 
 
-    host { 'staging-lb0':
+    host { 'staging-apache1':
         # 50.18.195.239  -> 10.53.9.10      load balancer (apache)
         ensure => present,
         ip => '10.53.9.10',

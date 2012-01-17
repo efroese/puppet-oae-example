@@ -19,6 +19,7 @@ node 'staging-apache1.academic.rsmart.local' inherits oaenode {
 
     # Headers is not in the default set of enabled modules
     apache::module { 'headers': }
+    apache::module { 'deflate': }
 
     # Simple vhost to redirect to 443
     apache::vhost { "${http_name}:80":

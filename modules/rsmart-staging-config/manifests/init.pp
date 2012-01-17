@@ -44,7 +44,7 @@ class localconfig {
     ###########################################################################
     $storedir    = "/files-academic"
     $nfs_share   = '/files-academic'
-    $nfs_options = 'rw,rsize=8192,wsize=8192,addr=10.53.10.13'
+    $nfs_options = '_netdev,rw,rsize=8192,wsize=8192'
 
     ###########################################################################
     # Git (Preview processor)

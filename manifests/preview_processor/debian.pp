@@ -17,10 +17,4 @@ class oae::preview_processor::debian {
 
     package { $packagelist: ensure => installed }
 
-    cron { 'run_preview_processor':
-        command => "${oae::preview_processor::basedir}/bin/run_preview_processor.sh",
-        user => $oae::params::user,
-        ensure => present,
-        minute => '*',
-    }
 }

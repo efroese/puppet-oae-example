@@ -55,4 +55,16 @@ class oae::preview_processor::init ($nakamura_git, $nakamura_tag="") {
         group  => root,
         mode   => 755,
     }
+    
+    $full_os = "${operatingsystem}${lsbmajdistrelease}"
+
+    cron { 'run_preview_processor':
+        command => $full_os ? {
+            /CentOS5|RedHat5/ => "PATH=/opt/local/bin:\$PATH ${oae::params::basedir}/bin/run_preview_processor.sh",
+            default           => "${oae::params::basedir}/bin/run_preview_processor.sh",
+        },
+        user => $oae::params::user,
+        ensure => present,
+        minute => '*',
+    }
 }

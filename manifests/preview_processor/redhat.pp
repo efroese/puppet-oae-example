@@ -47,26 +47,11 @@ class oae::preview_processor::redhat {
             command => "/sbin/ldconfig",
             unless  => 'ldd /opt/local/bin/ruby  | grep libruby.so.1.9'
         } 
-
-        cron { 'run_preview_processor':
-            command => "PATH=/opt/local/bin:\$PATH ${oae::params::basedir}/bin/run_preview_processor.sh",
-            user => $oae::params::user,
-            ensure => present,
-            minute => '*',
-        }
     } 
 
     # CentOS 6, RHEL 6
     if $lsbmajdistrelease == '6' {
-
         $centos6_pkgs = ['cronie', 'curlpp-devel', 'ImageMagick', 'ImageMagick-devel', 'ruby-devel']
         package { $centos6_pkgs: ensure => installed }
-
-        cron { 'run_preview_processor':
-            command => "${oae::params::basedir}/bin/run_preview_processor.sh",
-            user   => $oae::params::user,
-            ensure => present,
-            minute => '*',
-        }
     }
 }

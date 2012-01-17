@@ -99,6 +99,7 @@ node oaeappnode inherits oaenode {
         javamemorymin  => $localconfig::javamemorymin,
         javamemorymax  => $localconfig::javamemorymax,
         javapermsize   => $localconfig::javapermsize,
+        setenv_template => 'localconfig/stenv.sh.erb',
     }
     
     # NFS mounted shated storage for content bodies

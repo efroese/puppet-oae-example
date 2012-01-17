@@ -11,7 +11,7 @@
 # Apache load balancer
 #
 
-node /staging-apache[1-2].academic..rsmart.local/ inherits oaenode {
+node 'staging-apache1.academic.rsmart.local' inherits oaenode {
 
     $http_name = $localconfig::http_name
 

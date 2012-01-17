@@ -62,6 +62,7 @@ class oae::solr::common (
     exec { 'download-solr-home':
         command => "curl -o ${solr_basedir}/home0.tgz ${solr_home_tarball}",
         creates => "${solr_basedir}/home0.tgz",
+        require => $solr_basedir,
     }
 
     exec { 'unpack-solr-home':

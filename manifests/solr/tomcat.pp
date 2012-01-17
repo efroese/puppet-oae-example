@@ -25,7 +25,6 @@ class oae::solr::tomcat (
         cwd => "${oae::params::basedir}/solr/",
         command => "curl -o solr.war http://dl.dropbox.com/u/24606888/puppet-oae-files/apache-solr-4.0-SNAPSHOT.war",
         creates => "${oae::params::basedir}/solr/solr.war",
-        require => File["${oae::params::basedir}/solr/"],
     }
 
     file { "${oae::params::basedir}/tomcat/conf/Catalina/localhost/solr.xml":

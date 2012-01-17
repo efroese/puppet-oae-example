@@ -28,10 +28,10 @@ class localconfig {
     # staging-dbserv1
     $db_server   = '10.53.10.10'
     # solr master server
-    $solr_master = '10.50.10.42'
-    # solr slave server
-    $solr_slave0 = '10.50.10.47' # TODO fix!
-    
+    $solr_master = '10.53.10.21'
+    # solr slave servers
+    $solr_slave0 = '10.53.10.22'
+    $solr_slave1 = '10.53.10.23'
 
     ###########################################################################
     # Database setup
@@ -80,6 +80,6 @@ class localconfig {
     $ehcache_tcp_port = '40001'
 
     # solr
-    $solr_remoteurl = "http://${solr_master}:8983/solr"
-    $solr_queryurls = "http://${solr_master}:8983/solr|http://${solr_slave0}:8983/solr"
+    $solr_remoteurl = "http://${solr_master}:8080/solr"
+    $solr_queryurls = "http://${solr_master}:8080/solr|http://${solr_slave0}:8080/solr|http://${solr_slave1}:8080/solr"
 }

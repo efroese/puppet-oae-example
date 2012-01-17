@@ -20,8 +20,9 @@ Contains hard coded IP addresses and port numbers that may need changing. -->
 		    properties="peerDiscovery=automatic,
                         multicastGroupAddress=<%= mcast_address %>,
                         multicastGroupPort=<%= mcast_port %>, timeToLive=1"
-		    propertySeparator="," />
+		    propertySeparator=","
 		<% end %>
+	/>
 
 	<cacheManagerPeerListenerFactory
 		class="net.sf.ehcache.distribution.RMICacheManagerPeerListenerFactory"

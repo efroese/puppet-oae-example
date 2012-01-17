@@ -10,8 +10,8 @@ class localconfig {
     # OS
     $user    = 'rsmart'
     $group   = 'rsmart'
-    $uid     = 8080
-    $gid     = 8080
+    $uid     = 500
+    $gid     = 500
     $basedir = '/home/rsmart'
 
     ###########################################################################

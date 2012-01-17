@@ -31,6 +31,7 @@ node 'staging-apache1.academic.rsmart.local' inherits oaenode {
         cert     => "/etc/pki/tls/certs/rsmart.com.crt",
         certkey  => "/etc/pki/tls/private/rsmart.com.key",
         certchain => "/etc/pki/tls/certs/rsmart.com-intermediate.crt",
+        template  => 'localconfig/vhost-443.conf.erb',
     }
 
     # Server pool for trusted content
@@ -65,6 +66,7 @@ node 'staging-apache1.academic.rsmart.local' inherits oaenode {
         cert     => "/etc/pki/tls/certs/rsmart.com.crt",
         certkey  => "/etc/pki/tls/private/rsmart.com.key",
         certchain => "/etc/pki/tls/certs/rsmart.com-intermediate.crt",
+        template  => 'localconfig/vhost-8443.conf.erb',
     }
 
     # Server pool for untrusted content

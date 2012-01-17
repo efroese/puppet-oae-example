@@ -222,13 +222,25 @@ node solrnode inherits oaenode {
             parentdir => "${localconfig::basedir}",
             tomcat_user           => $localconfig::user,
             tomcat_group          => $localconfig::group,
-            admin_user            => 'tomcat',
-            admin_password        => 'wolverine',
+            admin_user            => $localconfig::tomcat_user,
+            admin_password        => $localconfig::tomcat_password,
+    }
+
+    class { 'oae::solr::tomcat':
+         tomcat_user => $localconfig::user,
+         tomcat_group => $localconfig::group,
     }
 }
 
 node 'staging-solr1.academic.rsmart.local' inherits solrnode {
-    class { 'oae::solr::tomcat': 
+    class { 'oae::solr::common':
+        master_url => "${localconfig::solr_remoteurl}/replication",
+        solrconfig => 'localconfig/master-solrconfig.xml.erb',
+    }
+}
+
+node /staging-solr[2-3].academic.rsmart.local/ inherits solrnode {
+    class { 'oae::solr::common':
         master_url => "${localconfig::solr_remoteurl}/replication",
         solrconfig => 'localconfig/master-solrconfig.xml.erb',
     }

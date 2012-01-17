@@ -82,4 +82,7 @@ class localconfig {
     # solr
     $solr_remoteurl = "http://${solr_master}:8080/solr"
     $solr_queryurls = "http://${solr_master}:8080/solr|http://${solr_slave0}:8080/solr|http://${solr_slave1}:8080/solr"
+
+    $tomcat_user    = 'admin'
+    $tomcat_password = 't0msm@rt!'
 }

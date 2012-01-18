@@ -27,6 +27,7 @@ Contains hard coded IP addresses and port numbers that may need changing. -->
 	<cacheManagerPeerListenerFactory
 		class="net.sf.ehcache.distribution.RMICacheManagerPeerListenerFactory"
 		properties="hostName=<%= tcp_address %>,
+		            <% if remote_object_port != "" -%>remoteObjectPort=<%= remote_object_port %>,<% end -%>
                     port=<%= tcp_port %>,
                     socketTimeoutMillis=120000"
 		propertySeparator="," />

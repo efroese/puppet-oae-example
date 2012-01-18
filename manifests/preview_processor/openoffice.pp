@@ -1,3 +1,7 @@
+# = Class: oae::preview_processor::openoffice
+#
+# Install openoffice for the preview processor
+#
 class oae::preview_processor::openoffice {
 
     ###########################################################################

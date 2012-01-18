@@ -1,3 +1,40 @@
+# = Class: oae::solr::tomcat
+#
+# Install solr as a webapp in a tomcat container.
+#
+# == Parameters:
+#
+# $solr_git::     See oae::solr::common
+#
+# $solr_tag::     See oae::solr::common
+#
+# $solr_home_tarball:: A URL to a tarball of the solr home build.
+#
+# $solrconfig::   See oae::solr::common
+#
+# $schema::       See oae::solr::common
+#
+# $master_url::   See oae::solr::common
+#
+# $tomcat_user::  The user tomcat runs as.
+#
+# $tomcat_user::  The group tomcat runs as.
+#
+# $webapp_url::   The url where the solr webapp is (optional)
+#
+# $solr_context_template:: A template used to render the tomcat context xml file (optional)
+#
+# == Actions:
+#   Install a solr server.
+#
+# == Sample Usage:
+# 
+#   class { 'oae::solr::jetty':
+#     solr_tarball => "http://source.sakaiproject.org/release/oae/solr/solr-example.tar.gz",
+#     solrconfig   => 'myconfig/solrconfig.xml.erb',
+#     schema       => 'myconfig/schema.xml.erb',
+#   }
+#
 class oae::solr::tomcat (
                     $solr_git          = "http://github.com/sakaiproject/solr.git",
                     $solr_tag          = "",

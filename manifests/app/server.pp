@@ -18,6 +18,8 @@
 #
 # $javapermsize::  The max java perm gen space
 #
+# $setenv_template::  The template to use to render the setenv.sh file. (optional)
+#
 # == Actions:
 #   Install a Sakai OAE app jar and start it up
 #

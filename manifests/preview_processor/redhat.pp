@@ -1,3 +1,7 @@
+# = Class: oae::preview_processor::redhat
+#
+# Set up the preview processor on a redhat machine
+#
 class oae::preview_processor::redhat {
 
     Class['oae::params'] -> Class['oae::preview_processor::redhat']

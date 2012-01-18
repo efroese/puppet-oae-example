@@ -1,3 +1,14 @@
+# = Class: oae::app::server
+#
+# This class sets up the directories ecesary for an OAE install
+#
+# == Actions:
+#   Create a few directories and links.
+#
+# == Sample Usage:
+#
+#   You don't use this class directly. The oae::app:;server class includes it.
+#
 class oae::app::setup {
 
     Class['oae::params'] -> Class['oae::app::setup']

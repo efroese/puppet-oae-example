@@ -1,4 +1,7 @@
-
+# = Class: oae::preview_processor::gems
+#
+# Set up the ruby gems needed by the preview processor
+#
 class oae::preview_processor::gems {
 
     define opt_gem($version = ""){

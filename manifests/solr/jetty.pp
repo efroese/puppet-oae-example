@@ -27,7 +27,6 @@
 #     schema       => 'myconfig/schema.xml.erb',
 #   }
 #
-
 class oae::solr::jetty(
                     $solr_git          = "http://github.com/sakaiproject/solr.git",
                     $solr_tag          = "",

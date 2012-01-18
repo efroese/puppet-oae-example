@@ -1,3 +1,13 @@
+# = Class: oae::preview_processor
+#
+# Install the OAE preview processor
+#
+# = Parameters
+#
+# $nakamura_git::   The url to your git repository (optional)
+#
+# $nakamura_tag::   The tag to check out (optional)
+#
 class oae::preview_processor::init ($nakamura_git, $nakamura_tag="") {
 
     Class['oae::params'] -> Class['oae::preview_processor::init']

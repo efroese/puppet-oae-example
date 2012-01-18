@@ -12,9 +12,11 @@
 #
 # $peers::          A list of peers. Required only for tcp communication
 #
-# $tcp_address::    Tcp address for cluster communication
+# $tcp_address::    TCP address for cluster communication
 #
-# $tcp_port::       Tcp port for cluster communication
+# $tcp_port::       TCP port for cluster communication
+#
+# $remote_object_port:: Secondary TCP port for cluster communication
 #
 # == Actions:
 #   Configure ehCache on an OAE server
@@ -32,6 +34,7 @@
 #     config_xml    => 'localconfig/ehcacheConfig.xml.erb'
 #     tcp_address => '192.168.1.50',
 #     tcp_port    => '40001',
+#     remote_object_port    => '40002',
 #   }
 class oae::app::ehcache ($config_xml = 'oae/ehcacheConfig.xml.erb',
                          $peers,

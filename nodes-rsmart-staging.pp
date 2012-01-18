@@ -197,6 +197,7 @@ node 'staging-app1.academic.rsmart.local' inherits oaeappnode {
         # 2 nodes, each others peer.
         peers       => [ $localconfig::app_server2, ],
         tcp_address => $ipaddress,
+        remote_object_port => $localconfig::ehcache_remote_object_port,
     }
 }
 
@@ -204,6 +205,7 @@ node 'staging-app2.academic.rsmart.local' inherits oaeappnode {
     class { 'oae::app::ehcache':
         peers       => [ $localconfig::app_server1, ],
         tcp_address => $ipaddress,
+        remote_object_port => $localconfig::ehcache_remote_object_port,
     }
 }
 

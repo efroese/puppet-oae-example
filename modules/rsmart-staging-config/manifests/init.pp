@@ -78,6 +78,7 @@ class localconfig {
 
     # ehcache
     $ehcache_tcp_port = '40001'
+    $ehcache_remote_object_port = '40002'
 
     # solr
     $solr_remoteurl = "http://${solr_master}:8080/solr"

@@ -137,18 +137,22 @@ class oae::app::server( $downloadurl = "",
     #
     # == Parameters
     #
-    # $dirname = The path below sling/config where the config file will be placed.
+    # $name    = The serice pid
     # $config  = A hash of configkey => value to configure the service
     #            Supports strings, booleans, and arrays
     #
-    define sling_config($dirname, $config){
-
+    define sling_config($config){
+        
+        # If your system doesn't have sed, tr, basename, and dirname I'm not configuring it.
+        # And if you complain because your old solaris machine has sed from 1986 I'll get stabby
+        $dirname = generate("dirname `echo ${name} | sed 's/\\./\\//g'`")
+        $basename = generate("basename `echo ${name} | sed 's/\\./\\//g'`")
         $sling_config = "${oae::params::basedir}/sling/config"
-        $config_dir   = "${sling_config}/${dirname}"
 
-        if !defined(Mkdir_p[$config_dir]){
+        # Multiple defines may try to create the same dir. its ok.
+        if !defined(Mkdir_p["${sling_config}/${dirname}"]){
             # create the config file destination
-            mkdir_p { $config_dir:
+            mkdir_p { $dirname:
                 owner => root,
                 group => root,
                 mode => 0644,
@@ -156,12 +160,12 @@ class oae::app::server( $downloadurl = "",
         }
 
         # Write the config file
-        file { "${sling_config}/${name}":
+        file { "${sling_config}/${dirname}/${basename}.config":
             owner => root,
             group => root,
             mode  => 0444,
             content => template("oae/sling_config.erb"),
-            require => Mkdir_p[$config_dir],
+            require => Mkdir_p["${sling_config}/${dirname}"],
         }
     }
 }

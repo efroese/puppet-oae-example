@@ -1,4 +1,4 @@
-service.pid="<%= name[0..-8].gsub('/', '.') %>"
+service.pid="<%= pid %>"
 <% config.each_pair do |key, value| -%>
 <% if value.is_a? String -%>
 <%= key %>=<%= "\"#{value}\"" %>

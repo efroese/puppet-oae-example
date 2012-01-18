@@ -122,8 +122,8 @@ node oaeappnode inherits oaenode {
     }
 
     # Connect OAE to the DB
-    oae::app::server::sling_config { "org/sakaiproject/nakamura/lite/storage/jdbc/JDBCStorageClientPool.config":
-        dirname => "org/sakaiproject/nakamura/lite/storage/jdbc",
+    oae::app::server::sling_config {
+        "org.sakaiproject.nakamura.lite.storage.jdbc.JDBCStorageClientPool":
         config => {
             'jdbc-driver' => $localconfig::db_driver,
             'jdbc-url'    => $localconfig::db_url,
@@ -135,8 +135,8 @@ node oaeappnode inherits oaenode {
     }
 
     # Separates trusted vs untrusted content.
-    oae::app::server::sling_config { "org/sakaiproject/nakamura/http/usercontent/ServerProtectionServiceImpl.config":
-        dirname => "org/sakaiproject/nakamura/http/usercontent",
+    oae::app::server::sling_config {
+        "org.sakaiproject.nakamura.http.usercontent.ServerProtectionServiceImpl":
         config => {
             'disable.protection.for.dev.mode' => false,
             'trusted.hosts'  => [
@@ -148,8 +148,8 @@ node oaeappnode inherits oaenode {
     }
 
     # Solr Client
-    oae::app::server::sling_config { "org/sakaiproject/nakamura/solr/MultiMasterRemoteSolrClient.config":
-        dirname => "org/sakaiproject/nakamura/solr",
+    oae::app::server::sling_config {
+        "org.sakaiproject.nakamura.solr.MultiMasterRemoteSolrClient":
         config => {
             "remoteurl"  => $localconfig::solr_remoteurl,
             "query-urls" => $localconfig::solr_queryurls,
@@ -157,33 +157,27 @@ node oaeappnode inherits oaenode {
     }
 
     # Specify the client type
-    oae::app::server::sling_config { "org/sakaiproject/nakamura/solr/SolrServerServiceImpl.config":
-        dirname => "org/sakaiproject/nakamura/solr",
-        config => {
-            "solr-impl" => "multiremote",
-        }
+    oae::app::server::sling_config {
+        "org.sakaiproject.nakamura.solr.SolrServerServiceImpl":
+        config => { "solr-impl" => "multiremote", }
     }
 
     # Clustering
     # Note that IP address will be evaluated ON the node. Not in this nodetype
-    oae::app::server::sling_config { "org/sakaiproject/nakamura/cluster/ClusterTrackingServiceImpl.config":
-        dirname => 'org/sakaiproject/nakamura/cluster',
-        config => {
-            'secure-host-url' => "http://${ipaddress}:8081",
-        }
+    oae::app::server::sling_config {
+        "org.sakaiproject.nakamura.cluster.ClusterTrackingServiceImpl":
+        config => { 'secure-host-url' => "http://${ipaddress}:8081", }
     }
 
     # Clustered Cache
-    oae::app::server::sling_config { "org/sakaiproject/nakamura/memory/CacheManagerServiceImpl.config":
-        dirname => 'org/sakaiproject/nakamura/memory',
-        config => {
-            'bind-address' => $ipaddress,
-        }
+    oae::app::server::sling_config {
+        "org.sakaiproject.nakamura.memory.CacheManagerServiceImpl":
+        config => { 'bind-address' => $ipaddress, }
     }
 
     # CLE integration
-    oae::app::server::sling_config { "org/sakaiproject/nakamura/basiclti/CLEVirtualToolDataProvider.config":
-        dirname => "org/sakaiproject/nakamura/basiclti",
+    oae::app::server::sling_config {
+        "org.sakaiproject.nakamura.basiclti.CLEVirtualToolDataProvider":
         config => {
             'sakai.cle.basiclti.secret' => "secret",
             'sakai.cle.server.url'      => "https://${http_name}",
@@ -192,11 +186,9 @@ node oaeappnode inherits oaenode {
     }
 
     # QoS filter
-    oae::app::server::sling_config { "org/sakaiproject/nakamura/http/qos/QoSFilter.config":
-        dirname => "org/sakaiproject/nakamura/http/qos",
-        config => {
-            'qos.default.limit' => 50,
-        }
+    oae::app::server::sling_config {
+        "org.sakaiproject.nakamura.http.qos.QoSFilter":
+        config => { 'qos.default.limit' => 50, }
     }
 }
 

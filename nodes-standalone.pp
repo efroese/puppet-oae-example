@@ -27,8 +27,8 @@ node 'oae-app0' inherits basenode {
         javapermsize   => '256',
     }
 
-    oae::app::server::sling_config { "org/sakaiproject/nakamura/lite/storage/jdbc/JDBCStorageClientPool.config":
-        dirname => "org/sakaiproject/nakamura/lite/storage/jdbc",
+    oae::app::server::sling_config {
+        "org.sakaiproject.nakamura.lite.storage.jdbc.JDBCStorageClientPool":
         config => {
             'jdbc-url'    => "jdbc:mysql://localhost/${db}?autoReconnectForPools=true",
             'jdbc-driver' => 'com.mysql.jdbc.Driver',
@@ -37,31 +37,31 @@ node 'oae-app0' inherits basenode {
         }
     }
 
-    oae::app::server::sling_config { "org/sakaiproject/nakamura/http/usercontent/ServerProtectionServiceImpl.config":
-        dirname => "org/sakaiproject/nakamura/http/usercontent",
+    oae::app::server::sling_config {
+        "org.sakaiproject.nakamura.http.usercontent.ServerProtectionServiceImpl":
         config => {
             'disable.protection.for.dev.mode' => false,
             'trusted.hosts'  => " localhost:8080 = http://localhost:8082, ${http_name}:8088 = https://${http_name}:8083 ", 
         }
     }
     
-    oae::app::server::sling_config { "org/sakaiproject/nakamura/proxy/ProxyClientServiceImpl.config":
-        dirname => "org/sakaiproject/nakamura/proxy/",
+    oae::app::server::sling_config {
+        "org.sakaiproject.nakamura.proxy.ProxyClientServiceImpl":
         config => {
             'flickr_api_key' => 'c02231b7a686de2b99648f5862206bc1',
         },
     }
 
-    oae::app::server::sling_config { "org/sakaiproject/nakamura/proxy/SlideshareProxyPreProcessor.config":
-        dirname => "org/sakaiproject/nakamura/proxy/",
+    oae::app::server::sling_config {
+        "org.sakaiproject.nakamura.proxy.SlideshareProxyPreProcessor":
         config => {
             'slideshare.apiKey' => '2YFELizz',
             'slideshare.sharedSecret' => 'TFOCwuxX',
         },
     }
     
-    oae::app::server::sling_config { "org/sakaiproject/nakamura/proxy/TrustedLoginTokenProxyPreProcessor.config":
-        dirname => "org/sakaiproject/nakamura/proxy/",
+    oae::app::server::sling_config {
+        "org.sakaiproject.nakamura.proxy.TrustedLoginTokenProxyPreProcessor":
         config => {
             'hostname' => 'qa1-nl.sakaiproject.org',
             'port'     => '80',
@@ -69,16 +69,16 @@ node 'oae-app0' inherits basenode {
         }
     }
     
-    oae::app::server::sling_config { "org/sakaiproject/nakamura/auth/trusted/TrustedTokenServiceImpl.config":
-        dirname => "org/sakaiproject/nakamura/auth/trusted/",
+    oae::app::server::sling_config {
+        "org.sakaiproject.nakamura.auth.trusted.TrustedTokenServiceImpl":
         config => {
             'sakai.auth.trusted.server.safe-hostsaddress' => "localhost;127.0.0.1;0:0:0:0:0:0:0:1%0;qa1-nl.sakaiproject.org;https://qa1-nl.sakaiproject.org",
             'sakai.auth.trusted.server.secret' => 'default-setting-change-before-use-17678901233445667',
         }
     }
     
-    oae::app::server::sling_config { "org/sakaiproject/nakamura/basiclti/CLEVirtualToolDataProvider.config":
-        dirname => "org/sakaiproject/nakamura/basiclti/",
+    oae::app::server::sling_config {
+        "org.sakaiproject.nakamura.basiclti.CLEVirtualToolDataProvider":
         config => {
              "sakai.cle.server.url" => "https://qa1-nl.sakaiproject.org",
         }

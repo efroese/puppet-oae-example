@@ -143,6 +143,7 @@ class oae::app::server( $downloadurl = "",
     #
     define sling_config($config){
         
+        $pid = $name
         $basename = template('oae/basename.erb')
         $dirname = template('oae/dirname.erb')
         $sling_config = "${oae::params::basedir}/sling/config"

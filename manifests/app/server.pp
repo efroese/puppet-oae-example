@@ -145,8 +145,8 @@ class oae::app::server( $downloadurl = "",
         
         # If your system doesn't have sed, tr, basename, and dirname I'm not configuring it.
         # And if you complain because your old solaris machine has sed from 1986 I'll get stabby
-        $dirname = generate("dirname `echo ${name} | sed 's/\\./\\//g'`")
-        $basename = generate("basename `echo ${name} | sed 's/\\./\\//g'`")
+        $dirname = generate("/usr/bin/dirname `echo ${name} | /bin/sed 's/\\./\\//g'`")
+        $basename = generate("/usr/bin/basename `echo ${name} | /bin/sed 's/\\./\\//g'`")
         $sling_config = "${oae::params::basedir}/sling/config"
 
         # Multiple defines may try to create the same dir. its ok.

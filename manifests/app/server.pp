@@ -143,16 +143,14 @@ class oae::app::server( $downloadurl = "",
     #
     define sling_config($config){
         
-        # If your system doesn't have sed, tr, basename, and dirname I'm not configuring it.
-        # And if you complain because your old solaris machine has sed from 1986 I'll get stabby
-        $dirname = generate("/usr/bin/dirname `echo ${name} | /bin/sed 's/\\./\\//g'`")
-        $basename = generate("/usr/bin/basename `echo ${name} | /bin/sed 's/\\./\\//g'`")
+        $basename = template('oae/basename.erb')
+        $dirname = template('oae/dirname.erb')
         $sling_config = "${oae::params::basedir}/sling/config"
 
         # Multiple defines may try to create the same dir. its ok.
         if !defined(Mkdir_p["${sling_config}/${dirname}"]){
             # create the config file destination
-            mkdir_p { $dirname:
+            mkdir_p { "${sling_config}/${dirname}":
                 owner => root,
                 group => root,
                 mode => 0644,

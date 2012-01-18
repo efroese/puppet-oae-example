@@ -123,19 +123,19 @@ node /oae-app[0-1].localdomain/ inherits oaenode {
         mcast_port    => $localconfig::mcast_port,
     }
     
-    oae::app::server::sling_config { "org/sakaiproject/nakamura/lite/storage/jdbc/JDBCStorageClientPool.config":
-           dirname => "org/sakaiproject/nakamura/lite/storage/jdbc",
-           config => {
-               'jdbc-url'    => $localconfig::db_url,
-               'jdbc-driver' => $localconfig::db_driver,
-               'username'    => $localconfig::db_user,
-               'password'    => $localconfig::db_password,
-           }
-       }
+    oae::app::server::sling_config {
+        "org.sakaiproject.nakamura.lite.storage.jdbc.JDBCStorageClientPool":
+        config => {
+            'jdbc-url'    => $localconfig::db_url,
+            'jdbc-driver' => $localconfig::db_driver,
+            'username'    => $localconfig::db_user,
+            'password'    => $localconfig::db_password,
+        }
+    }
 
     # Separates trusted vs untusted content.
-    oae::app::server::sling_config { "org/sakaiproject/nakamura/http/usercontent/ServerProtectionServiceImpl.config":
-        dirname => "org/sakaiproject/nakamura/http/usercontent",
+    oae::app::server::sling_config {
+        "org.sakaiproject.nakamura.http.usercontent.ServerProtectionServiceImpl":
         config => {
             'disable.protection.for.dev.mode' => false,
             'trusted.hosts'  => [
@@ -147,8 +147,8 @@ node /oae-app[0-1].localdomain/ inherits oaenode {
     }
 
     # Solr Client
-    oae::app::server::sling_config { "org/sakaiproject/nakamura/solr/MultiMasterRemoteSolrClient.config":
-        dirname => "org/sakaiproject/nakamura/solr",
+    oae::app::server::sling_config {
+        "org.sakaiproject.nakamura.solr.MultiMasterRemoteSolrClient":
         config => {
             "remoteurl"  => $localconfig::solr_remoteurl,
             "query-urls" => $localconfig::solr_queryurls,
@@ -156,24 +156,24 @@ node /oae-app[0-1].localdomain/ inherits oaenode {
     }
 
     # Specify the client type
-    oae::app::server::sling_config { "org/sakaiproject/nakamura/solr/SolrServerServiceImpl.config":
-        dirname => "org/sakaiproject/nakamura/solr",
+    oae::app::server::sling_config {
+        "org.sakaiproject.nakamura.solr.SolrServerServiceImpl":
         config => {
             "solr-impl" => "multiremote",
         }
     }
 
     # Clustering
-    oae::app::server::sling_config { "org/sakaiproject/nakamura/cluster/ClusterTrackingServiceImpl.config":
-        dirname => 'org/sakaiproject/nakamura/cluster',
+    oae::app::server::sling_config {
+        "org.sakaiproject.nakamura.cluster.ClusterTrackingServiceImpl":
         config => {
             'secure-host-url' => "http://${ipaddress}:8081",
         }
     }
 
     # Clustered Cache
-    oae::app::server::sling_config { "org/sakaiproject/nakamura/memory/CacheManagerServiceImpl.config":
-        dirname => 'org/sakaiproject/nakamura/memory',
+    oae::app::server::sling_config {
+        "org.sakaiproject.nakamura.memory.CacheManagerServiceImpl":
         config => {
             'bind-address' => $ipaddress,
         }

@@ -194,6 +194,7 @@ node oaeappnode inherits oaenode {
     # Keep an eye on caching in staging
     oae::app::server::sling_config {
         'org.apache.sling.commons.log.LogManager.factory.config-caching':
+	locked => false,
         config => {
             'org.apache.sling.commons.log.names' => ["org.sakaiproject.nakamura.memory","net.sf.ehcache"],
             'org.apache.sling.commons.log.level' => "trace",

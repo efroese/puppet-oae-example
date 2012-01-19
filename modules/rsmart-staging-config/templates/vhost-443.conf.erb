@@ -43,7 +43,7 @@
         deny from all
         <% scope.lookupvar('localconfig::oae_admin_hosts').each do |admin_host| -%>
         allow from <%= admin_host %>
-        <%= end -%>
+        <% end -%>
     </Location>
     
     # /dav and /sakai-axis go to utility server

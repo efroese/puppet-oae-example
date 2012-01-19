@@ -156,7 +156,6 @@ class oae::app::server( $downloadurl = "",
                 owner => $locked ? { false => $oae::params::user, default => 'root' },
                 group => $locked ? { false => $oae::params::group, default => 'root' },
                 mode => 0644,
-                notify => Exec["chown_${config_dir}/org/apache"],
             }
         }
 

@@ -156,6 +156,7 @@ class oae::app::server( $downloadurl = "",
                 owner => $locked ? { false => $oae::params::user, default => 'root' },
                 group => $locked ? { false => $oae::params::group, default => 'root' },
                 mode => 0644,
+                notify  => Exec["chown_sling_config_org_apache"],
             }
         }
 
@@ -167,5 +168,10 @@ class oae::app::server( $downloadurl = "",
             content => template("oae/sling_config.erb"),
             require => Mkdir_p["${sling_config}/${dirname}"],
         }
+    }
+
+    exec { "chown_sling_config_org_apache":
+        refreshonly => true,
+        command => "chown -R ${oae::params::user}:${oae::params::group} ${oae::params::basedir}/sling/config/org/apache",
     }
 }

@@ -73,7 +73,6 @@ class oae::app::server( $downloadurl = "",
     $jar_dest = "${oae::params::basedir}/jars/${jarfile}"
     $app_jar = "${oae::params::basedir}/sakaioae.jar"
 
-
     exec { 'fetch-package':
         command => $downloadurl ? {
             /""/ => "curl --silent ${downloaddir}${jarfile} --output ${jar_dest}",
@@ -142,8 +141,8 @@ class oae::app::server( $downloadurl = "",
     # $name    = The serice pid
     # $config  = A hash of configkey => value to configure the service
     #            Supports strings, booleans, and arrays
-    #
-    define sling_config($config){
+    # $locked  = Lock the config file so only root can edit it.
+    define sling_config($config, $locked = true){
         
         $pid = $name
         $basename = template('oae/basename.erb')
@@ -154,9 +153,10 @@ class oae::app::server( $downloadurl = "",
         if !defined(Mkdir_p["${sling_config}/${dirname}"]){
             # create the config file destination
             mkdir_p { "${sling_config}/${dirname}":
-                owner => root,
-                group => root,
+                owner => $locked ? { false => $oae::params::user, default => 'root' },
+                group => $locked ? { false => $oae::params::group, default => 'root' },
                 mode => 0644,
+                notify => Exec["chown_${config_dir}/org/apache"],
             }
         }
 

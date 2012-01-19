@@ -176,7 +176,7 @@ define apache::vhost-ssl (
     config_file    => $config_file,
     config_content => $config_content ? {
       false => $sslonly ? {
-        true => template("apache/vhost-ssl.erb"),
+        true => template($template, "apache/vhost-ssl.erb"),
         default => template("apache/vhost.erb", "apache/vhost-ssl.erb"),
       },
       default      => $config_content,

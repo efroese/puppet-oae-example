@@ -27,6 +27,6 @@ A cluster of OAE machines. See nodes-cluster.pp for the cluster description.
     puppet apply --modulepath modules site.pp --verbose
 
 ### Required Puppet Modules 
-The OAE module itself is available at https://github.com/efroese/puppet.oae.git.
+The OAE module itself is available at https://github.com/efroese/puppet-oae.git.
 The required modules are included as git submodules in the modules/ directory.
 Most of the modules are from http://github.com/camptocamp. I've forked some of them into http://github.com/efroese 

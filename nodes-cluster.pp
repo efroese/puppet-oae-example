@@ -22,7 +22,7 @@
 # oae-solr2.localdomain - 192.168.1.72 (slave)
 # oae-solr3.localdomain - 192.168.1.73 (slave)
 #
-# Storage tier - One MySQL database node.
+# Storage tier - One Postgres database node.
 # oae-db0.localdomain - 192.168.1.250
 # oae-content.localdomain - 192.168.1.240 # TODO: Create an nfs server.
 #
@@ -226,38 +226,19 @@ node 'oae-preview0.localdomain' inherits oaenode {
 
 ###########################################################################
 #
-# MySQL Database Server
+# Postgres Database Server
 #
 node 'oae-db0.localdomain' inherits oaenode {
 
-    include augeas
-    include mysql::server
+    class { 'postgres': }
 
-    mysql::database { "${localconfig::db}":
-        ensure   => present
+    postgres::database { $localconfig::db:
+        ensure => present,
     }
 
-    mysql::rights { "Set rights for puppet database":
+    postgres::role { $localconfig::db_user:
         ensure   => present,
-        database => $localconfig::db,
-        user     => $localconfig::db_user,
         password => $localconfig::db_password,
-    }
-
-    # R/W from the app nodes
-    mysql::rights { "oae-app0-${localconfig::db}":
-        ensure   => present,
-        database => $localconfig::db_user,
-        user     => $localconfig::db_user,
-        host     => $localconfig::app_server0,
-        password => $localconfig::db_password
-    }
-
-    mysql::rights { "oae-app1-${localconfig::db}":
-        ensure   => present,
-        database => $localconfig::db_user,
-        user     => $localconfig::db_user,
-        host     => $localconfig::app_server1,
-        password => $localconfig::db_password,
+        require  => Postgres::Database[$localconfig::db],
     }
 }

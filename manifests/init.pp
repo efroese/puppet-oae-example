@@ -12,13 +12,23 @@
 # ACTION OF CONTRACT, NEGLIGENCE OR OTHER TORTIOUS ACTION, ARISING OUT OF
 # OR IN CONNECTION WITH THE USE OR PERFORMANCE OF THIS SOFTWARE.
 
-class postgres {
-	package { [postgresql, ruby-postgres, postgresql-server]: ensure => installed }
+class postgres ($postgresql_conf_template='postgres/postgresql.conf.erb'){
 
-    service { postgresql:
+	package { [ 'postgresql', 'ruby-postgres', 'postgresql-server' ]: ensure => installed }
+
+    service { 'postgresql':
         ensure => running,
         enable => true,
         hasstatus => true,
         subscribe => [Package[postgresql-server], Package[postgresql]]
     }
+
+    file { "/var/lib/pgsql/data/postgresql.conf":
+        owner => 'postgres',
+        group => 'postgres',
+        mode  => 0600,
+        content => template($postgresql_conf_template),
+        notify  => Service['postgresql'],
+        require => Package['postgresql-server'],
+    }    
 }

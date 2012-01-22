@@ -2,9 +2,11 @@
 #
 # Nodes
 #
-# make sure that modules/localconfig -> modules/rsmart-config-m1
-# see modules/rsmart-config-m1/manifests.init.pp for the config.
+# make sure that modules/localconfig -> modules/rsmart-staging-config
+# see modules/rsmart-staging-config/manifests.init.pp for the config.
 
+# Install image
+node 'base.academic.rsmart.local' inherits oaenode { }
 
 ###########################################################################
 #

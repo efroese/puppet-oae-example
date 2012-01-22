@@ -15,8 +15,9 @@ class localconfig {
     ###########################################################################
     # Database setup
     $db          = 'nakamura'
-    $db_url      = "jdbc:mysql://192.168.1.250:3306/${db}?autoReconnectForPools\\=true"
-    $db_driver   = 'com.mysql.jdbc.Driver'
+    $db_server   = '192.168.1.250'
+    $db_url      = "jdbc:postgresql://${db_server}/${db}?charSet\\=UTF-8"
+    $db_driver   = 'org.postgresql.Driver'
     $db_user     = 'nakamura'
     $db_password = 'ironchef'
 

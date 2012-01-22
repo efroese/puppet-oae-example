@@ -281,3 +281,24 @@ node 'staging-preview.academic.rsmart.local' inherits oaenode {
         nakamura_tag => $localconfig::nakamura_tag,
     }
 }
+
+###########################################################################
+#
+# Postgres Database Server
+#
+node 'staging-dbserv1.academic.rsmart.local' inherits oaenode {
+
+    class { 'postgres':
+        postgresql_conf_template => 'localconfig/postgresql.conf.erb',
+    }
+
+    postgres::database { $localconfig::db:
+        ensure => present,
+    }
+
+    postgres::role { $localconfig::db_user:
+        ensure   => present,
+        password => $localconfig::db_password,
+        require  => Postgres::Database[$localconfig::db],
+    }
+}

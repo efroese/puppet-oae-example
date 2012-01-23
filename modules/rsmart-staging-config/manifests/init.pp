@@ -65,7 +65,7 @@ class localconfig {
     # App servers
     $jarsource     = '/home/rsmart/com.rsmart.academic.app-1.1.0-M1-QA1.jar'
     $jarfile       = 'com.rsmart.academic.app-1.1.0-M1-QA1.jar'
-    $java          = '/usr/java/latest/bin/java'
+    $java          = '/usr/java/jdk1.6.0_30/bin/java'
     $javamemorymax = '4096'
     $javamemorymin = '4096'
     $javapermsize  = '256'

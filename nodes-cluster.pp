@@ -202,6 +202,13 @@ node 'oae-solr0.localdomain' inherits solrnode {
         tomcat_user  => $localconfig::user,
         tomcat_group => $localconfig::group, 
     }
+
+    oae::solr::backup { "backup-${localconfig::solr_remoteurl}":
+        solr_url   => $localconfig::solr_remoteurl,
+        backup_dir => "${oae::params::basedir}/solr/backups",
+        user       => $oae::params::user,
+        group      => $oae::params::group,
+    }
 }
 
 node /oae-solr[1-3].localdomain/ inherits solrnode {

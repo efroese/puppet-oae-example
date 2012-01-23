@@ -4,7 +4,7 @@ define postgres::clientauth (
     $user,
     $address,
     $method,
-    $option,
+    $option
     ) {
 
     $config_line = "${type} ${db} ${user} ${address} ${method} ${option}"

@@ -12,7 +12,7 @@ class oae::solr {
     #
     # $user::   The user who will own the backups
     #
-    # $pass::   The group who will own the backups
+    # $group::   The group who will own the backups
     #
     # $backup_dir::   A directory to store the backups
     #
@@ -28,7 +28,7 @@ class oae::solr {
     #       group      => $oae::params::group,
     #   }
     #
-    define backup($solr_url, $user, $pass, $backup_dir) {
+    define backup($solr_url, $user, $group, $backup_dir) {
         
         file { $backup_dir:
             ensure => directory,

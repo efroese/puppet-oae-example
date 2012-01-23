@@ -26,93 +26,53 @@ class localconfig::users {
         managehome => true,
     }
 
-    @group { 'lspeelmon': gid => '801' }
+    @group { 'lspeelmon': gid => '501' }
     @user { 'lspeelmon': 
         ensure     => present,
-        uid        => '801',
+        uid        => '501',
         gid        => 'lspeelmon',
         home       => '/home/lspeelmon',
         managehome => true,
+        groups     => ['wheel',],
     }
 
-    @group { 'dgillman': gid => '802' }
+    @group { 'dgillman': gid => '506' }
     @user { 'dgillman': 
         ensure     => present,
-        uid        => '802',
+        uid        => '506',
         gid        => 'dgillman',
         home       => '/home/dgillman',
         managehome => true,
+        groups     => ['wheel',],
     }
 
-    @group { 'cramaker': gid => '803' }
+    @group { 'cramaker': gid => '503' }
     @user { 'cramaker': 
         ensure     => present,
-        uid        => '803',
+        uid        => '503',
         gid        => 'cramaker',
         home       => '/home/cramaker',
         managehome => true,
+        groups     => ['wheel',],
     }
 
-    @group { 'efroese': gid => '804' }
-    @user { 'efroese': 
-        ensure     => present,
-        uid        => '804',
-        gid        => 'efroese',
-        home       => '/home/efroese',
-        managehome => true,
-    }
-
-    @group { 'karagon': gid => '805' }
-    @user { 'karagon': 
-        ensure     => present,
-        uid        => '805',
-        gid        => 'karagon',
-        home       => '/home/karagon',
-        managehome => true,
-    }
-
-    @group { 'efroese': gid => '806' }
-    @user { 'efroese': 
-        ensure     => present,
-        uid        => '806',
-        gid        => 'efroese',
-        home       => '/home/efroese',
-        managehome => true,
-    }
-
-    @group { 'dthomson': gid => '807' }
+    @group { 'dthomson': gid => '502' }
     @user { 'dthomson': 
         ensure     => present,
-        uid        => '807',
+        uid        => '502',
         gid        => 'dthomson',
         home       => '/home/dthomson',
         managehome => true,
+        groups     => ['wheel',],
     }
 
-    @group { 'mflitsch': gid => '808' }
-    @user { 'mflitsch': 
+    @group { 'efroese': gid => '504' }
+    @user { 'efroese':
         ensure     => present,
-        uid        => '808',
-        gid        => 'mflitsch',
-        home       => '/home/mflitsch',
+        uid        => '504',
+        gid        => 'efroese',
+        home       => '/home/efroese',
         managehome => true,
-    }
-
-    @group { 'ppilli': gid => '809' }
-    @user { 'ppilli': 
-        ensure     => present,
-        uid        => '809',
-        gid        => 'ppilli',
-        home       => '/home/ppilli',
-        managehome => true,
-    }
-
-    @group { 'mdesimone': gid => '810' }
-    @user { 'mdesimone': 
-        ensure     => present,
-        uid        => '810',
-        gid        => 'mdesimone',
-        home       => '/home/mdesimone',
-        managehome => true,
+        groups     => ['wheel',],
     }
 }

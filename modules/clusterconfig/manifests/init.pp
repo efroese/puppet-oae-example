@@ -43,9 +43,10 @@ class localconfig {
 
     ###########################################################################
     # App servers
-    $downloadurl   = 'http://192.168.1.124/jars/org.sakaiproject.nakamura.app-1.1-mysql.jar'
+    $downloadurl   = 'http://192.168.1.200/jars/org.sakaiproject.nakamura.app-1.1-postgres.jar'
     $jarfile       = 'org.sakaiproject.nakamura.app-1.1-mysql.jar'
     $javamemorymax = '512'
+    $javamemorymin = '256'
     $javapermsize  = '256'
 
     # oae server protection service

@@ -37,7 +37,7 @@
 #     remote_object_port    => '40002',
 #   }
 class oae::app::ehcache ($config_xml = 'oae/ehcacheConfig.xml.erb',
-                         $peers,
+                         $peers=[],
                          $tcp_address = '',
                          $tcp_port = '40001',
                          $remote_object_port = '',

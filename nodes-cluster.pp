@@ -115,6 +115,7 @@ node /oae-app[0-1].localdomain/ inherits oaenode {
         downloadurl    => $localconfig::downloadurl,
         jarfile        => $localconfig::jarfile,
         javamemorymax  => $localconfig::javamemorymax,
+        javamemorymin  => $localconfig::javamemorymin,
         javapermsize   => $localconfig::javapermsize,
     }
 

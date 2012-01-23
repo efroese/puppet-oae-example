@@ -8,7 +8,7 @@ define postgres::clientauth (
     ) {
 
     if $option == "" {
-        $config_line = "${type} ${db} ${user} ${address} ${method}",
+        $config_line = "${type} ${db} ${user} ${address} ${method}"
     }
     else {
         $config_line = "${type} ${db} ${user} ${address} ${method} ${option}"

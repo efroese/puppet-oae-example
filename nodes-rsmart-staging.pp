@@ -260,6 +260,13 @@ node 'staging-solr1.academic.rsmart.local' inherits solrnode {
         tomcat_user  => $localconfig::user,
         tomcat_group => $localconfig::group,
     }
+
+    oae::solr::backup {
+       solr_url   => $localconfig::solr_remoteurl,
+       backup_dir => "${oae::params::basedir}/solr/backups",
+       user       => $oae::params::user,
+       group      => $oae::params::group,
+    }
 }
 
 node /staging-solr[2-3].academic.rsmart.local/ inherits solrnode {
@@ -300,5 +307,13 @@ node 'staging-dbserv1.academic.rsmart.local' inherits oaenode {
         ensure   => present,
         password => $localconfig::db_password,
         require  => Postgres::Database[$localconfig::db],
+    }
+
+    postgres::clientauth { "host-${localconfig::db}-${localconfig::db_user}-all-md5":
+       type => 'host',
+       db   => $localconfig::db,
+       user => $localconfig::db_user,
+       address => "$ipaddress/24",
+       method  => 'md5',
     }
 }

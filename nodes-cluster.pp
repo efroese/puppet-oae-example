@@ -242,4 +242,12 @@ node 'oae-db0.localdomain' inherits oaenode {
         password => $localconfig::db_password,
         require  => Postgres::Database[$localconfig::db],
     }
+
+    postgres::clientauth { "host-${localconfig::db}-${localconfig::db_user}-all-md5":
+       type => 'host',
+       db   => $localconfig::db,
+       user => $localconfig::db_user,
+       address => "$ipaddress/24",
+       method  => 'md5',
+    }
 }

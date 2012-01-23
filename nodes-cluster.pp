@@ -187,6 +187,8 @@ node /oae-app[0-1].localdomain/ inherits oaenode {
 #
 
 node solrnode inherits oaenode {
+    class { 'oae::solr': }
+
     class { 'tomcat6':
         parentdir => "${localconfig::basedir}/solr",
         tomcat_user  => $localconfig::user,

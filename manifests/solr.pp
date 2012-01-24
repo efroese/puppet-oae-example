@@ -38,7 +38,7 @@ class oae::solr {
         }
         
         cron { "oae-solr-backup-${solr_url}-${backup_dir}":
-            user => root,
+            user => $user,
             command => "curl '${solr_url}/replication?command=backup&location=${backup_dir}'",
             minute  => '0',
             hour    => '*',

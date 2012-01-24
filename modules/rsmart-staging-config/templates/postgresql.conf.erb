@@ -38,16 +38,19 @@
 # The default values of these variables are driven from the -D command-line
 # option or PGDATA environment variable, represented here as ConfigDir.
 
-#data_directory = 'ConfigDir'		# use data in another directory
-					# (change requires restart)
-#hba_file = 'ConfigDir/pg_hba.conf'	# host-based authentication file
-					# (change requires restart)
-#ident_file = 'ConfigDir/pg_ident.conf'	# ident configuration file
-					# (change requires restart)
+# use data in another directory (change requires restart)
+#data_directory = 'ConfigDir'
 
-# If external_pid_file is not explicitly set, no extra PID file is written.
-#external_pid_file = '(none)'		# write an extra PID file
-					# (change requires restart)
+# host-based authentication file (change requires restart)
+#hba_file = 'ConfigDir/pg_hba.conf'
+
+# ident configuration file (change requires restart)
+#ident_file = 'ConfigDir/pg_ident.conf'
+
+# If external_pid_file is not explicitly set, no extra PID file is written. 
+# write an extra PID file
+# (change requires restart)
+#external_pid_file = '(none)'
 
 
 #------------------------------------------------------------------------------
@@ -61,26 +64,33 @@
 					# defaults to 'localhost', '*' = all
 					# (change requires restart)
 listen_addresses = '*'
-#port = 5432				# (change requires restart)
-max_connections = 500			# (change requires restart)
+#port = 5432
+max_connections = 500
 # Note:  Increasing max_connections costs ~400 bytes of shared memory per
 # connection slot, plus lock space (see max_locks_per_transaction).
 #superuser_reserved_connections = 3	# (change requires restart)
 #unix_socket_directory = ''		# (change requires restart)
 #unix_socket_group = ''			# (change requires restart)
-#unix_socket_permissions = 0777		# begin with 0 to use octal notation
-					# (change requires restart)
-#bonjour = off				# advertise server via Bonjour
-					# (change requires restart)
-#bonjour_name = ''			# defaults to the computer name
-					# (change requires restart)
+
+# begin with 0 to use octal notation
+# (change requires restart)
+#unix_socket_permissions = 0777
+
+# advertise server via Bonjour
+# (change requires restart)
+#bonjour = off
+
+# defaults to the computer name
+# (change requires restart)
+#bonjour_name = ''
 
 # - Security and Authentication -
-
+# (change requires restart)
 #authentication_timeout = 1min		# 1s-600s
-#ssl = off				# (change requires restart)
-#ssl_ciphers = 'ALL:!ADH:!LOW:!EXP:!MD5:@STRENGTH'	# allowed SSL ciphers
-					# (change requires restart)
+#ssl = off
+# (change requires restart)
+# allowed SSL ciphers
+#ssl_ciphers = 'ALL:!ADH:!LOW:!EXP:!MD5:@STRENGTH'
 #ssl_renegotiation_limit = 512MB	# amount of data between renegotiations
 #password_encryption = on
 #db_user_namespace = off
@@ -93,13 +103,17 @@ max_connections = 500			# (change requires restart)
 # - TCP Keepalives -
 # see "man 7 tcp" for details
 
-#tcp_keepalives_idle = 0		# TCP_KEEPIDLE, in seconds;
-					# 0 selects the system default
-#tcp_keepalives_interval = 0		# TCP_KEEPINTVL, in seconds;
-					# 0 selects the system default
-#tcp_keepalives_count = 0		# TCP_KEEPCNT;
-					# 0 selects the system default
+# TCP_KEEPIDLE, in seconds;
+# 0 selects the system default
+#tcp_keepalives_idle = 0
 
+# TCP_KEEPINTVL, in seconds;
+# 0 selects the system default
+#tcp_keepalives_interval = 0
+
+# TCP_KEEPCNT;
+# 0 selects the system default
+#tcp_keepalives_count = 0
 
 #------------------------------------------------------------------------------
 # RESOURCE USAGE (except WAL)
@@ -107,18 +121,19 @@ max_connections = 500			# (change requires restart)
 
 # - Memory -
 
-shared_buffers = 5GB			# min 128kB
-					# (change requires restart)
-#temp_buffers = 8MB			# min 800kB
+# (change requires restart)
+shared_buffers = 5GB        # min 128kB
+#temp_buffers = 8MB         # min 800kB
+# (change requires restart)
 #max_prepared_transactions = 0		# zero disables the feature
-					# (change requires restart)
+
 # Note:  Increasing max_prepared_transactions costs ~600 bytes of shared memory
 # per transaction slot, plus lock space (see max_locks_per_transaction).
 # It is not advisable to set max_prepared_transactions nonzero unless you
 # actively intend to use prepared transactions.
-work_mem = 32MB				# min 64kB
-maintenance_work_mem = 128MB		# min 1MB
-#max_stack_depth = 2MB			# min 100kB
+work_mem = 32MB               # min 64kB
+maintenance_work_mem = 128MB  # min 1MB
+#max_stack_depth = 2MB        # min 100kB
 
 # - Kernel Resource Usage -
 
@@ -234,7 +249,6 @@ wal_keep_segments = 32
 					# 0 disables
 #hot_standby_feedback = off		# send info from standby to prevent
 					# query conflicts
-
 
 #------------------------------------------------------------------------------
 # QUERY TUNING
@@ -562,7 +576,6 @@ default_text_search_config = 'pg_catalog.english'
 
 #exit_on_error = off				# terminate session on any error?
 #restart_after_crash = on			# reinitialize after backend crash?
-
 
 #------------------------------------------------------------------------------
 # CUSTOMIZED OPTIONS

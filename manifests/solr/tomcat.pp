@@ -64,7 +64,7 @@ class oae::solr::tomcat (
         creates => "${oae::params::basedir}/solr/solr.war",
     }
 
-    file { "${oae::params::basedir}/tomcat/conf/Catalina/localhost/solr.xml":
+    file { "${oae::params::basedir}/solr/tomcat/conf/Catalina/localhost/solr.xml":
         owner => $tomcat_user,
         group => $tomcat_group,
         mode  => 0644,

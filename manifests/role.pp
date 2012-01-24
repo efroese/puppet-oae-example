@@ -12,23 +12,75 @@
 # ACTION OF CONTRACT, NEGLIGENCE OR OTHER TORTIOUS ACTION, ARISING OUT OF
 # OR IN CONNECTION WITH THE USE OR PERFORMANCE OF THIS SOFTWARE.
 
-define postgres::role($ensure, $password = false, $options = "") {
+define postgres::role(  $ensure,
+                        $password='',
+                        $superuser=false,
+                        $createdb=false,
+                        $createrole=false,
+                        $login=false,
+                        $inherit=false,
+                        $connection_limit=false,
+                        $encrypt=false
+                        ) {
     $passtext = $password ? {
         false => "",
         default => "LOGIN PASSWORD '${password}'"
     }
+
+    $superuser_opt = $superuser ? {
+        false => "--no-superuser",
+        default => "--superuser"
+    }
+
+    $createdb_opt = $superuser ? {
+        false => "--no-createdb",
+        default => "--createdb"
+    }
+
+    $createrole_opt = $createrole ? {
+        false => "--no-createrole",
+        default => "--createrole"
+    }
+
+    $login_opt = $login ? {
+        false => "--no-login",
+        default => "--login"
+    }
+
+    $inherit_opt = $inherit ? {
+        false => "--no-inherit",
+        default => "--inherit"
+    }
+
+    $connection_limit_opt = $connection_limit ? {
+        false => "",
+        default => "--connection_limit ${connection_limit}",
+    }
+
+    $encrypt_opt = $encrypt ? {
+        false => "-N",
+        default => "-E",
+    }
+
     case $ensure {
         present: {
             # The createuser command always prompts for the password.
             exec { "Create $name postgres role":
-                command => "/usr/bin/psql -c \"CREATE ROLE ${name} ${options}\"",
-                user    => "postgres",
+                command => "/usr/bin/createuser ${superuser_opt} ${createdb_opt} ${createrole_opt} ${inherit_opt} ${connection_limit_opt} ${encrypt_opt} ${name}",
+                user    => 'postgres',
                 unless  => "/usr/bin/psql -c '\\du' | grep '^  *${name}  *|'",
+                notify  => Exec["pg-set-password-${name}"],
+            }
+
+            exec { "pg-set-password-${name}":
+                command => "/usr/bin/psql -c \"ALTER ROLE ${name} WITH PASSWORD '${password}' \"",
+                user    => 'postgres',
+                refreshonly => true,
             }
         }
         absent:  {
             exec { "Remove $name postgres role":
-                command => "/usr/bin/dropeuser $name",
+                command => "/usr/bin/dropuser ${name}",
                 user => "postgres",
                 onlyif => "/usr/bin/psql -c '\\du' | grep '${name}  *|'"
             }

@@ -12,6 +12,19 @@
 # ACTION OF CONTRACT, NEGLIGENCE OR OTHER TORTIOUS ACTION, ARISING OUT OF
 # OR IN CONNECTION WITH THE USE OR PERFORMANCE OF THIS SOFTWARE.
 
+# = Class: postgres::database
+#
+# Manage postgres databases
+#
+# == Parameters:
+#
+# $ensure:: create or drop the database
+#
+# $owner:: The owner of the database (optional)
+#
+# == Actions:
+#   Create or drop a postgres database
+#
 define postgres::database($ensure, $create_options = "", $owner = false) {
     $ownerstring = $owner ? {
         false => "",

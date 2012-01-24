@@ -12,6 +12,17 @@
 # ACTION OF CONTRACT, NEGLIGENCE OR OTHER TORTIOUS ACTION, ARISING OUT OF
 # OR IN CONNECTION WITH THE USE OR PERFORMANCE OF THIS SOFTWARE.
 
+# = Class: postgres
+#
+# Manage postgres roles
+#
+# == Parameters:
+#
+# $postgresql_conf_template:: The template for postgresql.conf
+#
+# == Actions:
+#   Install a Postgres server and service.
+#
 class postgres ($postgresql_conf_template='postgres/postgresql.conf.erb'){
 
 	package { [ 'postgresql', 'ruby-postgres', 'postgresql-server' ]: ensure => installed }

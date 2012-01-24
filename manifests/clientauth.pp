@@ -1,3 +1,24 @@
+# = Class: postgres::clientauth
+#
+# Manage postgres client authentication
+#
+# == Parameters:
+#
+# $type::    Authenitcation type
+#
+# $db::      The database name
+#
+# $user::    The user name
+#
+# $address:: Where the user can authenticate from
+#
+# $method::  The authentication method
+#
+# $option::  Other options (optional)
+#
+# == Actions:
+#   Add a clientauth ine to pg_hba.conf
+#
 define postgres::clientauth (
     $type,
     $db,

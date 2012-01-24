@@ -75,8 +75,8 @@ class oae::app::server( $downloadurl = "",
 
     exec { 'fetch-package':
         command => $downloadurl ? {
-            /""/ => "curl --silent ${downloaddir}${jarfile} --output ${jar_dest}",
-            default => "cp ${jarsource} .",
+            /""/ => "cp ${jarsource} .",
+            default => "curl --silent ${downloaddir}${jarfile} --output ${jar_dest}",
         },
         cwd     => "${oae::params::basedir}/jars/",
         creates => $jar_dest,

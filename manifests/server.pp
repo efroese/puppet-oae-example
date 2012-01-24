@@ -1,6 +1,7 @@
 class nfs::server {
   case $operatingsystem {
-    Debian,Ubuntu:  { include nfs::server::debian}
-    default:        { notice "Unsupported operatingsystem ${operatingsystem}" }
+    Debian,Ubuntu:  { include nfs::server::debian }
+    RedHat,CentOS:  { include nfs::server::redhat }
+    default:        { fail "Unsupported operatingsystem ${operatingsystem}" }
   }
 }

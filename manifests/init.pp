@@ -24,8 +24,8 @@ class tomcat6 (  $parentdir      = '/usr/local',
     }
 
     exec { "chown-apache-tomcat-${tomcat_version}":
-        command => "chown -R ${tomcat_user}:${tomcat_group} ${parentdir}/apache-tomcat-${tomcat_version}",
-        unless  => "[ stat -c %U ${parentdir}/apache-tomcat-${tomcat_version} == ${tomcat_user}]",
+        command => "chown -R ${tomcat_user}:${tomcat_group} ${parentdir}/apache-tomcat-${tomcat_version}/{logs,temp,webapps,work}",
+        unless  => "[ `stat -c %U ${parentdir}/apache-tomcat-${tomcat_version}/logs` == ${tomcat_user} ]",
         require => Exec["unpack-apache-tomcat-${tomcat_version}"],
     }
 

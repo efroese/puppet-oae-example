@@ -5,16 +5,10 @@ define nfs::export ($ensure=present,
 
   $concatshare = substitute($share, '/', '-')
   $concatguest = substitute($guest, '/','-')
- 
-  if $options == "" {
-    $content = "${share}     ${guest}\n"
-  } else {
-    $content = "${share}     ${guest}($options)\n"
-  }
-  
+
   common::concatfilepart {"${concatshare}-on-${concatguest}":
     ensure      => $ensure,
-    content     => $content,
+    content     => template('nfs/export-line.erb'),
     file        => "/etc/exports",
     notify      => Exec['reload_nfs_srv'],
   }

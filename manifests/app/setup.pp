@@ -21,8 +21,9 @@ class oae::app::setup {
     $sling_dir  = "${oae::params::basedir}/sling"
     $config_dir = "${sling_dir}/config"
     $bin_dir    = "${oae::params::basedir}/bin"
+    $save_dir    = "${oae::params::basedir}/save"
 
-    file { [ $jar_dir, $sling_dir, $config_dir, $log_dir, $bin_dir]:
+    file { [ $jar_dir, $sling_dir, $config_dir, $log_dir, $bin_dir, $save_dir]:
         ensure => directory,
         owner  => $oae::params::user,
         group  => $oae::params::user,
@@ -42,6 +43,25 @@ class oae::app::setup {
         group  => root,
         mode   => 0644,
     }
+
+    define linked_oae_dir() {
+        file { "${save_dir}/${name}":
+            ensure => directory,
+            owner  => $oae::params::user,
+            group  => $oae::params::group,
+            mode   => 0755,
+            require => File[$save_dir],
+        }
+
+        file { "${sling_dir}/${name}":
+            ensure => link,
+            target => "${save_dir}/${name}",
+            require => [ File["${save_dir}/${name}"], File[$sling_dir] ],
+        }
+    }
+
+    linked_oae_dir { 'activemq-data': }
+    linked_oae_dir { 'solr': }
 
     # The sling logging bundle causes the config admin service to write configs under org/apache/sling/...
     # TODO: we may want to tighten up the perms in this directory to avoid runtime reconfigurations

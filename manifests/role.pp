@@ -12,6 +12,31 @@
 # ACTION OF CONTRACT, NEGLIGENCE OR OTHER TORTIOUS ACTION, ARISING OUT OF
 # OR IN CONNECTION WITH THE USE OR PERFORMANCE OF THIS SOFTWARE.
 
+# = Class: postgres::role
+#
+# Manage postgres roles
+#
+# == Parameters:
+#
+# $ensure::
+#
+# $password::   The password for the role
+#
+# $superuser::  Is this user a superuser?
+#
+# $createdb::   Can this user create databases.
+#
+# $createrole:: Can this user create roles.
+#
+# $login::      Can this role log in
+#
+# $inherit::    Role inherits privileges of roles it is a member of
+#
+# $encrypt::    Encrypt stored password
+#
+# == Actions:
+#   Install or remove a Postgres role.
+#
 define postgres::role(  $ensure,
                         $password='',
                         $superuser=false,
@@ -23,42 +48,42 @@ define postgres::role(  $ensure,
                         $encrypt=false
                         ) {
     $passtext = $password ? {
-        false => "",
+        false   => "",
         default => "LOGIN PASSWORD '${password}'"
     }
 
     $superuser_opt = $superuser ? {
-        false => "--no-superuser",
+        false   => "--no-superuser",
         default => "--superuser"
     }
 
     $createdb_opt = $superuser ? {
-        false => "--no-createdb",
+        false   => "--no-createdb",
         default => "--createdb"
     }
 
     $createrole_opt = $createrole ? {
-        false => "--no-createrole",
+        false   => "--no-createrole",
         default => "--createrole"
     }
 
     $login_opt = $login ? {
-        false => "--no-login",
+        false   => "--no-login",
         default => "--login"
     }
 
     $inherit_opt = $inherit ? {
-        false => "--no-inherit",
+        false   => "--no-inherit",
         default => "--inherit"
     }
 
     $connection_limit_opt = $connection_limit ? {
-        false => "",
+        false   => "",
         default => "--connection_limit ${connection_limit}",
     }
 
     $encrypt_opt = $encrypt ? {
-        false => "-N",
+        false   => "-N",
         default => "-E",
     }
 
@@ -73,16 +98,16 @@ define postgres::role(  $ensure,
             }
 
             exec { "pg-set-password-${name}":
-                command => "/usr/bin/psql -c \"ALTER ROLE ${name} WITH PASSWORD '${password}' \"",
-                user    => 'postgres',
+                command     => "/usr/bin/psql -c \"ALTER ROLE ${name} WITH PASSWORD '${password}' \"",
+                user        => 'postgres',
                 refreshonly => true,
             }
         }
         absent:  {
             exec { "Remove $name postgres role":
                 command => "/usr/bin/dropuser ${name}",
-                user => "postgres",
-                onlyif => "/usr/bin/psql -c '\\du' | grep '${name}  *|'"
+                user    => "postgres",
+                onlyif  => "/usr/bin/psql -c '\\du' | grep '${name}  *|'"
             }
         }
         default: {

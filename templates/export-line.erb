@@ -1,1 +1,1 @@
-<% guests.each do |guest, options| -%><%= share %>	<%= guest %>(<%= options %>)<% end %>
+<% guests.each do |guest| -%><%= share %>	<%= guest[0] %>(<%= guest[1] %>)<% end %>

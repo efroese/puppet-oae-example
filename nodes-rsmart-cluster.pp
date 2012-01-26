@@ -2,8 +2,8 @@
 #
 # Nodes
 #
-# make sure that modules/localconfig -> modules/rsmart-staging-config
-# see modules/rsmart-staging-config/manifests.init.pp for the config.
+# make sure that modules/localconfig -> modules/rsmart-config
+# see modules/rsmart-config/manifests.init.pp for the config.
 
 # Install image
 node 'base.academic.rsmart.local' inherits oaenode { }
@@ -12,7 +12,7 @@ node 'base.academic.rsmart.local' inherits oaenode { }
 #
 # Apache load balancer
 #
-node 'staging-apache1.academic.rsmart.local' inherits oaenode {
+node 'apache1.academic.rsmart.local' inherits oaenode {
 
     class { 'apache::ssl': }
 
@@ -221,7 +221,7 @@ node oaeappnode inherits oaenode {
     }
 }
 
-node 'staging-app1.academic.rsmart.local' inherits oaeappnode {
+node 'app1.academic.rsmart.local' inherits oaeappnode {
     class { 'oae::app::ehcache':
         # 2 nodes, each others peer.
         peers       => [ $localconfig::app_server2, ],
@@ -230,7 +230,7 @@ node 'staging-app1.academic.rsmart.local' inherits oaeappnode {
     }
 }
 
-node 'staging-app2.academic.rsmart.local' inherits oaeappnode {
+node 'app2.academic.rsmart.local' inherits oaeappnode {
     class { 'oae::app::ehcache':
         peers       => [ $localconfig::app_server1, ],
         tcp_address => $ipaddress,
@@ -253,7 +253,7 @@ node solrnode inherits oaenode {
     }
 }
 
-node 'staging-solr1.academic.rsmart.local' inherits solrnode {
+node 'solr1.academic.rsmart.local' inherits solrnode {
     class { 'oae::solr::tomcat':
         master_url   => "${localconfig::solr_remoteurl}/replication",
         solrconfig   => 'localconfig/master-solrconfig.xml.erb',
@@ -269,7 +269,7 @@ node 'staging-solr1.academic.rsmart.local' inherits solrnode {
     }
 }
 
-node /staging-solr[2-3].academic.rsmart.local/ inherits solrnode {
+node /solr[2-3].academic.rsmart.local/ inherits solrnode {
     class { 'oae::solr::tomcat':
         master_url   => "${localconfig::solr_remoteurl}/replication",
         solrconfig   => 'localconfig/slave-solrconfig.xml.erb',
@@ -282,7 +282,7 @@ node /staging-solr[2-3].academic.rsmart.local/ inherits solrnode {
 #
 # OAE Content Preview Processor Node
 #
-node 'staging-preview.academic.rsmart.local' inherits oaenode {
+node 'preview.academic.rsmart.local' inherits oaenode {
     class { 'oae::preview_processor::init': 
         nakamura_git => $localconfig::nakamura_git,
         nakamura_tag => $localconfig::nakamura_tag,
@@ -293,7 +293,7 @@ node 'staging-preview.academic.rsmart.local' inherits oaenode {
 #
 # Postgres Database Server
 #
-node 'staging-dbserv1.academic.rsmart.local' inherits oaenode {
+node 'dbserv1.academic.rsmart.local' inherits oaenode {
 
     class { 'postgres':
         postgresql_conf_template => 'localconfig/postgresql.conf.erb',

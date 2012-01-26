@@ -335,7 +335,7 @@ node 'dbserv1.academic.rsmart.local' inherits oaenode {
        type => 'host',
        db   => $localconfig::db,
        user => $localconfig::db_user,
-       address => "$ipaddress/24",
+       address => "all",
        method  => 'md5',
     }
     

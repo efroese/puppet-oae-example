@@ -258,7 +258,7 @@ node 'solr1.academic.rsmart.local' inherits solrnode {
         master_url   => "${localconfig::solr_remoteurl}/replication",
         solrconfig   => 'localconfig/master-solrconfig.xml.erb',
         tomcat_home  => "${localconfig::basedir}/tomcat",
-        tomcat_user  => $localconfig::user,
+    tomcat_user  => $localconfig::user,
         tomcat_group => $localconfig::group,
     }
 
@@ -287,6 +287,25 @@ node 'preview.academic.rsmart.local' inherits oaenode {
     class { 'oae::preview_processor::init': 
         nakamura_git => $localconfig::nakamura_git,
         nakamura_tag => $localconfig::nakamura_tag,
+    }
+}
+
+###########################################################################
+#
+# NFS Server
+#
+node 'nfs.academic.rsmart.local' inherits oaenode {
+
+    class { 'nfs::server': }
+
+    nfs::export { 'export-sakai-files-app0-app1-rw':
+        ensure  => present,
+        share   => '/files-academic',
+        options => 'rw',
+        guests   => [
+            [ $localconfig::app_server0, 'rw' ],
+            [ $localconfig::app_server1, 'rw' ],
+        ],
     }
 }
 

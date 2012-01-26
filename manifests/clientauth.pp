@@ -40,6 +40,6 @@ define postgres::clientauth (
     exec { "append-${config_line}-to-${hba_conf}":
         command => "echo ${config_line} >> ${hba_conf}",
         unless  => "grep '${config_line}' ${hba_conf}",
-        notify  => Service['postgresql'],
+        notify  => Service['postgresql-9.1'],
     }
 }

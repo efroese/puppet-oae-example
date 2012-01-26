@@ -34,7 +34,7 @@ class postgres ($postgresql_conf_template='postgres/postgresql.conf.erb'){
         enable => true,
         hasstatus => true,
         subscribe => [Package[postgresql91-server], Package[postgresql91]],
-		require   => File["/var/lib/pgsql/9.1/data/postgresql.conf"],
+        require   => File["/var/lib/pgsql/9.1/data/postgresql.conf"],
     }
 
 	exec { 'postgres initdb':
@@ -47,7 +47,7 @@ class postgres ($postgresql_conf_template='postgres/postgresql.conf.erb'){
         group => 'postgres',
         mode  => 0600,
         content => template($postgresql_conf_template),
-        notify  => Service['postgresql91'],
+        notify  => Service[$service_name],
         require => [ Exec['postgres initdb'], Package['postgresql91-server'] ],
     }    
 }

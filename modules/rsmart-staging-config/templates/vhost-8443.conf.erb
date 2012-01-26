@@ -11,8 +11,8 @@ SSLCryptoDevice builtin
 <% end -%>
 
     DocumentRoot <%= documentroot %>
-    LogLevel warn
 
+    LogLevel warn
     ErrorLog <%= wwwroot %>/<%= name %>/logs/error.log
     CustomLog <%= wwwroot %>/<%= name %>/logs/access.log combined
 
@@ -21,7 +21,6 @@ SSLCryptoDevice builtin
     SSLEngine On
     SSLCipherSuite HIGH:MEDIUM
     SSLProtocol all -SSLv2
-    SSLCryptoDevice builtin
     SSLCertificateFile <%= certfile %>
     SSLCertificateKeyFile <%= certkeyfile %>
     SSLCACertificateFile <%= cacertfile %>

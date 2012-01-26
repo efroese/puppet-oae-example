@@ -35,7 +35,7 @@ define apache::module ($ensure='present') {
     'absent': {
       exec { "a2dismod ${name}":
         command => $operatingsystem ? {
-          /RedHat|CentOS/ => "/usr/local/sbin/a2dismod ${name}",
+          /RedHat|CentOS|Amazon/ => "/usr/local/sbin/a2dismod ${name}",
           /Debian|Ubuntu/ => "/usr/sbin/a2dismod ${name}",
         },
         unless  => "/bin/sh -c '[ -L ${apache::params::conf}/mods-enabled/${name}.load ] \\

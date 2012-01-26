@@ -257,6 +257,7 @@ node 'solr1.academic.rsmart.local' inherits solrnode {
     class { 'oae::solr::tomcat':
         master_url   => "${localconfig::solr_remoteurl}/replication",
         solrconfig   => 'localconfig/master-solrconfig.xml.erb',
+        tomcat_home  => "${localconfig::basedir}/tomcat",
         tomcat_user  => $localconfig::user,
         tomcat_group => $localconfig::group,
     }

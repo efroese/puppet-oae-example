@@ -19,3 +19,6 @@
 [submodule "modules/postgres"]
 	path = modules/postgres
 	url = http://github.com/efroese/puppet-postgres.git
+[submodule "modules/nfs"]
+	path = modules/nfs
+	url = http://github.com/efroese/puppet-nfs.git

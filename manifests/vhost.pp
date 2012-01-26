@@ -15,7 +15,7 @@ define apache::vhost (
   $enable_default=true,
   $ports=['*:80'],
   $accesslog_format="combined",
-  template="apache/vhost.erb"
+  $template="apache/vhost.erb"
 ) {
 
   include apache::params

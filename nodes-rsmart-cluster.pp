@@ -303,8 +303,8 @@ node 'nfs.academic.rsmart.local' inherits oaenode {
         share   => '/files-academic',
         options => 'rw',
         guests   => [
-            [ $localconfig::app_server0, 'rw' ],
             [ $localconfig::app_server1, 'rw' ],
+            [ $localconfig::app_server2, 'rw' ],
         ],
     }
 }

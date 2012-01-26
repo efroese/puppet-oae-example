@@ -6,4 +6,6 @@
 #
 # For more info pass the --debug or --verbose flags.
 #
-puppet apply --modulepath modules site.pp $@
+export RUBYOPT=rubygems
+PUPPET=/usr/lib/ruby/gems/1.8/gems/puppet-2.7.9/bin/puppet
+$PUPPET apply --modulepath modules site.pp $@

@@ -1,0 +1,43 @@
+# file managed by puppet
+# This is the Sakai OAE untrusted content virtual host
+
+SSLCryptoDevice builtin
+
+<VirtualHost<% sslports.each do |port| -%> <%= port %><% end -%>>
+  ServerName <%= name %>
+
+<% aliases.each do |serveralias| -%>
+    ServerAlias <%= serveralias %>
+<% end -%>
+
+    DocumentRoot <%= documentroot %>
+    LogLevel warn
+
+    ErrorLog <%= wwwroot %>/<%= name %>/logs/error.log
+    CustomLog <%= wwwroot %>/<%= name %>/logs/access.log combined
+
+    Include <%= wwwroot %>/<%= name%>/conf/*.conf
+
+    SSLEngine On
+    SSLCipherSuite HIGH:MEDIUM
+    SSLProtocol all -SSLv2
+    SSLCryptoDevice builtin
+    SSLCertificateFile <%= certfile %>
+    SSLCertificateKeyFile <%= certkeyfile %>
+    SSLCACertificateFile <%= cacertfile %>
+
+<% if has_variable?("certchainfile") -%>
+    SSLCertificateChainFile <%= certchainfile %>
+<% end -%>
+
+    # do not turn on == evil (i.e. open proxy)
+    ProxyRequests Off
+    # Turn off VIA header as we know where the requests are proxied
+    ProxyVia Off
+    # see http://docs.codehaus.org/display/JETTY/Configuring+mod_proxy
+    ProxyPreserveHost On
+
+    ErrorDocument 503 http://feynman.rsmart.com/downtime.html
+    ServerSignature Off
+
+</VirtualHost>

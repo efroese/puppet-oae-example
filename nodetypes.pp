@@ -13,9 +13,25 @@ node basenode {
 
     class { 'git': }
     class { 'java': }   
+
     class { 'ntp':
         time_zone =>  '/usr/share/zoneinfo/America/Phoenix',
     }
+
+    realize(Group['hyperic'])
+    realize(User['hyperic'])
+
+    realize(Group['efroese'])
+    realize(User['efroese'])
+
+    realize(Group['lspeelmon'])
+    realize(User['lspeelmon'])
+
+    realize(Group['dgillman'])
+    realize(User['dgillman'])
+
+    realize(Group['cramaker'])
+    realize(User['cramaker'])
 }
 
 node oaenode inherits basenode {

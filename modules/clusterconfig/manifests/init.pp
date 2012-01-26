@@ -10,7 +10,7 @@ class localconfig {
     $group   = 'sakaioae'
     $uid     = 8080
     $gid     = 8080
-    $basedir = '/usr/local/sakaioae'
+    $basedir = '/home/rsmart'
 
     ###########################################################################
     # Database setup
@@ -52,18 +52,16 @@ class localconfig {
     # oae server protection service
     $serverprotectsec = 'shhh-its@secret'
 
-    $app_server0 = '192.168.1.50'
-    $app_server1 = '192.168.1.51'
+    $app_server0 = '10.53.10.16'
+    $app_server1 = '10.53.10.20'
 
     # ehcache
     $mcast_address = '230.0.0.2'
     $mcast_port = '8450'
 
     # solr
-    $solr_master = '192.168.1.70'
-    $solr_slave0 = '192.168.1.71'
-    $solr_slave1 = '192.168.1.72'
-    $solr_slave2 = '192.168.1.73'
+    $solr_master = '10.53.10.21'
+    $solr_slave0 = '10.53.10.21'
     $solr_remoteurl = "http://${solr_master}:8080/solr"
-    $solr_queryurls = "http://${solr_slave0}:8080/solr|http://${solr_slave1}:8983/solr|http://${solr_slave2}:8983/solr"
+    $solr_queryurls = "http://${solr_slave0}:8080/solr"
 }

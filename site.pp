@@ -5,7 +5,10 @@ import 'nodetypes'
 # import 'nodes-standlone'
 
 # OAE cluster example
-import 'nodes-cluster'
+# import 'nodes-cluster'
+
+# rSmart 1.1 Staging Cluster
+import 'nodes-rsmart-staging'
 
 # Set the default path for exec resources
 Exec { path => '/usr/local/sbin:/usr/local/bin:/sbin:/bin:/usr/sbin:/usr/bin:/root/bin' }

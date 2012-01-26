@@ -16,9 +16,11 @@
 #
 # $master_url::   See oae::solr::common
 #
+# $tomcat_home::  Path tot he tomcat install
+#
 # $tomcat_user::  The user tomcat runs as.
 #
-# $tomcat_user::  The group tomcat runs as.
+# $tomcat_group::  The group tomcat runs as.
 #
 # $webapp_url::   The url where the solr webapp is (optional)
 #
@@ -42,6 +44,7 @@ class oae::solr::tomcat (
                     $solrconfig        = 'oae/solrconfig.xml.erb',
                     $schema            = 'oae/schema.xml.erb',
                     $master_url        = 'set the master url',
+					$tomcat_home,
                     $tomcat_user,
                     $tomcat_group,
                     $webapp_url            = 'http://dl.dropbox.com/u/24606888/puppet-oae-files/apache-solr-4.0-SNAPSHOT.war',
@@ -64,7 +67,7 @@ class oae::solr::tomcat (
         creates => "${oae::params::basedir}/solr/solr.war",
     }
 
-    file { "${oae::params::basedir}/solr/tomcat/conf/Catalina/localhost/solr.xml":
+    file { "${tomcat_home}/conf/Catalina/localhost/solr.xml":
         owner => $tomcat_user,
         group => $tomcat_group,
         mode  => 0644,

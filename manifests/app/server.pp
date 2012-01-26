@@ -39,7 +39,7 @@
 #     javapermsize  => 256,
 #   }
 #
-class oae::app::server( $downloadurl = "",
+class oae::app::server( $downloadurl = undef,
                         $jarsource = "",
                         $jarfile,
                         $java="usr/bin/java",
@@ -75,7 +75,7 @@ class oae::app::server( $downloadurl = "",
 
     exec { 'fetch-package':
         command => $downloadurl ? {
-            /""/ => "cp ${jarsource} .",
+            undef   => "cp ${jarsource} .",
             default => "curl --silent ${downloaddir}${jarfile} --output ${jar_dest}",
         },
         cwd     => "${oae::params::basedir}/jars/",

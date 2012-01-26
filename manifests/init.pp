@@ -1,4 +1,4 @@
-class tomcat6 (  $parentdir      = '/usr/local',
+class tomcat6 ( $parentdir      = '/usr/local',
                 $tomcat_version = '6.0.35',
                 $mirror         = 'http://archive.apache.org/dist/tomcat',
                 $tomcat_users_template = 'tomcat6/tomcat-users.xml.erb',
@@ -29,10 +29,16 @@ class tomcat6 (  $parentdir      = '/usr/local',
         require => Exec["unpack-apache-tomcat-${tomcat_version}"],
     }
 
+    exec { "chmod-tomcat-conf":
+        command => "chmod +r ${parentdir}/apache-tomcat-${tomcat_version}/conf/*",
+        unless  => "[ `stat -c '%a' ${parentdir}/apache-tomcat-${tomcat_version}/conf/server.xml` == 644 ]",
+        require => Exec["chown-apache-tomcat-${tomcat_version}"],
+    }
+
     file { $basedir: 
         ensure => link,
         target => "${parentdir}/apache-tomcat-${tomcat_version}",
-        require => Exec["chown-apache-tomcat-${tomcat_version}"],
+        require => Exec["chmod-tomcat-conf"],
     }
 
     file { "/etc/init.d/tomcat": 

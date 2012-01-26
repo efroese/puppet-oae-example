@@ -24,7 +24,7 @@
 #
 # Storage tier - One Postgres database node.
 # oae-db0.localdomain - 192.168.1.250
-# oae-content.localdomain - 192.168.1.240 # TODO: Create an nfs server.
+# oae-nfs.localdomain - 192.168.1.240
 #
 
 ###########################################################################
@@ -258,5 +258,26 @@ node 'oae-db0.localdomain' inherits oaenode {
        user => $localconfig::db_user,
        address => "$ipaddress/24",
        method  => 'md5',
+    }
+}
+
+
+
+###########################################################################
+#
+# Postgres Database Server
+#
+node 'oae-nfs.localdomain' inherits oaenode {
+
+    class { 'nfs::server': }
+
+    nfs::export { 'export-sakai-files-app0-app1-rw':
+        ensure  => present,
+        share   => '/export/sakaioae/files',
+        options => 'rw',
+        guests   => [
+            [ $localconfig::app_server0, 'rw' ],
+            [ $localconfig::app_server1, 'rw' ],
+        ],
     }
 }

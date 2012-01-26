@@ -3,8 +3,8 @@ define apache::module ($ensure='present') {
   include apache::params
 
   $a2enmod_deps = $operatingsystem ? {
-    /RedHat|CentOS/ => [
-      Package["apache"],
+    /RedHat|CentOS|Amazon/ => [
+      Package["httpd"],
       File["/etc/httpd/mods-available"],
       File["/etc/httpd/mods-enabled"],
       File["/usr/local/sbin/a2enmod"],
@@ -21,8 +21,7 @@ define apache::module ($ensure='present') {
     'present' : {
       exec { "a2enmod ${name}":
         command => $operatingsystem ? {
-          RedHat => "/usr/local/sbin/a2enmod ${name}",
-          CentOS => "/usr/local/sbin/a2enmod ${name}",
+          /RedHat|CentOS|Amazon/ => "/usr/local/sbin/a2enmod ${name}",
           default => "/usr/sbin/a2enmod ${name}"
         },
         onlyif => "/bin/sh -c '[ -L ${apache::params::conf}/mods-enabled/${name}.load ] \\

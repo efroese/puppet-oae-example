@@ -8,7 +8,7 @@ class apache::redhat inherits apache::base {
     onlyif  => "apachectl configtest",
   }
 
-  Package["apache"] {
+  Package["httpd"] {
     require => [File["/usr/local/sbin/a2ensite"], File["/usr/local/sbin/a2dissite"], File["/usr/local/sbin/a2enmod"], File["/usr/local/sbin/a2dismod"]],
   }
 

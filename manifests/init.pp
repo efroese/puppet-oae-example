@@ -25,21 +25,29 @@
 #
 class postgres ($postgresql_conf_template='postgres/postgresql.conf.erb'){
 
-	package { [ 'postgresql', 'ruby-postgres', 'postgresql-server' ]: ensure => installed }
+	package { [ 'postgresql91', 'postgresql91-server' ]: ensure => installed }
 
-    service { 'postgresql':
+	$service_name = 'postgresql-9.1'
+
+    service { $service_name:
         ensure => running,
         enable => true,
         hasstatus => true,
-        subscribe => [Package[postgresql-server], Package[postgresql]]
+        subscribe => [Package[postgresql91-server], Package[postgresql91]],
+		require   => File["/var/lib/pgsql/9.1/data/postgresql.conf"],
     }
 
-    file { "/var/lib/pgsql/data/postgresql.conf":
+	exec { 'postgres initdb':
+		command => "service $service_name initdb",
+		creates => "/var/lib/pgsql/9.1/data/",
+	}
+
+    file { "/var/lib/pgsql/9.1/data/postgresql.conf":
         owner => 'postgres',
         group => 'postgres',
         mode  => 0600,
         content => template($postgresql_conf_template),
-        notify  => Service['postgresql'],
-        require => Package['postgresql-server'],
+        notify  => Service['postgresql91'],
+        require => [ Exec['postgres initdb'], Package['postgresql91-server'] ],
     }    
 }

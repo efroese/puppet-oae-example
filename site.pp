@@ -8,7 +8,7 @@ import 'nodetypes'
 # import 'nodes-cluster'
 
 # rSmart 1.1 Staging Cluster
-import 'nodes-rsmart-staging'
+import 'nodes-rsmart-cluster'
 
 # Set the default path for exec resources
 Exec { path => '/usr/local/sbin:/usr/local/bin:/sbin:/bin:/usr/sbin:/usr/bin:/root/bin' }

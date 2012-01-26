@@ -18,9 +18,14 @@ class apache::ssl::redhat inherits apache::base::ssl {
     before => Exec["apache-graceful"],
   }
 
+    $release = "${operatingsystem}-${operatingsystemrelease}" ? {
+        /Amazon-2011.09/ => '5',
+        default          => $lsbmajdistrelease,
+    }
+
   file {"/etc/httpd/mods-available/ssl.load":
     ensure => present,
-    content => template("apache/ssl.load.rhel${lsbmajdistrelease}.erb"),
+    content => template("apache/ssl.load.rhel${release}.erb"),
     mode => 644,
     owner => "root",
     group => "root",

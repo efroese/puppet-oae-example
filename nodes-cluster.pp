@@ -262,11 +262,9 @@ node 'oae-db0.localdomain' inherits oaenode {
     }
 }
 
-
-
 ###########################################################################
 #
-# Postgres Database Server
+# NFS Server
 #
 node 'oae-nfs.localdomain' inherits oaenode {
 

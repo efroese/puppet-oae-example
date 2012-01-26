@@ -1,6 +1,6 @@
 class nfs::server::redhat inherits nfs::client::redhat {
 
-    $portmap = "${operatingsystem}-${operatingsystemrelease}":
+    $portmap = "${operatingsystem}-${operatingsystemrelease}" ? {
         /Amazon-2011.09/ => 'rpcbind',
         default          => 'portmap',
     }

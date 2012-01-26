@@ -121,6 +121,8 @@ node oaeappnode inherits oaenode {
         group => root,
     }
 
+    class { 'nfs::client': }
+
     mount { $localconfig::storedir:
         ensure => 'mounted',
         fstype => 'nfs',

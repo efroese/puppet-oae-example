@@ -42,10 +42,12 @@ class localconfig {
     $db_password = 'ironchef'
 
     ###########################################################################
-    $storedir    = "/files-academic"
-    $nfs_share   = '/files-academic'
+    # Content body storage
+    $nfs_share   = '/export/files-academic'
+    $nfs_mountpoint = '/files-academic'
     $nfs_options = '_netdev,rw,rsize=8192,wsize=8192'
 
+    $storedir    = "/files-academic/store"
     ###########################################################################
     # Git (Preview processor)
     $nakamura_git = "http://github.com/rsmart/nakamura.git"

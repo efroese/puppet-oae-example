@@ -60,7 +60,7 @@ class oae::preview_processor::redhat {
     }
 
     if $operatingsystem == 'Amazon' and $operatingsystemrelease == '2011.09' {
-        $amazon_pkgs = ['cronie', 'curl-devel', 'ImageMagick', 'ImageMagick-devel', 'ruby-devel']
+        $amazon_pkgs = ['cronie', 'ImageMagick', 'ImageMagick-devel', 'ruby-devel']
         package { $amazon_pkgs: ensure => installed }
     }
 }

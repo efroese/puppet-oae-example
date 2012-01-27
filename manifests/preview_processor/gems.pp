@@ -21,9 +21,8 @@ class oae::preview_processor::gems {
 
     define gem($version) {
         package { $name:
-            ensure => installed,
+            ensure => $version,
             provider => 'gem',
-            version => $version
         }
     }
 

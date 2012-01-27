@@ -317,6 +317,8 @@ node 'nfs.academic.rsmart.local' inherits oaenode {
 #
 node 'dbserv1.academic.rsmart.local' inherits oaenode {
 
+    class { 'postgres::repos': stage => init }
+
     class { 'postgres':
         postgresql_conf_template => 'localconfig/postgresql.conf.erb',
     }

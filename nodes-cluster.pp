@@ -260,6 +260,10 @@ node 'oae-db0.localdomain' inherits oaenode {
        address => "$ipaddress/24",
        method  => 'md5',
     }
+
+    postgres::backup::simple { $localconfig::db:
+        ensure => present,
+    }
 }
 
 ###########################################################################

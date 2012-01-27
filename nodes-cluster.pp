@@ -241,6 +241,7 @@ node 'oae-preview0.localdomain' inherits oaenode {
 #
 node 'oae-db0.localdomain' inherits oaenode {
 
+    class { 'postgres::repos': stage => init }
     class { 'postgres': }
 
     postgres::database { $localconfig::db:

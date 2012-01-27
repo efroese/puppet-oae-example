@@ -261,9 +261,7 @@ node 'oae-db0.localdomain' inherits oaenode {
        method  => 'md5',
     }
 
-    postgres::backup::simple { $localconfig::db:
-        ensure => present,
-    }
+    postgres::backup::simple { $localconfig::db: }
 }
 
 ###########################################################################

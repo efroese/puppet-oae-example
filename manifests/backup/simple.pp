@@ -16,10 +16,13 @@ define postgres::backup::simple ($backup_dir='/var/lib/pgsql/9.1/backups',
                                 $date_format='%m%d%Y-%H%M',
                                 $hour='0',
                                 $minute='1') {
-     cron { "backup-postgres-${name}":
+
+    $pg_dump = '/usr/pgsql-9.1/bin/pg_dump'
+
+    cron { "backup-postgres-${name}":
         command => $date_format ? {
-            /''/    => "pg_dump ${name} | gzip > ${backup_dir}/${name}.sql.gz",
-            default => "pg_dump ${name} | gzip > ${backup_dir}/${name}.`date +'${date_format}'`.sql.gz",
+            /''/    => "${pg_dump} ${name} | gzip > ${backup_dir}/${name}.sql.gz",
+            default => "${pg_dump} ${name} | gzip > ${backup_dir}/${name}.`date +'${date_format}'`.sql.gz",
         },
         user    => 'postgres',
         minute  => $minute,

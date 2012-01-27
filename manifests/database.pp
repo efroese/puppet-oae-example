@@ -34,15 +34,15 @@ define postgres::database($ensure, $create_options = "", $owner = false) {
     case $ensure {
         present: {
             exec { "Create $name postgres db":
-                command => "/usr/bin/psql -c \"CREATE DATABASE ${name} ${ownerstring} ${create_options}\"",
+                command => "${postgres::params::psql} -c \"CREATE DATABASE ${name} ${ownerstring} ${create_options}\"",
                 user => "postgres",
-                unless => "/usr/bin/psql -l | grep '${name}  *|'",
+                unless => "${postgres::params::psql} -l | grep '${name}  *|'",
             }
         }
         absent:  {
             exec { "Remove $name postgres db":
-                command => "/usr/bin/psql -c \"DROP DATABASE ${name}\"",
-                onlyif => "/usr/bin/psql -l | grep '${name}  *|'",
+                command => "${postgres::params::psql} -c \"DROP DATABASE ${name}\"",
+                onlyif => "${postgres::params::psql} -l | grep '${name}  *|'",
                 user => "postgres",
             }
         }

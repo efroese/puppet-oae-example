@@ -91,23 +91,23 @@ define postgres::role(  $ensure,
         present: {
             # The createuser command always prompts for the password.
             exec { "Create $name postgres role":
-                command => "/usr/bin/createuser ${superuser_opt} ${createdb_opt} ${createrole_opt} ${inherit_opt} ${connection_limit_opt} ${encrypt_opt} ${name}",
+                command => "${postgres::params::createuser} ${superuser_opt} ${createdb_opt} ${createrole_opt} ${inherit_opt} ${connection_limit_opt} ${encrypt_opt} ${name}",
                 user    => 'postgres',
-                unless  => "/usr/bin/psql -c '\\du' | grep '^  *${name}  *|'",
+                unless  => "${postgres::params::psql} -c '\\du' | grep '^  *${name}  *|'",
                 notify  => Exec["pg-set-password-${name}"],
             }
 
             exec { "pg-set-password-${name}":
-                command     => "/usr/bin/psql -c \"ALTER ROLE ${name} WITH PASSWORD '${password}' \"",
+                command     => "${postgres::params::psql} -c \"ALTER ROLE ${name} WITH PASSWORD '${password}' \"",
                 user        => 'postgres',
                 refreshonly => true,
             }
         }
         absent:  {
             exec { "Remove $name postgres role":
-                command => "/usr/bin/dropuser ${name}",
+                command => "${postgres::params::dropuser} ${name}",
                 user    => "postgres",
-                onlyif  => "/usr/bin/psql -c '\\du' | grep '${name}  *|'"
+                onlyif  => "${postgres::params::psql} -c '\\du' | grep '${name}  *|'"
             }
         }
         default: {

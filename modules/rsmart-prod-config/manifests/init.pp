@@ -27,6 +27,8 @@ class localconfig {
     $db_server   = '10.52.11.70'
     # solr master server
     $solr_master = '10.52.11.30'
+    $solr_slave1 = '10.52.11.35'
+    $solr_slave2 = '10.52.11.36'
 
 	# prod-cle
     $cle_server  = '10.53.10.17'
@@ -80,7 +82,7 @@ class localconfig {
 
     # solr
     $solr_remoteurl = "http://${solr_master}:8080/solr"
-    $solr_queryurls = "http://${solr_master}:8080/solr|http://${solr_slave0}:8080/solr|http://${solr_slave1}:8080/solr"
+    $solr_queryurls = "http://${solr_master}:8080/solr|http://${solr_slave1}:8080/solr|http://${solr_slave2}:8080/solr"
 
     $tomcat_user    = 'admin'
     $tomcat_password = 'pulp134@rain'

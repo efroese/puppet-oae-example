@@ -4,7 +4,7 @@
 #
 node basenode {
 
-    if $operatingsystem == 'CentOS' {
+    if $operatingsystem == 'CentOS' or $operatingsystem == 'Amazon' {
         class { 'centos': stage => init }
         if $virtual == "virtualbox" {
             class { 'centos_minimal': stage => init }
@@ -12,8 +12,7 @@ node basenode {
     }
 
     class { 'git': }
-    class { 'java': }   
-
+    class { 'java': }
     class { 'ntp':
         time_zone =>  '/usr/share/zoneinfo/America/Phoenix',
     }

@@ -25,7 +25,7 @@ class localconfig::hosts {
 
 	host { 'prod-preview':
     	ensure => present,
-        ip => '10.52.9.200',
+        ip => '10.52.11.200',
         host_aliases => 'prod-preview.academic.rsmart.local',
         comment => 'OAE Preview processor',
     }

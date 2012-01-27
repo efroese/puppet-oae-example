@@ -5,9 +5,13 @@
 #
 # = Paramters:
 #
+# $backup_dir:: The directory that holds the backups
+#
+# $backup_user:: The system user that runs backup jobs.
+#
 # $backup_config_template:: The path to the config template you'd like to use (optional)
 #
-class postgres::backup::rotated ($backup_dir='/var/lib/pgsql/backups/',
+class postgres::backup::rotated ($backup_dir='/var/lib/pgsql/9.1/backups/',
                                 $backup_user='postgres',
                                 $backup_config_template='postgres/backup.config.erb'){
 

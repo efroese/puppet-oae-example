@@ -12,7 +12,10 @@
 #
 # $hour::     Hour(s) the cron job will run
 #
-class postgres::backup::simple ($backup_dir, $date_format='%m%d%Y-%H%M', $hour, $minute) {
+class postgres::backup::simple ($backup_dir=/var/lib/pgsql/9.1/backups,
+                                $date_format='%m%d%Y-%H%M',
+                                $hour='0',
+                                $minute='1') {
      cron { "backup-postgres-${db}":
         command => $date_format ? {
             /''/    => "pg_dump ${name} | gzip > ${backup_dir}/${db}.sql.gz",

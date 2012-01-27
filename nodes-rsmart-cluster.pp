@@ -114,21 +114,13 @@ node oaeappnode inherits oaenode {
     ###########################################################################
     # Storage
 
-    # NFS mounted shared storage for content bodies
-    file { $localconfig::storedir:
-        ensure => directory,
-        owner => root,
-        group => root,
-    }
-
     class { 'nfs::client': }
 
-    mount { $localconfig::storedir:
-        ensure => 'mounted',
-        fstype => 'nfs',
-        device => "${localconfig::nfs_server}:${localconfig::nfs_share}",
-        options => $localconfig::nfs_options,
-        atboot => true,
+    nfs::mount { 'sparse-content-bodies-mount':
+        server         => $localconfig::nfs_server,
+        share          => $localconfig::nfs_share,
+        mountpoint     => $localconfig::nfs_mountpoint,
+        server_options => $localconfig::nfs_options,
     }
 
     # Connect OAE to the DB
@@ -300,9 +292,20 @@ node 'nfs.academic.rsmart.local' inherits oaenode {
 
     class { 'nfs::server': }
 
+    file { '/export':
+        ensure => directory
+    }
+
+    file { '/export/files-academic':
+        ensure => directory,
+        owner  => $oae::params::user,
+        group  => $oae::params::group,
+        mode   => 0744,
+    }
+
     nfs::export { 'export-sakai-files-app0-app1-rw':
         ensure  => present,
-        share   => '/files-academic',
+        share   => '/export/files-academic',
         options => 'rw',
         guests   => [
             [ $localconfig::app_server1, 'rw' ],

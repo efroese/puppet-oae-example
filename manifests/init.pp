@@ -27,7 +27,7 @@ class postgres ($postgresql_conf_template='postgres/postgresql.conf.erb'){
     
     Class['postgres::params'] -> Class['postgres']
 
-    class { 'oae::params': }
+    class { 'postgres::params': }
 
 	package { [ 'postgresql91', 'postgresql91-server' ]: ensure => installed }
 

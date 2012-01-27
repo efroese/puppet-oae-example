@@ -339,9 +339,7 @@ node 'dbserv1.academic.rsmart.local' inherits oaenode {
        method  => 'md5',
     }
 
-    postgres::backup::simple { $localconfig::db:
-        ensure => present,
-    }
+    postgres::backup::simple { $localconfig::db: }
 
     # Allowing a maximum 24GB of shared memory:
     exec { 'set-shmmax':

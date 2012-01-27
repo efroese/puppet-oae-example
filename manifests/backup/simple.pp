@@ -12,7 +12,7 @@
 #
 # $hour::     Hour(s) the cron job will run
 #
-class postgres::backup::simple ($backup_dir=/var/lib/pgsql/9.1/backups,
+define postgres::backup::simple ($backup_dir=/var/lib/pgsql/9.1/backups,
                                 $date_format='%m%d%Y-%H%M',
                                 $hour='0',
                                 $minute='1') {

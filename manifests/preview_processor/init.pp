@@ -27,8 +27,6 @@ class oae::preview_processor::init ($nakamura_git, $nakamura_tag="") {
         mode   => 750,
     }
 
-
-
     # Checkout a specific tag if specified
     if $nakamura_tag != "" {
         # clone a copy of nakamura to /usr/local/sakaioae/nakamura.

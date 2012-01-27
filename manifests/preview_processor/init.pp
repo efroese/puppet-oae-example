@@ -13,7 +13,7 @@ class oae::preview_processor::init ($nakamura_git, $nakamura_tag="") {
     Class['oae::params'] -> Class['oae::preview_processor::init']
 
     case $operatingsystem {
-        /RedHat|CentOS/:   { include oae::preview_processor::redhat }
+        /RedHat|CentOS|Amazon/:   { include oae::preview_processor::redhat }
         /Debian|Ubuntu/:   { include oae::preview_processor::debian }
     }
 
@@ -70,7 +70,7 @@ class oae::preview_processor::init ($nakamura_git, $nakamura_tag="") {
 
     cron { 'run_preview_processor':
         command => $full_os ? {
-            /CentOS5|RedHat5/ => "PATH=/opt/local/bin:\$PATH ${oae::params::basedir}/bin/run_preview_processor.sh",
+            /CentOS5|RedHat5|Amazon*/ => "PATH=/opt/local/bin:\$PATH ${oae::params::basedir}/bin/run_preview_processor.sh",
             default           => "${oae::params::basedir}/bin/run_preview_processor.sh",
         },
         user => $oae::params::user,

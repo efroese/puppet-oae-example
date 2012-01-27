@@ -10,7 +10,7 @@ class oae::preview_processor::redhat {
     package { $common_packages: ensure => installed }
 
     # CentOS 5, RHEL 5
-    if  $lsbmajdistrelease == '5' {
+    if  $lsbmajdistrelease == '5'  {
 
         $centos5_pkgs = ['curl-devel', 'tesseract', 'bzip2-devel', 'ghostscript-devel', 'jasper-devel',
 			'lcms-devel', 'libX11-devel', 'libXext-devel', 'libXt-devel', 'libjpeg-devel', 
@@ -57,5 +57,10 @@ class oae::preview_processor::redhat {
     if $lsbmajdistrelease == '6' {
         $centos6_pkgs = ['cronie', 'curlpp-devel', 'ImageMagick', 'ImageMagick-devel', 'ruby-devel']
         package { $centos6_pkgs: ensure => installed }
+    }
+
+    if $operatingsystem == 'Amazon' and $operatingsystemrelease == '2011.09' {
+        $amazon_pkgs = ['cronie', 'curl-devel', 'ImageMagick', 'ImageMagick-devel', 'ruby-devel']
+        package { $amazon_pkgs: ensure => installed }
     }
 }

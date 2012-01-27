@@ -4,7 +4,7 @@
 SSLCryptoDevice builtin
 
 <VirtualHost<% sslports.each do |port| -%> <%= port %><% end -%>>
-  ServerName <%= name %>
+    ServerName <%= name %>
 
 <% aliases.each do |serveralias| -%>
     ServerAlias <%= serveralias %>
@@ -29,6 +29,10 @@ SSLCryptoDevice builtin
 <% if has_variable?("certchainfile") -%>
     SSLCertificateChainFile <%= certchainfile %>
 <% end -%>
+
+    # Enable Persistent Connections
+    # http://httpd.apache.org/docs/2.2/mod/core.html#keepalive
+    KeepAlive On
 
     # do not turn on == evil (i.e. open proxy)
     ProxyRequests Off

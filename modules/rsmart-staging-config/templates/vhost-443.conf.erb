@@ -30,6 +30,10 @@ SSLCryptoDevice builtin
     SSLCertificateChainFile <%= certchainfile %>
 <% end -%>
 
+    # Enable Persistent Connections
+    # http://httpd.apache.org/docs/2.2/mod/core.html#keepalive
+    KeepAlive On
+
     # do not turn on == evil (i.e. open proxy)
     ProxyRequests Off
     # Turn off VIA header as we know where the requests are proxied

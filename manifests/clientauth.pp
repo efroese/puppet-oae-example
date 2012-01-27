@@ -35,7 +35,7 @@ define postgres::clientauth (
         $config_line = "${type} ${db} ${user} ${address} ${method} ${option}"
     }
 
-    $hba_conf = '/var/lib/pgsql/data/pg_hba.conf'
+    $hba_conf = '/var/lib/pgsql/9.1/data/pg_hba.conf'
 
     exec { "append-${config_line}-to-${hba_conf}":
         command => "echo ${config_line} >> ${hba_conf}",

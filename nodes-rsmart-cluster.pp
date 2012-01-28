@@ -116,11 +116,12 @@ node oaeappnode inherits oaenode {
 
     class { 'nfs::client': }
 
-    nfs::mount { 'sparse-content-bodies-mount':
-        server         => $localconfig::nfs_server,
-        share          => $localconfig::nfs_share,
-        mountpoint     => $localconfig::nfs_mountpoint,
-        server_options => $localconfig::nfs_options,
+    mount { $localconfig::nfs_mountpoint:
+        ensure => 'mounted',
+        fstype => 'nfs4',
+        device => "${localconfig::nfs_server}:${localconfig::nfs_share}",
+        options => $localconfig::nfs_options,
+        atboot => true,
     }
 
     # Connect OAE to the DB

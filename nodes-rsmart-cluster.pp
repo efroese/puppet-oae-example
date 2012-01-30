@@ -192,6 +192,15 @@ node oaeappnode inherits oaenode {
         config => { 'bind-address' => $ipaddress, }
     }
 
+    oae::app::server::sling_config {
+        "org.sakaiproject.nakamura.activemq.ActiveMQBrokerComponent":
+        config => {
+            'federated.broker.url' => template('oae/activemq-federated-brokers.erb'),
+            'broker.enabled'       => true,
+            'broker.url'           => "tcp://localhost:61616",
+        }
+    }
+
     # Keep an eye on caching in staging
     oae::app::server::sling_config {
         'org.apache.sling.commons.log.LogManager.factory.config-caching':

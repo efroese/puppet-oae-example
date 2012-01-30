@@ -13,8 +13,8 @@ class oae::preview_processor::init ($nakamura_git, $nakamura_tag="") {
     Class['oae::params'] -> Class['oae::preview_processor::init']
 
     case $operatingsystem {
-        /RedHat|CentOS|Amazon/:   { include oae::preview_processor::redhat }
-        /Debian|Ubuntu/:   { include oae::preview_processor::debian }
+        /RedHat|CentOS|Amazon/: { include oae::preview_processor::redhat }
+        /Debian|Ubuntu/:        { include oae::preview_processor::debian }
     }
 
     class { 'oae::preview_processor::openoffice': }
@@ -57,7 +57,7 @@ class oae::preview_processor::init ($nakamura_git, $nakamura_tag="") {
 
     ###########################################################################
     # Drop the script for the cron job
-    file { "${basedir}/bin/run_preview_processor.sh":
+    file { "${oae::params::basedir}/bin/run_preview_processor.sh":
         content => template('oae/run_preview_processor.sh.erb'),
         owner  => root,
         group  => root,
@@ -74,5 +74,6 @@ class oae::preview_processor::init ($nakamura_git, $nakamura_tag="") {
         user => $oae::params::user,
         ensure => present,
         minute => '*',
+        require => File["${oae::params::basedir}/bin/run_preview_processor.sh"],
     }
 }

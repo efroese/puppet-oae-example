@@ -63,5 +63,9 @@ class localconfig {
     $solr_master = '10.53.10.21'
     $solr_slave0 = '10.53.10.21'
     $solr_remoteurl = "http://${solr_master}:8080/solr"
-    $solr_queryurls = "http://${solr_slave0}:8080/solr"
+    $solr_queryurls = "http://${solr_slave0}:8080/solr|http://${solr_slave1}:8983/solr|http://${solr_slave2}:8983/solr"
+
+    # ActiveMQ
+    $activemq_brokers = [ app_server0, app_server1 ]
+    $activemq_reconnect_delay = '5000'
 }

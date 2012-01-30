@@ -172,6 +172,15 @@ node /oae-app[0-1].localdomain/ inherits oaenode {
         }
     }
 
+    oae::app::server::sling_config {
+        "org.sakaiproject.nakamura.activemq.ActiveMQBrokerComponent":
+        config => {
+            'federated.broker.url' => template('oae/activemq-federated-brokers.erb'),
+            'broker.enabled'       => true,
+            'broker.url'           => "tcp://localhost:61616",
+        }
+    }
+
     # Clustered Cache
     oae::app::server::sling_config {
         "org.sakaiproject.nakamura.memory.CacheManagerServiceImpl":

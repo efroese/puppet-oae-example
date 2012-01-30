@@ -90,6 +90,6 @@ class localconfig {
     $tomcat_password = 'pulp134@rain'
 
     # ActiveMQ
-    $activemq_brokers = [ app_server1, app_server2 ]
+    $activemq_brokers = [ $app_server1, $app_server2 ]
     $activemq_reconnect_delay = '5000'
 }

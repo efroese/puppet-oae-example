@@ -14,9 +14,9 @@
 #
 class oae::preview_processor::init (
         $admin_password='admin',
-        $upload_protocol='https',
+        $upload_url,
         $nakamura_git,
-        $nakamura_tag="") {
+        $nakamura_tag=undef) {
 
     Class['oae::params'] -> Class['oae::preview_processor::init']
 
@@ -36,7 +36,7 @@ class oae::preview_processor::init (
     }
 
     # Checkout a specific tag if specified
-    if $nakamura_tag != "" {
+    if $nakamura_tag != undef {
         # clone a copy of nakamura to /usr/local/sakaioae/nakamura.
         # technically we only need the preview_processor
         exec { "clone nakamura":
@@ -67,7 +67,7 @@ class oae::preview_processor::init (
         owner => $oae::params::user,
         group => $oae::params::group,
         mode  => 0600,
-        content => "${upload_protocol}://${oae::params::http_name}/ ${admin_password}",
+        content => "${upload_url} ${admin_password}",
     }
 
     ###########################################################################

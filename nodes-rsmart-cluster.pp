@@ -68,9 +68,9 @@ node 'apache1.academic.rsmart.local' inherits oaenode {
     apache::vhost-ssl { "${localconfig::http_name}:8443":
         sslonly  => true,
         sslports => ['*:8443'],
-        cert     => "/etc/pki/tls/certs/rsmart.com.crt",
-        certkey  => "/etc/pki/tls/private/rsmart.com.key",
-        certchain => "/etc/pki/tls/certs/rsmart.com-intermediate.crt",
+        cert     => "/etc/pki/tls/certs/academic.rsmart.com.crt",
+        certkey  => "/etc/pki/tls/private/academic.rsmart.com.key",
+        certchain => "/etc/pki/tls/certs/academic.rsmart.com-intermediate.crt",
         template  => 'localconfig/vhost-8443.conf.erb',
     }
 

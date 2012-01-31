@@ -279,7 +279,8 @@ node /solr[2-3].academic.rsmart.local/ inherits solrnode {
 # OAE Content Preview Processor Node
 #
 node 'preview.academic.rsmart.local' inherits oaenode {
-    class { 'oae::preview_processor::init': 
+    class { 'oae::preview_processor::init':
+        admin_password => $localconfig::admin_password,
         nakamura_git => $localconfig::nakamura_git,
         nakamura_tag => $localconfig::nakamura_tag,
     }

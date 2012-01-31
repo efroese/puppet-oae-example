@@ -1,1 +1,0 @@
-static:(<% scope.lookupvar('localconfig::activemq_brokers').each do |broker| -%>tcp://<%= broker %>:61616,<% end -%>)?maxReconnectDelay=<%= scope.lookupvar('localconfig::activemq_reconnect_delay') %>

@@ -4,11 +4,19 @@
 #
 # = Parameters
 #
+# $admin_password::   The OAE admin password
+#
+# $upload_protocol::   The protocol that the preview pocessor will use to upload images. (https or http)
+#
 # $nakamura_git::   The url to your git repository (optional)
 #
 # $nakamura_tag::   The tag to check out (optional)
 #
-class oae::preview_processor::init ($nakamura_git, $nakamura_tag="") {
+class oae::preview_processor::init (
+        $admin_password='admin',
+        $upload_protocol='https',
+        $nakamura_git,
+        $nakamura_tag="") {
 
     Class['oae::params'] -> Class['oae::preview_processor::init']
 
@@ -55,6 +63,13 @@ class oae::preview_processor::init ($nakamura_git, $nakamura_tag="") {
         }
     }
 
+    file { "${oae::params::basedir}/.oae_credentials.txt":
+        owner => $oae::params::user,
+        group => $oae::params::group,
+        mode  => 0600,
+        content => "${upload_protocol}://${oae::params::http_name}/ ${admin_password}",
+    }
+
     ###########################################################################
     # Drop the script for the cron job
     file { "${oae::params::basedir}/bin/run_preview_processor.sh":
@@ -74,6 +89,9 @@ class oae::preview_processor::init ($nakamura_git, $nakamura_tag="") {
         user => $oae::params::user,
         ensure => present,
         minute => '*',
-        require => File["${oae::params::basedir}/bin/run_preview_processor.sh"],
+        require => [
+            File["${oae::params::basedir}/bin/run_preview_processor.sh"],
+            File["${oae::params::basedir}/.oae_credentials.txt"],
+        ],
     }
 }

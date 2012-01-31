@@ -7,7 +7,7 @@
 
 <LocationMatch <%= scope.lookupvar('localconfig::apache_cle_location_match') %>>
     ProxyPass <%= balancer %> nofailover=On stickysession=SAKAI2SESSIONID lbmethod=byrequests
-    ProxyPassReverse balancer://sakai_cle/
+    ProxyPassReverse <%= balancer %>
     
     # Compress responses
     SetOutputFilter DEFLATE

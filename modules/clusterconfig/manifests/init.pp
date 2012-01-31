@@ -28,7 +28,8 @@ class localconfig {
 
     ###########################################################################
     # HA apache load balancer
-    $apache_lb_http_name       = 'oae.localdomain'
+    $http_name                = 'oae.localdomain'
+    $apache_lb_http_name       = $http_name
     $apache_lb_virtual_ip      = '192.168.1.40'
     $apache_lb_virtual_netmask = '255.255.255.0'
     $apache_lb_hostnames       = ['oae-lb1.localdomain', 'oae-lb2.localdomain']

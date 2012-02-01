@@ -51,7 +51,7 @@ class localconfig {
     ###########################################################################
     # Git (Preview processor)
     $nakamura_git = "http://github.com/rsmart/nakamura.git"
-    $nakamura_tag = "1.1"
+    $nakamura_tag = "acad-1.1.0-M1-20120130"
 
     ###########################################################################
     # Apache load balancer
@@ -65,8 +65,8 @@ class localconfig {
 
     ###########################################################################
     # App servers
-    $jarsource     = '/home/rsmart/com.rsmart.academic.app-1.1.0-M1.jar'
-    $jarfile       = 'com.rsmart.academic.app-1.1.0-M1.jar'
+    $jarsource     = '/home/rsmart/com.rsmart.academic.app-1.1.0-M1-20120130.jar'
+    $jarfile       = 'com.rsmart.academic.app-1.1.0-M1-20120130.jar'
     $java          = '/usr/java/jdk1.6.0_30/bin/java'
     $javamemorymax = '4096'
     $javamemorymin = '4096'

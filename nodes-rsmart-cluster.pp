@@ -157,7 +157,7 @@ node oaeappnode inherits oaenode {
     # QoS filter rate-limits the app server so it won't fall over
     oae::app::server::sling_config {
         "org.sakaiproject.nakamura.http.qos.QoSFilter":
-        config => { 'qos.default.limit' => 50, }
+        config => { 'qos.default.limit' => 10, }
     }
 
     ###########################################################################
@@ -253,7 +253,7 @@ node 'solr1.academic.rsmart.local' inherits solrnode {
         master_url   => "${localconfig::solr_remoteurl}/replication",
         solrconfig   => 'localconfig/master-solrconfig.xml.erb',
         tomcat_home  => "${localconfig::basedir}/tomcat",
-    tomcat_user  => $localconfig::user,
+        tomcat_user  => $localconfig::user,
         tomcat_group => $localconfig::group,
     }
 

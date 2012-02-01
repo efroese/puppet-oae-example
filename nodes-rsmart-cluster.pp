@@ -198,7 +198,7 @@ node oaeappnode inherits oaenode {
         locked => false,
         config => {
             'org.apache.sling.commons.log.names' => ["org.sakaiproject.nakamura.memory","net.sf.ehcache"],
-            'org.apache.sling.commons.log.level' => "trace",
+            'org.apache.sling.commons.log.level' => "info",
             'org.apache.sling.commons.log.file'  => "logs/cache.log",
             'service.factoryPid'                 => "org.apache.sling.commons.log.LogManager.factory.config",
         }

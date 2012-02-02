@@ -42,7 +42,7 @@
 class oae::app::server( $downloadurl = undef,
                         $jarsource = "",
                         $jarfile,
-                        $java="usr/bin/java",
+                        $java="/usr/bin/java",
                         $javamemorymax,
                         $javamemorymin,
                         $javapermsize,

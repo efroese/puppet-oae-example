@@ -179,17 +179,22 @@ node oaeappnode inherits oaenode {
 
     ###########################################################################
     # Clustering
-
-    # Note that IP address will be evaluated by puppet on the node.
     oae::app::server::sling_config {
         "org.sakaiproject.nakamura.cluster.ClusterTrackingServiceImpl":
         config => { 'secure-host-url' => "http://${ipaddress}:8081", }
     }
 
     # Clustered cache
+    # Note that IP address will be evaluated by puppet on the node.
     oae::app::server::sling_config {
         "org.sakaiproject.nakamura.memory.CacheManagerServiceImpl":
         config => { 'bind-address' => $ipaddress, }
+    }
+
+    class { 'oae::app::ehcache':
+        peers       => [ $localconfig::app_server1, $localconfig::app_server2, ],
+        tcp_address => $ipaddress,
+        remote_object_port => $localconfig::ehcache_remote_object_port,
     }
 
     # Keep an eye on caching in staging
@@ -216,22 +221,7 @@ node oaeappnode inherits oaenode {
     }
 }
 
-node 'app1.academic.rsmart.local' inherits oaeappnode {
-    class { 'oae::app::ehcache':
-        # 2 nodes, each others peer.
-        peers       => [ $localconfig::app_server2, ],
-        tcp_address => $ipaddress,
-        remote_object_port => $localconfig::ehcache_remote_object_port,
-    }
-}
-
-node 'app2.academic.rsmart.local' inherits oaeappnode {
-    class { 'oae::app::ehcache':
-        peers       => [ $localconfig::app_server1, ],
-        tcp_address => $ipaddress,
-        remote_object_port => $localconfig::ehcache_remote_object_port,
-    }
-}
+node /app[1-2].academic.rsmart.local/ inherits oaeappnode { }
 
 ###########################################################################
 #

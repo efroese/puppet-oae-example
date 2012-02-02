@@ -52,6 +52,7 @@ class tomcat6 ( $parentdir      = '/usr/local',
         mode   => 0644,
         content => template($tomcat_users_template),
         require => Exec["chown-apache-tomcat-${tomcat_version}"],
+        notify  => Service['tomcat'],
     }
 
     file { "${basedir}/conf/server.xml":
@@ -61,6 +62,7 @@ class tomcat6 ( $parentdir      = '/usr/local',
         mode   => 0644,
         content => template($tomcat_conf_template),
         require => Exec["chown-apache-tomcat-${tomcat_version}"],
+        notify  => Service['tomcat'],
     }
 
     file { "${basedir}/conf/Catalina":

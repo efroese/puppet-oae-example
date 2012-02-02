@@ -1,12 +1,13 @@
-class tomcat6 ( $parentdir      = '/usr/local',
-                $tomcat_version = '6.0.35',
-                $mirror         = 'http://archive.apache.org/dist/tomcat',
-                $tomcat_users_template = 'tomcat6/tomcat-users.xml.erb',
-                $tomcat_conf_template = 'tomcat6/server.xml.erb',
-                $tomcat_user='root',
-                $tomcat_group='root',
-                $admin_user = 'tomcat',
-                $admin_password = 'tomcat'
+class tomcat6 ( $parentdir               = '/usr/local',
+                $tomcat_version          = '6.0.35',
+                $mirror                  = 'http://archive.apache.org/dist/tomcat',
+                $tomcat_users_template   = 'tomcat6/tomcat-users.xml.erb',
+                $tomcat_conf_template    = 'tomcat6/server.xml.erb',
+                $tomcat_logging_template = 'tomcat6/logging.properties.erb',
+                $tomcat_user             = 'root',
+                $tomcat_group            = 'root',
+                $admin_user              = 'tomcat',
+                $admin_password          = 'tomcat'
              ) {
                     
     $tomcat_url  = "${mirror}/tomcat-6/v${tomcat_version}/bin/apache-tomcat-${tomcat_version}.tar.gz"
@@ -61,6 +62,16 @@ class tomcat6 ( $parentdir      = '/usr/local',
         group  => root,
         mode   => 0644,
         content => template($tomcat_conf_template),
+        require => Exec["chown-apache-tomcat-${tomcat_version}"],
+        notify  => Service['tomcat'],
+    }
+
+    file { "${basedir}/conf/logging.properties":
+        ensure => present,
+        owner  => root,
+        group  => root,
+        mode   => 0644,
+        content => template($tomcat_logging_template),
         require => Exec["chown-apache-tomcat-${tomcat_version}"],
         notify  => Service['tomcat'],
     }

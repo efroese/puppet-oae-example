@@ -29,12 +29,13 @@
 #     mcast_port    => '5509',
 #   }
 #
-#   # Some environments don't allow multicat. Use tcp instead.
+#   # Some environments don't allow multicast. Use tcp instead.
 #   class { 'oae::app::ehcache':
-#     config_xml    => 'localconfig/ehcacheConfig.xml.erb'
+#     config_xml  => 'localconfig/ehcacheConfig.xml.erb'
+#     peers       => [ '192.168.1.50', '192.168.1.51' ]
 #     tcp_address => '192.168.1.50',
 #     tcp_port    => '40001',
-#     remote_object_port    => '40002',
+#     remote_object_port => '40002',
 #   }
 class oae::app::ehcache ($config_xml = 'oae/ehcacheConfig.xml.erb',
                          $peers=[],

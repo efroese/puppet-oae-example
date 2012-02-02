@@ -2,6 +2,7 @@ class tomcat6 ( $parentdir      = '/usr/local',
                 $tomcat_version = '6.0.35',
                 $mirror         = 'http://archive.apache.org/dist/tomcat',
                 $tomcat_users_template = 'tomcat6/tomcat-users.xml.erb',
+                $tomcat_users_template = 'tomcat6/server.xml.erb',
                 $tomcat_user='root',
                 $tomcat_group='root',
                 $admin_user = 'tomcat',
@@ -29,16 +30,10 @@ class tomcat6 ( $parentdir      = '/usr/local',
         require => Exec["unpack-apache-tomcat-${tomcat_version}"],
     }
 
-    exec { "chmod-tomcat-conf":
-        command => "chmod +r ${parentdir}/apache-tomcat-${tomcat_version}/conf/*",
-        unless  => "[ `stat -c '%a' ${parentdir}/apache-tomcat-${tomcat_version}/conf/server.xml` == 644 ]",
-        require => Exec["chown-apache-tomcat-${tomcat_version}"],
-    }
-
     file { $basedir: 
         ensure => link,
         target => "${parentdir}/apache-tomcat-${tomcat_version}",
-        require => Exec["chmod-tomcat-conf"],
+        require => Exec["unpack-apache-tomcat-${tomcat_version}"],
     }
 
     file { "/etc/init.d/tomcat": 
@@ -50,12 +45,21 @@ class tomcat6 ( $parentdir      = '/usr/local',
         require => File[$basedir],
     }
 
-    file { "${basedir}/conf/tomcat-users.xml": 
+    file { "${basedir}/conf/tomcat-users.xml":
         ensure => present,
         owner  => root,
         group  => root,
         mode   => 0644,
         content => template($tomcat_users_template),
+        require => Exec["chown-apache-tomcat-${tomcat_version}"],
+    }
+
+    file { "${basedir}/conf/server.xml":
+        ensure => present,
+        owner  => root,
+        group  => root,
+        mode   => 0644,
+        content => template($tomcat_conf_template),
         require => Exec["chown-apache-tomcat-${tomcat_version}"],
     }
 

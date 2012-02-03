@@ -45,12 +45,12 @@ class oae::app::setup($store_dir=undef){
     }
 
     if $store_dir != undef {
-        file { "${sling_dir}/store":
+        file { "${oae::params::basedir}/store":
             ensure  => link,
             owner   => $oae::params::user,
             group   => $oae::params::user,
             target  => $store_dir,
-            require => File[$sling_dir]
+            require => File[$oae::params::basedir]
         }
     }
 

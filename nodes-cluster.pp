@@ -230,7 +230,7 @@ node /oae-solr[1-3].localdomain/ inherits solrnode {
 #
 node 'oae-preview0.localdomain' inherits oaenode {
     class { 'oae::preview_processor::init':
-        upload_url   => "https://${localconfig::http_name}/"
+        upload_url   => "https://${localconfig::http_name}/",
         nakamura_git => $localconfig::nakamura_git,
         nakamura_tag => $localconfig::nakamura_tag,
     }

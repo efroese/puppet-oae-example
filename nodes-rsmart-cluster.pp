@@ -109,6 +109,7 @@ node oaeappnode inherits oaenode {
         javamemorymax  => $localconfig::javamemorymax,
         javapermsize   => $localconfig::javapermsize,
         setenv_template => 'localconfig/setenv.sh.erb',
+        store_dir       => $localconfig::storedir,
     }
     
     ###########################################################################

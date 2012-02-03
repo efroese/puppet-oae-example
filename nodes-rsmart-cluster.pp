@@ -215,9 +215,9 @@ node oaeappnode inherits oaenode {
     oae::app::server::sling_config {
         "org.sakaiproject.nakamura.basiclti.CLEVirtualToolDataProvider":
         config => {
-            'sakai.cle.basiclti.secret' => "secret",
+            'sakai.cle.basiclti.secret' => "C7beFutror7iSd",
             'sakai.cle.server.url'      => "https://${localconfig::http_name}",
-            'sakai.cle.basiclti.key'    => "12345",
+            'sakai.cle.basiclti.key'    => "AcademicRsmartCom",
         }
     }
 }

@@ -46,11 +46,14 @@ class oae::app::server( $downloadurl = undef,
                         $javamemorymax,
                         $javamemorymin,
                         $javapermsize,
-                        $setenv_template='oae/setenv.sh.erb') {
+                        $setenv_template='oae/setenv.sh.erb',
+                        $store_dir=undef) {
 
     Class['oae::app::setup'] -> Class['oae::app::server']
 
-    include oae::app::setup
+    class { 'oae::app::setup':
+        store_dir => $store_dir,
+    }
 
     file { "${oae::params::basedir}/sling/nakamura.properties":
         ensure => present,

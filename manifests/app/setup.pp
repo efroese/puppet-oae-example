@@ -9,7 +9,7 @@
 #
 #   You don't use this class directly. The oae::app:;server class includes it.
 #
-class oae::app::setup {
+class oae::app::setup($store_dir=undef){
 
     Class['oae::params'] -> Class['oae::app::setup']
 
@@ -42,6 +42,16 @@ class oae::app::setup {
         owner  => root,
         group  => root,
         mode   => 0644,
+    }
+
+    if $store_dir != undef {
+        file { "${sling_dir}/store":
+            ensure  => link,
+            owner   => $oae::params::user,
+            group   => $oae::params::user,
+            target  => $store_dir,
+            require => File[$store_dir]
+        }
     }
 
     define linked_oae_dir() {

@@ -88,6 +88,10 @@ class localconfig {
     $solr_remoteurl = "http://${solr_master}:8080/solr"
     $solr_queryurls = "http://${solr_master}:8080/solr|http://${solr_slave1}:8080/solr|http://${solr_slave2}:8080/solr"
 
+    #CLE
+    $basiclti_secret = "C7beFutror7iSd"
+    $basiclti_key = "AcademicRsmartCom"
+
     $tomcat_user    = 'admin'
     $tomcat_password = 'pulp134@rain'
 }

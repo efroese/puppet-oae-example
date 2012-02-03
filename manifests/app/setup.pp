@@ -50,7 +50,7 @@ class oae::app::setup($store_dir=undef){
             owner   => $oae::params::user,
             group   => $oae::params::user,
             target  => $store_dir,
-            require => File[$store_dir]
+            require => File[$sling_dir]
         }
     }
 

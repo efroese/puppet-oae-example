@@ -31,7 +31,7 @@ class localconfig {
     $solr_slave2 = '10.52.11.36'
 
 	# prod-cle
-    $cle_server  = '10.53.10.17'
+    $cle_server  = '10.52.10.17'
 
     ###########################################################################
     # Database setup
@@ -61,7 +61,7 @@ class localconfig {
     
     $apache_cle_lb_members = [ "${cle_server}:8009 route=cle1", "${cle_server}:8010 route=cle2" ]
     $apache_cle_location_match = "^/(xsl-portal.*|access.*|courier.*|dav.*|direct.*|imsblti.*|library.*|messageforums-tool.*|osp-common-tool.*|polls-tool.*|portal.*|profile-tool.*|profile2-tool.*|sakai.*|samigo-app.*|scheduler-tool.*|rsmart-customizer-tool.*|oauth-tool.*|emailtemplateservice-tool.*|sitestats-tool.*|rsmart-support-tool.*|mailsender-tool.*|tool.css|portool_base.css)"
-    $cle_dav_server0 = '10.53.10.19'
+    $cle_dav_server0 = '10.52.10.19'
 
     ###########################################################################
     # App servers

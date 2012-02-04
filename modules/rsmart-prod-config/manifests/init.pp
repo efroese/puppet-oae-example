@@ -55,7 +55,7 @@ class localconfig {
 
     ###########################################################################
     # Apache load balancer
-    $http_name                   = 'prod2.academic.rsmart.com'
+    $http_name                   = 'academic.rsmart.com'
     $apache_lb_members           = [ "${app_server1}:8080", "${app_server2}:8080" ]
     $apache_lb_members_untrusted = [ "${app_server1}:8082", "${app_server2}:8082" ]
     

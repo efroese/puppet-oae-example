@@ -12,13 +12,13 @@ SSLCryptoDevice builtin
 
     DocumentRoot <%= documentroot %>
 
-    # restrict all access to firebox
-    <Location />
-        Order deny,allow
-        Deny from all
-        Allow from firebox.rsmart.com
-        ErrorDocument 403 http://feynman.rsmart.com/downtime.html
-    </Location>
+    # restrict all access to firebox for maintenance
+    # <Location />
+    #     Order deny,allow
+    #     Deny from all
+    #     Allow from firebox.rsmart.com
+    #     ErrorDocument 403 http://feynman.rsmart.com/downtime.html
+    # </Location>
 
     LogLevel warn
     ErrorLog <%= wwwroot %>/<%= name %>/logs/error.log

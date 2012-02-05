@@ -1,4 +1,3 @@
-	attributes standby="on"
 primitive P_APACHE ocf:heartbeat:apache \
 	params configfile="/etc/httpd/conf/httpd.conf" statusurl="http://localhost/server-status" \
 	op monitor interval="40s"

@@ -55,7 +55,7 @@ class localconfig {
 
     ###########################################################################
     # Apache load balancer
-    $http_name                   = 'prod2.academic.rsmart.com'
+    $http_name                   = 'academic.rsmart.com'
     $apache_lb_members           = [ "${app_server1}:8080", "${app_server2}:8080" ]
     $apache_lb_members_untrusted = [ "${app_server1}:8082", "${app_server2}:8082" ]
     
@@ -86,7 +86,8 @@ class localconfig {
 
     # solr
     $solr_remoteurl = "http://${solr_master}:8080/solr"
-    $solr_queryurls = "http://${solr_master}:8080/solr|http://${solr_slave1}:8080/solr|http://${solr_slave2}:8080/solr"
+    # $solr_queryurls = "http://${solr_master}:8080/solr|http://${solr_slave1}:8080/solr|http://${solr_slave2}:8080/solr"
+    $solr_queryurls = "http://${solr_master}:8080/solr"
 
     #CLE
     $basiclti_secret = "C7beFutror7iSd"

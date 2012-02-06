@@ -1,3 +1,35 @@
+# = Class: tomcat6
+#
+# Install the Apache Tomcat servlet container.
+#
+# == Parameters:
+#
+# $parentdir::               Where tomcat will be installed
+#
+# $tomcat_version::          The version of tomcat to install.
+#
+# $mirror::                  The apache mirror to download from.
+#
+# $tomcat_users_template::   A template to use to render the conf/tomcat-users.xml file.
+#
+# $tomcat_conf_template::    A template to use to render the conf/server.xml file.
+#
+# $tomcat_logging_template:: A template to use to render the conf/logging.properties file.
+#
+# $tomcat_user::             The system user the tomcat process will run as.
+#
+# $tomcat_group::            The system group the tomcat process will run as.
+#
+# $admin_user::              The admin user for the Tomcat Manager webapp
+#
+# $admin_password::          The admin password for the Tomcat Manager webapp
+#
+# == Actions:
+#   Install the Apache Tomcat servlet container and configure the container, users, and logging.
+#
+# == Requires:
+#   - Package['java']
+#
 class tomcat6 ( $parentdir               = '/usr/local',
                 $tomcat_version          = '6.0.35',
                 $mirror                  = 'http://archive.apache.org/dist/tomcat',

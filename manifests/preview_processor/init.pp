@@ -2,7 +2,7 @@
 #
 # Install the OAE preview processor
 #
-# = Parameters
+# == Parameters:
 #
 # $admin_password::   The OAE admin password
 #

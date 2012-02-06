@@ -26,15 +26,15 @@
 # == Sample Usage:
 #
 #   class { 'oae::app::server':
-#     downloadurl   => 'http://192.168.1.124/jars/org.sakaiproject.nakamura.app-1.1-mysql.jar',
-#     jarfile       => 'org.sakaiproject.nakamura.app-1.1-mysql.jar',
+#     downloadurl   => 'http://192.168.1.124/jars/org.sakaiproject.nakamura.app-1.1-postgres.jar',
+#     jarfile       => 'org.sakaiproject.nakamura.app-1.1-postgres.jar',
 #     javamemorymax => 512,
 #     javapermsize  => 256,
 #   }
 #
 #   class { 'oae::app::server':
-#     jarsource     => '/home/sakaioae/jars/org.sakaiproject.nakamura.app-1.1-mysql.jar',
-#     jarfile       => 'org.sakaiproject.nakamura.app-1.1-mysql.jar',
+#     jarsource     => '/home/sakaioae/jars/org.sakaiproject.nakamura.app-1.1-postgres.jar',
+#     jarfile       => 'org.sakaiproject.nakamura.app-1.1-postgres.jar',
 #     javamemorymax => 512,
 #     javapermsize  => 256,
 #   }

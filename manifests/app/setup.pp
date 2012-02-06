@@ -2,12 +2,18 @@
 #
 # This class sets up the directories ecesary for an OAE install
 #
+# == Paramters:
+#
+# $store_dir:: Where content bodies get stored.
+#   A link is created due to a race condition with bringing up OSGi services
+#   that causes sparse to temporarily come up with its default configuration.
+#
 # == Actions:
 #   Create a few directories and links.
 #
 # == Sample Usage:
 #
-#   You don't use this class directly. The oae::app:;server class includes it.
+#   You don't use this class directly. The oae::app::server class includes it.
 #
 class oae::app::setup($store_dir=undef){
 
@@ -37,6 +43,7 @@ class oae::app::setup($store_dir=undef){
         target  => $log_dir,
     }
 
+    # This is owned by root so we can delegate write-access access only to certain services
     file { "${config_dir}/org":
         ensure => directory,
         owner  => root,
@@ -54,6 +61,9 @@ class oae::app::setup($store_dir=undef){
         }
     }
 
+    # Create a directory that is siblings of the sling directory.
+    # Create a link underneath the sling directory to the sling sibling.
+    # The allows us to delete the sling directory and preserve certain folders/data.
     define linked_oae_dir() {
         file { "${save_dir}/${name}":
             ensure => directory,

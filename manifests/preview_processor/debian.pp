@@ -2,7 +2,6 @@
 #
 # Debian packages for the preview processor.
 #
-# Parameters:
 class oae::preview_processor::debian {
 
     $packagelist = [

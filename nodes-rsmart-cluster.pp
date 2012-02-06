@@ -224,6 +224,16 @@ node oaeappnode inherits oaenode {
             'sakai.cle.basiclti.key'    => $localconfig::basiclti_key,
         }
     }
+
+    ###########################################################################
+    # Email integration
+    oae::app::server::sling_config {
+        'org.sakaiproject.nakamura.email.outgoing.LiteOutgoingEmailMessageListener':
+        config => {
+            'sakai.email.replyAsAddress' => $localconfig::reply_as_address,
+            'sakai.email.replyAsName'    => $localconfig::reply_as_name,
+        }
+    }
 }
 
 node /app[1-2].academic.rsmart.local/ inherits oaeappnode { }

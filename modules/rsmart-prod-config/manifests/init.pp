@@ -95,4 +95,8 @@ class localconfig {
 
     $tomcat_user    = 'admin'
     $tomcat_password = 'pulp134@rain'
+
+    # outgoing email
+    $reply_as_address = 'noreply@rsmart.com'
+    $reply_as_name = 'rSmart'
 }

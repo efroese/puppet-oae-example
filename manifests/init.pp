@@ -112,7 +112,7 @@ class tomcat6 ( $parentdir               = '/usr/local',
         ensure => directory,
         owner  => $tomcat_user,
         group  => $tomcat_group,
-        mode   => 0744,
+        mode   => 0755,
         require => Exec["chown-apache-tomcat-${tomcat_version}"],
     }
 
@@ -120,7 +120,7 @@ class tomcat6 ( $parentdir               = '/usr/local',
         ensure => directory,
         owner  => $tomcat_user,
         group  => $tomcat_group,
-        mode   => 0744,
+        mode   => 0755,
         require => File["${basedir}/conf/Catalina"],
     }
 

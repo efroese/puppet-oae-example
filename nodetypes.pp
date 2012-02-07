@@ -31,6 +31,9 @@ node basenode {
 
     realize(Group['cramaker'])
     realize(User['cramaker'])
+    
+    realize(Group['dthomson'])
+    realize(User['dthomson'])
 }
 
 node oaenode inherits basenode {

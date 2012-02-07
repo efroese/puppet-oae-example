@@ -80,6 +80,7 @@ class localconfig {
 
     # oae server protection service
     $serverprotectsec = 'shhh-its@secret'
+    $sps_disabled = true
 
     # ehcache
     $ehcache_tcp_port = '40001'

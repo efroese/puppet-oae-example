@@ -145,7 +145,7 @@ node oaeappnode inherits oaenode {
     oae::app::server::sling_config {
         "org.sakaiproject.nakamura.http.usercontent.ServerProtectionServiceImpl":
         config => {
-            'disable.protection.for.dev.mode' => false,
+            'disable.protection.for.dev.mode' => $localconfig::sps_disabled,
             'trusted.hosts'  => [
                 "localhost:8080\\ \\=\\ http://localhost:8081",
                 "${hostname}:8080\\ \\=\\ http://${hostname}:8081",

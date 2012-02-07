@@ -42,7 +42,7 @@ class postgres ($postgresql_conf_template='postgres/postgresql.conf.erb'){
     }
 
 	exec { 'postgres initdb':
-		command => "service $service_name initdb",
+		command => "service ${service_name} initdb",
 		creates => "/var/lib/pgsql/9.1/data/",
 	}
 

@@ -94,12 +94,14 @@ define postgres::role(  $ensure,
                 command => "${postgres::params::createuser} ${superuser_opt} ${createdb_opt} ${createrole_opt} ${inherit_opt} ${connection_limit_opt} ${encrypt_opt} ${name}",
                 user    => 'postgres',
                 unless  => "${postgres::params::psql} -c '\\du' | grep '^  *${name}  *|'",
+                require => Exec['postgres initdb'],
                 notify  => Exec["pg-set-password-${name}"],
             }
 
             exec { "pg-set-password-${name}":
                 command     => "${postgres::params::psql} -c \"ALTER ROLE ${name} WITH PASSWORD '${password}' \"",
                 user        => 'postgres',
+                require => Exec['postgres initdb'],
                 refreshonly => true,
             }
         }
@@ -107,6 +109,7 @@ define postgres::role(  $ensure,
             exec { "Remove $name postgres role":
                 command => "${postgres::params::dropuser} ${name}",
                 user    => "postgres",
+                require => Exec['postgres initdb'],
                 onlyif  => "${postgres::params::psql} -c '\\du' | grep '${name}  *|'"
             }
         }

@@ -37,6 +37,7 @@ define postgres::database($ensure, $create_options = "", $owner = false) {
                 command => "${postgres::params::psql} -c \"CREATE DATABASE ${name} ${ownerstring} ${create_options}\"",
                 user => "postgres",
                 unless => "${postgres::params::psql} -l | grep '${name}  *|'",
+                require => Exec['postgres initdb'],
             }
         }
         absent:  {
@@ -44,6 +45,7 @@ define postgres::database($ensure, $create_options = "", $owner = false) {
                 command => "${postgres::params::psql} -c \"DROP DATABASE ${name}\"",
                 onlyif => "${postgres::params::psql} -l | grep '${name}  *|'",
                 user => "postgres",
+                require => Exec['postgres initdb'],
             }
         }
         default: {

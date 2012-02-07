@@ -37,13 +37,12 @@ class postgres ($postgresql_conf_template='postgres/postgresql.conf.erb'){
         ensure => running,
         enable => true,
         hasstatus => true,
-        subscribe => [Package[postgresql91-server], Package[postgresql91]],
-        require   => File["/var/lib/pgsql/9.1/data/postgresql.conf"],
+        require   =>  Exec['postgres initdb'],
     }
 
 	exec { 'postgres initdb':
 		command => "service ${service_name} initdb",
-		creates => "/var/lib/pgsql/9.1/data/",
+		creates => "/var/lib/pgsql/9.1/data/PG_VERSION",
 	}
 
     file { "/var/lib/pgsql/9.1/data/postgresql.conf":

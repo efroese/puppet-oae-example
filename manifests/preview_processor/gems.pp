@@ -68,7 +68,7 @@ class oae::preview_processor::gems {
         unless  => "grep Iconv ${docsplit_gem_path}/lib/docsplit/info_extractor.rb",
         require => $lsbmajdistrelease ? {
             5       => [ File["${oae::params::basedir}/patches/info_extractor.rb.patch"], Opt_gem['docsplit'] ],
-            default => [ File["${oae::params::basedir}/patches/info_extractor.rb.patch"], gem['docsplit'] ],
+            default => [ File["${oae::params::basedir}/patches/info_extractor.rb.patch"], Gem['docsplit'] ],
         },
     }
 

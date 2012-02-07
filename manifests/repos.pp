@@ -5,8 +5,8 @@ class postgres::repos {
         /Amazon/ => '6'
     }
 
-	yumrepo { "PostgreSQL 9.1 6 - ${architecture}":
-        name     =>  "PostgreSQL 9.1 RHEL - ${release} - ${architecture}",
+	yumrepo { "postgresql-9.1-RHEL-${release}-${architecture}":
+        name     =>  "postgresql-9.1-RHEL-${release}-${architecture}",
         baseurl  => "http://yum.postgresql.org/9.1/redhat/rhel-${release}-${architecture}",
         enabled  => '1',
         gpgcheck => '0',

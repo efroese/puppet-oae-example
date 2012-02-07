@@ -86,10 +86,12 @@ node 'oipp-standalone.academic.rsmart.local' inherits oaenode {
     }
 
     class { 'oae::app::server':
-        downloaddir    => 'http://source.sakaiproject.org/maven2/org/sakaiproject/nakamura/org.sakaiproject.nakamura.app/1.1/',
-        jarfile        => 'org.sakaiproject.nakamura.app-1.1.jar',
-        javamemorymax  => '512',
-        javapermsize   => '256',
+        jarsource      => $localconfig::jarsource,
+        jarfile        => $localconfig::jarfile,
+        java           => $localconfig::java,
+        javamemorymin  => $localconfig::javamemorymin,
+        javamemorymax  => $localconfig::javamemorymax,
+        javapermsize   => $localconfig::javapermsize,
     }
 
     oae::app::server::sling_config {

@@ -6,7 +6,7 @@
 </Proxy>
 
 <Location <%= location %>>
-    ProxyPass <%= balancer %>/
+    ProxyPass <%= balancer %>/ stickysession=ROUTEID nofailover=Off
     
     # Compress responses
     SetOutputFilter DEFLATE
@@ -28,8 +28,11 @@ ProxyPass <%= noproxy %> !
 
 <Proxy <%= balancer %>>
 
-<% members.each do |member| %>
-    BalancerMember <%= proto %>://<%= member %><% params.each do |param| -%> <%= param %><% end -%>
+    # Sticky sessions based on the BalancerMember route attribute
+    Header add Set-Cookie "ROUTEID=.%{BALANCER_WORKER_ROUTE}e; path=/" env=BALANCER_ROUTE_CHANGED
+
+<% members.each_with_index do |member,index| -%>
+    BalancerMember <%= proto %>://<%= member %><% params.each do |param| -%> <%= param %><% end -%> route=<% index %>
 <% end %>
 
 <% if standbyurl != "" -%>

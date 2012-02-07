@@ -28,11 +28,13 @@ class oae::preview_processor::init (
     class { 'oae::preview_processor::openoffice': }
     class { 'oae::preview_processor::gems': }
 
-    file { "${oae::params::basedir}/bin":
-        ensure => directory,
-        owner  => $oae::params::user,
-        group  => $oae::params::group,
-        mode   => 750,
+    if !defined(File["${oae::params::basedir}/bin"]) {
+        file { "${oae::params::basedir}/bin":
+            ensure => directory,
+            owner  => $oae::params::user,
+            group  => $oae::params::group,
+            mode   => 750,
+        }
     }
 
     # Checkout a specific tag if specified

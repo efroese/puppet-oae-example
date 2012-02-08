@@ -176,10 +176,21 @@ node 'oipp-standalone.academic.rsmart.local' inherits oaenode {
     postgres::backup::simple { $localconfig::db:
         date_format => ''
     }
-    
+
     ###########################################################################
     #
     # MySQL Database Server
     #
+    class { 'mysql::server': stage => init }
 
+    mysql::database{ $localconfig::cle_db:
+        ensure   => present
+    }
+
+    mysql::rights{ "mysql-grant-${localconfig::cle_db}-${localconfig::cle_db_user}":
+        ensure   => present,
+        database => $localconfig::cle_db,
+        user     => $localconfig::cle_db_user,
+        password => $localconfig::cle_db_pass,
+    }
 }

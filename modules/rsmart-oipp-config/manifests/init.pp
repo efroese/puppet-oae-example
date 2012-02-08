@@ -17,8 +17,8 @@ class localconfig {
     ###########################################################################
     # Nodes
     $app_server  = '127.0.0.1'
-    $cle_server  = 'cole.uconline.edu'
     $db_server   = '127.0.0.1'
+    $cle_server  = 'cole.uconline.edu'
 
     ###########################################################################
     # Database setup
@@ -27,6 +27,11 @@ class localconfig {
     $db_driver   = 'org.postgresql.Driver'
     $db_user     = 'nakamura'
     $db_password = 'ironchef'
+
+    # TODO - Get the real values for the CLE database
+    $cle_db          = 'cle'
+    $cle_db_user     = 'sakai_cle'
+    $cle_db_password = 'ironchef'
 
     ###########################################################################
     # Content body storage

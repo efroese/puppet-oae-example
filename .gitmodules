@@ -22,3 +22,6 @@
 [submodule "modules/nfs"]
 	path = modules/nfs
 	url = http://github.com/efroese/puppet-nfs.git
+[submodule "modules/mysql"]
+	path = modules/mysql
+	url = http://github.com/efroese/puppet-mysql.git

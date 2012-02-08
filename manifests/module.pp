@@ -24,8 +24,7 @@ define apache::module ($ensure='present') {
           /RedHat|CentOS|Amazon/ => "/usr/local/sbin/a2enmod ${name}",
           default => "/usr/sbin/a2enmod ${name}"
         },
-        unless => "[ -e ${apache::params::conf}/mods-enabled/${name}.load ] \\
-                   && [ ${apache::params::conf}/mods-enabled/${name}.load -ef ${apache::params::conf}/mods-available/${name}.load ]'",
+        onlyif => "[ ! -e ${apache::params::conf}/mods-enabled/${name}.load ]",
         require => $a2enmod_deps,
         notify  => Service["apache"],
       }
@@ -37,7 +36,7 @@ define apache::module ($ensure='present') {
           /RedHat|CentOS|Amazon/ => "/usr/local/sbin/a2dismod ${name}",
           /Debian|Ubuntu/ => "/usr/sbin/a2dismod ${name}",
         },
-        unless  => "/bin/sh -c '[ -e ${apache::params::conf}/mods-enabled/${name}.load ]'",
+        onlyif => "[ -e ${apache::params::conf}/mods-enabled/${name}.load ]",
         require => $a2enmod_deps,
         notify  => Service["apache"],
        }

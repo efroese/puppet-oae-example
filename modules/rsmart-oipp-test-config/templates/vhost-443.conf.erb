@@ -49,6 +49,14 @@ SSLCryptoDevice builtin
     # see http://docs.codehaus.org/display/JETTY/Configuring+mod_proxy
     ProxyPreserveHost On
     
+    ProxyPass /Shibboleth.sso/ !
+    ProxyPass /Shibboleth.sso !
+
+    #  deny /sakai-axis
+    <LocationMatch "^/(sakai-axis.*)">
+        Redirect gone /
+    </LocationMatch>
+
     # restrict access to system console
     <Location /system/console>
         Order deny,allow

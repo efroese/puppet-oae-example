@@ -1,4 +1,7 @@
 #
+# OIPP production cluster
+# https://oipp-test.academic.rsmart.com
+#
 # Use this class to configure a specific OAE cluster.
 # In your nodes file refer to these variables as $localconfig::variable_name.
 #
@@ -44,7 +47,7 @@ class localconfig {
 
     ###########################################################################
     # Apache load balancer
-    $http_name                   = 'cole.uconline.edu'
+    $http_name                   = 'oipp-test.academic.rsmart.com:'
     $apache_lb_members           = [ "${app_server}:8080", ]
     $apache_lb_members_untrusted = [ "${app_server}:8082", ]
     $apache_cle_lb_members       = [ "${cle_server}:8009 route=OIPP-CLE1", "${cle_server}:8010 route=OIPP-CLE2" ]
@@ -84,9 +87,9 @@ class localconfig {
     $reply_as_name    = 'rSmart Academic'
     
     # Registration
-    $redirect_url = "https://cole.uconline.edu"
+    $redirect_url = "https://oipp-test.academic.rsmart.com/"
     $redirect_enabled = true
-    
+
     $mapping_enabled = true
     $authn_header    = "sak3-user"
     $trusted_ip      = "10.51.9.10"

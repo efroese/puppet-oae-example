@@ -92,7 +92,7 @@ class localconfig {
 
     $mapping_enabled = true
     $authn_header    = "sak3-user"
-    $trusted_ip      = "10.51.9.10"
+    $trusted_ip      = "127.0.0.1"
     $user_property   = "eppn"
     $authn_path      = "/system/trustedauth"
     

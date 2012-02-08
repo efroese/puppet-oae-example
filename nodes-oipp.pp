@@ -169,11 +169,13 @@ node 'oipp-standalone.academic.rsmart.local' inherits oaenode {
        type => 'host',
        db   => $localconfig::db,
        user => $localconfig::db_user,
-       address => "$ipaddress/24",
-       method  => 'md5',
+       address => "127.0.0.1/32",
+       method  => 'trust',
     }
 
-    postgres::backup::simple { $localconfig::db: }
+    postgres::backup::simple { $localconfig::db:
+        date_format => ''
+    }
     
     ###########################################################################
     #

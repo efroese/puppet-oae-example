@@ -18,7 +18,7 @@ class localconfig {
     # Nodes
     $app_server  = '127.0.0.1'
     $cle_server  = 'cole.uconline.edu'
-    $db_server   = '10.51.10.11'
+    $db_server   = '127.0.0.1'
 
     ###########################################################################
     # Database setup

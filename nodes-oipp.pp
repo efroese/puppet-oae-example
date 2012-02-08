@@ -155,6 +155,9 @@ node 'oipp-standalone.academic.rsmart.local' inherits oaenode {
 
     postgres::database { $localconfig::db:
         ensure => present,
+        owner  => $localconfig::db_user,
+        create_options => "ENCODING = 'UTF8' TABLESPACE = pg_default LC_COLLATE = 'en_US.UTF-8' LC_CTYPE = 'en_US.UTF-8' CONNECTION LIMIT = -1",
+        require => Postgres::Role[$localconfig::db_user]
     }
 
     postgres::role { $localconfig::db_user:

@@ -163,7 +163,6 @@ node 'oipp-standalone.academic.rsmart.local' inherits oaenode {
     postgres::role { $localconfig::db_user:
         ensure   => present,
         password => $localconfig::db_password,
-        require  => Postgres::Database[$localconfig::db],
     }
 
     postgres::clientauth { "host-${localconfig::db}-${localconfig::db_user}-all-md5":

@@ -80,7 +80,12 @@ node 'oipp-standalone.academic.rsmart.local' inherits oaenode {
 
     $selinux = false
 
-    class { 'shibboleth::sp': }
+    class { 'shibboleth::sp':
+        shibboleth2_xml_template   => 'localconfig/shibboleth.xml.erb',
+        attribute_map_xml_template => 'localconfig/attribute-map.xml.erb',
+        sp_cert => 'puppet://modules/localconfig/sp-cert.pem',
+        sp_key  => 'puppet://modules/localconfig/sp-key.pem',
+    }
     class { 'shibboleth::shibd': }
     apache::module { 'shib': }
 
@@ -89,9 +94,17 @@ node 'oipp-standalone.academic.rsmart.local' inherits oaenode {
         group => root,
         mode  => 0644,
         content => template('localconfig/shib.conf'),
-	notify => Service['httpd'],
+	    notify => Service['httpd'],
+	    require => Package['shibboleth'],
     }
 
+    file { "/etc/shibboleth/incommon.pem":
+        owner => root,
+        group => root,
+        mode  => 0644,
+        source => 'puppet://modules/localconfig/incommon.pem',
+	    notify => Service['httpd'],
+    }
 
     ###########################################################################
     # Apache global config

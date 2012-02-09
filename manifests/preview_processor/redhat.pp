@@ -58,6 +58,12 @@ class oae::preview_processor::redhat {
     if $lsbmajdistrelease == '6' {
         $centos6_pkgs = ['cronie', 'curlpp-devel', 'ImageMagick', 'ImageMagick-devel', 'ruby-devel']
         package { $centos6_pkgs: ensure => installed }
+
+        package { 'pdftk-1.44-1.el6.rf.x86_64':
+             ensure   => present,
+             source   => "http://dl.dropbox.com/u/24606888/puppet-oae-files/pdftk-1.44-1.el6.rf.x86_64.rpm",
+             provider => 'rpm',
+        }
     }
 
     if $operatingsystem == 'Amazon' and $operatingsystemrelease == '2011.09' {

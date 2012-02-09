@@ -32,7 +32,7 @@ ProxyPass <%= noproxy %> !
     Header add Set-Cookie "ROUTEID=.%{BALANCER_WORKER_ROUTE}e; path=/" env=BALANCER_ROUTE_CHANGED
 
 <% members.each_with_index do |member,index| -%>
-    BalancerMember <%= proto %>://<%= member %><% params.each do |param| -%> <%= param %><% end -%> route=<% index %>
+    BalancerMember <%= proto %>://<%= member %><% params.each do |param| -%> <%= param %><% end -%> route=<%= index %>
 <% end %>
 
 <% if standbyurl != "" -%>

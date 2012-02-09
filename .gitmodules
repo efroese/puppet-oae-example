@@ -25,3 +25,6 @@
 [submodule "modules/mysql"]
 	path = modules/mysql
 	url = http://github.com/efroese/puppet-mysql.git
+[submodule "modules/shibboleth"]
+	path = modules/shibboleth
+	url = http://github.com/efroese/puppet-shibboleth.git

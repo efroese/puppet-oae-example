@@ -72,7 +72,7 @@ class oae::app::server( $downloadurl = undef,
         owner   => $oae::params::user,
         group   => $oae::params::user,
         mode    => '0755',
-        content => template($sparse_properties_template),
+        content => template($setenv_template),
         notify  => Service['sakaioae']
     }
 

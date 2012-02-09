@@ -76,6 +76,14 @@ node 'oipp-standalone.academic.rsmart.local' inherits oaenode {
     }
 
     ###########################################################################
+    # Shibboleth
+
+    $selinux = false
+
+    class { 'shibboleth::sp': }
+    class { 'shibboleth::shibd': }
+
+    ###########################################################################
     # Apache global config
 
     file { "/etc/httpd/conf.d/traceenable.conf":

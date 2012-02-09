@@ -90,6 +90,12 @@ node 'apache1.academic.rsmart.local' inherits oaenode {
         mode  => 644,
         content => 'TraceEnable Off',
     }
+
+    ###########################################################################
+    # Shibboleth
+
+    class { 'shibboleth::sp': }
+    class { 'shibboleth::shibd': }
 }
 
 ###########################################################################

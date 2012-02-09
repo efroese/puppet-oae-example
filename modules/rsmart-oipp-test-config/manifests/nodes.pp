@@ -181,7 +181,11 @@ node 'oipp-standalone.academic.rsmart.local' inherits oaenode {
     #
     # MySQL Database Server
     #
-    class { 'mysql::server': stage => init }
+
+    $mysql_password = 'khjRE7AftLfB'
+
+    class { 'augeas': }
+    class { 'mysql::server': }
 
     mysql::database{ $localconfig::cle_db:
         ensure   => present
@@ -191,6 +195,6 @@ node 'oipp-standalone.academic.rsmart.local' inherits oaenode {
         ensure   => present,
         database => $localconfig::cle_db,
         user     => $localconfig::cle_db_user,
-        password => $localconfig::cle_db_pass,
+        password => $localconfig::cle_db_password,
     }
 }

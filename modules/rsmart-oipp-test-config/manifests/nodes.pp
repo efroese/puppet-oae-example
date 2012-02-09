@@ -82,6 +82,16 @@ node 'oipp-standalone.academic.rsmart.local' inherits oaenode {
 
     class { 'shibboleth::sp': }
     class { 'shibboleth::shibd': }
+    apache::module { 'shib': }
+
+    file { "/var/www/vhosts/${localconfig::http_name}:443/conf/shib.conf":
+        owner => root,
+        group => root,
+        mode  => 0644,
+        content => template('localconfig/shib.conf'),
+	notify => Service['httpd'],
+    }
+
 
     ###########################################################################
     # Apache global config

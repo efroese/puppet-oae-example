@@ -18,6 +18,8 @@
 #
 # $javapermsize::  The max java perm gen space
 #
+# $sparseconfig_properties_template:: The template to use to render sparseconfig.properties (optional)
+#
 # $setenv_template::  The template to use to render the setenv.sh file. (optional)
 #
 # == Actions:
@@ -47,6 +49,7 @@ class oae::app::server( $downloadurl = undef,
                         $javamemorymin,
                         $javapermsize,
                         $setenv_template='oae/setenv.sh.erb',
+                        $sparseconfig_properties_template=undef,
                         $store_dir=undef) {
 
     Class['oae::app::setup'] -> Class['oae::app::server']
@@ -56,7 +59,7 @@ class oae::app::server( $downloadurl = undef,
     }
 
     file { "${oae::params::basedir}/sling/nakamura.properties":
-        ensure => present,
+        ensure  => present,
         owner   => $oae::params::user,
         group   => $oae::params::user,
         mode    => '0644',
@@ -65,12 +68,23 @@ class oae::app::server( $downloadurl = undef,
     }
 
     file { "${oae::params::basedir}/bin/setenv.sh":
-        ensure => present,
+        ensure  => present,
         owner   => $oae::params::user,
         group   => $oae::params::user,
         mode    => '0755',
-        content  => template($setenv_template),
+        content => template($sparse_properties_template),
         notify  => Service['sakaioae']
+    }
+
+    if $sparseconfig_properties_template == undef {
+        file { "${oae::params::basedir}/bin/sparseconfig.properties":
+            ensure  => present,
+            owner   => $oae::params::user,
+            group   => $oae::params::user,
+            mode    => '0755',
+            content => template($setenv_template),
+            notify  => Service['sakaioae']
+        }
     }
 
     $jar_dest = "${oae::params::basedir}/jars/${jarfile}"

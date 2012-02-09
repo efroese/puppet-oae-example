@@ -76,13 +76,13 @@ class oae::app::server( $downloadurl = undef,
         notify  => Service['sakaioae']
     }
 
-    if $sparseconfig_properties_template == undef {
+    if $sparseconfig_properties_template != undef {
         file { "${oae::params::basedir}/bin/sparseconfig.properties":
             ensure  => present,
             owner   => $oae::params::user,
             group   => $oae::params::user,
             mode    => '0755',
-            content => template($setenv_template),
+            content => template($sparseconfig_properties_template),
             notify  => Service['sakaioae']
         }
     }

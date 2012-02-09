@@ -13,10 +13,18 @@ Example usage:
   include apache
 
 */
-class apache {
+class apache ($httpd_conf_template='apache/httpd.conf.erb'){
   case $operatingsystem {
-    Debian,Ubuntu:  { include apache::debian}
-    RedHat,CentOS,Amazon:  { include apache::redhat}
+    Debian,Ubuntu: {
+        class { 'apache::debian':
+            httpd_conf_template => $httpd_conf_template,
+        }
+    }
+    RedHat,CentOS,Amazon: {
+        class { 'apache::redhat':
+            httpd_conf_template => $httpd_conf_template,
+        }
+    }
     default: { notice "Unsupported operatingsystem ${operatingsystem}" }
   }
 }

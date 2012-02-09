@@ -1,4 +1,4 @@
-class apache::redhat inherits apache::base {
+class apache::redhat($httpd_conf_template='apache/httpd.conf.erb') inherits apache::base {
 
   include apache::params
   
@@ -68,7 +68,7 @@ class apache::redhat inherits apache::base {
 
   file { "${apache::params::conf}/conf/httpd.conf":
     ensure => present,
-    content => template("apache/httpd.conf.erb"),
+    content => template($httpd_conf_template),
     seltype => "httpd_config_t",
     notify  => Service["apache"],
     require => Package["apache"],

@@ -44,6 +44,12 @@ class mysql::server {
     }
   }
 
+  # The amazon package doesn't create this
+  file { '/etc/mysql':
+    ensure => directory,
+    require => Package['mysql-server']
+  }
+
   file { "/etc/mysql/my.cnf":
     ensure => present,
     path => $mysql::params::mycnf,
@@ -51,7 +57,7 @@ class mysql::server {
     group => root,
     mode => 644,
     seltype => "mysqld_etc_t",
-    require => Package["mysql-server"],
+    require => [Package["mysql-server"], File['/etc/mysql'] ]
   }
 
   file { "/usr/share/augeas/lenses/contrib/mysql.aug":

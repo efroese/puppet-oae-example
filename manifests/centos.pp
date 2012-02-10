@@ -4,7 +4,7 @@ class centos {
 
     yumrepo { 'centos6-base':
         name       => 'centos6-base',
-        baseurl    => "http://mirrorlist.centos.org/?release=6&arch=${architecture}&repo=os",
+        baseurl    => "http://mirror.7x24web.net/centos/6/os/x86_64/",
         gpgcheck   => '1',
         gpgkey     => 'http://mirror.centos.org/centos/RPM-GPG-KEY-CentOS-6',
         priority   => '99',

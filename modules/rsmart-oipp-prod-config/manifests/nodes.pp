@@ -140,12 +140,14 @@ node oaeappnode inherits oaenode {
 
     class { 'nfs::client': }
 
+    file  { $localconfig::nfs_mountpoint: ensure => directory }
     mount { $localconfig::nfs_mountpoint:
         ensure => 'mounted',
         fstype => 'nfs4',
         device => "${localconfig::nfs_server}:${localconfig::nfs_share}",
         options => $localconfig::nfs_options,
         atboot => true,
+        require => File[$localconfig::nfs_mountpoint],
     }
 
     # Connect OAE to the DB

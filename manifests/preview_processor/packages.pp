@@ -64,13 +64,14 @@ class oae::preview_processor::packages {
 
         # CentOS 6, RHEL 6
         if $release == '6' {
-            $centos6_pkgs = ['cronie', 'libcurl-devel', 'ImageMagick', 'ImageMagick-devel', 'ruby-devel']
+            $centos6_pkgs = ['cronie', 'libcurl-devel', 'ImageMagick', 'ImageMagick-devel', 'ruby-devel', 'libgcj']
             package { $centos6_pkgs: ensure => installed }
 
             package { 'pdftk-1.44-1.el6.rf.x86_64':
                  ensure   => present,
                  source   => "http://dl.dropbox.com/u/24606888/puppet-oae-files/pdftk-1.44-1.el6.rf.x86_64.rpm",
                  provider => 'rpm',
+                 require  => Package['libgcj']
             }
         }
     }

@@ -27,7 +27,7 @@ class mysql::slave inherits mysql::slave::common {
 
     } # Debian
 
-    RedHat,CentOS: {
+    RedHat,CentOS,Amazon: {
       case $lsbmajdistrelease {
 
         "4","5": { }

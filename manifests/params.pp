@@ -1,7 +1,7 @@
 class mysql::params {
 
   $mycnf = $operatingsystem ? {
-    /RedHat|Fedora|CentOS/ => "/etc/my.cnf",
+    /RedHat|Fedora|CentOS|Amazon/ => "/etc/my.cnf",
     default => "/etc/mysql/my.cnf",
   }
 

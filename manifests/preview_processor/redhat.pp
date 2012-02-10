@@ -10,8 +10,13 @@ class oae::preview_processor::redhat {
                         'poppler-utils', 'pdftk', 'rubygems', 'tk', 'GraphicsMagick']
     package { $common_packages: ensure => installed }
 
+    $release = $operatingsystem ? {
+        /CentOS|RedHat/ => $lsbmajdistrelease,
+        /Amazon|Linux/ => '6'
+    }
+
     # CentOS 5, RHEL 5
-    if  $lsbmajdistrelease == '5'  {
+    if  $release == '5'  {
 
         $centos5_pkgs = ['curl-devel', 'tesseract', 'bzip2-devel', 'ghostscript-devel', 'jasper-devel',
 			'lcms-devel', 'libX11-devel', 'libXext-devel', 'libXt-devel', 'libjpeg-devel', 
@@ -55,8 +60,8 @@ class oae::preview_processor::redhat {
     } 
 
     # CentOS 6, RHEL 6
-    if $lsbmajdistrelease == '6' {
-        $centos6_pkgs = ['cronie', 'curlpp-devel', 'ImageMagick', 'ImageMagick-devel', 'ruby-devel']
+    if $release == '6' {
+        $centos6_pkgs = ['cronie', 'libcurl-devel', 'ImageMagick', 'ImageMagick-devel', 'ruby-devel']
         package { $centos6_pkgs: ensure => installed }
 
         package { 'pdftk-1.44-1.el6.rf.x86_64':
@@ -64,10 +69,5 @@ class oae::preview_processor::redhat {
              source   => "http://dl.dropbox.com/u/24606888/puppet-oae-files/pdftk-1.44-1.el6.rf.x86_64.rpm",
              provider => 'rpm',
         }
-    }
-
-    if $operatingsystem == 'Amazon' and $operatingsystemrelease == '2011.09' {
-        $amazon_pkgs = ['cronie', 'ImageMagick', 'ImageMagick-devel', 'ruby-devel']
-        package { $amazon_pkgs: ensure => installed }
     }
 }

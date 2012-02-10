@@ -4,6 +4,8 @@
 #
 class oae::preview_processor::gems {
 
+    Class['oae::preview_processor::packages'] -> Class['oae::preview_processor::gems']
+
     define opt_gem($version = ""){
         if $version == "" {
             exec { "gem-install-${name}":
@@ -21,7 +23,7 @@ class oae::preview_processor::gems {
 
     define gem($version) {
         package { $name:
-            ensure => $version,
+            ensure   => $version,
             provider => 'gem',
         }
     }

@@ -20,11 +20,6 @@ class oae::preview_processor::init (
 
     Class['oae::params'] -> Class['oae::preview_processor::init']
 
-    case $operatingsystem {
-        /RedHat|CentOS|Amazon/: { include oae::preview_processor::redhat }
-        /Debian|Ubuntu/:        { include oae::preview_processor::debian }
-    }
-
     class { 'oae::preview_processor::openoffice': }
     class { 'oae::preview_processor::gems': }
 

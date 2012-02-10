@@ -7,7 +7,7 @@ class oae::preview_processor::openoffice {
     if $operatingsystem =~ /Amazon|Linux/ {
         $pkg_string = 'openoffice.org-core.x86_64 openoffice.org-javafilter.x86_64 openoffice.org-headless.x86_64 openoffice.org-writer.x86_64'
         exec { 'install-ooo-centos':
-            command => "yum -y --enablerepo=centos-base install ${pkg_string}",
+            command => "yum -y --enablerepo=centos6-base install ${pkg_string}",
             unless  => "rpm -q ${pkg_string}",
             notify => File['/usr/lib/openoffice'],
         }

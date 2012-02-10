@@ -18,9 +18,8 @@ class apache::ssl::redhat inherits apache::base::ssl {
     before => Exec["apache-graceful"],
   }
 
-    $release = "${operatingsystem}-${operatingsystemrelease}" ? {
-        /Linux-2011.09/ => '6',
-        /Linux-2.6.*/ => '6',
+    $release = $operatingsystem ? {
+        /Amazon|Linux/ => '6',
         default          => $lsbmajdistrelease,
     }
 

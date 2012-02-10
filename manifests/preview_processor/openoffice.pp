@@ -13,7 +13,8 @@ class oae::preview_processor::openoffice {
         }
     }
     else {
-        package { [ 'openoffice.org-core', 'openoffice.org-javafilter', 'openoffice.org-headless',  'openoffice.org-writer.x86_64' ]: 
+        package { [ 'openoffice.org-core', 'openoffice.org-javafilter',
+                    'openoffice.org-headless',  'openoffice.org-writer' ]: 
             ensure => installed,
             notify => [ Service['soffice'], File['/usr/lib/openoffice'] ],
         }
@@ -22,7 +23,10 @@ class oae::preview_processor::openoffice {
     file { '/usr/lib/openoffice':
         ensure => link,
         target => '/usr/lib64/openoffice.org3',
-        refreshonly => true,
+        require => $operatingsystem ? {
+            /Amazon|Linux/ => Exec['install-ooo-centos'],
+            default => Package['openoffice.org-core'],
+        }
     }
 
     # Run the OpenOffice service to convert docs

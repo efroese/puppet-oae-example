@@ -3,7 +3,7 @@
 # OIPP Standalone App Server
 #
 # 
-node 'oipp-standalone.academic.rsmart.local' inherits oaenode {
+node /oipp-test[2]?.academic.rsmart.local/ inherits oaenode {
     
     class { 'apache::ssl': }
 

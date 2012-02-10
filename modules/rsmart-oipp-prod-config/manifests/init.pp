@@ -17,18 +17,12 @@ class localconfig {
     ###########################################################################
     # Nodes
     
-    # prod-app1
-    $app_server1 = '10.TODO.TODO.TODO'
-    # prod-app2
-    $app_server2 = '10.TODO.TODO.TODO'
-    # prod-nfs
-    $nfs_server  = '10.TODO.TODO.TODO'
-    # prod-dbserv1
-    $db_server   = '10.TODO.TODO.TODO'
-    # solr master server
-    $solr_master = '10.TODO.TODO.TODO'
-    $solr_slave1 = '10.TODO.TODO.TODO'
-    $solr_slave2 = '10.TODO.TODO.TODO'
+    $app_server1 = '10.51.11.100'
+    $app_server2 = '10.51.11.101'
+    $nfs_server  = '10.51.11.90'
+    $db_server   = '10.51.11.70'
+    $solr_master = '10.51.11.30'
+    $solr_slave1 = '10.51.11.31'
 
 	# prod-cle
     $cle_server  = '10.TODO.TODO.TODO'
@@ -55,7 +49,9 @@ class localconfig {
 
     ###########################################################################
     # Apache load balancer
-    $http_name                   = 'cole.uconline.edu'
+    # $http_name = 'cole.uconline.edu'
+    $http_name           = 'oipp-prod2.academic.rsmart.com'
+    $http_name_untrusted = 'oipp-content.academic.rsmart.com'
     $apache_lb_members           = [ "${app_server1}:8080", "${app_server2}:8080" ]
     $apache_lb_members_untrusted = [ "${app_server1}:8082", "${app_server2}:8082" ]
     
@@ -78,7 +74,7 @@ class localconfig {
     $oae_admin_hosts = ['72.44.192.164', ]
 
     # oae server protection service
-    $serverprotectsec = 'TODO'
+    $serverprotectsec = 'M9LjpkmNioYEZD81BBffC4QzRAiHpJ8'
     $sps_disabled = false
 
     # ehcache
@@ -87,7 +83,7 @@ class localconfig {
 
     # solr
     $solr_remoteurl = "http://${solr_master}:8080/solr"
-    # $solr_queryurls = "http://${solr_master}:8080/solr|http://${solr_slave1}:8080/solr|http://${solr_slave2}:8080/solr"
+    # $solr_queryurls = "http://${solr_master}:8080/solr|http://${solr_slave1}:8080/solr"
     $solr_queryurls = "http://${solr_master}:8080/solr"
 
     #CLE

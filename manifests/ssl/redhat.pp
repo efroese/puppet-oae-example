@@ -19,7 +19,8 @@ class apache::ssl::redhat inherits apache::base::ssl {
   }
 
     $release = "${operatingsystem}-${operatingsystemrelease}" ? {
-        /Amazon-2011.09/ => '5',
+        /Linux-2011.09/ => '6',
+        /Linux-2.6.*/ => '6',
         default          => $lsbmajdistrelease,
     }
 

@@ -20,7 +20,7 @@ class apache ($httpd_conf_template='apache/httpd.conf.erb'){
             httpd_conf_template => $httpd_conf_template,
         }
     }
-    RedHat,CentOS,Amazon: {
+    RedHat,CentOS,Linux: {
         class { 'apache::redhat':
             httpd_conf_template => $httpd_conf_template,
         }

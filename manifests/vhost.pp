@@ -233,7 +233,7 @@ define apache::vhost (
 
       exec {"enable vhost ${name}":
         command => $operatingsystem ? {
-          /RedHat|CentOS|Amazon/ => "/usr/local/sbin/a2ensite ${name}",
+          /RedHat|CentOS|Linux/ => "/usr/local/sbin/a2ensite ${name}",
           default => "/usr/sbin/a2ensite ${name}"
         },
         notify  => Exec["apache-graceful"],

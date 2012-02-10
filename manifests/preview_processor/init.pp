@@ -20,6 +20,7 @@ class oae::preview_processor::init (
 
     Class['oae::params'] -> Class['oae::preview_processor::init']
 
+    class { 'oae::preview_processor::packages': }
     class { 'oae::preview_processor::openoffice': }
     class { 'oae::preview_processor::gems': }
 

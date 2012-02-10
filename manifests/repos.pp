@@ -1,8 +1,8 @@
 class postgres::repos {
     
     $release = $operatingsystem ? {
-        CentOS,RedHat => $lsbmajdistrelease,
-        Amazon,Linux => '6'
+        /CentOS|RedHat/ => $lsbmajdistrelease,
+        /Amazon|Linux/ => '6'
     }
 
 	yumrepo { "postgresql-9.1-RHEL-${release}-${architecture}":

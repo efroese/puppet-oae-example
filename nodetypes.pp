@@ -4,11 +4,14 @@
 #
 node basenode {
 
-    if $operatingsystem == 'CentOS' or $operatingsystem == 'Amazon' {
-        class { 'centos': stage => init }
+    if $operatingsystem =~ /Redhat|CentOS/ {
         if $virtual == "virtualbox" {
             class { 'centos_minimal': stage => init }
         }
+    }
+
+    if $operatingsystem =~ /Amazon|Linux/ {
+        class { 'centos': stage => init }
     }
 
     class { 'git': }

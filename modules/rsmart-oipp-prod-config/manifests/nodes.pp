@@ -92,7 +92,7 @@ node 'apache1.academic.rsmart.local' inherits oaenode {
     $selinux = false
 
     class { 'shibboleth::sp':
-        shibboleth2_xml_template   => 'localconfig/shibboleth.xml.erb',
+        shibboleth2_xml_template   => 'localconfig/shibboleth2.xml.erb',
         attribute_map_xml_template => 'localconfig/attribute-map.xml.erb',
         sp_cert => 'puppet://modules/localconfig/sp-cert.pem',
         sp_key  => 'puppet://modules/localconfig/sp-key.pem',

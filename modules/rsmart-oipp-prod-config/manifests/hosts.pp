@@ -3,7 +3,7 @@ class localconfig::hosts {
 
     host { 'oipp-prod-apache1':
         ensure => present,
-        ip => '10.51.9.20 ',
+        ip => '10.51.9.20',
         host_aliases => 'oipp-prod-apache1.academic.rsmart.local',
         comment => 'Apache load balancer'
     }

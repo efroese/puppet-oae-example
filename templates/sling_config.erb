@@ -1,5 +1,6 @@
 service.pid="<%= pid %>"
-<% config.sort!.each_pair do |key, value| -%>
+<% config.keys.sort.each do |key| -%>
+<% value = config[key] -%>
 <% if value.is_a? String -%>
 <%= key %>=<%= "\"#{value}\"" %>
 <% end -%>

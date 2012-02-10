@@ -27,10 +27,13 @@ node 'apache1.academic.rsmart.local' inherits oaenode {
 
     # Serve the OAE app (trusted content) on 443
     apache::vhost-ssl { "${localconfig::http_name}:443":
-        sslonly  => true,
-        cert     => "puppet://modules/localconfig/cole.uconline.edu.crt",
-        certkey  => "puppet://modules/localconfig/cole.uconline.edu.key",
-        certchain => "puppet://modules/localconfig/cole.uconline.edu-intermediate.crt",
+        sslonly   => true,
+        #cert     => "puppet:///modules/localconfig/cole.uconline.edu.crt",
+        #certkey  => "puppet:///modules/localconfig/cole.uconline.edu.key",
+        #certchain => "puppet:///modules/localconfig/cole.uconline.edu-intermediate.crt",
+        cert      => "puppet:///modules/localconfig/academic.rsmart.com.crt",
+        certkey   => "puppet:///modules/localconfig/academic.rsmart.com.key",
+        certchain => "puppet:///modules/localconfig/academic.rsmart.com-intermediate.crt",
         template  => 'localconfig/vhost-443.conf.erb',
     }
 
@@ -59,10 +62,13 @@ node 'apache1.academic.rsmart.local' inherits oaenode {
     ###########################################################################
     # Serve untrusted content from another hostname
     apache::vhost-ssl { "${localconfig::http_name_untrusted}:443":
-        sslonly  => true,
-        cert     => "/etc/pki/tls/certs/rsmart.com.crt",
-        certkey  => "/etc/pki/tls/private/rsmart.com.key",
-        certchain => "/etc/pki/tls/certs/rsmart.com-intermediate.crt",
+        sslonly   => true,
+        #cert     => "puppet:///modules/localconfig/content-cole.uconline.edu.crt",
+        #certkey  => "puppet:///modules/localconfig/content-cole.uconline.edu.key",
+        #certchain => "puppet:///modules/localconfig/content-cole.uconline.edu-intermediate.crt",
+        cert      => "puppet:///modules/localconfig/academic.rsmart.com.crt",
+        certkey   => "puppet:///modules/localconfig/academic.rsmart.com.key",
+        certchain => "puppet:///modules/localconfig/academic.rsmart.com-intermediate.crt",
         template  => 'localconfig/vhost-8443.conf.erb',
     }
 
@@ -94,8 +100,8 @@ node 'apache1.academic.rsmart.local' inherits oaenode {
     class { 'shibboleth::sp':
         shibboleth2_xml_template   => 'localconfig/shibboleth2.xml.erb',
         attribute_map_xml_template => 'localconfig/attribute-map.xml.erb',
-        sp_cert => 'puppet://modules/localconfig/sp-cert.pem',
-        sp_key  => 'puppet://modules/localconfig/sp-key.pem',
+        sp_cert => 'puppet:///modules/localconfig/sp-cert.pem',
+        sp_key  => 'puppet:///modules/localconfig/sp-key.pem',
     }
     class { 'shibboleth::shibd': }
     apache::module { 'shib': }
@@ -113,7 +119,7 @@ node 'apache1.academic.rsmart.local' inherits oaenode {
         owner => root,
         group => root,
         mode  => 0644,
-        source => 'puppet://modules/localconfig/incommon.pem',
+        source => 'puppet:///modules/localconfig/incommon.pem',
 	    notify => Service['httpd'],
     }
 }

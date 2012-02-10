@@ -48,6 +48,7 @@ class localconfig {
     ###########################################################################
     # Apache load balancer
     $http_name                   = 'oipp-test.academic.rsmart.com'
+    $http_name_untrusted         = 'oipp-test-content.academic.rsmart.com'
     $apache_lb_members           = [ "${app_server}:8080", ]
     $apache_lb_members_untrusted = [ "${app_server}:8082", ]
     $apache_cle_lb_members       = [ "${cle_server}:8009 route=OIPP-CLE1", "${cle_server}:8010 route=OIPP-CLE2" ]

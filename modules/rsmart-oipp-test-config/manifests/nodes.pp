@@ -54,11 +54,8 @@ node /oipp-test[2]?.academic.rsmart.local/ inherits oaenode {
     # https://staging.academic.rsmart.com:8443
 
     # Serve untrusted content from 8443
-    apache::listen { "8443": }
-    apache::namevhost { "*:8443": }
-    apache::vhost-ssl { "${localconfig::http_name}:8443":
+    apache::vhost-ssl { "${localconfig::http_name_untrusted}:443":
         sslonly  => true,
-        sslports => ['*:8443'],
         cert     => "puppet:///modules/localconfig/academic.rsmart.com.crt",
         certkey  => "puppet:///modules/localconfig/academic.rsmart.com.key",
         certchain => "puppet:///modules/localconfig/academic.rsmart.com-intermediate.crt",
@@ -67,7 +64,7 @@ node /oipp-test[2]?.academic.rsmart.local/ inherits oaenode {
 
     # Balancer pool for untrusted content
     apache::balancer { "apache-balancer-oae-app-untrusted":
-        vhost      => "${localconfig::http_name}:8443",
+        vhost      => "${localconfig::http_name_untrusted}:443",
         location   => "/",
         proto      => "http",
         members    => $localconfig::apache_lb_members_untrusted,

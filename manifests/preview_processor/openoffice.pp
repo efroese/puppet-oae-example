@@ -4,27 +4,28 @@
 #
 class oae::preview_processor::openoffice {
 
-    ###########################################################################
-    # Run the OpenOffice service to convert docs
-    $ooo_packages = [
-            'openoffice.org-core',
-            'openoffice.org-javafilter', 
-            'openoffice.org-headless', 
-            'openoffice.org-writer.x86_64',
-        ]
-
-    package { $ooo_packages: 
-        ensure => installed,
-        notify => Service['soffice']
+    if $operatingsystem =~ /Amazon|Linux/ {
+        $pkg_string = 'openoffice.org-core.x86_64 openoffice.org-javafilter.x86_64 openoffice.org-headless.x86_64 openoffice.org-writer.x86_64'
+        exec { 'install-ooo-centos':
+            command => 'yum -y --enablerepo=centos-base install ${pkg_string}',
+            unless  => 'rpm -q ${pkg_string}',
+            notify => File['/usr/lib/openoffice'],
+        }
     }
-        
+    else {
+        package { [ 'openoffice.org-core', 'openoffice.org-javafilter', 'openoffice.org-headless',  'openoffice.org-writer.x86_64' ]: 
+            ensure => installed,
+            notify => [ Service['soffice'], File['/usr/lib/openoffice'] ],
+        }
+    }
     # Create Link /usr/lib/openoffice
     file { '/usr/lib/openoffice':
         ensure => link,
         target => '/usr/lib64/openoffice.org3',
-        require => Package['openoffice.org-core'],
+        refreshonly => true,
     }
-    
+
+    # Run the OpenOffice service to convert docs
     file { '/etc/init.d/soffice':
         content => template('oae/soffice.sh.erb'),
         owner  => root,

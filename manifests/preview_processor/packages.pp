@@ -10,8 +10,7 @@ class oae::preview_processor::packages {
 
     CentOS,Redhat,Amazon,Linux: {
         $common_packages = ['cpp', 'gcc', 'gcc-c++', 'fontconfig-devel',
-                            'poppler-utils', 'pdftk', 'rubygems', 'tk', 
-                            'GraphicsMagick']
+                            'poppler-utils', 'rubygems', 'GraphicsMagick']
         package { $common_packages: ensure => installed }
 
         $release = $operatingsystem ? {
@@ -23,7 +22,7 @@ class oae::preview_processor::packages {
         if  $release == '5'  {
             $centos5_pkgs = ['curl-devel', 'tesseract', 'bzip2-devel', 'ghostscript-devel', 'jasper-devel',
     			'lcms-devel', 'libX11-devel', 'libXext-devel', 'libXt-devel', 'libjpeg-devel', 
-    			'libtiff-devel', 'djvulibre', 'librsvg2', 'libwmf',]
+                'libtiff-devel', 'djvulibre', 'librsvg2', 'libwmf', 'tk', 'pdftk',]
             package { $centos5_pkgs: ensure => installed }
 
             # CentOS needs updated ImageMagick and Ruby packages
@@ -66,6 +65,11 @@ class oae::preview_processor::packages {
         if $release == '6' {
             $centos6_pkgs = ['cronie', 'libcurl-devel', 'ImageMagick', 'ImageMagick-devel', 'ruby-devel', 'libgcj']
             package { $centos6_pkgs: ensure => installed }
+
+            exec { 'yum-install-tk-centos6-repo':
+                command => "yum -y -t --enablerepo=centos6-base install tk",
+                unless  => 'rpm -q tk',
+            }
 
             package { 'pdftk-1.44-1.el6.rf.x86_64':
                  ensure   => present,

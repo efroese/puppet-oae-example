@@ -22,9 +22,9 @@ node /oipp-test[2]?.academic.rsmart.local/ inherits oaenode {
     # Serve the OAE app (trusted content) on 443
     apache::vhost-ssl { "${localconfig::http_name}:443":
         sslonly  => true,
-        cert     => "/etc/pki/tls/certs/kumo-sandbox.crt",
-        certkey  => "/etc/pki/tls/private/kumo-sandbox.key",
-        certchain => "/etc/pki/tls/certs/my-ca.crt",
+        cert     => "puppet:///modules/localconfig/academic.rsmart.com.crt",
+        certkey  => "puppet:///modules/localconfig/academic.rsmart.com.key",
+        certchain => "puppet:///modules/localconfig/academic.rsmart.com-intermediate.crt",
         template  => 'localconfig/vhost-443.conf.erb',
     }
 
@@ -59,9 +59,9 @@ node /oipp-test[2]?.academic.rsmart.local/ inherits oaenode {
     apache::vhost-ssl { "${localconfig::http_name}:8443":
         sslonly  => true,
         sslports => ['*:8443'],
-        cert     => "/etc/pki/tls/certs/rsmart.com.crt",
-        certkey  => "/etc/pki/tls/private/rsmart.com.key",
-        certchain => "/etc/pki/tls/certs/rsmart.com-intermediate.crt",
+        cert     => "puppet:///modules/localconfig/academic.rsmart.com.crt",
+        certkey  => "puppet:///modules/localconfig/academic.rsmart.com.key",
+        certchain => "puppet:///modules/localconfig/academic.rsmart.com-intermediate.crt",
         template  => 'localconfig/vhost-8443.conf.erb',
     }
 

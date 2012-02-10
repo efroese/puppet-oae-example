@@ -17,12 +17,12 @@ class localconfig {
     ###########################################################################
     # Nodes
     
-    $app_server1 = '10.51.11.100'
-    $app_server2 = '10.51.11.101'
-    $nfs_server  = '10.51.11.90'
-    $db_server   = '10.51.11.70'
-    $solr_master = '10.51.11.30'
-    $solr_slave1 = '10.51.11.31'
+    $app_server1 = '10.52.11.100'
+    $app_server2 = '10.52.11.101'
+    $nfs_server  = '10.52.11.90'
+    $db_server   = '10.52.11.70'
+    $solr_master = '10.52.11.30'
+    $solr_slave1 = '10.52.11.31'
 
 	# prod-cle
     $cle_server  = '10.TODO.TODO.TODO'

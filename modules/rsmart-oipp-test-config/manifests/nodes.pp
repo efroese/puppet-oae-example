@@ -51,9 +51,7 @@ node /oipp-test[2]?.academic.rsmart.local/ inherits oaenode {
     }
 
     ###########################################################################
-    # https://staging.academic.rsmart.com:8443
-
-    # Serve untrusted content from 8443
+    # https://oipp-test-content.academic.rsmart.com:443
     apache::vhost-ssl { "${localconfig::http_name_untrusted}:443":
         sslonly  => true,
         cert     => "puppet:///modules/localconfig/academic.rsmart.com.crt",
@@ -141,7 +139,7 @@ node /oipp-test[2]?.academic.rsmart.local/ inherits oaenode {
             'trusted.secet' => $localconfig::serverprotectsec,
         }
     }
-    
+
     oae::app::server::sling_config {
         "org.sakaiproject.nakamura.proxy.ProxyClientServiceImpl":
         config => {
@@ -156,7 +154,7 @@ node /oipp-test[2]?.academic.rsmart.local/ inherits oaenode {
             'slideshare.sharedSecret' => $localconfig::slideshare_shared_secret,
         },
     }
-        
+
     oae::app::server::sling_config {
         "org.sakaiproject.nakamura.basiclti.CLEVirtualToolDataProvider":
         config => {
@@ -165,7 +163,7 @@ node /oipp-test[2]?.academic.rsmart.local/ inherits oaenode {
              'sakai.cle.basiclti.secret' => $localconfig::basiclti_secret,
         }
     }
-    
+
     ###########################################################################
     # Preview processor
     class { 'oae::preview_processor::init':
@@ -179,7 +177,9 @@ node /oipp-test[2]?.academic.rsmart.local/ inherits oaenode {
     # Postgres Database Server
     #
     class { 'postgres::repos': stage => init }
-    class { 'postgres': }
+    class { 'postgres':
+        hba_conf_template => 'localconfig/pg_hba.conf.erb',
+    }
 
     postgres::database { $localconfig::db:
         ensure => present,
@@ -191,14 +191,6 @@ node /oipp-test[2]?.academic.rsmart.local/ inherits oaenode {
     postgres::role { $localconfig::db_user:
         ensure   => present,
         password => $localconfig::db_password,
-    }
-
-    postgres::clientauth { "host-${localconfig::db}-${localconfig::db_user}-all-md5":
-       type => 'host',
-       db   => $localconfig::db,
-       user => $localconfig::db_user,
-       address => "127.0.0.1/32",
-       method  => 'trust',
     }
 
     postgres::backup::simple { $localconfig::db:

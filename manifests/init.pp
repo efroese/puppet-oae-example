@@ -69,13 +69,26 @@ class tomcat6 ( $parentdir               = '/usr/local',
         require => Exec["unpack-apache-tomcat-${tomcat_version}"],
     }
 
-    file { "/etc/init.d/tomcat": 
+    file { "/etc/init.d/tomcat":
         ensure => present,
         owner  => root,
         group  => root,
         mode   => 0755,
         content => template('tomcat6/tomcat.init.erb'),
         require => File[$basedir],
+    }
+
+    file { "/var/log/tomcat":
+        ensure => directory,
+        owner  => root,
+        group  => $tomcat_group,
+        mode   => 0775,
+    }
+
+    file { "${parentdir}/apache-tomcat-${tomcat_version}/logs":
+        ensure => link,
+        target => "/var/log/tomcat",
+        require => Exec["chown-apache-tomcat-${tomcat_version}"],
     }
 
     file { "${basedir}/conf/tomcat-users.xml":

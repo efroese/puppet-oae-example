@@ -20,16 +20,23 @@
 #
 # $postgresql_conf_template:: The template for postgresql.conf
 #
+# $hba_conf_template:: The template for pg)hba.conf
+#
 # == Actions:
 #   Install a Postgres server and service.
 #
-class postgres ($postgresql_conf_template='postgres/postgresql.conf.erb'){
+class postgres (
+        $postgresql_conf_template='postgres/postgresql.conf.erb',
+        $hba_conf_template='postgres/pg_hba.conf.erb'
+    ){
     
     Class['postgres::params'] -> Class['postgres']
 
     class { 'postgres::params': }
 
-	package { [ 'postgresql91', 'postgresql91-server' ]: ensure => installed }
+	package { [ 'postgresql91', 'postgresql91-server' ]:
+	    ensure => installed
+	}
 
 	$service_name = 'postgresql-9.1'
 
@@ -52,5 +59,14 @@ class postgres ($postgresql_conf_template='postgres/postgresql.conf.erb'){
         content => template($postgresql_conf_template),
         notify  => Service[$service_name],
         require => [ Exec['postgres initdb'], Package['postgresql91-server'] ],
-    }    
+    }
+
+    file { "/var/lib/pgsql/9.1/data/pg_hba.conf":
+        owner => 'postgres',
+        group => 'postgres',
+        mode  => 0600,
+        content => template($hba_conf_template),
+        notify  => Service[$service_name],
+        require => [ Exec['postgres initdb'], Package['postgresql91-server'] ],
+    } 
 }

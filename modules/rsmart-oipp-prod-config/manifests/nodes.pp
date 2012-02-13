@@ -49,14 +49,29 @@ node 'apache1.academic.rsmart.local' inherits oaenode {
         template   => 'localconfig/balancer-trusted.erb',
     }
 
-    # Balancer pool for CLE traffic
-    apache::balancer { "apache-balancer-cle":
-        vhost      => "${localconfig::http_name}:443",
-        proto      => "ajp",
-        members    => $localconfig::apache_cle_lb_members,
-        params     => [ "timeout=300", "loadfactor=100" ],
-        standbyurl => $localconfig::apache_lb_standbyurl,
-        template   => 'localconfig/balancer-cle.erb',
+    # Mock out CLE content
+    if $localconfig::mock_cle_content {
+        $htdocs = "${apache::params::apache_root}/${localconfig::http_name}:443/htdocs/"
+        exec { "mkdir-mock-cle-content":
+            command => "mkdir -p ${htdocs}access/content/group/OAEGateway",
+            creates => "${htdocs}/access/content/group/OAEGateway"
+        }
+
+        file { "${htdocs}/access/content/group/OAEGateway/splash.html":
+            mode => 0644,
+            content => "<html><body>This is mock content. Set $localconfig::mock_cle_content = false to disable this message.</body></html>"
+        }
+    }
+    else {
+        # Balancer pool for CLE traffic
+        apache::balancer { "apache-balancer-cle":
+            vhost      => "${localconfig::http_name}:443",
+            proto      => "ajp",
+            members    => $localconfig::apache_cle_lb_members,
+            params     => [ "timeout=300", "loadfactor=100" ],
+            standbyurl => $localconfig::apache_lb_standbyurl,
+            template   => 'localconfig/balancer-cle.erb',
+        }
     }
 
     ###########################################################################
@@ -252,19 +267,6 @@ node oaeappnode inherits oaenode {
             'sakai.cle.basiclti.secret' => $localconfig::basiclti_secret,
             'sakai.cle.server.url'      => "https://${localconfig::http_name}",
             'sakai.cle.basiclti.key'    => $localconfig::basiclti_key,
-        }
-    }
-
-    if $localconfig::mock_cle_content {
-        $htdocs = "${apache::params::apache_root}/${localconfig::http_name}:443/htdocs/"
-        exec { "mkdir-mock-cle-content":
-            command => "mkdir -p ${htdocs}access/content/group/OAEGateway",
-            creates => "${htdocs}/access/content/group/OAEGateway"
-        }
-
-        file { "${htdocs}/access/content/group/OAEGateway/splash.html":
-            mode => 0644,
-            content => "<html><body>This is mock content. Set $localconfig::mock_cle_content = false to disable this message.</body></html>"
         }
     }
 

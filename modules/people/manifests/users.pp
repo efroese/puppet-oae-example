@@ -1,14 +1,9 @@
 #
 # User resources for sakai
 #
-class localconfig::users {
+class people::users {
 
-    Class['localconfig'] -> Class['localconfig::users']
-
-	@group { $localconfig::group:
-		gid => $localconfig::gid,
-	}
-
+    #rsmart 
 	@user { $localconfig::user:
 		ensure => present,
 		uid    => $localconfig::uid,
@@ -17,7 +12,6 @@ class localconfig::users {
 		managehome => true
 	}
 
-    @group { 'hyperic': gid => '701' }
     @user { 'hyperic': 
         ensure     => present,
         uid        => '701',
@@ -26,7 +20,6 @@ class localconfig::users {
         managehome => true,
     }
 
-    @group { 'lspeelmon': gid => '501' }
     @user { 'lspeelmon': 
         ensure     => present,
         uid        => '501',
@@ -44,7 +37,6 @@ class localconfig::users {
         require => User['lspeelmon'],
     }
 
-    @group { 'dgillman': gid => '506' }
     @user { 'dgillman': 
         ensure     => present,
         uid        => '506',
@@ -62,7 +54,6 @@ class localconfig::users {
         require => User['dgillman'],
     }
 
-    @group { 'cramaker': gid => '503' }
     @user { 'cramaker': 
         ensure     => present,
         uid        => '503',
@@ -80,7 +71,6 @@ class localconfig::users {
         require => User['cramaker'],
     }
 
-    @group { 'dthomson': gid => '502' }
     @user { 'dthomson': 
         ensure     => present,
         uid        => '502',
@@ -98,7 +88,6 @@ class localconfig::users {
         require => User['dthomson'],
     }
 
-    @group { 'efroese': gid => '504' }
     @user { 'efroese':
         ensure     => present,
         uid        => '504',
@@ -114,5 +103,22 @@ class localconfig::users {
         type => 'ssh-rsa',
         user => 'efroese',
         require => User['efroese'],
+    }
+
+    @user { 'kcampos':
+        ensure     => present,
+        uid        => '505',
+        gid        => 'kcampos',
+        home       => '/home/kcampos',
+        managehome => true,
+        groups     => ['kcampos', 'wheel',],
+    }
+
+    ssh_authorized_key { 'kcampos-home-pub':
+        ensure => present,
+        key  => 'AAAAB3NzaC1yc2EAAAABIwAAAQEAweJmgQAL6kNjPdesK8PYgCIbiV4QLx9afk35yt741u4e9lE/fbQ4vBu94qAAv63brUp9s4hGBmtTf1xhxSaeZPd9/pQHlaH00URA0ZORXD8WloSuVst4SvK1Ll2L6vz+ZInTmefWoo571HL9omFXxnwuvSLAjYBDBPaeAaeNS9uNSLcDrnkb1sRRepVxrApJt7j4+dZ3bbNaGH9gOxh+EtBuo6ZoBtxRkpvr7NKCxcM3K4PpmD5mRDCqF6Ojc52PlpEXIMDnt+xUrQ6ACfNism2julmSBTO7rH7xSn6FAREeYjoBF6+K/AL1lWx9SoOBPCuxNbd7Vivb2890FXoZYQ==',
+        type => 'ssh-rsa',
+        user => 'kcampos',
+        require => User['kcampos'],
     }
 }

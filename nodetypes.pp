@@ -19,24 +19,8 @@ node basenode {
     class { 'ntp':
         time_zone =>  '/usr/share/zoneinfo/America/Phoenix',
     }
-
-    realize(Group['hyperic'])
-    realize(User['hyperic'])
-
-    realize(Group['efroese'])
-    realize(User['efroese'])
-
-    realize(Group['lspeelmon'])
-    realize(User['lspeelmon'])
-
-    realize(Group['dgillman'])
-    realize(User['dgillman'])
-
-    realize(Group['cramaker'])
-    realize(User['cramaker'])
     
-    realize(Group['dthomson'])
-    realize(User['dthomson'])
+    class { 'people': }
 }
 
 node oaenode inherits basenode {

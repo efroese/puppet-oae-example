@@ -129,6 +129,7 @@ node oaeappnode inherits oaenode {
     }
 
     # Connect OAE to the DB
+    class { 'postgres::repos': stage => init }
     class { 'postgres::client': }
     oae::app::server::sling_config {
         "org.sakaiproject.nakamura.lite.storage.jdbc.JDBCStorageClientPool":

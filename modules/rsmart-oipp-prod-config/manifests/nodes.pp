@@ -172,6 +172,8 @@ node oaeappnode inherits oaenode {
         require => File[$localconfig::nfs_mountpoint],
     }
 
+    class { 'postgres::client': }
+
     # Connect OAE to the DB
     oae::app::server::sling_config {
         "org.sakaiproject.nakamura.lite.storage.jdbc.JDBCStorageClientPool":

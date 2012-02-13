@@ -28,9 +28,9 @@ ProxyPass <%= noproxy %> !
 # Don't proxy to these tools. This is just a workaround, not a comprehensive list of CLE urls
 ProxyPass /access !
 ProxyPass /imsblti !
-<% end %>
+<% end -%>
 
-ProxyPass <%= location %> <%= balancer %>/ stickysession=ROUTEID nofailover=Off
+ProxyPass <%= location %> <%= balancer %>/ stickysession=ROUTEID nofailover=Off lbmethod=byrequests timeout=60
 
 <Proxy <%= balancer %>>
 

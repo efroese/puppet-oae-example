@@ -6,8 +6,6 @@
 </Proxy>
 
 <Location <%= location %>>
-    ProxyPass <%= balancer %>/ stickysession=ROUTEID nofailover=Off
-    
     # Compress responses
     SetOutputFilter DEFLATE
     # Netscape 4.x has some problems...
@@ -26,13 +24,21 @@
 ProxyPass <%= noproxy %> !
 <% end %>
 
+<% if scope.lookupvar('localconfig::mock_cle_content') %>
+# Don't proxy to these tools. This is just a workaround, not a comprehensive list of CLE urls
+ProxyPass /access !
+ProxyPass /imsblti !
+<% end -%>
+
+ProxyPass <%= location %> <%= balancer %>/ stickysession=ROUTEID nofailover=Off lbmethod=byrequests timeout=60
+
 <Proxy <%= balancer %>>
 
     # Sticky sessions based on the BalancerMember route attribute
     Header add Set-Cookie "ROUTEID=.%{BALANCER_WORKER_ROUTE}e; path=/" env=BALANCER_ROUTE_CHANGED
 
 <% members.each_with_index do |member,index| -%>
-    BalancerMember <%= proto %>://<%= member %><% params.each do |param| -%> <%= param %><% end -%> route=<%= index %>
+    BalancerMember <%= proto %>://<%= member %><% params.each do |param| -%> <%= param %><% end -%> route=<% index %>
 <% end %>
 
 <% if standbyurl != "" -%>

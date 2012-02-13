@@ -48,7 +48,7 @@ node 'apache1.academic.rsmart.local' inherits oaenode {
         locations_noproxy => ['/server-status', '/balancer-manager'],
         proto      => "http",
         members    => $localconfig::apache_lb_members,
-        params     => ["retry=20", "min=3", "flushpackets=auto"],
+        params     => $localconfig::apache_lb_params,
         standbyurl => $localconfig::apache_lb_standbyurl,
         template   => 'localconfig/balancer-trusted.erb',
     }

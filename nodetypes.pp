@@ -19,8 +19,6 @@ node basenode {
     class { 'ntp':
         time_zone =>  '/usr/share/zoneinfo/America/Phoenix',
     }
-    
-    class { 'people': }
 }
 
 node oaenode inherits basenode {
@@ -28,7 +26,13 @@ node oaenode inherits basenode {
     # OAE cluster-specific configuration
     class { 'localconfig': }
     class { 'localconfig::hosts': }
-    class { 'localconfig::users': }
+
+    class { 'people':
+        $sakai_user  => $localconfig::user,
+        $sakai_group => $localconfig::group,
+        $uid         => $localconfig::uid,
+        $gid         => $localconfig::gid,
+    }
 
     # OAE module configuration
     class { 'oae::params':

@@ -1,6 +1,14 @@
-class people {
-    class { 'people::groups': }
-    class { 'people::users': }
+class people ($sakai_user='sakaioae', $sakai_group='sakaioae', $uid='8080', $gid='8080'){
+    class { 'people::groups':
+        sakai_group => $sakai_group,
+        gid => $gid,
+    }
+
+    class { 'people::users':
+        sakai_user => $sakai_user,
+        uid => $uid,
+        gid => $gid,
+    }
     
     realize(Group['hyperic'])
     realize(User['hyperic'])

@@ -51,7 +51,7 @@ node 'apache1.academic.rsmart.local' inherits oaenode {
 
     # Mock out CLE content
     if $localconfig::mock_cle_content {
-        $htdocs = "${apache::params::apache_root}/${localconfig::http_name}:443/htdocs"
+        $htdocs = "${apache::params::root}/${localconfig::http_name}:443/htdocs"
         exec { "mkdir-mock-cle-content":
             command => "mkdir -p ${htdocs}/access/content/group/OAEGateway",
             creates => "${htdocs}/access/content/group/OAEGateway"

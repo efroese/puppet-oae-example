@@ -6,8 +6,6 @@
 </Proxy>
 
 <Location <%= location %>>
-    ProxyPass <%= balancer %>/ stickysession=ROUTEID nofailover=Off
-    
     # Compress responses
     SetOutputFilter DEFLATE
     # Netscape 4.x has some problems...
@@ -22,9 +20,17 @@
     Header append Vary User-Agent env=!dont-vary
 </Location>
 
-<% locations_noproxy.each do |noproxy| %>
+<% if scope.lookupvar('localconfig::locations_noproxy').each do |noproxy| - %>
 ProxyPass <%= noproxy %> !
-<% end %>
+<% end -%>
+
+<% if scope.lookupvar('localconfig::mock_cle_content') %>
+# Don't proxy to these tools. This is just a workaround, not a comprehensive list of CLE urls
+ProxyPass /access !
+ProxyPass /imsblti !
+<% end -%>
+
+ProxyPass <%= location %> <%= balancer %>/ stickysession=ROUTEID nofailover=Off
 
 <Proxy <%= balancer %>>
 

@@ -20,9 +20,9 @@
     Header append Vary User-Agent env=!dont-vary
 </Location>
 
-<% if scope.lookupvar('localconfig::locations_noproxy').each do |noproxy| - %>
+<% locations_noproxy.each do |noproxy| %>
 ProxyPass <%= noproxy %> !
-<% end -%>
+<% end %>
 
 <% if scope.lookupvar('localconfig::mock_cle_content') %>
 # Don't proxy to these tools. This is just a workaround, not a comprehensive list of CLE urls

@@ -22,3 +22,6 @@
 [submodule "modules/nfs"]
 	path = modules/nfs
 	url = http://github.com/efroese/puppet-nfs.git
+[submodule "modules/archive"]
+	path = modules/archive
+	url = http://github.com/camptocamp/puppet-archive.git

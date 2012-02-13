@@ -140,6 +140,15 @@ node /oipp-test[2]?.academic.rsmart.local/ inherits oaenode {
         }
     }
 
+    # Email integration
+    oae::app::server::sling_config {
+        'org.sakaiproject.nakamura.email.outgoing.LiteOutgoingEmailMessageListener':
+        config => {
+            'sakai.email.replyAsAddress' => $localconfig::reply_as_address,
+            'sakai.email.replyAsName'    => $localconfig::reply_as_name,
+        }
+    }
+
     oae::app::server::sling_config {
         "org.sakaiproject.nakamura.proxy.ProxyClientServiceImpl":
         config => {

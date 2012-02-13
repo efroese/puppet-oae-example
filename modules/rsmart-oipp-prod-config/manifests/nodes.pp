@@ -255,6 +255,19 @@ node oaeappnode inherits oaenode {
         }
     }
 
+    if $localconfig::mock_cle_content {
+        $htdocs = "${apache::params::apache_root}/${localconfig::http_name}:443/htdocs/"
+        exec { "mkdir-mock-cle-content":
+            command => "mkdir -p ${htdocs}access/content/group/OAEGateway",
+            creates => "${htdocs}/access/content/group/OAEGateway"
+        }
+
+        file { "${htdocs}/access/content/group/OAEGateway/splash.html":
+            mode => 0644,
+            content => "<html><body>This is mock content. Set $localconfig::mock_cle_content = false to disable this message.</body></html>"
+        }
+    }
+
     ###########################################################################
     # Email integration
     oae::app::server::sling_config {

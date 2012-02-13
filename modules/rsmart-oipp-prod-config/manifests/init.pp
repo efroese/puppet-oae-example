@@ -56,8 +56,9 @@ class localconfig {
     $apache_lb_members           = [ "${app_server1}:8080", "${app_server2}:8080" ]
     $apache_lb_members_untrusted = [ "${app_server1}:8082", "${app_server2}:8082" ]
     
+    $mock_cle_content = true
     $apache_cle_lb_members = [ "${cle_server1}:8009 route=OIPP-CLE1", "${cle_server2}:8009 route=OIPP-CLE2" ]
-    $apache_cle_location_match = "^/(xsl-portal.*|access.*|courier.*|dav.*|direct.*|imsblti.*|library.*|messageforums-tool.*|osp-common-tool.*|polls-tool.*|portal.*|profile-tool.*|profile2-tool.*|sakai.*|samigo-app.*|scheduler-tool.*|rsmart-customizer-tool.*|oauth-tool.*|emailtemplateservice-tool.*|sitestats-tool.*|rsmart-support-tool.*|mailsender-tool.*|tool.css|portool_base.css)"
+    $apache_cle_location_match = "^/(xsl-portal.*|access.*|courier.*|dav.*|direct.*|imsblti.*|library.*|messageforums-tool.*|osp-common-tool.*|polls-tool.*|portal.*|profile-tool.*|profile2-tool.*|sakai.*|samigo-app.*|scheduler-tool.*|rsmart-customizer-tool.*|oauth-tool.*|emailtemplateservice-tool.*|sitestats-tool.*|rsmart-support-tool.*|mailsender-tool.*|tool.css|portool_base.css)" 
     $cle_dav_server0 = '10.52.10.19'
 
     ###########################################################################
@@ -69,7 +70,7 @@ class localconfig {
     $javamemorymin = '4096'
     $javapermsize  = '256'
 
-    $admin_password = 'TODO'
+    $admin_password = 'admin'
 
     # These hosts can access /system/console
     $oae_admin_hosts = ['72.44.192.164', ]

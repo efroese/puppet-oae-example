@@ -131,12 +131,16 @@ node /oipp-test[2]?.academic.rsmart.local/ inherits oaenode {
         }
     }
 
+    # Separates trusted vs untrusted content.
     oae::app::server::sling_config {
         "org.sakaiproject.nakamura.http.usercontent.ServerProtectionServiceImpl":
         config => {
-            'disable.protection.for.dev.mode' => false,
-            'trusted.hosts' => " localhost:8080 = http://localhost:8082, ${localconfig::http_name}:8088 = https://${localconfig::http_name}:8083 ",
-            'trusted.secet' => $localconfig::serverprotectsec,
+            'disable.protection.for.dev.mode' => $localconfig::sps_disabled,
+            'trusted.hosts'  => [
+                "localhost:8080\\ \\=\\ http://localhost:8082",
+                "${localconfig::http_name}\\ \\=\\ https://${localconfig::http_name_untrusted}:443",
+            ],
+            'trusted.secret' => $localconfig::serverprotectsec,
         }
     }
 

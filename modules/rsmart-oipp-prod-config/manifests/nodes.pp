@@ -179,8 +179,7 @@ node oaeappnode inherits oaenode {
             'disable.protection.for.dev.mode' => $localconfig::sps_disabled,
             'trusted.hosts'  => [
                 "localhost:8080\\ \\=\\ http://localhost:8081",
-                "${hostname}:8080\\ \\=\\ http://${hostname}:8081",
-                "${localconfig::http_name}\\ \\=\\ https://${localconfig::http_name}:8443",
+                "${localconfig::http_name}\\ \\=\\ https://${localconfig::http_name_untrusted}:443",
             ],
             'trusted.secret' => $localconfig::serverprotectsec,
         }

@@ -28,10 +28,10 @@ node oaenode inherits basenode {
     class { 'localconfig::hosts': }
 
     class { 'people':
-        $sakai_user  => $localconfig::user,
-        $sakai_group => $localconfig::group,
-        $uid         => $localconfig::uid,
-        $gid         => $localconfig::gid,
+        sakai_user  => $localconfig::user,
+        sakai_group => $localconfig::group,
+        uid         => $localconfig::uid,
+        gid         => $localconfig::gid,
     }
 
     # OAE module configuration

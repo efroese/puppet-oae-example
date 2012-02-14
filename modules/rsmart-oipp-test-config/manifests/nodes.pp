@@ -134,6 +134,7 @@ node /oipp-test[2]?.academic.rsmart.local/ inherits oaenode {
         javamemorymin  => $localconfig::javamemorymin,
         javamemorymax  => $localconfig::javamemorymax,
         javapermsize   => $localconfig::javapermsize,
+        setenv_template => 'localconfig/setenv.sh.erb',
     }
 
     oae::app::server::sling_config {

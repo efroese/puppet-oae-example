@@ -43,6 +43,14 @@ class oae::app::setup($store_dir=undef){
         target  => $log_dir,
     }
 
+    cron { 'zip-oae-logs':
+        user => $oae::params::user,
+        cwd  => $log_dir,
+        command => 'for log in `ls *.log.* | grep -v gz`; do gzip $log; done',
+        hour    => '1',
+        minute  => '0',
+    }
+
     # This is owned by root so we can delegate write-access access only to certain services
     file { "${config_dir}/org":
         ensure => directory,

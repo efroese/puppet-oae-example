@@ -188,7 +188,7 @@ node /oipp-test[2]?.academic.rsmart.local/ inherits oaenode {
     oae::app::server::sling_config {
         "org.sakaiproject.nakamura.basiclti.CLEVirtualToolDataProvider":
         config => {
-             'sakai.cle.server.url'      => "https://${localconfig::http_name}/",
+             'sakai.cle.server.url'      => "https://${localconfig::http_name}",
              'sakai.cle.basiclti.key'    => $localconfig::basiclti_key,
              'sakai.cle.basiclti.secret' => $localconfig::basiclti_secret,
         }

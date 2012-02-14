@@ -16,6 +16,8 @@
 #
 # $tomcat_logging_template:: A template to use to render the conf/logging.properties file.
 #
+# $setenv_template::         A template to use to render the bin/setenv.sh file.
+#
 # $tomcat_user::             The system user the tomcat process will run as.
 #
 # $tomcat_group::            The system group the tomcat process will run as.
@@ -36,6 +38,7 @@ class tomcat6 ( $parentdir               = '/usr/local',
                 $tomcat_users_template   = 'tomcat6/tomcat-users.xml.erb',
                 $tomcat_conf_template    = 'tomcat6/server.xml.erb',
                 $tomcat_logging_template = 'tomcat6/logging.properties.erb',
+                $setenv_template         = 'tomcat6/setenv.sh.erb',
                 $tomcat_user             = 'root',
                 $tomcat_group            = 'root',
                 $admin_user              = 'tomcat',
@@ -117,6 +120,16 @@ class tomcat6 ( $parentdir               = '/usr/local',
         group  => root,
         mode   => 0644,
         content => template($tomcat_logging_template),
+        require => Exec["chown-apache-tomcat-${tomcat_version}"],
+        notify  => Service['tomcat'],
+    }
+    
+    file { "${basedir}/bin/setenv.sh":
+        ensure => present,
+        owner  => root,
+        group  => root,
+        mode   => 0755,
+        content => template($setenv_template),
         require => Exec["chown-apache-tomcat-${tomcat_version}"],
         notify  => Service['tomcat'],
     }

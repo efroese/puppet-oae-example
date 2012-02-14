@@ -70,9 +70,9 @@ class localconfig {
     $jarsource     = '/home/rsmart/com.rsmart.academic.app-1.1.0-M1-20120130.jar'
     $jarfile       = 'com.rsmart.academic.app-1.1.0-M1-20120130.jar'
     $java          = '/usr/java/jdk1.6.0_30/bin/java'
-    $javamemorymax = '4096'
-    $javamemorymin = '4096'
-    $javapermsize  = '256'
+    $javamemorymax = '5g'
+    $javamemorymin = '5g'
+    $javapermsize  = '256m'
 
     $admin_password = 'DDZn24tzeWtUEn'
 

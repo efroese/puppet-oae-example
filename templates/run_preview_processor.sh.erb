@@ -78,7 +78,7 @@ check_processing_url=`curl --insecure --head --silent ${SAKAIOAE_URL}${PROCESSIN
 
 if [ "${?}" = "0" ] ; then
     # Run the preview processol:
-    ruby ${SCRIPT_DIR}/preview_processor.rb --server ${SAKAIOAE_URL} --password ${PASSWORD} -t http://localhost:8085/ | grep -v "^I,";
+    ruby ${SCRIPT_DIR}/preview_processor.rb --server ${SAKAIOAE_URL} --password ${PASSWORD} | grep -v "^I,";
     # ruby scripts return 1 on success:
     ruby_return_code=${?};
     if [ "${ruby_return_code}" = "1" ] ; then

@@ -45,8 +45,7 @@ class oae::app::setup($store_dir=undef){
 
     cron { 'zip-oae-logs':
         user => $oae::params::user,
-        cwd  => $log_dir,
-        command => 'for log in `ls *.log.* | grep -v gz`; do gzip $log; done',
+        command => "(cd $log_dir && for log in `ls *.log.* | grep -v gz`; do gzip \$log; done)",
         hour    => '1',
         minute  => '0',
     }

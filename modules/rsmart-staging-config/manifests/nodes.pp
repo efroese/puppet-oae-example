@@ -255,6 +255,7 @@ node solrnode inherits oaenode {
         tomcat_group   => $localconfig::group,
         admin_user     => $localconfig::tomcat_user,
         admin_password => $localconfig::tomcat_password,
+        setenv_template => 'localconfig/solr-setenv.sh.erb',
     }
 }
 

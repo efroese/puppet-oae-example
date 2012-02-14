@@ -309,6 +309,7 @@ node 'solr1.academic.rsmart.local' inherits solrnode {
         tomcat_home  => "${localconfig::basedir}/tomcat",
         tomcat_user  => $localconfig::user,
         tomcat_group => $localconfig::group,
+        setenv_template => 'localconfig/solr-setenv.sh.erb',
     }
 
     oae::solr::backup { "solr-backup-${localconfig::solr_remoteurl}-${oae::params::basedir}/solr/backups":

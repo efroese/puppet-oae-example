@@ -20,14 +20,8 @@
     Header append Vary User-Agent env=!dont-vary
 </Location>
 
-<% locations_noproxy.each do |noproxy| %>
+<% locations_noproxy.each do |noproxy| -%>
 ProxyPass <%= noproxy %> !
-<% end %>
-
-<% if scope.lookupvar('localconfig::mock_cle_content') %>
-# Don't proxy to these tools. This is just a workaround, not a comprehensive list of CLE urls
-ProxyPass /access !
-ProxyPass /imsblti !
 <% end -%>
 
 ProxyPass <%= location %> <%= balancer %>/ stickysession=ROUTEID nofailover=Off lbmethod=byrequests timeout=60

@@ -41,7 +41,12 @@ node 'apache1.academic.rsmart.local' inherits oaenode {
     apache::balancer { "apache-balancer-oae-app":
         vhost      => "${localconfig::http_name}:443",
         location   => "/",
-        locations_noproxy => ['/server-status', '/balancer-manager', '/Shibboleth.sso'],
+        locations_noproxy => $localconfig::mock_cle_content ? {
+            # Don't proxy to the access and lti tools.
+            # This is just a workaround, not a comprehensive list of CLE urls
+            true  => ['/server-status', '/balancer-manager', '/Shibboleth.sso', '/access', '/imsblti'],
+            false => ['/server-status', '/balancer-manager', '/Shibboleth.sso'],
+        },
         proto      => "http",
         members    => $localconfig::apache_lb_members,
         params     => $localconfig::apache_lb_params,

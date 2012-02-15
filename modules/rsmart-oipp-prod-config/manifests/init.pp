@@ -45,7 +45,7 @@ class localconfig {
     $storedir    = "/files-academic/store"
     ###########################################################################
     # Git (Preview processor)
-    $nakamura_git = "http://github.com/rsmart/nakamura.git"
+    $nakamura_git = "http://github.com/rSmart/nakamura.git"
     $nakamura_tag = "acad-1.1.0-M1-20120130"
 
     ###########################################################################

@@ -14,6 +14,10 @@ node 'base.academic.rsmart.local' inherits oaenode { }
 #
 node 'apache1.academic.rsmart.local' inherits oaenode {
 
+    class { 'apache':
+        httpd_conf_template => 'localconfig/httpd.conf.erb'
+    }
+
     class { 'apache::ssl': }
 
     # Headers is not in the default set of enabled modules
@@ -60,11 +64,14 @@ node 'apache1.academic.rsmart.local' inherits oaenode {
     }
 
     ###########################################################################
-    # https://content-academic.rsmart.com
+    # https://academic.rsmart.com:8443
 
+    apache::listen { "8443": }
+    apache::namevhost { "*:8443": }
     # Serve untrusted content from another hostname
-    apache::vhost-ssl { "${localconfig::http_name_untrusted}:443":
+    apache::vhost-ssl { "${localconfig::http_name}:8443":
         sslonly  => true,
+        sslports => ['*:8443'],
         cert     => "/etc/pki/tls/certs/rsmart.com.crt",
         certkey  => "/etc/pki/tls/private/rsmart.com.key",
         certchain => "/etc/pki/tls/certs/rsmart.com-intermediate.crt",
@@ -73,7 +80,7 @@ node 'apache1.academic.rsmart.local' inherits oaenode {
 
     # Balancer pool for untrusted content
     apache::balancer { "apache-balancer-oae-app-untrusted":
-        vhost      => "${localconfig::http_name_untrusted}:443",
+        vhost      => "${localconfig::http_name}:8443",
         location   => "/",
         proto      => "http",
         members    => $localconfig::apache_lb_members_untrusted,
@@ -150,7 +157,7 @@ node oaeappnode inherits oaenode {
             'trusted.hosts'  => [
                 "localhost:8080\\ \\=\\ http://localhost:8081",
                 "${hostname}:8080\\ \\=\\ http://${hostname}:8081",
-                "${localconfig::http_name}\\ \\=\\ https://${localconfig::http_name_untrusted}:443",
+                "${localconfig::http_name}\\ \\=\\ https://${localconfig::http_name}:8443",
             ],
             'trusted.secret' => $localconfig::serverprotectsec,
         }

@@ -51,7 +51,7 @@ class localconfig {
 
     ###########################################################################
     # Git (Preview processor)
-    $nakamura_git = "http://github.com/rsmart/nakamura.git"
+    $nakamura_git = "http://github.com/rSmart/nakamura.git"
     $nakamura_tag = "1.1"
 
     ###########################################################################

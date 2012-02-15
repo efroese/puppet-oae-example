@@ -41,7 +41,12 @@ node 'apache1.academic.rsmart.local' inherits oaenode {
     apache::balancer { "apache-balancer-oae-app":
         vhost      => "${localconfig::http_name}:443",
         location   => "/",
-        locations_noproxy => ['/server-status', '/balancer-manager'],
+        locations_noproxy => $localconfig::mock_cle_content ? {
+            # Don't proxy to the access and lti tools.
+            # This is just a workaround, not a comprehensive list of CLE urls
+            true  => ['/server-status', '/balancer-manager', '/Shibboleth.sso', '/access', '/imsblti'],
+            false => ['/server-status', '/balancer-manager', '/Shibboleth.sso'],
+        },
         proto      => "http",
         members    => $localconfig::apache_lb_members,
         params     => $localconfig::apache_lb_params,
@@ -59,7 +64,7 @@ node 'apache1.academic.rsmart.local' inherits oaenode {
 
         file { "${htdocs}/access/content/group/OAEGateway/splash.html":
             mode => 0644,
-            content => "<html><body>This is mock content. Set $localconfig::mock_cle_content = false to disable this message.</body></html>",
+            content => "<html><body>This is mock content. Set \$localconfig::mock_cle_content = false to disable this message.</body></html>",
             require => Exec["mkdir-mock-cle-content"],
         }
     }
@@ -283,6 +288,27 @@ node oaeappnode inherits oaenode {
             'sakai.email.replyAsName'    => $localconfig::reply_as_name,
         }
     }
+
+    ###########################################################################
+    # Authentication 
+    oae::app::server::sling_config {
+        "com.rsmart.academic.authn.filter.AuthnTokenRemappingFilter":
+        config => {
+             'user.property'             => "eppn",
+             'trusted.ip'                => "127.0.0.1",
+             'authn.path'                => "/system/trustedauth",
+             'authn.header'              => "sak3-user",
+             'mapping.enabled'           => true,
+        }
+    }
+
+    oae::app::server::sling_config {
+        "org.sakaiproject.nakamura.auth.trusted.TrustedAuthenticationServlet":
+        config => {
+             'sakai.auth.trusted.destination.default' => "/me"
+        }
+    }
+
 }
 
 node /app[1-2].academic.rsmart.local/ inherits oaeappnode { }

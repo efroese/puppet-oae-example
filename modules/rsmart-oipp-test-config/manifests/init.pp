@@ -42,8 +42,9 @@ class localconfig {
 
     ###########################################################################
     # Git (Preview processor)
-    $nakamura_git = "http://github.com/rsmart/nakamura.git"
-    $nakamura_tag = "acad-1.1.0-M1-20120130"
+    $nakamura_git = "http://github.com/rSmart/nakamura.git"
+    # TODO - Set the tag once we have an oipp 1.1.1
+    $nakamura_tag = undef
 
     ###########################################################################
     # Apache load balancer
@@ -66,7 +67,7 @@ class localconfig {
     $javamemorymin = '1024m'
     $javapermsize  = '512m'
 
-    $admin_password = 'admin'
+    $admin_password = 'e4D7kYbQgswCHp'
 
     # These hosts can access /system/console
     $oae_admin_hosts = ['72.44.192.164', ]

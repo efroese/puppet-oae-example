@@ -32,7 +32,12 @@ node /oipp-test[2]?.academic.rsmart.local/ inherits oaenode {
     apache::balancer { "apache-balancer-oae-app":
         vhost      => "${localconfig::http_name}:443",
         location   => "/",
-        locations_noproxy => ['/server-status', '/balancer-manager'],
+        locations_noproxy => $localconfig::mock_cle_content ? {
+            # Don't proxy to the access and lti tools.
+            # This is just a workaround, not a comprehensive list of CLE urls
+            true  => ['/server-status', '/balancer-manager', 'Shibboleth.sso', '/access', '/imsblti'],
+            false => ['/server-status', '/balancer-manager', 'Shibboleth.sso'],
+        },
         proto      => "http",
         members    => $localconfig::apache_lb_members,
         params     => $localconfig::apache_lb_params,
@@ -194,9 +199,28 @@ node /oipp-test[2]?.academic.rsmart.local/ inherits oaenode {
         }
     }
 
+    oae::app::server::sling_config {
+        "com.rsmart.academic.authn.filter.AuthnTokenRemappingFilter":
+        config => {
+             'user.property'             => "eppn",
+             'trusted.ip'                => "127.0.0.1",
+             'authn.path'                => "/system/trustedauth",
+             'authn.header'              => "sak3-user",
+             'mapping.enabled'           => true,
+        }
+    }
+
+    oae::app::server::sling_config {
+        "org.sakaiproject.nakamura.auth.trusted.TrustedAuthenticationServlet":
+        config => {
+             'sakai.auth.trusted.destination.default' => "/me"
+        }
+    }
+
     ###########################################################################
     # Preview processor
     class { 'oae::preview_processor::init':
+        admin_password => $localconfig::admin_password,
         upload_url   => "https://${localconfig::http_name}/",
         nakamura_git => $localconfig::nakamura_git,
         nakamura_tag => $localconfig::nakamura_tag,

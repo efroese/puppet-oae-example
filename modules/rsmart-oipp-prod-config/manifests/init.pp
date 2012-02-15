@@ -45,8 +45,8 @@ class localconfig {
     $storedir    = "/files-academic/store"
     ###########################################################################
     # Git (Preview processor)
-    $nakamura_git = "http://github.com/rsmart/nakamura.git"
-    $nakamura_tag = "acad-1.1.0-M1-20120130"
+    $nakamura_git = "http://github.com/rSmart/nakamura.git"
+    $nakamura_tag = undef
 
     ###########################################################################
     # Apache load balancer
@@ -55,7 +55,7 @@ class localconfig {
     $http_name_untrusted = 'oipp-content.academic.rsmart.com'
     $apache_lb_members           = [ "${app_server1}:8080", "${app_server2}:8080" ]
     $apache_lb_members_untrusted = [ "${app_server1}:8082", "${app_server2}:8082" ]
-    $apache_lb_params            = ["retry=20", "min=3", "flushpackets=auto", "max=250", "loadfactor=100", "timeout=60"]
+    $apache_lb_params            = ["retry=20", "min=3", "flushpackets=auto", "max=1", "loadfactor=100", "timeout=300"]
 
     $mock_cle_content = true
     $apache_cle_lb_members = [ "${cle_server1}:8009 route=OIPP-CLE1", "${cle_server2}:8009 route=OIPP-CLE2" ]
@@ -71,7 +71,7 @@ class localconfig {
     $javamemorymin = '5g'
     $javapermsize  = '256m'
 
-    $admin_password = 'admin'
+    $admin_password = 'e4D7kYbQgswCHp'
 
     # These hosts can access /system/console
     $oae_admin_hosts = ['72.44.192.164', ]

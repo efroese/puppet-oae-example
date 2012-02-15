@@ -180,7 +180,7 @@ node oaeappnode inherits oaenode {
         config => {
             "remoteurl"  => $localconfig::solr_remoteurl,
             "query-urls" => $localconfig::solr_queryurls,
-            "query-so-timeout" => 2000,
+            "query-so-timeout" => 10000,
             "query-connection-timeout" => 1000,
             "query-connection-manager-timeout" => 1000,
             "connection.timeout" => 1000,

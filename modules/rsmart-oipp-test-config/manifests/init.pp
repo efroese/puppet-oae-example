@@ -91,7 +91,7 @@ class localconfig {
     $reply_as_name    = 'rSmart Academic'
     
     # Registration
-    $redirect_url = "https://oipp-test2.academic.rsmart.com/"
+    $redirect_url = "https://oipp-test.academic.rsmart.com/"
     $redirect_enabled = true
 
     $mapping_enabled = true

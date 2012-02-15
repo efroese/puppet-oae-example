@@ -15,7 +15,7 @@
 class oae::preview_processor::init (
         $admin_password='admin',
         $upload_url,
-        $nakamura_git,
+        $nakamura_git='http://github.com/sakaiproject/nakamura.git',
         $nakamura_tag=undef) {
 
     Class['oae::params'] -> Class['oae::preview_processor::init']

@@ -199,6 +199,24 @@ node /oipp-test[2]?.academic.rsmart.local/ inherits oaenode {
         }
     }
 
+    oae::app::server::sling_config {
+        "com.rsmart.academic.authn.filter.AuthnTokenRemappingFilter":
+        config => {
+             'user.property'             => "eppn",
+             'trusted.ip'                => "127.0.0.1",
+             'authn.path'                => "/system/trustedauth",
+             'authn.header'              => "sak3-user",
+             'mapping.enabled'           => true,
+        }
+    }
+
+    oae::app::server::sling_config {
+        "org.sakaiproject.nakamura.auth.trusted.TrustedAuthenticationServlet":
+        config => {
+             'sakai.auth.trusted.destination.default' => "/me"
+        }
+    }
+
     ###########################################################################
     # Preview processor
     class { 'oae::preview_processor::init':

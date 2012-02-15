@@ -47,6 +47,7 @@ class oae::preview_processor::gems {
         opt_gem { 'daemons':  version => $daemons_gem_version }
         opt_gem { 'rbtagger': version => $rbtagger_version }
         opt_gem { 'term-extract': version => $termextract_gem_version }
+        opt_gem { 'nakamura': version => $nakamura_gem_version }
     } 
     else {
         gem { 'curb':     version => $curb_gem_version }
@@ -57,6 +58,7 @@ class oae::preview_processor::gems {
         gem { 'daemons':  version => $daemons_gem_version }
         gem { 'rbtagger': version => $rbtagger_version }
         gem { 'term-extract': version => $termextract_gem_version }
+        gem { 'nakamura': version => $nakamura_gem_version }
     }
 
     $docsplit_gem_path = $lsbmajdistrelease ? {

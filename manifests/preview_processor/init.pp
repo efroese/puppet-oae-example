@@ -39,6 +39,7 @@ class oae::preview_processor::init (
         # technically we only need the preview_processor
         exec { "clone nakamura":
             command => "git clone ${nakamura_git} ${oae::params::basedir}/nakamura",
+            user    => $oae::params::user,
             creates => "${oae::params::basedir}/nakamura",
             require => Package['git'],
             notify  => Exec['checkout nakamura tag'],
@@ -46,6 +47,7 @@ class oae::preview_processor::init (
         
         exec { "checkout nakamura tag":
             command => "git checkout ${nakamura_tag}",
+            user    => $oae::params::user,
             cwd     => "${oae::params::basedir}/nakamura",
             require => [ Package['git'], Exec['clone nakamura'], ],
             refreshonly => true, # only do this when notified, not on every run
@@ -56,6 +58,7 @@ class oae::preview_processor::init (
         # technically we only need the preview_processor
         exec { "clone nakamura":
             command => "git clone ${nakamura_git} ${oae::params::basedir}/nakamura",
+            user    => $oae::params::user,
             creates => "${oae::params::basedir}/nakamura",
             require => Package['git'],
         }

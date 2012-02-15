@@ -74,7 +74,7 @@ class localconfig {
     $javamemorymin = '5g'
     $javapermsize  = '256m'
 
-    $admin_password = 'DDZn24tzeWtUEn'
+    $admin_password = 'Iibitj9XrKhR2yfXawsvXZbMNnwAtNjbwHNHctwBnoAFhKGEQj'
 
     # These hosts can access /system/console
     $oae_admin_hosts = ['72.44.192.164', ]

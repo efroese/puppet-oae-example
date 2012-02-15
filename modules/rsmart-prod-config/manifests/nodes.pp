@@ -14,6 +14,10 @@ node 'base.academic.rsmart.local' inherits oaenode { }
 #
 node 'apache1.academic.rsmart.local' inherits oaenode {
 
+    class { 'apache':
+        httpd_conf_template => 'localconfig/httpd.conf.erb'
+    }
+
     class { 'apache::ssl': }
 
     # Headers is not in the default set of enabled modules

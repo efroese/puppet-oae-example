@@ -32,7 +32,7 @@ node /oipp-test[2]?.academic.rsmart.local/ inherits oaenode {
     apache::balancer { "apache-balancer-oae-app":
         vhost      => "${localconfig::http_name}:443",
         location   => "/",
-        locations_noproxy => ['/server-status', '/balancer-manager'],
+        locations_noproxy => ['/server-status', '/balancer-manager', '/Shibboleth.sso'],
         proto      => "http",
         members    => $localconfig::apache_lb_members,
         params     => $localconfig::apache_lb_params,

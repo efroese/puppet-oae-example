@@ -64,10 +64,10 @@ node 'apache1.academic.rsmart.local' inherits oaenode {
     }
 
     ###########################################################################
-    # https://content-academic.rsmart.com
+    # https://academic.rsmart.com:8443
 
     # Serve untrusted content from another hostname
-    apache::vhost-ssl { "${localconfig::http_name_untrusted}:443":
+    apache::vhost-ssl { "${localconfig::http_name}:8443":
         sslonly  => true,
         cert     => "/etc/pki/tls/certs/rsmart.com.crt",
         certkey  => "/etc/pki/tls/private/rsmart.com.key",
@@ -77,7 +77,7 @@ node 'apache1.academic.rsmart.local' inherits oaenode {
 
     # Balancer pool for untrusted content
     apache::balancer { "apache-balancer-oae-app-untrusted":
-        vhost      => "${localconfig::http_name_untrusted}:443",
+        vhost      => "${localconfig::http_name}:8443",
         location   => "/",
         proto      => "http",
         members    => $localconfig::apache_lb_members_untrusted,

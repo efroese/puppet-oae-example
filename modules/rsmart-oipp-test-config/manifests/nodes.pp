@@ -35,8 +35,8 @@ node /oipp-test[2]?.academic.rsmart.local/ inherits oaenode {
         locations_noproxy => $localconfig::mock_cle_content ? {
             # Don't proxy to the access and lti tools.
             # This is just a workaround, not a comprehensive list of CLE urls
-            true  => ['/server-status', '/balancer-manager', 'Shibboleth.sso', '/access', '/imsblti'],
-            false => ['/server-status', '/balancer-manager', 'Shibboleth.sso'],
+            true  => ['/server-status', '/balancer-manager', '/Shibboleth.sso', '/access', '/imsblti'],
+            false => ['/server-status', '/balancer-manager', '/Shibboleth.sso'],
         },
         proto      => "http",
         members    => $localconfig::apache_lb_members,

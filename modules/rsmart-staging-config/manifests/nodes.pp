@@ -154,7 +154,7 @@ node oaeappnode inherits oaenode {
             'trusted.hosts'  => [
                 "localhost:8080\\ \\=\\ http://localhost:8081",
                 "${hostname}:8080\\ \\=\\ http://${hostname}:8081",
-                "${localconfig::http_name}\\ \\=\\ https://${localconfig::http_name_untrusted}:443",
+                "${localconfig::http_name}\\ \\=\\ https://${localconfig::http_name_untrusted}",
             ],
             'trusted.secret' => $localconfig::serverprotectsec,
         }

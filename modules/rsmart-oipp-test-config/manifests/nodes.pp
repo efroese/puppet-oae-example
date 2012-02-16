@@ -160,7 +160,7 @@ node /oipp-test[2]?.academic.rsmart.local/ inherits oaenode {
             'disable.protection.for.dev.mode' => $localconfig::sps_disabled,
             'trusted.hosts'  => [
                 "localhost:8080\\ \\=\\ http://localhost:8082",
-                "${localconfig::http_name}\\ \\=\\ https://${localconfig::http_name_untrusted}:443",
+                "${localconfig::http_name}\\ \\=\\ https://${localconfig::http_name_untrusted}",
             ],
             'trusted.secret' => $localconfig::serverprotectsec,
         }

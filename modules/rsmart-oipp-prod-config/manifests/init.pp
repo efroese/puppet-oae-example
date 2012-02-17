@@ -50,9 +50,10 @@ class localconfig {
 
     ###########################################################################
     # Apache load balancer
-    # $http_name = 'cole.uconline.edu'
-    $http_name           = 'oipp-prod2.academic.rsmart.com'
-    $http_name_untrusted = 'oipp-content.academic.rsmart.com'
+    $http_name           = 'cole.uconline.edu'
+    $http_name_untrusted = 'content-cole.uconline.edu'
+    # $http_name           = 'oipp-prod2.academic.rsmart.com'
+    # $http_name_untrusted = 'oipp-content.academic.rsmart.com'
     $apache_lb_members           = [ "${app_server1}:8080", "${app_server2}:8080" ]
     $apache_lb_members_untrusted = [ "${app_server1}:8082", "${app_server2}:8082" ]
     $apache_lb_params            = ["retry=20", "min=3", "flushpackets=auto", "max=1", "loadfactor=100", "timeout=300"]

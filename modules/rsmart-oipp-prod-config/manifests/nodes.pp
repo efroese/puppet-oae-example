@@ -295,7 +295,7 @@ node oaeappnode inherits oaenode {
         "com.rsmart.academic.authn.filter.AuthnTokenRemappingFilter":
         config => {
              'user.property'             => "eppn",
-             'trusted.ip'                => "127.0.0.1",
+             'trusted.ip'                => "10.51.9.20",
              'authn.path'                => "/system/trustedauth",
              'authn.header'              => "sak3-user",
              'mapping.enabled'           => true,

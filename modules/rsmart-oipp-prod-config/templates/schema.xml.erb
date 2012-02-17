@@ -491,7 +491,8 @@
    <field name="name" type="text_ci" indexed="true" stored="true" termVectors="true" />
    <field name="firstName" type="text" indexed="true" stored="true" />
    <field name="lastName" type="text" indexed="true" stored="true" />
-   <field name="email" type="text" indexed="true" stored="true" />
+   <field name="email" type="text_ci" indexed="true" stored="true" />
+   <field name="newemail" type="text_ci" indexed="true" stored="true" />
    <field name="type" type="string" indexed="true" stored="true" termVectors="true" />
    <field name="group" type="string" indexed="true" stored="true" multiValued="true" />
 
@@ -700,6 +701,7 @@
    <copyField source="firstName" dest="ngram"/>
    <copyField source="lastName" dest="ngram"/>
    <copyField source="email" dest="ngram"/>
+   <copyField source="newemail" dest="ngram"/>
    <copyField source="title" dest="ngram"/>
    <copyField source="description" dest="ngram"/>
    <copyField source="widgetdata" dest="ngram"/>
@@ -713,6 +715,7 @@
    <copyField source="firstName" dest="edgengram"/>
    <copyField source="lastName" dest="edgengram"/>
    <copyField source="email" dest="edgengram"/>
+   <copyField source="newemail" dest="edgengram"/>
    <copyField source="title" dest="edgengram"/>
    <copyField source="description" dest="edgengram"/>
    <copyField source="widgetdata" dest="edgengram"/>
@@ -726,6 +729,7 @@
    <copyField source="firstName" dest="general"/>
    <copyField source="lastName" dest="general"/>
    <copyField source="email" dest="general"/>
+   <copyField source="newemail" dest="general"/>
    <copyField source="title" dest="general"/>
    <copyField source="description" dest="general"/>
    <copyField source="widgetdata" dest="general"/>

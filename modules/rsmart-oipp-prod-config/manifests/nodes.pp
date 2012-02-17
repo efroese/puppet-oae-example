@@ -84,12 +84,12 @@ node 'apache1.academic.rsmart.local' inherits oaenode {
     # Serve untrusted content from another hostname
     apache::vhost-ssl { "${localconfig::http_name_untrusted}:443":
         sslonly   => true,
-        #cert     => "puppet:///modules/localconfig/content-cole.uconline.edu.crt",
-        #certkey  => "puppet:///modules/localconfig/content-cole.uconline.edu.key",
-        #certchain => "puppet:///modules/localconfig/content-cole.uconline.edu-intermediate.crt",
-        cert      => "puppet:///modules/localconfig/academic.rsmart.com.crt",
-        certkey   => "puppet:///modules/localconfig/academic.rsmart.com.key",
-        certchain => "puppet:///modules/localconfig/academic.rsmart.com-intermediate.crt",
+        cert     => "puppet:///modules/localconfig/uconline.edu.crt",
+        certkey  => "puppet:///modules/localconfig/uconline.edu.key",
+        certchain => "puppet:///modules/localconfig/uconline.edu-intermediate.crt",
+        # cert      => "puppet:///modules/localconfig/academic.rsmart.com.crt",
+        # certkey   => "puppet:///modules/localconfig/academic.rsmart.com.key",
+        # certchain => "puppet:///modules/localconfig/academic.rsmart.com-intermediate.crt",
         template  => 'localconfig/vhost-8443.conf.erb',
     }
 

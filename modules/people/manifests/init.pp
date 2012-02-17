@@ -30,4 +30,7 @@ class people ($sakai_user='sakaioae', $sakai_group='sakaioae', $uid='8080', $gid
 
     realize(Group['kcampos'])
     realize(User['kcampos'])
+
+    realize(Group['mdesimone'])
+    realize(User['mdesimone'])
 }

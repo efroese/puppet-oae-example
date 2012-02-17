@@ -121,4 +121,21 @@ class people::users ($sakai_user='sakaioae', $uid='8080', $gid='8080') {
         user => 'kcampos',
         require => User['kcampos'],
     }
+
+    @user { 'mdesimone':
+        ensure     => present,
+        uid        => '507',
+        gid        => 'mdesimone',
+        home       => '/home/mdesimone',
+        managehome => true,
+        groups     => ['mdesimone', 'wheel',],
+    }
+
+    ssh_authorized_key { 'mdesimone-home-pub':
+        ensure => present,
+        key  => 'AAAAB3NzaC1yc2EAAAABIwAAAQEAyaOsc4zC2b4w6CQNoHYFAOiDt1gzUFrYNUoOO/TvCVgiEI4d9vmMxPxNxSdxq70WLMoB13f0Wnd3H4u4DwY0cs5jPEjt/XuWXHf/z+HAw/+5z916mnxLi7zp/ylHhDryajiKxNIVqn6dZlNySyj5kt97zaA7/9+/r5bKlXA/aK2pFhUnVV2g3Ij0ocbLp31m38LI+QRSUwnIVrcdVxIVykTEGWRTWUe/x46VJOJ1Ur/POTfdEbNMnG1cdjv9sHk+26EEzkJo0RqWp9Ln4HmaMp2vQy/U7X06+OfMtPubnfPtR+l9KHN4hzrGtU6SKgfE0X2OhxwT7LCFhZXN465dbQ==',
+        type => 'ssh-rsa',
+        user => 'mdesimone',
+        require => User['mdesimone'],
+    }
 }

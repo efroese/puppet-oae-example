@@ -15,6 +15,7 @@ class people::groups ($sakai_group='sakaioae', $gid='8080') {
     @group { 'efroese':   gid => '504' }
     @group { 'kcampos':   gid => '505' }
     @group { 'dgillman':  gid => '506' }
+    @group { 'mdesimone': gid => '507' }
 
     # Services/Applications/Robots/Aliens
     @group { 'hyperic':   gid => '701' }

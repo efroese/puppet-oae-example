@@ -91,8 +91,8 @@ class localconfig {
     $solr_queryurls = "http://${solr_master}:8080/solr"
 
     #CLE
-    $basiclti_secret = "C7beFutror7iSd"
-    $basiclti_key = "AcademicRsmartCom"
+    $basiclti_secret = "rLKQsw6YBq4TUa"
+    $basiclti_key = "ColeUconlineEdu"
 
     $tomcat_user    = 'admin'
     $tomcat_password = 'pulp134@rain'

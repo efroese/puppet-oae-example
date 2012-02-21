@@ -72,18 +72,18 @@ class oae::app::setup($store_dir=undef){
     # Create a link underneath the sling directory to the sling sibling.
     # The allows us to delete the sling directory and preserve certain folders/data.
     define linked_oae_dir() {
-        file { "${save_dir}/${name}":
+        file { "${oae::app::setup::save_dir}/${name}":
             ensure => directory,
             owner  => $oae::params::user,
             group  => $oae::params::group,
             mode   => 0755,
-            require => File[$save_dir],
+            require => File[$oae::app::setup::save_dir],
         }
 
-        file { "${sling_dir}/${name}":
+        file { "${oae::app::setup::sling_dir}/${name}":
             ensure => link,
-            target => "${save_dir}/${name}",
-            require => [ File["${save_dir}/${name}"], File[$sling_dir] ],
+            target => "${oae::app::setup::save_dir}/${name}",
+            require => [ File["${oae::app::setup::save_dir}/${name}"], File[$oae::app::setup::sling_dir] ],
         }
     }
 

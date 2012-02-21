@@ -65,7 +65,7 @@ fi
 pushd ${SCRIPT_DIR} > /dev/null;
 
 # Check for lock file:
-if [ -f ${SCRIPT_DIR}/contentpreview.lock ] ; then
+if [ -f ${SCRIPT_DIR}/.contentpreview.lock ] ; then
     echo "WARN: previous content preview process did not complete in 60 seconds";
     exit 6;
 fi

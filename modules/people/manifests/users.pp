@@ -12,6 +12,15 @@ class people::users ($sakai_user='sakaioae', $uid='8080', $gid='8080') {
 		managehome => true
 	}
 
+	@user { 'rsmartian':
+        ensure     => present,
+        uid        => '800',
+        gid        => 'rsmartian',
+        home       => '/home/rsmartian',
+        managehome => true,
+        groups     => ['rsmartian', 'wheel',],
+    }
+
     @user { 'hyperic': 
         ensure     => present,
         uid        => '701',

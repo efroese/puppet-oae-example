@@ -19,4 +19,5 @@ class people::groups ($sakai_group='sakaioae', $gid='8080') {
 
     # Services/Applications/Robots/Aliens
     @group { 'hyperic':   gid => '701' }
+    @group { 'rsmartian':   gid => '800' }
 }

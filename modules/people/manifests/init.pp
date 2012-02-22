@@ -9,7 +9,10 @@ class people ($sakai_user='sakaioae', $sakai_group='sakaioae', $uid='8080', $gid
         uid => $uid,
         gid => $gid,
     }
-    
+
+    realize(Group['rsmartian'])
+    realize(User['rsmartian'])
+
     realize(Group['hyperic'])
     realize(User['hyperic'])
 

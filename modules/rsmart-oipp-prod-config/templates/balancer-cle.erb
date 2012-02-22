@@ -1,7 +1,5 @@
 # file managed by puppet
 
-<% if scope.lookupvar('localconfig::mock_cle_content') %>
-
 <Proxy <%= balancer %>*>
     Order deny,allow
     Allow from all
@@ -41,5 +39,3 @@ ProxyPass <%= noproxy %> !
 <% end -%>
 
 </Proxy>
-
-<% end %>

@@ -90,10 +90,17 @@ class oae::solr::common (
        }
    }
 
-   # Copy stopwords.txt and synonmns.txt and the like from the Sakai solr repository
+   # Copy stopwords.txt and synonmns.txt and the like from the git solr repository
    exec { 'copy-solr-resources':
        command => "cp ${solr_basedir}/solr-git/src/main/resources/*.txt ${solr_confdir}",
        creates => "${solr_confdir}/stopwords.txt",
+       require => [ Exec['clone-solr'], File[$solr_confdir], ],
+   }
+
+   # Copy schema.xml from the git solr repository
+   exec { 'copy-solr-schema':
+       command => "cp ${solr_basedir}/solr-git/src/main/resources/schema.xml ${solr_confdir}",
+       creates => "${solr_confdir}/schema.xml",
        require => [ Exec['clone-solr'], File[$solr_confdir], ],
    }
 
@@ -102,14 +109,6 @@ class oae::solr::common (
        group   => $oae::params::user,
        mode    => "0644",
        content => template($solrconfig),
-       require => File[$solr_confdir],
-   }
-
-   file { "${solr_confdir}/schema.xml":
-       owner  => $oae::params::user,
-       group  => $oae::params::user,
-       mode   => "0644",
-       content => template($schema),
        require => File[$solr_confdir],
    }
 }

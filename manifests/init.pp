@@ -34,6 +34,7 @@
 #
 class tomcat6 ( $parentdir               = '/usr/local',
                 $tomcat_version          = '6.0.35',
+                $tomcat_major_version    = '6',
                 $mirror                  = 'http://archive.apache.org/dist/tomcat',
                 $tomcat_users_template   = 'tomcat6/tomcat-users.xml.erb',
                 $tomcat_conf_template    = 'tomcat6/server.xml.erb',
@@ -45,7 +46,7 @@ class tomcat6 ( $parentdir               = '/usr/local',
                 $admin_password          = 'tomcat'
              ) {
                     
-    $tomcat_url  = "${mirror}/tomcat-6/v${tomcat_version}/bin/apache-tomcat-${tomcat_version}.tar.gz"
+    $tomcat_url  = "${mirror}/tomcat-${tomcat_major_version}/v${tomcat_version}/bin/apache-tomcat-${tomcat_version}.tar.gz"
     $basedir     = "${parentdir}/tomcat"
     $javahome    = "/usr/lib/jvm/java"
 

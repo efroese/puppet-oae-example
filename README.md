@@ -21,7 +21,7 @@ A cluster of OAE machines. See nodes-cluster.pp for the cluster description.
     cd puppet-oae-example
     git submodule update --init
     cd modules
-    ln -s clusterconfig localconfig
+    ln -s cluster-config localconfig
     cd ..
     # Edit site.pp to make sure nodes-cluster is imported.
     puppet apply --modulepath modules site.pp --verbose

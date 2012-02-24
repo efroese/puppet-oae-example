@@ -93,6 +93,7 @@ class tomcat6 ( $parentdir               = '/usr/local',
         ensure => link,
         target => "/var/log/tomcat",
         require => Exec["chown-apache-tomcat-${tomcat_version}"],
+        force => true,
     }
 
     file { "${basedir}/conf/tomcat-users.xml":

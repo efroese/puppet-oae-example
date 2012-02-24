@@ -21,16 +21,7 @@ class oae::preview_processor::init (
     Class['oae::params'] -> Class['oae::preview_processor::init']
 
     class { 'oae::preview_processor::openoffice': }
-    class { 'oae::preview_processor::gems': }
-    
-    case $operatingsystem {
-        CentOS,Redhat: {
-            include 'oae::preview_processor::redhat'
-        }
-        Amazon: {
-            include 'oae::preview_processor::amazon'
-        }
-    }
+    class { 'oae::preview_processor::packages': }
 
     if !defined(File["${oae::params::basedir}/bin"]) {
         file { "${oae::params::basedir}/bin":

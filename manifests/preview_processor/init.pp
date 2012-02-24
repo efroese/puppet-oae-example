@@ -20,9 +20,17 @@ class oae::preview_processor::init (
 
     Class['oae::params'] -> Class['oae::preview_processor::init']
 
-    class { 'oae::preview_processor::packages': }
     class { 'oae::preview_processor::openoffice': }
     class { 'oae::preview_processor::gems': }
+    
+    case $operatingsystem {
+        CentOS,Redhat: {
+            include 'oae::preview_processor::redhat'
+        }
+        Amazon: {
+            include 'oae::preview_processor::amazon'
+        }
+    }
 
     if !defined(File["${oae::params::basedir}/bin"]) {
         file { "${oae::params::basedir}/bin":
@@ -43,6 +51,7 @@ class oae::preview_processor::init (
             creates => "${oae::params::basedir}/nakamura",
             require => Package['git'],
             notify  => Exec['checkout nakamura tag'],
+            timeout => 0,
         }
         
         exec { "checkout nakamura tag":

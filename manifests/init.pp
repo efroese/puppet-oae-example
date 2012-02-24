@@ -102,7 +102,7 @@ class tomcat6 ( $parentdir               = '/usr/local',
         group  => root,
         mode   => 0644,
         content => template($tomcat_users_template),
-        require => Exec["chown-apache-tomcat-${tomcat_version}"],
+        require => File[$basedir],
         notify  => Service['tomcat'],
     }
 
@@ -112,7 +112,7 @@ class tomcat6 ( $parentdir               = '/usr/local',
         group  => root,
         mode   => 0644,
         content => template($tomcat_conf_template),
-        require => Exec["chown-apache-tomcat-${tomcat_version}"],
+        require => File[$basedir],
         notify  => Service['tomcat'],
     }
 
@@ -122,7 +122,7 @@ class tomcat6 ( $parentdir               = '/usr/local',
         group  => root,
         mode   => 0644,
         content => template($tomcat_logging_template),
-        require => Exec["chown-apache-tomcat-${tomcat_version}"],
+        require => File[$basedir],
         notify  => Service['tomcat'],
     }
     
@@ -132,7 +132,7 @@ class tomcat6 ( $parentdir               = '/usr/local',
         group  => root,
         mode   => 0755,
         content => template($setenv_template),
-        require => Exec["chown-apache-tomcat-${tomcat_version}"],
+        require => File[$basedir],
         notify  => Service['tomcat'],
     }
 
@@ -141,7 +141,7 @@ class tomcat6 ( $parentdir               = '/usr/local',
         owner  => $tomcat_user,
         group  => $tomcat_group,
         mode   => 0755,
-        require => Exec["chown-apache-tomcat-${tomcat_version}"],
+        require => File[$basedir],
     }
 
     file { "${basedir}/conf/Catalina/localhost":

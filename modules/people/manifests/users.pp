@@ -58,7 +58,7 @@ class people::users ($sakai_user='sakaioae', $uid='8080', $gid='8080') {
     ssh_authorized_key { 'dgillman-pub':
         ensure => present,
         key  => 'AAAAB3NzaC1yc2EAAAABIwAAAQEAoxOaLODYDqQNAURGI2j2bMhFrYg/I1h7tydOMyVYh5nsu0qK/kc8RCknRNJeEABDUKfJaSQX7OwZKqPS+/R3aSBY/WxnyBX3pAJW1Lq4+1U7+y2S8Y13Fw4JXwDnHIIbNLJUHyqF+MIyl55A5inMm39Z2EEaXIr2KbpwLTsx8nmRMNvlmFov4WTui1HUAb7IM/gF9UInTGflQ5YMNZSYvMULhUldbKFpW/i1OGcwZb8z49vlh30gqVYaiHGJ3bO/tw9vvBpfhAhTEZsJtTNP73fZ+q6iBtC/dW9alr0Gy1i8jy5817K5rbpuBC1gsgCKH+8PCn9T+Sv6oWYS18U/OQ==',
-        type => 'ssh-dss',
+        type => 'ssh-rsa',
         user => 'dgillman',
         require => User['dgillman'],
     }

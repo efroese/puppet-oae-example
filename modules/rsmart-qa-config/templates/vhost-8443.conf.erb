@@ -1,0 +1,55 @@
+# file managed by puppet
+# This is the Sakai OAE untrusted content virtual host
+
+SSLCryptoDevice builtin
+
+<VirtualHost<% sslports.each do |port| -%> <%= port %><% end -%>>
+  ServerName <%= name %>
+
+<% aliases.each do |serveralias| -%>
+    ServerAlias <%= serveralias %>
+<% end -%>
+
+    DocumentRoot <%= documentroot %>
+
+    # restrict all access to firebox for maintenance
+    # <Location />
+    #     Order deny,allow
+    #     Deny from all
+    #     Allow from firebox.rsmart.com
+    #     ErrorDocument 403 http://feynman.rsmart.com/downtime.html
+    # </Location>
+
+    LogLevel warn
+
+    ErrorLog <%= wwwroot %>/<%= name %>/logs/error.log
+    CustomLog <%= wwwroot %>/<%= name %>/logs/access.log combined
+
+    Include <%= wwwroot %>/<%= name%>/conf/*.conf
+
+    SSLEngine On
+    SSLCipherSuite HIGH:MEDIUM
+    SSLProtocol all -SSLv2
+    SSLCertificateFile <%= certfile %>
+    SSLCertificateKeyFile <%= certkeyfile %>
+    SSLCACertificateFile <%= cacertfile %>
+
+<% if has_variable?("certchainfile") -%>
+    SSLCertificateChainFile <%= certchainfile %>
+<% end -%>
+
+    # Enable Persistent Connections
+    # http://httpd.apache.org/docs/2.2/mod/core.html#keepalive
+    KeepAlive On
+
+    # do not turn on == evil (i.e. open proxy)
+    ProxyRequests Off
+    # Turn off VIA header as we know where the requests are proxied
+    ProxyVia Off
+    # see http://docs.codehaus.org/display/JETTY/Configuring+mod_proxy
+    ProxyPreserveHost On
+
+    ErrorDocument 503 http://feynman.rsmart.com/downtime.html
+    ServerSignature Off
+
+</VirtualHost>

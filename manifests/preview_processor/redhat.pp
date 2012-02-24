@@ -2,7 +2,7 @@
 #
 # Set up the preview processor on a redhat machine
 #
-class oae::preview_processor::packages {
+class oae::preview_processor::redhat {
 
     Class['oae::params'] -> Class['oae::preview_processor::packages']
     

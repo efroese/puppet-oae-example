@@ -4,6 +4,15 @@
 #
 # 
 node /oipp-test[2]?.academic.rsmart.local/ inherits oaenode {
+
+
+    ###########################################################################
+    # System
+
+    limits::conf { 
+        "${localconfig::user}-soft": domain => $localconfig::user, type => soft, item => nofile, value => 20000;
+        "${localconfig::user}-hard": domain => $localconfig::user, type => hard, item => nofile, value => 20000;
+    }
     
     class { 'apache::ssl': }
 
@@ -132,6 +141,8 @@ node /oipp-test[2]?.academic.rsmart.local/ inherits oaenode {
         content => 'TraceEnable Off',
     }
 
+    ###########################################################################
+    # OAE App server
     class { 'oae::app::server':
         jarsource      => $localconfig::jarsource,
         jarfile        => $localconfig::jarfile,
@@ -249,6 +260,31 @@ node /oipp-test[2]?.academic.rsmart.local/ inherits oaenode {
 
     postgres::backup::simple { $localconfig::db:
         date_format => ''
+    }
+
+    ###########################################################################
+    #
+    # CLE Server
+    #
+
+    class { 'tomcat6':
+        parentdir => "${localconfig::homedir}/sakaicle",
+        tomcat_version => '5.5.33',
+        tomcat_major_version => '5',
+        tomcat_user  => $oae::params::user,
+        tomcat_group => $oae::params::group,
+	tomcat_conf_template => 'localconfig/cle-server.xml.erb',
+    }
+
+    class { 'cle':
+        cle_tarball_url => 'https://rsmart-releases.s3.amazonaws.com/releases/CLE/2.8.0.29/upgrader_CLEv2.8.0.29.tar.bz2',
+        user        => $oae::params::user,
+        basedir     => "${localconfig::homedir}/sakaicle",
+        tomcat_home => "${localconfig::homedir}/sakaicle/tomcat",
+        server_id   => 'OIPP-CLE1',
+        sakai_properties_template    => 'localconfig/sakai.properties.erb',
+        local_properties_template    => 'localconfig/local.properties.erb',
+        instance_properties_template => 'localconfig/instance.properties.erb',
     }
 
     ###########################################################################

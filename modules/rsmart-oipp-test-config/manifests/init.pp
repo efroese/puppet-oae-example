@@ -60,7 +60,7 @@ class localconfig {
     $apache_cle_location_match   = "^/(xsl-portal.*|access.*|courier.*|dav.*|direct.*|imsblti.*|library.*|messageforums-tool.*|osp-common-tool.*|polls-tool.*|portal.*|profile-tool.*|profile2-tool.*|sakai.*|samigo-app.*|scheduler-tool.*|rsmart-customizer-tool.*|oauth-tool.*|emailtemplateservice-tool.*|sitestats-tool.*|rsmart-support-tool.*|mailsender-tool.*|tool.css|portool_base.css)"
 
     ###########################################################################
-    # App servers
+    # OAE App servers
     $jarsource     = '/home/rsmart/com.rsmart.academic.app.oipp-1.1.1-SNAPSHOT.jar'
     $jarfile       = 'com.rsmart.academic.app.oipp-1.1.1-SNAPSHOT.jar'
     $java          = '/usr/java/jdk1.6.0_30/bin/java'
@@ -96,6 +96,7 @@ class localconfig {
     $redirect_url = "https://oipp-test.academic.rsmart.com/"
     $redirect_enabled = true
 
+    # Shibboleth
     $mapping_enabled = true
     $authn_header    = "sak3-user"
     $trusted_ip      = "127.0.0.1"
@@ -103,4 +104,9 @@ class localconfig {
     $authn_path      = "/system/trustedauth"
     
     $auth_trusted_destination_default = "/me"
+
+    ###########################################################################
+    # CLE App servers
+    $linktool_privkey = 'N?m:???8??.???a'
+    $linktool_salt = '}*?|xD?U?0??+*2?????6?O%F?as8???(??.??6??#??????0??'
 }

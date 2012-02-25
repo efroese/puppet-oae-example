@@ -273,7 +273,7 @@ node /oipp-test[2]?.academic.rsmart.local/ inherits oaenode {
         tomcat_major_version => '5',
         tomcat_user  => $oae::params::user,
         tomcat_group => $oae::params::group,
-	tomcat_conf_template => 'localconfig/cle-server.xml.erb',
+	    tomcat_conf_template => 'localconfig/cle-server.xml.erb',
     }
 
     class { 'cle':
@@ -285,6 +285,8 @@ node /oipp-test[2]?.academic.rsmart.local/ inherits oaenode {
         sakai_properties_template    => 'localconfig/sakai.properties.erb',
         local_properties_template    => 'localconfig/local.properties.erb',
         instance_properties_template => 'localconfig/instance.properties.erb',
+        linktool_salt    => $localconfig::linktool_salt,
+        linktool_privkey => $localconfig::linktool_privkey,
     }
 
     ###########################################################################

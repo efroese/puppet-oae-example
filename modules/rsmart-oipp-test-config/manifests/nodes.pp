@@ -282,11 +282,12 @@ node /oipp-test[2]?.academic.rsmart.local/ inherits oaenode {
 	    setenv_template      => 'localconfig/cle-setenv.sh.erb',
     }
 
-    tomcat::overlay { 'rsmart-cle-prod-overlay':
+    tomcat6::overlay { 'rsmart-cle-prod-overlay':
         tomcat_home  => "${localconfig::homedir}/sakaicle/tomcat",
         overlay_path => "${localconfig::homedir}/sakaicle/rsmart-cle-prod-overlay.tbz",
         creates      => 'webapps/ROOT/rsmart.jsp',
         user         => $oae::params::user,
+        require      => Class['Tomcat6']
     }
 
     class { 'cle':

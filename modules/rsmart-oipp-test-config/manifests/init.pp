@@ -32,10 +32,10 @@ class localconfig {
     $db_user     = 'nakamura'
     $db_password = 'ironchef'
 
-    # TODO - Get the real values for the CLE database
-    $cle_db          = 'cle'
-    $cle_db_user     = 'sakai_cle'
-    $cle_db_password = 'ironchef'
+    $mysql_root_password = 'khjRE7AftLfB'
+    $cle_db              = 'cle'
+    $cle_db_user         = 'sakai_cle'
+    $cle_db_password     = 'ironchef'
 
     ###########################################################################
     # Content body storage

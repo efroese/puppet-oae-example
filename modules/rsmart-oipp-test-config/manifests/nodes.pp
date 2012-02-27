@@ -301,7 +301,7 @@ node /oipp-test[2]?.academic.rsmart.local/ inherits oaenode {
     # MySQL Database Server
     #
 
-    $mysql_password = 'khjRE7AftLfB'
+    $mysql_password = $localconfig::mysql_root_password
 
     class { 'augeas': }
     class { 'mysql::server': }

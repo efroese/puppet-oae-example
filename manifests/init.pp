@@ -88,6 +88,12 @@ class tomcat6 ( $parentdir               = '/usr/local',
         require => Exec["unpack-apache-tomcat-${tomcat_version}"],
     }
 
+    file { "${parentdir}/apache-tomcat-${tomcat_version}":
+        ensure => directory,
+        owner  => $tomcat_user,
+        require => Exec["unpack-apache-tomcat-${tomcat_version}"],
+    }
+
     file { "/etc/init.d/tomcat":
         ensure => present,
         owner  => root,

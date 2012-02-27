@@ -17,7 +17,7 @@ JAVA_OPTS="$JAVA_OPTS -Duser.timezone=US/Pacific"
 ## for debugging--print garbage collection info
 JAVA_OPTS="$JAVA_OPTS -verbose:gc -XX:+PrintGCTimeStamps -XX:+PrintGCDetails"
 
-JAVA_OPTS="$JAVA_OPTS -Dsakai.home=<% scope.lookupvar('tomcat6::parentdir') %>/tomcat/sakai"
+JAVA_OPTS="$JAVA_OPTS -Dsakai.home=<%= scope.lookupvar('tomcat6::parentdir') %>/tomcat/sakai"
 
 # app dynamics config is specifc to server, so must be a local file, not shared like this one.
 #. ${CATALINA_HOME}/bin/appdynamics.sh
@@ -25,7 +25,7 @@ JAVA_OPTS="$JAVA_OPTS -Dsakai.home=<% scope.lookupvar('tomcat6::parentdir') %>/t
 # erase indexwork area on restart
 if [[ "$1" == "start" ]]; then
   echo "in startup, remove indexwork, set up jmx"
-  rm -rf <% scope.lookupvar('tomcat6::parentdir') %>/tomcat/sakai/indexwork/*
+  rm -rf <%= scope.lookupvar('tomcat6::parentdir') %>/tomcat/sakai/indexwork/*
 fi
 
 JAVA_OPTS="$JAVA_OPTS -Djavax.net.ssl.trustStore=/home/rsmart/ssl/cacerts -Djavax.net.ssl.trustStorePassword=s3cUreD -Djavax.net.ssl.keyStore=/home/rsmart/ssl/cacerts -Djavax.net.ssl.keyStorePassword=s3cUreD -Dsakai.cookieName=SAKAI2SESSIONID"

@@ -26,6 +26,10 @@
 #
 # $java_home::               Java installation.
 #
+# $jvm_route::               Java JVM route for load balancing.
+#
+# $shutdown_password::       Tomcat shutdown password
+#
 # $tomcat_group::            The system group the tomcat process will run as.
 #
 # $admin_user::              The admin user for the Tomcat Manager webapp
@@ -49,6 +53,8 @@ class tomcat6 ( $parentdir               = '/usr/local',
                 $jmxremote_access_template = undef,
                 $jmxremote_password_template = undef,
                 $java_home               = '/usr/java/latest',
+                $jvm_route               = 'jvm1',
+                $shutdown_password       = 'SHUTDOWN',
                 $tomcat_user             = 'root',
                 $tomcat_group            = 'root',
                 $admin_user              = 'tomcat',

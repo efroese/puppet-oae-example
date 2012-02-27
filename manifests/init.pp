@@ -192,4 +192,14 @@ class tomcat6 ( $parentdir               = '/usr/local',
         enable => true,
         require => File["${basedir}/conf/tomcat-users.xml"]
     }
+
+    define overlay($tomcat_home, $tarball_path, $creates, $user) {
+        exec { "unpack-tomcat-overlay-${name}":
+            cwd     => $tomcat_home,
+            user    => $user,
+            command => "tar xjf ${tarball_path}",
+            creates => $creates,
+            timeout => 0,
+        }
+    }
 }

@@ -20,6 +20,12 @@
 #
 # $tomcat_user::             The system user the tomcat process will run as.
 #
+# $jmxremote_access_template:: JMX remote access file template.
+#
+# $jmxremote_password_template:: JMX remote password file template.
+#
+# $java_home::               Java installation.
+#
 # $tomcat_group::            The system group the tomcat process will run as.
 #
 # $admin_user::              The admin user for the Tomcat Manager webapp
@@ -40,6 +46,8 @@ class tomcat6 ( $parentdir               = '/usr/local',
                 $tomcat_conf_template    = 'tomcat6/server.xml.erb',
                 $tomcat_logging_template = 'tomcat6/logging.properties.erb',
                 $setenv_template         = 'tomcat6/setenv.sh.erb',
+                $jmxremote_access_template = undef,
+                $jmxremote_password_template = undef,
                 $java_home               = '/usr/java/latest',
                 $tomcat_user             = 'root',
                 $tomcat_group            = 'root',
@@ -133,6 +141,26 @@ class tomcat6 ( $parentdir               = '/usr/local',
         group  => root,
         mode   => 0755,
         content => template($setenv_template),
+        require => File[$basedir],
+        notify  => Service['tomcat'],
+    }
+
+    file { "${basedir}/conf/jmxremote.access":
+        ensure => present,
+        owner  => root,
+        group  => root,
+        mode   => 0644,
+        content => template($jmxremote_access_template),
+        require => File[$basedir],
+        notify  => Service['tomcat'],
+    }
+
+    file { "${basedir}/conf/jmxremote.password":
+        ensure => present,
+        owner  => root,
+        group  => root,
+        mode   => 0644,
+        content => template($jmxremote_password_template),
         require => File[$basedir],
         notify  => Service['tomcat'],
     }

@@ -288,7 +288,7 @@ node /oipp-test[2]?.academic.rsmart.local/ inherits oaenode {
         basedir         => "${localconfig::homedir}/sakaicle",
         tomcat_home     => "${localconfig::homedir}/sakaicle/tomcat",
         server_id       => $localconfig::cle_server_id,
-        sakai_properties_template    => 'localconfig/cle-sakai-configuration.xml.erb',
+        configuration_xml_template   => 'localconfig/cle-sakai-configuration.xml.erb',
         sakai_properties_template    => 'localconfig/sakai.properties.erb',
         local_properties_template    => 'localconfig/local.properties.erb',
         instance_properties_template => 'localconfig/instance.properties.erb',

@@ -3,7 +3,7 @@
 JAVA_HOME=<%= java_home %>
 
 JAVA_OPTS="-server -d64 -Xms5g -Xmx5g -Djava.awt.headless=true -XX:MaxNewSize=1500m -XX:PermSize=512m -XX:MaxPermSize=768m -XX:+UseConcMarkSweepGC -XX:+CMSIncrementalMode -XX:+CMSIncrementalPacing -XX:+DisableExplicitGC"
-CATALINA_PID="$CATALINA_HOME/cle.pid"
+CATALINA_PID="$CATALINA_HOME/work/cle.pid"
 
 JAVA_OPTS="$JAVA_OPTS -Dorg.apache.jasper.compiler.Parser.STRICT_QUOTE_ESCAPING=false -Dhttp.agent=Sakai-News-Tool"
 

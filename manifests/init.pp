@@ -197,7 +197,7 @@ class tomcat6 ( $parentdir               = '/usr/local',
         exec { "unpack-tomcat-overlay-${name}":
             cwd     => $tomcat_home,
             user    => $user,
-            command => "tar xjf ${tarball_path} .",
+            command => "tar xjf ${tarball_path}",
             creates => $creates,
             timeout => 0,
         }

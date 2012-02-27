@@ -276,6 +276,8 @@ node /oipp-test[2]?.academic.rsmart.local/ inherits oaenode {
         java_home            => $localconfig::java_home,
         jmxremote_access_template   => 'localconfig/jmxremote.access.erb',
         jmxremote_password_template => 'localconfig/jmxremote.password.erb',
+        jvm_route            => $localconfig::cle_server_id,
+        shutdown_password    => $localconfig::tomcat_shutdown_password,
 	    tomcat_conf_template => 'localconfig/cle-server.xml.erb',
 	    setenv_template      => 'localconfig/cle-setenv.sh.erb',
     }

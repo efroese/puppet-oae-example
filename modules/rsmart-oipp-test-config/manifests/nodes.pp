@@ -268,12 +268,13 @@ node /oipp-test[2]?.academic.rsmart.local/ inherits oaenode {
     #
 
     class { 'tomcat6':
-        parentdir => "${localconfig::homedir}/sakaicle",
-        tomcat_version => '5.5.33',
+        parentdir            => "${localconfig::homedir}/sakaicle",
+        tomcat_version       => '5.5.33',
         tomcat_major_version => '5',
-        tomcat_user  => $oae::params::user,
-        tomcat_group => $oae::params::group,
+        tomcat_user          => $oae::params::user,
+        tomcat_group         => $oae::params::group,
 	    tomcat_conf_template => 'localconfig/cle-server.xml.erb',
+	    setenv_template      => 'localconfig/cle-setenv.sh.erb',
     }
 
     class { 'cle':

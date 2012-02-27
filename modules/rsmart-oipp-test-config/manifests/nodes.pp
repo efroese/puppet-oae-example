@@ -273,6 +273,7 @@ node /oipp-test[2]?.academic.rsmart.local/ inherits oaenode {
         tomcat_major_version => '5',
         tomcat_user          => $oae::params::user,
         tomcat_group         => $oae::params::group,
+        java_home            => $localconfig::java_home,
 	    tomcat_conf_template => 'localconfig/cle-server.xml.erb',
 	    setenv_template      => 'localconfig/cle-setenv.sh.erb',
     }

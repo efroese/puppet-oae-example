@@ -271,6 +271,7 @@ node /oipp-test[2]?.academic.rsmart.local/ inherits oaenode {
         parentdir            => "${localconfig::homedir}/sakaicle",
         tomcat_version       => '5.5.35',
         tomcat_major_version => '5',
+        digest_string        => '3d79cd245497b2c501b4fd64e1da641c',
         tomcat_user          => $oae::params::user,
         tomcat_group         => $oae::params::group,
         java_home            => $localconfig::java_home,

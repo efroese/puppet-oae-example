@@ -41,11 +41,13 @@
 #
 # == Requires:
 #   - Package['java']
+#   - Module['Archive']
 #
 class tomcat6 ( $parentdir               = '/usr/local',
                 $tomcat_version          = '6.0.35',
                 $tomcat_major_version    = '6',
                 $mirror                  = 'http://archive.apache.org/dist/tomcat',
+                $digest_string           = 'pass the digest_string param',
                 $tomcat_users_template   = 'tomcat6/tomcat-users.xml.erb',
                 $tomcat_conf_template    = 'tomcat6/server.xml.erb',
                 $tomcat_logging_template = 'tomcat6/logging.properties.erb',
@@ -63,17 +65,17 @@ class tomcat6 ( $parentdir               = '/usr/local',
                     
     $tomcat_url  = "${mirror}/tomcat-${tomcat_major_version}/v${tomcat_version}/bin/apache-tomcat-${tomcat_version}.tar.gz"
     $basedir     = "${parentdir}/tomcat"
-    $javahome    = "/usr/lib/jvm/java"
 
-    exec { "download-apache-tomcat-${tomcat_version}":
-        command => "mkdir -p ${parentdir} && curl -o ${parentdir}/apache-tomcat-${tomcat_version}.tar.gz ${tomcat_url}",
-        creates => "${parentdir}/apache-tomcat-${tomcat_version}.tar.gz",
+    archive::download { "apache-tomcat-${tomcat_version}.tar.gz":
+        ensue         => present,
+        digest_string => $digest_string,
+        src_target    => $parentdir,
     }
 
-    exec { "unpack-apache-tomcat-${tomcat_version}":
-        command => "tar xzf ${parentdir}/apache-tomcat-${tomcat_version}.tar.gz -C ${parentdir}",
-        creates => "${parentdir}/apache-tomcat-${tomcat_version}",
-        require => Exec["download-apache-tomcat-${tomcat_version}"],
+    archive::extract { "apache-tomcat-${tomcat_version}.tar.gz":
+        ensure  => present,
+        target  => $parentdir,
+        require => Archive::Download["apache-tomcat-${tomcat_version}.tar.gz"],
     }
 
     exec { "chown-apache-tomcat-${tomcat_version}":

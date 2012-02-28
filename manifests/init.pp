@@ -63,11 +63,11 @@ class tomcat6 ( $parentdir               = '/usr/local',
                 $admin_password          = 'tomcat'
              ) {
                     
-    $tomcat_url  = "${mirror}/tomcat-${tomcat_major_version}/v${tomcat_version}/bin/apache-tomcat-${tomcat_version}.tar.gz"
     $basedir     = "${parentdir}/tomcat"
 
     archive::download { "apache-tomcat-${tomcat_version}.tar.gz":
-        ensure       => present,
+        ensure        => present,
+        url           => "${mirror}/tomcat-${tomcat_major_version}/v${tomcat_version}/bin/apache-tomcat-${tomcat_version}.tar.gz",
         digest_string => $digest_string,
         src_target    => $parentdir,
     }
@@ -81,19 +81,19 @@ class tomcat6 ( $parentdir               = '/usr/local',
     exec { "chown-apache-tomcat-${tomcat_version}":
         command => "chown -R ${tomcat_user}:${tomcat_group} ${parentdir}/apache-tomcat-${tomcat_version}/*",
         unless  => "[ `stat -c %U ${parentdir}/apache-tomcat-${tomcat_version}/conf` == ${tomcat_user} ]",
-        require => Exec["unpack-apache-tomcat-${tomcat_version}"],
+        require => Archive::Extract["apache-tomcat-${tomcat_version}.tar.gz"],
     }
 
     file { $basedir: 
         ensure => link,
         target => "${parentdir}/apache-tomcat-${tomcat_version}",
-        require => Exec["unpack-apache-tomcat-${tomcat_version}"],
+        require => Archive::Extract["apache-tomcat-${tomcat_version}.tar.gz"],
     }
 
     file { "${parentdir}/apache-tomcat-${tomcat_version}":
         ensure => directory,
         owner  => $tomcat_user,
-        require => Exec["unpack-apache-tomcat-${tomcat_version}"],
+        require => Archive::Extract["apache-tomcat-${tomcat_version}.tar.gz"],
     }
 
     file { "/etc/init.d/tomcat":

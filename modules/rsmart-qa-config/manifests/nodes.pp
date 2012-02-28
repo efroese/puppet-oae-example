@@ -145,21 +145,6 @@ node /qa.academic.rsmart.local/ inherits oaenode {
     }
 
     oae::app::server::sling_config {
-        "org.sakaiproject.nakamura.proxy.ProxyClientServiceImpl":
-        config => {
-            'flickr_api_key' => $localconfig::flickr_api_key,
-        },
-    }
-
-    oae::app::server::sling_config {
-        "org.sakaiproject.nakamura.proxy.SlideshareProxyPreProcessor":
-        config => {
-            'slideshare.apiKey'       => $localconfig::slideshare_api_key,
-            'slideshare.sharedSecret' => $localconfig::slideshare_shared_secret,
-        },
-    }
-
-    oae::app::server::sling_config {
         "org.sakaiproject.nakamura.basiclti.CLEVirtualToolDataProvider":
         config => {
              'sakai.cle.server.url'      => "https://${localconfig::http_name}",

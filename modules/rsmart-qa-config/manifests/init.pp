@@ -73,18 +73,11 @@ class localconfig {
     $oae_admin_hosts = ['72.44.192.164', ]
 
     # oae server protection service
-    $serverprotectsec = 'TODO-change-this'
+    $serverprotectsec = 'OLjTwyOTWGl9fZ9lDKGPBri0J0eoKyQ'
 
     # CLE
     $basiclti_secret = "TODO-basic-lti-secret"
     $basiclti_key    = "TODO-basic-lti-key"
-    
-    # Slideshare
-    $slideshare_api_key       = "TODO-slideshare-key"
-    $slideshare_shared_secret = "TODO-slideshare-shared-secret"
-    
-    # Flickr
-    $flickr_api_key = 'TODO-flickr-api-key'
 
     # outgoing email
     $reply_as_address = 'noreply@rsmart.com'

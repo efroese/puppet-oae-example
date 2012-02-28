@@ -271,7 +271,7 @@ node /oipp-test[2]?.academic.rsmart.local/ inherits oaenode {
         parentdir            => "${localconfig::homedir}/sakaicle",
         tomcat_version       => '5.5.35',
         tomcat_major_version => '5',
-        digest_string        => '3d79cd245497b2c501b4fd64e1da641c',
+        digest_string        => '1791951e1f2e03be9911e28c6145e177',
         tomcat_user          => $oae::params::user,
         tomcat_group         => $oae::params::group,
         java_home            => $localconfig::java_home,
@@ -279,10 +279,11 @@ node /oipp-test[2]?.academic.rsmart.local/ inherits oaenode {
         jmxremote_password_template => 'localconfig/jmxremote.password.erb',
         jvm_route            => $localconfig::cle_server_id,
         shutdown_password    => $localconfig::tomcat_shutdown_password,
-	    tomcat_conf_template => 'localconfig/cle-server.xml.erb',
-	    setenv_template      => 'localconfig/cle-setenv.sh.erb',
+	tomcat_conf_template => 'localconfig/cle-server.xml.erb',
+	setenv_template      => 'localconfig/cle-setenv.sh.erb',
     }
 
+    # Base Tomcat customizations
     tomcat6::overlay { 'rsmart-cle-prod-overlay':
         tomcat_home  => "${localconfig::homedir}/sakaicle/tomcat",
         tarball_path => "${localconfig::homedir}/sakaicle/rsmart-cle-prod-overlay.tbz",

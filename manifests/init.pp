@@ -67,7 +67,7 @@ class tomcat6 ( $parentdir               = '/usr/local',
     $basedir     = "${parentdir}/tomcat"
 
     archive::download { "apache-tomcat-${tomcat_version}.tar.gz":
-        ensue         => present,
+        ensure       => present,
         digest_string => $digest_string,
         src_target    => $parentdir,
     }

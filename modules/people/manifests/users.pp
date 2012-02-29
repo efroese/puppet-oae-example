@@ -147,4 +147,21 @@ class people::users ($sakai_user='sakaioae', $uid='8080', $gid='8080') {
         user => 'mdesimone',
         require => User['mdesimone'],
     }
+
+    @user { 'jenkins':
+        ensure     => present,
+        uid        => '900',
+        gid        => 'devops',
+        home       => '/home/jenkins',
+        managehome => true,
+        groups     => ['devops', 'wheel',],
+    }
+
+    ssh_authorized_key { 'jenkins-home-pub':
+        ensure => present,
+        key  => 'AAAAB3NzaC1yc2EAAAABIwAAAQEA75hmsZg08LrfTKIklSOtPEGpk8vuHy5C68+xPd/Wzp08X+serGQNucuFeeVfx8ytM5txPIjyElJGHxn2U2XgMEzoCEY0da/UwvVzfQJK2ON11yn68DPMVsoFqjK+U8+nHHmsJQ6ApFOO/8GldlcieoIV8yQ46msNxMGImk/8GogOSGb+7JNtH1udUl5dUHD9bCMEObdzVwJzgpVu13x+4bPqDDsp+NIX6Tm4ZJB4qaCG3nvWxOL+apxHOwhuRXAqw5EqVyi2BZj5VjPckQ0wJkqm277tlJuUdhjmFZ1wcaqtRLHw8uNqBrBEV81S4F+8cabPcOyVgX8zeP3oE23LSQ==',
+        type => 'ssh-rsa',
+        user => 'jenkins',
+        require => User['jenkins'],
+    }
 }

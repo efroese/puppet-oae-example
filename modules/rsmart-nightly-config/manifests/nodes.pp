@@ -111,6 +111,9 @@ node /nightly.academic.rsmart.local/ inherits devopsnode {
         setenv_template => 'localconfig/setenv.sh.erb',
     }
 
+    ###########################################################################
+    # OAE App Servers
+
     oae::app::server::sling_config {
         "org.sakaiproject.nakamura.lite.storage.jdbc.JDBCStorageClientPool":
         config => {
@@ -142,21 +145,6 @@ node /nightly.academic.rsmart.local/ inherits devopsnode {
             'sakai.email.replyAsAddress' => $localconfig::reply_as_address,
             'sakai.email.replyAsName'    => $localconfig::reply_as_name,
         }
-    }
-
-    oae::app::server::sling_config {
-        "org.sakaiproject.nakamura.proxy.ProxyClientServiceImpl":
-        config => {
-            'flickr_api_key' => $localconfig::flickr_api_key,
-        },
-    }
-
-    oae::app::server::sling_config {
-        "org.sakaiproject.nakamura.proxy.SlideshareProxyPreProcessor":
-        config => {
-            'slideshare.apiKey'       => $localconfig::slideshare_api_key,
-            'slideshare.sharedSecret' => $localconfig::slideshare_shared_secret,
-        },
     }
 
     oae::app::server::sling_config {
@@ -207,7 +195,7 @@ node /nightly.academic.rsmart.local/ inherits devopsnode {
     # MySQL Database Server
     #
 
-    $mysql_password = 'khjRE7AftLfB'
+    $mysql_password = $localconfig::mysql_root_password
 
     class { 'augeas': }
     class { 'mysql::server': }

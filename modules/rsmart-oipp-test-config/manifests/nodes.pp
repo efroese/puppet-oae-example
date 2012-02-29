@@ -5,7 +5,6 @@
 # 
 node /oipp-test[2]?.academic.rsmart.local/ inherits oaenode {
 
-
     ###########################################################################
     # System
 
@@ -299,6 +298,9 @@ node /oipp-test[2]?.academic.rsmart.local/ inherits oaenode {
         basedir         => "${localconfig::homedir}/sakaicle",
         tomcat_home     => "${localconfig::homedir}/sakaicle/tomcat",
         server_id       => $localconfig::cle_server_id,
+        db_url          => $localconfig::cle_db_url,
+        db_user         => $localconfig::cle_db_user,
+        db_password     => $localconfig::cle_db_password,
         configuration_xml_template   => 'rsmart-common/cle-sakai-configuration.xml.erb',
         sakai_properties_template    => 'localconfig/sakai.properties.erb',
         local_properties_template    => 'localconfig/local.properties.erb',

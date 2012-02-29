@@ -35,6 +35,7 @@ class localconfig {
     $cle_db          = 'cle'
     $cle_db_user     = 'sakai_cle'
     $cle_db_password = 'ironchef'
+    $cle_db_url      = "jdbc:mysql://localhost:3306/${cle_db}?useUnicode=true&characterEncoding=UTF-8&useServerPrepStmts=false&cachePrepStmts=true&prepStmtCacheSize=4096&prepStmtCacheLimit=4096"
 
     ###########################################################################
     # Content body storage

@@ -86,7 +86,7 @@ hibernate.show_sql=false
 auto.ddl=false
 
 # change the following to a common location if clustering
-sharedJournalBase@org.sakaiproject.search.api.JournalSettings=/home/rsmart/cle/files
+sharedJournalBase@org.sakaiproject.search.api.JournalSettings=<%= scope.lookupvar('cle::basedir') %>/files
 
 # Convert existing database to files on a filesystem
 #convertToFile@org.sakaiproject.content.api.ContentHostingService = true
@@ -94,7 +94,7 @@ sharedJournalBase@org.sakaiproject.search.api.JournalSettings=/home/rsmart/cle/f
 # the file system root for content hosting's external stored files (default is null, i.e. store them in the db)
 # recommend enabling (along with bodyVolumes)
 # must be the same for each server in a cluster
-bodyPath@org.sakaiproject.content.api.ContentHostingService = /home/rsmart/cle/files/db/bodyContent/
+bodyPath@org.sakaiproject.content.api.ContentHostingService = <%= scope.lookupvar('cle::basedir') %>/files/db/bodyContent/
 
 # when storing content hosting's body bits in files, an optional set of folders just within the bodyPath -
 # to act as volumes to distribute the files among - a comma separate list of folders.  If left out, no volumes will be used.
@@ -104,7 +104,7 @@ bodyVolumes@org.sakaiproject.content.api.ContentHostingService = fs1,fs2,fs3,fs4
 # root of archive file system area - used to write archive files and to read them
 # when clustering app servers, this should be a shared network location
 # must be the same for each server in a cluster
-storagePath@org.sakaiproject.archive.api.ArchiveService = /home/rsmart/cle/files/archive/
+storagePath@org.sakaiproject.archive.api.ArchiveService = <%= scope.lookupvar('cle::basedir') %>/files/archive/
 
 # force all URLs out of Sakai back to Sakai to be secure, i.e. to use https, on this port.  Leave out to respond with the same transport as the request.
 #  Otherwise, the URLs will reflect the attributes of the request URL. (443 | 8443 | or any other port) [defaults to missing]
@@ -151,13 +151,13 @@ localIndexBase@org.sakaiproject.search.api.JournalSettings=${sakai.home}/indexwo
 melete.wysiwyg.editor=FCK Editor
 #
 # need to copy src/melete/var/melete/packagefiles/* into melete.packagingDir
-# default is to create melete directories in /home/rsmart/cle/files
-# if you need to override, you need to use an absolute pathname.  /home/rsmart/cle/files will not be resolved.
+# default is to create melete directories in <%= scope.lookupvar('cle::basedir') %>/files
+# if you need to override, you need to use an absolute pathname.  <%= scope.lookupvar('cle::basedir') %>/files will not be resolved.
 # must be the same for each server in a cluster
-melete.homeDir=/home/rsmart/cle/files/melete
-melete.packagingDir=/home/rsmart/cle/files/melete/packagefiles
-melete.uploadDir=/home/rsmart/cle/files/melete/uploads
-melete.packagingscormdir=/home/rsmart/cle/files/melete/packagefiles/packagefilesscorm
+melete.homeDir=<%= scope.lookupvar('cle::basedir') %>/files/melete
+melete.packagingDir=<%= scope.lookupvar('cle::basedir') %>/files/melete/packagefiles
+melete.uploadDir=<%= scope.lookupvar('cle::basedir') %>/files/melete/uploads
+melete.packagingscormdir=<%= scope.lookupvar('cle::basedir') %>/files/melete/packagefiles/packagefilesscorm
 #
 # turn on for melete integration with resources
 melete.editor.site.default=true
@@ -170,7 +170,7 @@ samigo.saveMediaToDb=false
 samigo.editPubAssessment.restricted=false
 #
 ## this should be set to an absolute path
-samigo.answerUploadRepositoryPath=/home/rsmart/cle/files/sam/uploads
+samigo.answerUploadRepositoryPath=<%= scope.lookupvar('cle::basedir') %>/files/sam/uploads
 #
 ### Samigo email server settings
 # The e-mail settings are for Samigo only. Samigo looks to these settings
@@ -221,7 +221,7 @@ separateIdEid@org.sakaiproject.user.api.UserDirectoryService=true
 roles@com.rsmart.customer.integration.processor.cle.CleCourseMemberProcesssor=Student
 
 # User Processor
-filename@com.rsmart.customer.integration.processor.cle.CleUserProcessor=/home/rsmart/cle/files/sis/users.csv
+filename@com.rsmart.customer.integration.processor.cle.CleUserProcessor=<%= scope.lookupvar('cle::basedir') %>/files/sis/users.csv
 headerRowPresent@com.rsmart.customer.integration.processor.cle.CleUserProcessor=false
 
 # set to true if using LDAP and client wants to also add properties to the user with csv file
@@ -233,14 +233,14 @@ updateAllowed@com.rsmart.customer.integration.processor.cle.CleUserProcessor=fal
 archive@com.rsmart.customer.integration.processor.cle.CleUserProcessor=false
 
 # Course Processor
-filename@com.rsmart.customer.integration.processor.cle.CleCourseProcessor=/home/rsmart/cle/files/sis/courses.csv
+filename@com.rsmart.customer.integration.processor.cle.CleCourseProcessor=<%= scope.lookupvar('cle::basedir') %>/files/sis/courses.csv
 headerRowPresent@com.rsmart.customer.integration.processor.cle.CleCourseProcessor=false
 
 # uncomment to allow updating of the password field during SIS processing
 #updatePassword@com.rsmart.customer.integration.processor.cle.CleUserProcessor=true
 
 #set location of remove file (one userid per line) - this is an optional file
-filename@com.rsmart.customer.integration.processor.cle.CleRemoveUserProcessor=/home/rsmart/cle/files/sis/removeusers.csv
+filename@com.rsmart.customer.integration.processor.cle.CleRemoveUserProcessor=<%= scope.lookupvar('cle::basedir') %>/files/sis/removeusers.csv
 
 # defaults to false, meaning it looks the user up by eid, set this to true to lookup by user id
 lookupByUserId@com.rsmart.customer.integration.processor.cle.CleRemoveUserProcessor=false
@@ -259,14 +259,14 @@ archive@com.rsmart.customer.integration.processor.cle.CleCourseProcessor=false
 masterSiteId@com.rsmart.customer.integration.processor.cle.CleCourseProcessor=MasterSite
 
 # Site Membership Processor
-filename@com.rsmart.customer.integration.processor.cle.CleMembershipProcessor=/home/rsmart/cle/files/sis/members.csv
+filename@com.rsmart.customer.integration.processor.cle.CleMembershipProcessor=<%= scope.lookupvar('cle::basedir') %>/files/sis/members.csv
 headerRowPresent@com.rsmart.customer.integration.processor.cle.CleMembershipProcessor=false
 
 # archive file to archive directory specified above
 archive@com.rsmart.customer.integration.processor.cle.CleMembershipProcessor=false
 
 # CSV file archive location
-directory@com.rsmart.customer.integration.util.FileArchiveUtil=/home/rsmart/cle/files/sis/archive
+directory@com.rsmart.customer.integration.util.FileArchiveUtil=<%= scope.lookupvar('cle::basedir') %>/files/sis/archive
 
 # date format for directories created by archiving (for format like 1-Jan-2007, use d-MMM-y)
 dateFormat@com.rsmart.integration.util.FileArchiveUtil=yyyy-MM-dd
@@ -283,8 +283,8 @@ emailNotification@com.rsmart.customer.integration.processor.cle.CleUserProcessor
 recipients@customerIntegrationJob=
 
 # SIS Section Integration Properties
-filename@com.rsmart.customer.integration.processor.cle.CleSectionMembershipProcessor=/home/rsmart/cle/files/sis/section_members.csv
-filename@com.rsmart.customer.integration.processor.cle.CleSectionProcessor=/home/rsmart/cle/files/sis/sections.csv
+filename@com.rsmart.customer.integration.processor.cle.CleSectionMembershipProcessor=<%= scope.lookupvar('cle::basedir') %>/files/sis/section_members.csv
+filename@com.rsmart.customer.integration.processor.cle.CleSectionProcessor=<%= scope.lookupvar('cle::basedir') %>/files/sis/sections.csv
 
 # archive section csv files?
 archive@com.rsmart.customer.integration.processor.cle.CleSectionMembershipProcessor=false
@@ -370,19 +370,19 @@ config@org.sakaiproject.section.api.SectionManager=MANUAL_MANDATORY
 #org.sakaiproject.authz.api.GroupProvider=org.sakaiproject.coursemanagement.impl.provider.CourseManagementGroupProvider.configurable
 #config@org.sakaiproject.section.api.SectionManager=AUTOMATIC_DEFAULT
 #site-manage.courseManagementSystemImplemented=true
-#filename@com.rsmart.customer.integration.processor.cle.cm.AcademicSessionProcessor=/home/rsmart/cle/files/academic_session.csv
-#filename@com.rsmart.customer.integration.processor.cle.cm.CanonicalCourseProcessor=/home/rsmart/cle/files/canonical_course.csv
-#filename@com.rsmart.customer.integration.processor.cle.cm.CourseOfferingMemberProcessor=/home/rsmart/cle/files/co_member.csv
-#filename@com.rsmart.customer.integration.processor.cle.cm.CourseOfferingProcessor=/home/rsmart/cle/files/course_offering.csv
-#filename@com.rsmart.customer.integration.processor.cle.cm.CourseSetProcessor=/home/rsmart/cle/files/course_set.csv
-#filename@com.rsmart.customer.integration.processor.cle.cm.EnrollmentProcessor=/home/rsmart/cle/files/enrollment.csv
-#filename@com.rsmart.customer.integration.processor.cle.cm.EnrollmentSetProcessor=/home/rsmart/cle/files/enrollment_set.csv
-#filename@com.rsmart.customer.integration.processor.cle.cm.SectionProcessor=/home/rsmart/cle/files/section.csv
-#filename@com.rsmart.customer.integration.processor.cle.cm.SectionMemberProcessor=/home/rsmart/cle/files/section_member.csv
-#filename@com.rsmart.customer.integration.processor.cle.cm.SectionMeetingProcessor=/home/rsmart/cle/files/section_meeting.csv
-#filename@com.rsmart.customer.integration.processor.cle.cm.InstructorProcessor=/home/rsmart/cle/files/instructors.csv
-#filename@com.rsmart.customer.integration.processor.cle.cm.SectionCategoryProcessor=/home/rsmart/cle/files/section_category.csv
-#filename@com.rsmart.customer.integration.processor.cle.cm.SectionCategoryProcessor=/home/rsmart/cle/files/memberships.csv
+#filename@com.rsmart.customer.integration.processor.cle.cm.AcademicSessionProcessor=<%= scope.lookupvar('cle::basedir') %>/files/academic_session.csv
+#filename@com.rsmart.customer.integration.processor.cle.cm.CanonicalCourseProcessor=<%= scope.lookupvar('cle::basedir') %>/files/canonical_course.csv
+#filename@com.rsmart.customer.integration.processor.cle.cm.CourseOfferingMemberProcessor=<%= scope.lookupvar('cle::basedir') %>/files/co_member.csv
+#filename@com.rsmart.customer.integration.processor.cle.cm.CourseOfferingProcessor=<%= scope.lookupvar('cle::basedir') %>/files/course_offering.csv
+#filename@com.rsmart.customer.integration.processor.cle.cm.CourseSetProcessor=<%= scope.lookupvar('cle::basedir') %>/files/course_set.csv
+#filename@com.rsmart.customer.integration.processor.cle.cm.EnrollmentProcessor=<%= scope.lookupvar('cle::basedir') %>/files/enrollment.csv
+#filename@com.rsmart.customer.integration.processor.cle.cm.EnrollmentSetProcessor=<%= scope.lookupvar('cle::basedir') %>/files/enrollment_set.csv
+#filename@com.rsmart.customer.integration.processor.cle.cm.SectionProcessor=<%= scope.lookupvar('cle::basedir') %>/files/section.csv
+#filename@com.rsmart.customer.integration.processor.cle.cm.SectionMemberProcessor=<%= scope.lookupvar('cle::basedir') %>/files/section_member.csv
+#filename@com.rsmart.customer.integration.processor.cle.cm.SectionMeetingProcessor=<%= scope.lookupvar('cle::basedir') %>/files/section_meeting.csv
+#filename@com.rsmart.customer.integration.processor.cle.cm.InstructorProcessor=<%= scope.lookupvar('cle::basedir') %>/files/instructors.csv
+#filename@com.rsmart.customer.integration.processor.cle.cm.SectionCategoryProcessor=<%= scope.lookupvar('cle::basedir') %>/files/section_category.csv
+#filename@com.rsmart.customer.integration.processor.cle.cm.SectionCategoryProcessor=<%= scope.lookupvar('cle::basedir') %>/files/memberships.csv
 #dateFormat@com.rsmart.customer.integration.processor.cle.cm.AcademicSessionProcessor=yyyy-MM-dd
 #dateFormat@com.rsmart.customer.integration.processor.cle.cm.CourseOfferingProcessor=yyyy-MM-dd
 
@@ -556,12 +556,12 @@ conditions.service.enabled=false
 # ---------------------------- JForum
 #
 # Directory to store uploaded avatars
-etudes.jforum.avatar.path =/home/rsmart/cle/files/jforum/
+etudes.jforum.avatar.path =<%= scope.lookupvar('cle::basedir') %>/files/jforum/
 # Directory to store the uploaded files
-etudes.jforum.attachments.store.dir =/home/rsmart/cle/files/jforum/uploads/
+etudes.jforum.attachments.store.dir =<%= scope.lookupvar('cle::basedir') %>/files/jforum/uploads/
 # Package files path for Import and Export for Task Topics.
 # Copy the cle.src/jforum/var/jforum/packagefiles directory contents to etudes.jforum.packaging.path
-etudes.jforum.packaging.path = /home/rsmart/cle/files/jforum/packagefiles
+etudes.jforum.packaging.path = <%= scope.lookupvar('cle::basedir') %>/files/jforum/packagefiles
 #setup outgoing smpt address for jforum
 etudes.jforum.mail.smtp.host=localhost
 
@@ -593,8 +593,8 @@ wsetup.config.tool.attribute.default_sakai.news=http://sakaiproject.org/feed
 
 # ---------------------------- Database settings - alter as needed
 #
-username@javax.sql.BaseDataSource=sakai-1
-password@javax.sql.BaseDataSource=sakai-1_pw
+username@javax.sql.BaseDataSource=<%= scope.lookupvar('cle::db_user') %>
+password@javax.sql.BaseDataSource=<%= scope.lookupvar('cle::db_password') %>
 
 #### MYSQL settings (this is the sakai default)
 vendor@org.sakaiproject.db.api.SqlService=mysql
@@ -611,7 +611,7 @@ hibernate.dialect=org.hibernate.dialect.MySQL5InnoDBDialect
 validationQuery@javax.sql.BaseDataSource=select 1 from DUAL
 
 defaultTransactionIsolationString@javax.sql.BaseDataSource=TRANSACTION_READ_COMMITTED
-url@javax.sql.BaseDataSource=jdbc:mysql://localhost:3306/cle?useUnicode=true&characterEncoding=UTF-8&useServerPrepStmts=false&cachePrepStmts=true&prepStmtCacheSize=4096&prepStmtCacheLimit=4096
+url@javax.sql.BaseDataSource=<%= scope.lookupvar('cle::db_url') %>
 
 #-------------------------Timeout Settings----------
 sakai.X-UA-Compatible=IE=EmulateIE8
@@ -904,4 +904,4 @@ rsaSha1Key@google.oauth.provider=
 
 #eidXPathString@com.rsmart.sakora.impl.ims.sungard.CreatePerson.target=//*/roles/userid/useridtype[textstring='BannerID']/../useridvalue/textstring
 #generateUserId@com.rsmart.sakora.impl.ims.sungard.CreatePerson.target=true
-templateDirectory@com.rsmart.certification.api.CertificateService.wrapped=/home/rsmart/cle/files/certificate-templates
+templateDirectory@com.rsmart.certification.api.CertificateService.wrapped=<%= scope.lookupvar('cle::basedir') %>/files/certificate-templates

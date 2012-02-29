@@ -57,9 +57,10 @@ class localconfig {
     $mock_cle_content            = false
     $apache_cle_lb_members       = [ "${cle_server}:8009 route=cle1", ]
     $apache_cle_location_match   = "^/(xsl-portal.*|access.*|courier.*|dav.*|direct.*|imsblti.*|library.*|messageforums-tool.*|osp-common-tool.*|polls-tool.*|portal.*|profile-tool.*|profile2-tool.*|sakai.*|samigo-app.*|scheduler-tool.*|rsmart-customizer-tool.*|oauth-tool.*|emailtemplateservice-tool.*|sitestats-tool.*|rsmart-support-tool.*|mailsender-tool.*|tool.css|portool_base.css)"
+    $disable_cle_axis            = true
 
     ###########################################################################
-    # App servers
+    # OAE App servers
     $jarsource     = '/home/rsmart/com.rsmart.academic.app-1.1.2-rsmart-SNAPSHOT.jar'
     $jarfile       = 'com.rsmart.academic.app-1.1.2-rsmart-SNAPSHOT.jar'
     $java          = '/usr/java/jdk1.6.0_30/bin/java'

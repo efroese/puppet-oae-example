@@ -13,7 +13,7 @@ node /qa.academic.rsmart.local/ inherits oaenode {
 
     # http://cole.uconline.edu to redirects to 443
     apache::vhost { "${localconfig::http_name}:80":
-        template => 'localconfig/vhost-80.conf.erb',
+        template => 'rsmart-common/vhost-80.conf.erb',
     }
 
     ###########################################################################
@@ -22,10 +22,10 @@ node /qa.academic.rsmart.local/ inherits oaenode {
     # Serve the OAE app (trusted content) on 443
     apache::vhost-ssl { "${localconfig::http_name}:443":
         sslonly  => true,
-        cert     => "puppet:///modules/localconfig/academic.rsmart.com.crt",
-        certkey  => "puppet:///modules/localconfig/academic.rsmart.com.key",
-        certchain => "puppet:///modules/localconfig/academic.rsmart.com-intermediate.crt",
-        template  => 'localconfig/vhost-443.conf.erb',
+        cert     => "puppet:///modules/rsmart-common/academic.rsmart.com.crt",
+        certkey  => "puppet:///modules/rsmart-common/academic.rsmart.com.key",
+        certchain => "puppet:///modules/rsmart-common/academic.rsmart.com-intermediate.crt",
+        template  => 'rsmart-common/vhost-trusted.conf.erb',
     }
 
     # Balancer pool for trusted content
@@ -42,7 +42,7 @@ node /qa.academic.rsmart.local/ inherits oaenode {
         members    => $localconfig::apache_lb_members,
         params     => $localconfig::apache_lb_params,
         standbyurl => $localconfig::apache_lb_standbyurl,
-        template   => 'localconfig/balancer-trusted.erb',
+        template   => 'rsmart-common/balancer-trusted.erb',
     }
 
     # Mock out CLE content
@@ -67,7 +67,7 @@ node /qa.academic.rsmart.local/ inherits oaenode {
             members    => $localconfig::apache_cle_lb_members,
             params     => [ "timeout=300", "loadfactor=100" ],
             standbyurl => $localconfig::apache_lb_standbyurl,
-            template   => 'localconfig/balancer-cle.erb',
+            template   => 'rsmart-common/balancer-cle.conf.erb',
         }
     }
 
@@ -75,10 +75,10 @@ node /qa.academic.rsmart.local/ inherits oaenode {
     # https://oipp-test-content.academic.rsmart.com:443
     apache::vhost-ssl { "${localconfig::http_name_untrusted}:443":
         sslonly  => true,
-        cert     => "puppet:///modules/localconfig/academic.rsmart.com.crt",
-        certkey  => "puppet:///modules/localconfig/academic.rsmart.com.key",
-        certchain => "puppet:///modules/localconfig/academic.rsmart.com-intermediate.crt",
-        template  => 'localconfig/vhost-8443.conf.erb',
+        cert     => "puppet:///modules/rsmart-common/academic.rsmart.com.crt",
+        certkey  => "puppet:///modules/rsmart-common/academic.rsmart.com.key",
+        certchain => "puppet:///modules/rsmart-common/academic.rsmart.com-intermediate.crt",
+        template  => 'rsmart-common/vhost-untrusted.conf.erb',
     }
 
     # Balancer pool for untrusted content
@@ -108,7 +108,7 @@ node /qa.academic.rsmart.local/ inherits oaenode {
         javamemorymin  => $localconfig::javamemorymin,
         javamemorymax  => $localconfig::javamemorymax,
         javapermsize   => $localconfig::javapermsize,
-        setenv_template => 'localconfig/setenv.sh.erb',
+        setenv_template => 'rsmart-common/setenv.sh.erb',
     }
 
     oae::app::server::sling_config {

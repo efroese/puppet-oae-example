@@ -26,7 +26,7 @@ node 'apache1.academic.rsmart.local' inherits oaenode {
 
     # http://staging.academic.rsmart.com to redirects to 443
     apache::vhost { "${localconfig::http_name}:80":
-        template => 'localconfig/vhost-80.conf.erb',
+        template => 'rsmart-common/vhost-80.conf.erb',
     }
 
     ###########################################################################
@@ -35,10 +35,10 @@ node 'apache1.academic.rsmart.local' inherits oaenode {
     # Serve the OAE app (trusted content) on 443
     apache::vhost-ssl { "${localconfig::http_name}:443":
         sslonly  => true,
-        cert     => "/etc/pki/tls/certs/rsmart.com.crt",
-        certkey  => "/etc/pki/tls/private/rsmart.com.key",
-        certchain => "/etc/pki/tls/certs/rsmart.com-intermediate.crt",
-        template  => 'localconfig/vhost-443.conf.erb',
+        cert     => "puppet:///modules/rsmart-common/academic.rsmart.com.crt",
+        certkey  => "puppet:///modules/rsmart-common/academic.rsmart.com.key",
+        certchain => "puppet:///modules/rsmart-common/academic.rsmart.com-intermediate.crt",
+        template  => 'rsmart-common/vhost-trusted.conf.erb',
     }
 
     # Balancer pool for trusted content
@@ -50,7 +50,7 @@ node 'apache1.academic.rsmart.local' inherits oaenode {
         members    => $localconfig::apache_lb_members,
         params     => ["retry=20", "min=3", "flushpackets=auto"],
         standbyurl => $localconfig::apache_lb_standbyurl,
-        template   => 'localconfig/balancer-trusted.erb',
+        template   => 'rsmart-common/balancer-trusted.erb',
     }
 
     # Balancer pool for CLE traffic
@@ -60,7 +60,7 @@ node 'apache1.academic.rsmart.local' inherits oaenode {
         members    => $localconfig::apache_cle_lb_members,
         params     => [ "timeout=300", "loadfactor=100" ],
         standbyurl => $localconfig::apache_lb_standbyurl,
-        template   => 'localconfig/balancer-cle.erb',
+        template   => 'rsmart-common/balancer-cle.conf.erb',
     }
 
     ###########################################################################
@@ -72,10 +72,10 @@ node 'apache1.academic.rsmart.local' inherits oaenode {
     apache::vhost-ssl { "${localconfig::http_name}:8443":
         sslonly  => true,
         sslports => ['*:8443'],
-        cert     => "/etc/pki/tls/certs/rsmart.com.crt",
-        certkey  => "/etc/pki/tls/private/rsmart.com.key",
-        certchain => "/etc/pki/tls/certs/rsmart.com-intermediate.crt",
-        template  => 'localconfig/vhost-8443.conf.erb',
+        cert     => "puppet:///modules/rsmart-common/academic.rsmart.com.crt",
+        certkey  => "puppet:///modules/rsmart-common/academic.rsmart.com.key",
+        certchain => "puppet:///modules/rsmart-common/academic.rsmart.com-intermediate.crt",
+        template  => 'rsmart-common/vhost-untrusted.conf.erb',
     }
 
     # Balancer pool for untrusted content
@@ -112,7 +112,7 @@ node oaeappnode inherits oaenode {
         javamemorymin  => $localconfig::javamemorymin,
         javamemorymax  => $localconfig::javamemorymax,
         javapermsize   => $localconfig::javapermsize,
-        setenv_template => 'localconfig/setenv.sh.erb',
+        setenv_template => 'rsmart-common/setenv.sh.erb',
         store_dir       => $localconfig::storedir,
     }
     
@@ -258,14 +258,14 @@ node solrnode inherits oaenode {
         tomcat_group   => $localconfig::group,
         admin_user     => $localconfig::tomcat_user,
         admin_password => $localconfig::tomcat_password,
-        setenv_template => 'localconfig/solr-setenv.sh.erb',
+        setenv_template => 'rsmart-common/solr-setenv.sh.erb',
     }
 }
 
 node 'solr1.academic.rsmart.local' inherits solrnode {
     class { 'oae::solr::tomcat':
         master_url   => "${localconfig::solr_remoteurl}/replication",
-        solrconfig   => 'localconfig/master-solrconfig.xml.erb',
+        solrconfig   => 'rsmart-common/master-solrconfig.xml.erb',
         tomcat_home  => "${localconfig::basedir}/tomcat",
         tomcat_user  => $localconfig::user,
         tomcat_group => $localconfig::group,
@@ -282,7 +282,7 @@ node 'solr1.academic.rsmart.local' inherits solrnode {
 node /solr[2-3].academic.rsmart.local/ inherits solrnode {
     class { 'oae::solr::tomcat':
         master_url   => "${localconfig::solr_remoteurl}/replication",
-        solrconfig   => 'localconfig/slave-solrconfig.xml.erb',
+        solrconfig   => 'rsmart-common/slave-solrconfig.xml.erb',
         tomcat_user  => $localconfig::user,
         tomcat_group => $localconfig::group,
     }

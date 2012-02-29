@@ -30,7 +30,7 @@
 	url = http://github.com/efroese/puppet-shibboleth.git
 [submodule "modules/archive"]
 	path = modules/archive
-	url = http://github.com/camptocamp/puppet-archive.git
+	url = http://github.com/efroese/puppet-archive.git
 [submodule "modules/cle"]
 	path = modules/cle
 	url = http://github.com/efroese/puppet-cle.git

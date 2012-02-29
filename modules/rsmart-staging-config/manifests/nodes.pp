@@ -35,9 +35,9 @@ node 'apache1.academic.rsmart.local' inherits oaenode {
     # Serve the OAE app (trusted content) on 443
     apache::vhost-ssl { "${localconfig::http_name}:443":
         sslonly  => true,
-        cert     => "/etc/pki/tls/certs/rsmart.com.crt",
-        certkey  => "/etc/pki/tls/private/rsmart.com.key",
-        certchain => "/etc/pki/tls/certs/rsmart.com-intermediate.crt",
+        cert     => "puppet:///modules/rsmart-common/academic.rsmart.com.crt",
+        certkey  => "puppet:///modules/rsmart-common/academic.rsmart.com.key",
+        certchain => "puppet:///modules/rsmart-common/academic.rsmart.com-intermediate.crt",
         template  => 'rsmart-common/vhost-trusted.conf.erb',
     }
 
@@ -69,9 +69,9 @@ node 'apache1.academic.rsmart.local' inherits oaenode {
     # Serve untrusted content from another hostname on port 443
     apache::vhost-ssl { "${localconfig::http_name_untrusted}:443":
         sslonly  => true,
-        cert     => "/etc/pki/tls/certs/rsmart.com.crt",
-        certkey  => "/etc/pki/tls/private/rsmart.com.key",
-        certchain => "/etc/pki/tls/certs/rsmart.com-intermediate.crt",
+        cert     => "puppet:///modules/rsmart-common/academic.rsmart.com.crt",
+        certkey  => "puppet:///modules/rsmart-common/academic.rsmart.com.key",
+        certchain => "puppet:///modules/rsmart-common/academic.rsmart.com-intermediate.crt",
         template  => 'rsmart-common/vhost-untrusted.conf.erb',
     }
 

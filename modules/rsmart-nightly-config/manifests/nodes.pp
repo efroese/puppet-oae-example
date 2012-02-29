@@ -263,4 +263,14 @@ node 'nightly.academic.rsmart.local' inherits devopsnode {
         user     => $localconfig::cle_db_user,
         password => $localconfig::cle_db_password,
     }
+
+    augeas { "my.cnf/mysqld-lower_case_table_names-1":
+        context => "${mysql::params::mycnfctx}/mysqld/",
+        load_path => "/usr/share/augeas/lenses/contrib/",
+        changes => [
+          "set lower_case_table_names 1",
+        ],
+        require => File["/etc/mysql/my.cnf"],
+        notify => Service["mysql"],
+    }
 }

@@ -109,7 +109,7 @@ node /nightly.academic.rsmart.local/ inherits devopsnode {
         javamemorymin  => $localconfig::javamemorymin,
         javamemorymax  => $localconfig::javamemorymax,
         javapermsize   => $localconfig::javapermsize,
-        setenv_template => 'localconfig/setenv.sh.erb',
+        setenv_template => 'rsmart-common/setenv.sh.erb',
     }
 
     oae::app::server::sling_config {

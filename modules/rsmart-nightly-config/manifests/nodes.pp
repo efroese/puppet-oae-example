@@ -3,7 +3,7 @@
 # OIPP Standalone App Server
 #
 # 
-node /nightly.academic.rsmart.local/ inherits oaenode {
+node /nightly.academic.rsmart.local/ inherits devopsnode {
     
     class { 'apache::ssl': }
 

@@ -38,9 +38,9 @@ class people ($sakai_user='sakaioae', $sakai_group='sakaioae', $uid='8080', $gid
 
     realize(Group['kcampos'])
     realize(User['kcampos'])
-    realize(Ssh_authorized_key['kcampos-home'])
+    realize(Ssh_authorized_key['kcampos-home-pub'])
 
     realize(Group['mdesimone'])
     realize(User['mdesimone'])
-    realize(Ssh_authorized_key['mdesimone-home'])
+    realize(Ssh_authorized_key['mdesimone-home-pub'])
 }

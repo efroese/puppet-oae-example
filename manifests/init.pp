@@ -160,24 +160,28 @@ class tomcat6 ( $parentdir               = '/usr/local',
         notify  => Service['tomcat'],
     }
 
-    file { "${basedir}/conf/jmxremote.access":
-        ensure => present,
-        owner  => $tomcat_user,
-        group  => $tomcat_group,
-        mode   => 0600,
-        content => template($jmxremote_access_template),
-        require => File[$basedir],
-        notify  => Service['tomcat'],
+    if $jmxremote_access_template != undef {
+        file { "${basedir}/conf/jmxremote.access":
+            ensure => present,
+            owner  => $tomcat_user,
+            group  => $tomcat_group,
+            mode   => 0600,
+            content => template($jmxremote_access_template),
+            require => File[$basedir],
+            notify  => Service['tomcat'],
+        }
     }
 
-    file { "${basedir}/conf/jmxremote.password":
-        ensure => present,
-        owner  => $tomcat_user,
-        group  => $tomcat_group,
-        mode   => 0600,
-        content => template($jmxremote_password_template),
-        require => File[$basedir],
-        notify  => Service['tomcat'],
+    if $jmxremote_password_template != undef {
+        file { "${basedir}/conf/jmxremote.password":
+            ensure => present,
+            owner  => $tomcat_user,
+            group  => $tomcat_group,
+            mode   => 0600,
+            content => template($jmxremote_password_template),
+            require => File[$basedir],
+            notify  => Service['tomcat'],
+        }
     }
 
     file { "${basedir}/conf/Catalina":

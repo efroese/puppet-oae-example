@@ -83,4 +83,13 @@ class localconfig {
     # outgoing email
     $reply_as_address = 'noreply@rsmart.com'
     $reply_as_name    = 'rSmart Academic'
+
+    ###########################################################################
+    # CLE App servers
+    $cle_tarball_url  = 'https://rsmart-releases.s3.amazonaws.com/releases/CLE/2.8.0.29/upgrader_CLEv2.8.0.29.tar.bz2'
+    $cle_server_id    = 'sakai-nightly1'
+    $tomcat_shutdown_password = 'downa56f3111'
+
+    $linktool_privkey = 'N?m:???8??.???a'
+    $linktool_salt    = '}*?|xD?U?0??+*2?????6?O%F?as8???(??.??6??#??????0??'
 }

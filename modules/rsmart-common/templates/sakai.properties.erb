@@ -1,0 +1,387 @@
+titleEditableSiteType.count=2
+titleEditableSiteType.1=project
+titleEditableSiteType.2=portfolio
+
+# specify the wysiwyg editor
+wysiwyg.editor=FCKeditor
+
+# the URL path (relative is ok) to the collection of skins
+skin.repo=/library/skin
+
+# locations of info pages to display for server, myworkspace, and unconfigured web content
+server.info.url=/content/public/server_info.html
+myworkspace.info.url=/content/public/myworkspace_info.html
+webcontent.instructions.url=/content/public/webcontent_instructions.html
+webdav.instructions.url=/library/content/webdav_instructions.html
+
+# enable/disable presence display in the portal
+display.users.present=true
+
+# the URL to send folks to after they logout
+loggedOutUrl=/xsl-portal
+
+accessPath=/access
+portalPath=/xsl-portal
+helpPath=/help
+
+#use /tool for the new dispatcher
+toolPath=/xsl-portal/tool
+
+# to include the user id and password for login on the gateway site
+top.login=true
+
+# to let the container handle login or not (set to true for single-signon type setups, false for just internal login)
+container.login=false
+
+# to enable some beeping in the user interfaces
+java.beep=false
+
+# Define the icon for users present in chat - if this is undefined, no icon will be used
+presence.inchat.icon=/library/icon/chat.gif
+
+# Supported language locales for user preferences
+locales = en_US, en_GB, ja_JP, ko_KR, nl_NL, zh_CN, es_ES, fr_CA, ca_ES, sv_SE, ar
+
+# upload limit per request, in megs
+content.upload.max=20
+
+# the copyright options for the resources tool
+copyrighttype.count=6
+copyrighttype.1=Material is in public domain.
+copyrighttype.2=I hold copyright.
+copyrighttype.3=Material is subject to fair use exception.
+copyrighttype.4=I have obtained permission to use this material.
+copyrighttype.5=Copyright status is not yet determined.
+copyrighttype.6=Use copyright below.
+copyrighttype.own=I hold copyright.
+copyrighttype.new=Use copyright below.
+default.copyright=Copyright status is not yet determined.
+default.copyright.alert=false
+fairuse.url=http://fairuse.stanford.edu
+newcopyrightinput=true
+
+editViewRosterSiteType.count=2
+editViewRosterSiteType.1=project
+editViewRosterSiteType.2=portfolio
+
+sitebrowser.termsearch.type=course
+sitebrowser.termsearch.property=term_eid
+sitesearch.noshow.sitetype=portfolioAdmin
+
+# send an email to the user when the user is added
+notifyNewUserEmail=true
+
+# Indicates whether or not we allow web-service logins
+webservices.allowlogin=true
+
+# Indicates the shared secret between the Sakai JSR-168 Portlet and this instance of Sakai
+webservice.portalsecret=mys3cr3t
+
+# suppport group editing in Worksite Setup tool: true or false
+wsetup.group.support=true
+
+# STEALTH TOOLS.  A stealth tool is a tool that is running in Sakai, but is not available to be added to a site in Worksite Setup.
+stealthTools@org.sakaiproject.tool.api.ActiveToolManager=sakai-site-pageorder-helper,edia.sakai.selector,sakai.formbuilder,osp.reports,sakai.reports,sakai.mneme,rsn.linktool.pentaho,sakai.gmt,sakai.datapoint,sakai.bbb,sakai.signup,sakai.clog
+
+termterm.count=7
+termterm.1=SUMMER
+termterm.2=FALL
+termterm.3=WINTER
+termterm.4=SPRING
+termterm.5=SUMMER
+termterm.6=FALL
+termterm.7=WINER
+
+termyear.count=7
+termyear.1=2010
+termyear.2=2010
+termyear.3=2011
+termyear.4=2011
+termyear.5=2011
+termyear.6=2011
+termyear.7=2012
+
+termlistabbr.count=7
+termlistabbr.1=Su10
+termlistabbr.2=F10
+termlistabbr.3=W11
+termlistabbr.4=Sp11
+termlistabbr.5=Su11
+termlistabbr.6=F11
+termlistabbr.7=W12
+
+termiscurrent.count=7
+termiscurrent.1=true
+termiscurrent.2=false
+termiscurrent.3=false
+termiscurrent.4=false
+termiscurrent.5=false
+termiscurrent.6=false
+termiscurrent.7=false
+
+termstarttime.count=7
+termstarttime.1=20100601000000000
+termstarttime.2=20100815000000000
+termstarttime.3=20110101000000000
+termstarttime.4=20110201000000000
+termstarttime.5=20110601000000000
+termstarttime.6=20110815000000000
+termstarttime.7=20120101000000000
+
+termendtime.count=7
+termendtime.1=20100814000000000
+termendtime.2=20101231000000000
+termendtime.3=20110131000000000
+termendtime.4=20110531000000000
+termendtime.5=20110814000000000
+termendtime.6=20111231000000000
+termendtime.7=20110201000000000
+
+portal.term.order.count=3
+portal.term.order.1=WINTER 2011
+portal.term.order.2=FALL 2010
+portal.term.order.3=SUMMER 2010
+
+#turn display of eid off in msgcenter
+msg.displayEid=false
+
+### Samigo
+# size in KB
+samigo.sizeThreshold=512
+
+# size in KB, default is 20mb
+samigo.sizeMax=20480
+
+# set to false to disable the release/retract and hiding of resources in ContentHostingService
+# if this setting is left out of sakai.properties, the availability features should be enabled
+# by default
+availabilityChecksEnabled@org.sakaiproject.content.api.ContentHostingService = true
+
+# set to false to disable custom sorts within folders in ContentHostingService
+# if this setting is left out of sakai.properties, the priority sorts should be
+# enabled by default
+prioritySortEnabled@org.sakaiproject.content.api.ContentHostingService = true
+
+# SESSION EXPIRATION
+
+# sessions expire if nothing happens in this many seconds (1 hour)
+inactiveInterval@org.sakaiproject.tool.api.SessionManager=3600
+
+# presence expires if not refreshed in this many seconds
+timeoutSeconds@org.sakaiproject.presence.api.PresenceService=60
+
+# CACHE SETTINGS
+
+# minutes to cache each security question in the SecurityService - set to 0 to disable caching.
+cacheMinutes@org.sakaiproject.authz.api.SecurityService = 3
+
+# minutes to cache each site (site, page, tool) access in the SiteService - set to 0 to disable caching.
+cacheMinutes@org.sakaiproject.site.api.SiteService = 3
+
+# minutes to cache each user access in the UserDirectoryService - set to 0 to disable caching.(0 is the default)
+cacheMinutes@org.sakaiproject.user.api.UserDirectoryService = 10
+
+# minutes between checks of the user cache for cleaning expired entries - set to 0 to disable caching (0 is the default)
+cacheCleanerMinutes@org.sakaiproject.user.api.UserDirectoryService = 15
+
+# use the db to read tool/category info (should always be true)
+useDb@org.theospi.portfolio.portal.intf.PortalManager=true
+
+# use the brand aware portal renderer
+renderContextBeanName@org.sakaiproject.portal.api.PortalRenderEngine.xslt=org.sakaiproject.portal.xsltcharon.impl.BrandAwareXsltRenderContext
+
+# defaults for SIS processing.  Do not change.
+columns@com.rsmart.customer.integration.processor.cle.CleUserProcessor=7
+columns@com.rsmart.customer.integration.processor.cle.CleCourseProcessor=9
+columns@com.rsmart.customer.integration.processor.cle.CleMembershipProcessor=3
+
+# rSmart Customizer Tool Options
+# The following 4 options are very dangerous, use with extreme caution on an existing production instance
+# We strongly suggest they not be used and/or please consult with rSmart before use
+
+# reload default site template, realm template, tool & category info from the source code
+reloadDb@org.theospi.portfolio.portal.intf.PortalManager=false
+
+# when uploading the spreadsheet, overwrite realms, roles, tools & categories
+destructiveMode@com.rsmart.admin.customizer.api.CustomizerService.target=false
+
+# rebuild !user templates
+applySiteOptions@org.theospi.portfolio.admin.intf.SakaiIntegrationService.rsmart=false
+
+# this setting will cause the realm info to be reset
+# set this to false to not reset realms and sites each time the app is started
+realm.reset=false
+
+# enable the Word-2-QTI tool
+samigo.samliteEnabled=true
+
+# run default jobs once an hour
+jobscheduler.invocation.interval=3600
+
+# disable letter grade until SAK-13129 is resolved
+gradebook_enable_letter_grade=false
+
+# turn on dhtml more tab
+portal.use.dhtml.more=true
+
+#set to the site id of the gateway site, can be used to determine if we should render the gateway site differently
+portal.gatewayId=!gateway
+
+#turn on iCal support
+calendar.external.subscriptions.enable=true
+
+## Preferences tool page order/visibility control
+# Controls the order pages appear in the Preferences tool, and whether a page appears at all.
+# The property enable.privacy.status, which previously turned on the privacy status page
+# in preferences is no longer used.
+# The default if no value for preference.pages is set is
+# Tab control prefs, Notification prefs, Timezone pref, Language pref
+# (and privacy pref page is not shown as per the previous default).
+# To show the privacy page, include pref_privacy_title in the preference_pages setting.
+# To eliminate a page, explicity set preference.pages and leave the page value out.
+preference.pages=prefs_tab_title, prefs_noti_title, prefs_timezone_title, prefs_lang_title, prefs_privacy_title
+
+#############################
+# Etudes JForum properties  #
+#############################
+# topics per page
+etudes.jforum.topicsPerPage = 30
+
+# Posts per page
+etudes.jforum.postsPerPage = 30
+
+# Users per page
+etudes.jforum.usersPerPage = 30
+
+# Number of replies to mark a topic as hot
+etudes.jforum.hot.topic.begin = 20
+
+# Recent topics per page
+etudes.jforum.topic.recent = 30
+
+# Encoding
+etudes.jforum.encoding = UTF-8
+
+# Avatar path(should have read and write permissions) and context. Copy the files and directories under
+# jforum-images/var/jforum_images to etudes.jforum.avatar.path.
+etudes.jforum.avatar.clustered = true
+etudes.jforum.avatar.context = /jforum-images
+
+# Date format
+etudes.jforum.dateTime.format = MM/dd/yyyy hh:mm:ss a
+
+# Calendar date format
+etudes.jforum.calendar.dateTime.format = MM/dd/yyyy hh:mm a
+
+# i18n - en_US, pt_BR, de_DE, zh_TW, zh_CN, es_ES, ca_ES
+etudes.jforum.i18n.board.default= en_US
+etudes.jforum.i18n.images.dir = en_US
+
+# Markup
+etudes.jforum.html.tags.welcome=a, abbr, acronym, address, b, big, blockquote, br, center, cite, code, dd, del, dir, div, dl, dt, em, font, hr, h1, h2, h3, h4, h5, h6, i, ins,kbd, li, marquee, menu, nobr, noembed, ol, p, pre, q, rt, ruby, rbc, rb, rtc, rp,s, samp, small, span, strike, strong, sub, sup, tt, u, ul, var, xmp, img, embed,object, table, tr, td, th, tbody, caption, thead, tfoot, colgroup, col 
+
+# ATTACHMENTS
+# Maximum of attachments per post
+etudes.jforum.attachments.max.post = 3
+
+# attatchments quota limit in MB(mega bytes)
+etudes.jforum.attachments.quota.limit = 5
+
+# Grade book tool id for grading
+etudes.jforum.sakai.gradebook.tool.id = sakai.gradebook.tool
+#etudes.jforum.sakai.gradebook2.tool.id = sakai.gradebook.gwt.rpc
+
+#Maximum number of users allowed to copy in Private Messages
+etudes.jforum.maxPMToUsers=10
+
+############################################################################
+# Enabling cache is optional. It is disabled by default with Etudes Jforum 2.7.1.
+# To enable category cache uncomment the below lines and add
+# jforum-tool/src/webapp/WEB-INF/config/jforum-cache-cluster.xml to
+# etudes.jforum.local.config.dir path. In the clustered environment
+# config to use multi cast by configuring the UDP element's attributes
+# ip_mcast to "true" and provide bind_addr of the machine
+# Note: Give the same "ClusterName" in the cluster
+############################################################################
+# do not change this value when using the MemoryServiceCacheEngine as it causes issues
+etudes.category.cache.enabled = false
+etudes.jforum.cache.engine.implementation = org.etudes.jforum.cache.MemoryServiceCacheEngine
+
+# If "true", a mail will be send to users when a topic is
+# answered. To disable, set to "false"
+etudes.jforum.mail.notify.answers=true
+
+####################################
+# End of Etudes JForum properties  #
+####################################
+
+# set to false in order to preserve localization of tool titles and bypass customizer changes
+customizer.allowTitleCustomization=true
+
+
+# preserve pre 2.7 feature of not opening html content as a download, see SAK-18417
+content.html.forcedownload=false
+
+
+# ##############
+# SYNOPTIC TOOLS
+# ##############
+wsetup.home.toolids.count=5
+wsetup.home.toolids.1=sakai.iframe.site
+wsetup.home.toolids.2=sakai.synoptic.announcement
+wsetup.home.toolids.3=sakai.summary.calendar
+wsetup.home.toolids.4=sakai.synoptic.messagecenter
+wsetup.home.toolids.5=sakai.synoptic.chat
+
+wsetup.home.toolids.course.count=5
+wsetup.home.toolids.course.1=sakai.iframe.site
+wsetup.home.toolids.course.2=sakai.synoptic.announcement
+wsetup.home.toolids.course.3=sakai.summary.calendar
+wsetup.home.toolids.course.4=sakai.synoptic.messagecenter
+wsetup.home.toolids.course.5=sakai.synoptic.chat
+
+### Profile2 Settings
+profile2.picture.max=2
+profile2.convert=false
+profile2.integration.twitter.enabled=true
+profile2.integration.twitter.source=Profile2
+profile2.picture.change.enabled=true
+profile2.picture.type=upload
+profile2.privacy.change.enabled=true
+profile2.privacy.default.profileImage=0
+profile2.privacy.default.basicInfo=0
+profile2.privacy.default.contactInfo=0
+profile2.privacy.default.academicInfo=0
+profile2.privacy.default.personalInfo=0
+profile2.privacy.default.birthYear=true
+profile2.privacy.default.search=0
+profile2.privacy.default.myFriends=0
+profile2.privacy.default.myStatus=0
+profile2.invisible.users=postmaster
+profile2.official.image.enabled=false
+#profile2.official.image.source=url 
+#profile2.official.image.attribute=jpegPhoto
+
+
+# there is a bug in gb2 that prevents additional gradebook2 specific security mechanism from working in 2.8, regular sakai security is still enforced even with this turned off
+# work around for GRBK-908
+gb2.security.enabled=false
+
+# ---------------------------- Active MQ/Message Service (CLE-9075)
+#
+
+# These settings alter the URI used by the ActiveMQ Message Broker for this
+# instance of the CLE.
+# By default the URI is:
+#  tcp://localhost:61616?wireFormat.maxInactivityDuration=0
+# It should only be necessary (usually) to change the port number. This is
+# so multiple CLEs (each with its own broker) can run on the same machine.
+
+#scheme@org.sakaiproject.messageservice.api.BrokerUriFactoryBean=tcp
+#host@org.sakaiproject.messageservice.api.BrokerUriFactoryBean=localhost
+#port@org.sakaiproject.messageservice.api.BrokerUriFactoryBean=61616
+#query@org.sakaiproject.messageservice.api.BrokerUriFactoryBean=wireFormat.maxInactivityDuration=0
+
+# ---------------------------- Assignments
+# Set default letter grades for assignments.  Defaults are below
+#assignment.letterGradeOptions=A+,A,A-,B+,B,B-,C+,C,C-,D+,D,D-,E,F

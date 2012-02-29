@@ -1,7 +1,6 @@
 ###########################################################################
 #
-# OIPP Standalone App Server
-#
+# rSmart nightly build server
 # 
 node /nightly.academic.rsmart.local/ inherits devopsnode {
     
@@ -17,7 +16,7 @@ node /nightly.academic.rsmart.local/ inherits devopsnode {
     }
 
     ###########################################################################
-    # https://cole.uconline.edu:443
+    # https://nightly.academic.rsmart.com:443
 
     # Serve the OAE app (trusted content) on 443
     apache::vhost-ssl { "${localconfig::http_name}:443":
@@ -72,7 +71,7 @@ node /nightly.academic.rsmart.local/ inherits devopsnode {
     }
 
     ###########################################################################
-    # https://oipp-test-content.academic.rsmart.com:443
+    # https://nightly-content.academic.rsmart.com:443
     apache::vhost-ssl { "${localconfig::http_name_untrusted}:443":
         sslonly  => true,
         cert     => "puppet:///modules/rsmart-common/academic.rsmart.com.crt",
@@ -91,7 +90,6 @@ node /nightly.academic.rsmart.local/ inherits devopsnode {
         standbyurl => $localconfig::apache_lb_standbyurl,
     }
 
-    ###########################################################################
     # Apache global config
 
     file { "/etc/httpd/conf.d/traceenable.conf":
@@ -100,6 +98,9 @@ node /nightly.academic.rsmart.local/ inherits devopsnode {
         mode  => 644,
         content => 'TraceEnable Off',
     }
+    
+    ###########################################################################
+    # OAE App Servers
 
     class { 'oae::app::server':
         jarsource      => $localconfig::jarsource,
@@ -110,9 +111,6 @@ node /nightly.academic.rsmart.local/ inherits devopsnode {
         javapermsize   => $localconfig::javapermsize,
         setenv_template => 'localconfig/setenv.sh.erb',
     }
-
-    ###########################################################################
-    # OAE App Servers
 
     oae::app::server::sling_config {
         "org.sakaiproject.nakamura.lite.storage.jdbc.JDBCStorageClientPool":
@@ -192,9 +190,53 @@ node /nightly.academic.rsmart.local/ inherits devopsnode {
 
     ###########################################################################
     #
-    # MySQL Database Server
+    # CLE Server
     #
 
+    class { 'tomcat6':
+        parentdir            => "${localconfig::homedir}/sakaicle",
+        tomcat_version       => '5.5.35',
+        tomcat_major_version => '5',
+        digest_string        => '1791951e1f2e03be9911e28c6145e177',
+        tomcat_user          => $oae::params::user,
+        tomcat_group         => $oae::params::group,
+        java_home            => $localconfig::java_home,
+        jvm_route            => $localconfig::cle_server_id,
+        shutdown_password    => $localconfig::tomcat_shutdown_password,
+        tomcat_conf_template => 'rsmart-common/cle-server.xml.erb',
+        setenv_template      => 'localconfig/cle-setenv.sh.erb',
+        jmxremote_access_template   => 'localconfig/jmxremote.access.erb',
+        jmxremote_password_template => 'localconfig/jmxremote.password.erb',
+    }
+
+    # Base rSmart Tomcat customizations
+    tomcat6::overlay { 'rsmart-cle-prod-overlay':
+        tomcat_home  => "${localconfig::homedir}/sakaicle/tomcat",
+        tarball_path => "${localconfig::homedir}/sakaicle/rsmart-cle-prod-overlay.tbz",
+        creates      => "${localconfig::homedir}/sakaicle/tomcat/webapps/ROOT/rsmart.jsp",
+        user         => $oae::params::user,
+        require      => Class['Tomcat6']
+    }
+
+    # CLE tomcat overlay and configuration
+    class { 'cle':
+        cle_tarball_url => $localconfig::cle_tarball_url,
+        user            => $oae::params::user,
+        basedir         => "${localconfig::homedir}/sakaicle",
+        tomcat_home     => "${localconfig::homedir}/sakaicle/tomcat",
+        server_id       => $localconfig::cle_server_id,
+        configuration_xml_template   => 'rsmart-common/cle-sakai-configuration.xml.erb',
+        sakai_properties_template    => 'rsmart-common/sakai.properties.erb',
+        local_properties_template    => 'rsmart-common/local.properties.erb',
+        instance_properties_template => 'rsmart-common/instance.properties.erb',
+        linktool_salt                => $localconfig::linktool_salt,
+        linktool_privkey             => $localconfig::linktool_privkey,
+    }
+
+    ###########################################################################
+    #
+    # MySQL Database Server
+    #
     $mysql_password = $localconfig::mysql_root_password
 
     class { 'augeas': }

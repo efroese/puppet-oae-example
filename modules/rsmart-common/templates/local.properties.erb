@@ -1,0 +1,907 @@
+# local.properties
+#
+# settings in here override anything that might be in sakai.properties
+# or set by default and are installation-specific.  this would include
+# email settings, database settings, server ID settings, and the like.
+#
+
+# name of default skin
+skin.default=rsmart
+
+
+# ---------------------------- Access Personalization
+#
+# identify your application server with a short name, unique among the
+# servers in your cluster. choose a server id even if you are running a
+# single app server
+serverId=OVERRIDDEN
+
+# the URL to the server, including transport, DNS name, and port, if any
+serverUrl=https://ec2-204-236-164-7.us-west-1.compute.amazonaws.com
+
+# the DNS name of the server
+serverName=ec2-204-236-164-7.us-west-1.compute.amazonaws.com
+
+# some fill-ins for the css/vm ui (Worksite Setup, Digest Service, Email
+# notification, Worksite Setup, Contact Support, Portal)
+#
+# ui.institution: The name of the organization associated with this
+#   installation (such as "My University")
+# ui.service:  The local brand for Sakai CLE within the institution.
+#   Among other things, this text is displayed at the root of the
+#   bread crumb bar that appears within the CLE.
+ui.institution = rSmart
+ui.service = rSmart CLE
+# version.service is used by the CLE to automatically run upgrade SQL, so
+#   this should be updated when applying a service pack.  The value to
+##   change it to is included in the upgrade instructions available via RSN.
+version.service=2.8.0.0
+# This is the version of Sakai this release of the CLE is based upon.
+# This should not be changed.
+version.sakai=2.8.0-b04
+
+
+# ---------------------------- Email Settings
+#
+# set to false to allow email to be sent, otherwise it's logged and not sent
+testMode@org.sakaiproject.email.api.EmailService=true
+
+# SMTP server for outgoing email
+smtp@org.sakaiproject.email.api.EmailService=localhost
+
+# DNS addresses used by James for incoming email
+smtp.dns.1 = 255.255.255.1
+smtp.dns.2 = 255.255.255.1
+
+# SMTP port James runs on - defaults to 25, but recommendation is to run on an
+# unprivileged port and use DNAT port-forwarding or a standard mailer on 25 to
+# relay traffic.
+#
+smtp.port = 8125
+
+# enable or disable James for incoming email (true | false)
+#
+smtp.enabled = false
+
+# email support address used in incoming rejection messages
+mail.support =bogus@mailinator.com
+
+# email address to use as the from email when sending setup messages
+setup.request=bogus@mailinator.com
+
+#email address to send errors caught by the portal, and user bug reports in response
+# (should not be a bug tracking general email address)
+portal.error.email=
+
+# return adddress from emails sent by the Messages tool
+#msgcntr.notification.from.address=
+
+
+# ---------------------------- General Database Configuration
+#
+# enable hibernate SQL debugging output
+hibernate.show_sql=false
+
+# establish auto.ddl (on by default)
+auto.ddl=false
+
+# change the following to a common location if clustering
+sharedJournalBase@org.sakaiproject.search.api.JournalSettings=/home/rsmart/cle/files
+
+# Convert existing database to files on a filesystem
+#convertToFile@org.sakaiproject.content.api.ContentHostingService = true
+
+# the file system root for content hosting's external stored files (default is null, i.e. store them in the db)
+# recommend enabling (along with bodyVolumes)
+# must be the same for each server in a cluster
+bodyPath@org.sakaiproject.content.api.ContentHostingService = /home/rsmart/cle/files/db/bodyContent/
+
+# when storing content hosting's body bits in files, an optional set of folders just within the bodyPath -
+# to act as volumes to distribute the files among - a comma separate list of folders.  If left out, no volumes will be used.
+# must be the same for each server in a cluster
+bodyVolumes@org.sakaiproject.content.api.ContentHostingService = fs1,fs2,fs3,fs4,fs5,fs6,fs7,fs8,fs9,fs10,fs11,fs12,fs13,fs14,fs15,fs16
+
+# root of archive file system area - used to write archive files and to read them
+# when clustering app servers, this should be a shared network location
+# must be the same for each server in a cluster
+storagePath@org.sakaiproject.archive.api.ArchiveService = /home/rsmart/cle/files/archive/
+
+# force all URLs out of Sakai back to Sakai to be secure, i.e. to use https, on this port.  Leave out to respond with the same transport as the request.
+#  Otherwise, the URLs will reflect the attributes of the request URL. (443 | 8443 | or any other port) [defaults to missing]
+#force.url.secure=443
+
+# Upload size settings for IMS import file (in MB)
+# if it's increased beyond the default of 20, content.upload.max will need
+# to be increased as well.
+content.upload.ceiling=20
+
+# Enable the following for clustering
+# run the cluster service's maintenance "ghost busting" and cleanup only 10% of each pass (from each app server in the cluster)
+ghostingPercent@org.sakaiproject.cluster.api.ClusterService=10
+
+# run the cluster service's app server checkin (to show it's still alive) at once every 10 minutes (default is 1 minute)
+refresh@org.sakaiproject.cluster.api.ClusterService=600
+
+# and give us 30 minutes to consider it lost
+expired@org.sakaiproject.cluster.api.ClusterService=1800
+
+# wait 5 seconds (not the default 2) for checks to the db for new events from elsewhere in the cluster
+period@org.sakaiproject.event.api.EventTrackingService=5
+
+# set to false to disable tool categories
+xslPortal.displayToolCategories=true
+
+# ---------------------------- Virus Scanning
+#
+virusScan.host=localhost
+virusScan.port=3310
+virusScan.enabled=false
+
+# ---------------------------- Search Tool Settings
+#
+search.enable = true
+localIndexBase@org.sakaiproject.search.api.JournalSettings=${sakai.home}/indexwork
+
+
+# ----------------------------  rSmart CLE defaults
+#
+
+# ---------------------------- Melete
+#
+melete.wysiwyg.editor=FCK Editor
+#
+# need to copy src/melete/var/melete/packagefiles/* into melete.packagingDir
+# default is to create melete directories in /home/rsmart/cle/files
+# if you need to override, you need to use an absolute pathname.  /home/rsmart/cle/files will not be resolved.
+# must be the same for each server in a cluster
+melete.homeDir=/home/rsmart/cle/files/melete
+melete.packagingDir=/home/rsmart/cle/files/melete/packagefiles
+melete.uploadDir=/home/rsmart/cle/files/melete/uploads
+melete.packagingscormdir=/home/rsmart/cle/files/melete/packagefiles/packagefilesscorm
+#
+# turn on for melete integration with resources
+melete.editor.site.default=true
+melete.allow.resource.links=true
+
+
+# ---------------------------- Samigo
+#
+samigo.saveMediaToDb=false
+samigo.editPubAssessment.restricted=false
+#
+## this should be set to an absolute path
+samigo.answerUploadRepositoryPath=/home/rsmart/cle/files/sam/uploads
+#
+### Samigo email server settings
+# The e-mail settings are for Samigo only. Samigo looks to these settings
+# instead of the regular Sakai e-mail settings. Also, these settings
+# do not override the usual Sakai settings.
+#
+# outgoing SMTP server (required)
+samigo.smtp.server=localhost
+#
+# Bypass SMTP AUTH for outgoing mail
+# if false, specify username/password
+samigo.email.bypassAuth=true
+samigo.email.username=SMTP_AUTH_USER
+samigo.email.password=SMTP_AUTH_PASSWORD
+#
+# enable partial credit for MC, default = false. SAM-818
+samigo.partialCreditEnabled=true
+# enable print feature , default is true, SAM-721
+samigo.printAssessment=true
+# enable autosave during delivery. If not set, auto-save if disabled.
+#samigo.autoSave.repeat.milliseconds=900000
+# enable autoSubmit to force the submission of saved assessments for students who have NO previous submissions
+#samigo.autoSubmit.enabled=true
+
+# ---------------------------- Mneme
+## set to serverId to cause mneme maintenance thread to run.
+## only set one of these in a clustered deployment
+mneme.maintenance.server=QA-CLE-1-SAKAI-1
+
+# ---------------------------- Help
+#
+# for cle-570 (add link in help tool to ask a question)
+mail.support.help.enabled=true
+# online help location (change localhost only)
+help.location=http://28.help.rsmart.com/rsmart-help-content
+
+# ---------------------------- Messages
+#
+# use threaded discussions in Messages?
+mc.threadedview=true
+
+separateIdEid@org.sakaiproject.user.api.UserDirectoryService=true
+
+# ---------------------------- SIS Course Integration Properties
+#
+# removeRoles
+# People with these roles will be removed during course processing and all others (e.g., Instructor) will not. (separate multiple roles with commas)
+roles@com.rsmart.customer.integration.processor.cle.CleCourseMemberProcesssor=Student
+
+# User Processor
+filename@com.rsmart.customer.integration.processor.cle.CleUserProcessor=/home/rsmart/cle/files/sis/users.csv
+headerRowPresent@com.rsmart.customer.integration.processor.cle.CleUserProcessor=false
+
+# set to true if using LDAP and client wants to also add properties to the user with csv file
+externallyProvided@com.rsmart.customer.integration.processor.cle.CleUserProcessor=false
+
+# allow information in CSV file to overwrite information in database
+updateAllowed@com.rsmart.customer.integration.processor.cle.CleUserProcessor=false
+# archive file to archive directory specified above
+archive@com.rsmart.customer.integration.processor.cle.CleUserProcessor=false
+
+# Course Processor
+filename@com.rsmart.customer.integration.processor.cle.CleCourseProcessor=/home/rsmart/cle/files/sis/courses.csv
+headerRowPresent@com.rsmart.customer.integration.processor.cle.CleCourseProcessor=false
+
+# uncomment to allow updating of the password field during SIS processing
+#updatePassword@com.rsmart.customer.integration.processor.cle.CleUserProcessor=true
+
+#set location of remove file (one userid per line) - this is an optional file
+filename@com.rsmart.customer.integration.processor.cle.CleRemoveUserProcessor=/home/rsmart/cle/files/sis/removeusers.csv
+
+# defaults to false, meaning it looks the user up by eid, set this to true to lookup by user id
+lookupByUserId@com.rsmart.customer.integration.processor.cle.CleRemoveUserProcessor=false
+
+# allow information in CSV file to overwrite information in database
+updateAllowed@com.rsmart.customer.integration.processor.cle.CleCourseProcessor=false
+# date format in file: see java.text.SimpleDateFormat for options; some examples are below
+# for 2007-01-01, use yyyy-MM-dd
+# for 1-Jan-2007, use d-MMM-y
+# for 2007-01-01 00:00:00, use yyyy-MM-dd HH:mm:ss
+dateFormat@com.rsmart.customer.integration.processor.cle.CleCourseProcessor=yyyy-MM-dd
+# archive file to archive directory specified above
+archive@com.rsmart.customer.integration.processor.cle.CleCourseProcessor=false
+
+# site id for course processor to clone
+masterSiteId@com.rsmart.customer.integration.processor.cle.CleCourseProcessor=MasterSite
+
+# Site Membership Processor
+filename@com.rsmart.customer.integration.processor.cle.CleMembershipProcessor=/home/rsmart/cle/files/sis/members.csv
+headerRowPresent@com.rsmart.customer.integration.processor.cle.CleMembershipProcessor=false
+
+# archive file to archive directory specified above
+archive@com.rsmart.customer.integration.processor.cle.CleMembershipProcessor=false
+
+# CSV file archive location
+directory@com.rsmart.customer.integration.util.FileArchiveUtil=/home/rsmart/cle/files/sis/archive
+
+# date format for directories created by archiving (for format like 1-Jan-2007, use d-MMM-y)
+dateFormat@com.rsmart.integration.util.FileArchiveUtil=yyyy-MM-dd
+
+# Site Masters (will match site master id column in course csv file.  If blank in csv file, will use masterSiteId from CleCourseProcessor)
+cle.mastersiteid.course=87654321-abcd-1234-wxyz-12ab34cd56ef
+cle.mastersiteid.project=12345678-abcd-1234-wxyz-12ab34cd56ef
+cle.mastersiteid.portfolio=87654321-abcd-1234-wxyz-ab12cd34ef56
+
+#enable email notification during sis user creation with this
+emailNotification@com.rsmart.customer.integration.processor.cle.CleUserProcessor=false
+
+# comma separated list of emails to send sis results
+recipients@customerIntegrationJob=
+
+# SIS Section Integration Properties
+filename@com.rsmart.customer.integration.processor.cle.CleSectionMembershipProcessor=/home/rsmart/cle/files/sis/section_members.csv
+filename@com.rsmart.customer.integration.processor.cle.CleSectionProcessor=/home/rsmart/cle/files/sis/sections.csv
+
+# archive section csv files?
+archive@com.rsmart.customer.integration.processor.cle.CleSectionMembershipProcessor=false
+archive@com.rsmart.customer.integration.processor.cle.CleSectionProcessor=false
+
+# Role name mappings for sections
+studentRole@com.rsmart.customer.integration.processor.cle.CleSectionMembershipProcessor=student
+taRole@com.rsmart.customer.integration.processor.cle.CleSectionMembershipProcessor=ta
+
+# If the csv files contain complete enrollment info, you can choose to adjust section enrollments with the following 2 properties
+deleteTeachingAssistants@com.rsmart.customer.integration.processor.cle.CleSectionMembershipProcessor=false
+deleteStudents@com.rsmart.customer.integration.processor.cle.CleSectionMembershipProcessor=true
+
+# Delete sections that no longer appear in the csv file
+deleteSections@com.rsmart.customer.integration.processor.cle.CleSectionProcessor=false
+
+# ------------------------------
+# course site publish settings
+# ------------------------------
+# the course site publish quartz job will be run using this user's eid.
+# valid values are any valid user's eid.
+# if a value is not specified, the default is 'admin'.
+#rsmart.course_site_publish.user=admin
+
+# how many days before the term starts should course sites be published.
+# valid values are >= 0.
+# if a value is not specified, the default is '14'.
+rsmart.course_site_publish.num_days_before_term_starts=14
+
+# ------------------------------
+# course site removal settings
+# ------------------------------
+# the course site removal quartz job will be run using this user's eid.
+# valid values are any valid user's eid.
+# if a value is not specified, the default is 'admin'.
+#rsmart.course_site_removal.user=admin
+
+# whether to remove the course sites or to simply unpublish them.
+# valid values are 'remove' or 'unpublish'.
+# if a value is not specified, the default is 'remove'.
+rsmart.course_site_removal.action=unpublish
+
+# how many days after the term ends should course sites be removed.
+# valid values are >= 0.
+# if a value is not specified, the default is '14'.
+#rsmart.course_site_removal.num_days_after_term_ends=14
+
+# -------------------------------------
+# membership active/inactive settings
+# -------------------------------------
+# turns this feature on, otherwise site is unpublished, but memberships are not affected
+#inactivateMembers@com.rsmart.course_site_removal.intf.CourseSiteRemovalService.target=true
+
+# a comma separated list of the roles which should be inactivated, without any config this defaults to Student
+#removeRoles@com.rsmart.course_site_removal.intf.CourseSiteRemovalService.target=Student,Instructor
+
+
+# commas separated list of CM impls, comment this out if you are using CM, otherwise the proper sections will not show up
+implNameList@org.sakaiproject.coursemanagement.api.CourseManagementService.target=org.sakaiproject.coursemanagement.api.CourseManagementService.properties
+
+# adjust UI when creating a course site, setting to false keeps the pre 2.3 UI, setting to true unveils the UI for CM integration
+site-manage.courseManagementSystemImplemented=false
+
+# This sets the default implementation of the Course Management API.
+org.sakaiproject.coursemanagement.api.CourseManagementService=org.sakaiproject.coursemanagement.api.CourseManagementService.properties
+
+# GROUP PROVIDER CONFIGURATION
+# This sets the default authz group provider implementation
+
+# default group provider which does nothing at all
+org.sakaiproject.authz.api.GroupProvider=com.rsmart.sakaiproject.integration.coursemanagement.impl.DummyGroupProvider
+
+# the following property should be removed if you are using a CM service
+config@org.sakaiproject.section.api.SectionManager=MANUAL_MANDATORY
+
+
+# ---------------------------- COURSE MANAGEMENT SERVICE CONFIGURATION
+#
+# for use with rSmart's CM sync Job
+# don't forget to comment out implNameList@org.sakaiproject.coursemanagement.api.CourseManagementService.target above !!
+
+#org.sakaiproject.coursemanagement.api.CourseManagementService=org.sakaiproject.coursemanagement.impl.CourseManagementServiceFederatedImpl
+#org.sakaiproject.authz.api.GroupProvider=org.sakaiproject.coursemanagement.impl.provider.CourseManagementGroupProvider.configurable
+#config@org.sakaiproject.section.api.SectionManager=AUTOMATIC_DEFAULT
+#site-manage.courseManagementSystemImplemented=true
+#filename@com.rsmart.customer.integration.processor.cle.cm.AcademicSessionProcessor=/home/rsmart/cle/files/academic_session.csv
+#filename@com.rsmart.customer.integration.processor.cle.cm.CanonicalCourseProcessor=/home/rsmart/cle/files/canonical_course.csv
+#filename@com.rsmart.customer.integration.processor.cle.cm.CourseOfferingMemberProcessor=/home/rsmart/cle/files/co_member.csv
+#filename@com.rsmart.customer.integration.processor.cle.cm.CourseOfferingProcessor=/home/rsmart/cle/files/course_offering.csv
+#filename@com.rsmart.customer.integration.processor.cle.cm.CourseSetProcessor=/home/rsmart/cle/files/course_set.csv
+#filename@com.rsmart.customer.integration.processor.cle.cm.EnrollmentProcessor=/home/rsmart/cle/files/enrollment.csv
+#filename@com.rsmart.customer.integration.processor.cle.cm.EnrollmentSetProcessor=/home/rsmart/cle/files/enrollment_set.csv
+#filename@com.rsmart.customer.integration.processor.cle.cm.SectionProcessor=/home/rsmart/cle/files/section.csv
+#filename@com.rsmart.customer.integration.processor.cle.cm.SectionMemberProcessor=/home/rsmart/cle/files/section_member.csv
+#filename@com.rsmart.customer.integration.processor.cle.cm.SectionMeetingProcessor=/home/rsmart/cle/files/section_meeting.csv
+#filename@com.rsmart.customer.integration.processor.cle.cm.InstructorProcessor=/home/rsmart/cle/files/instructors.csv
+#filename@com.rsmart.customer.integration.processor.cle.cm.SectionCategoryProcessor=/home/rsmart/cle/files/section_category.csv
+#filename@com.rsmart.customer.integration.processor.cle.cm.SectionCategoryProcessor=/home/rsmart/cle/files/memberships.csv
+#dateFormat@com.rsmart.customer.integration.processor.cle.cm.AcademicSessionProcessor=yyyy-MM-dd
+#dateFormat@com.rsmart.customer.integration.processor.cle.cm.CourseOfferingProcessor=yyyy-MM-dd
+
+# turn these on to use the optional course set column in course offering and canonical course, see CLE-4113
+#columns@com.rsmart.customer.integration.processor.cle.cm.CourseOfferingProcessor=9
+#columns@com.rsmart.customer.integration.processor.cle.cm.CanonicalCourseProcessor=4
+
+## set this property to 'true' to cause the course management impl to consider session dates instead of the "current"
+## flag when determining if the AcademicSession is current.  This flag is false by default.
+#cm.findCurrentAcademicSessions.byDate=true
+
+## Where automatic promotion to "provided" users is not desired (KNL-403)
+#promoteUsersToProvided@org.sakaiproject.authz.api.AuthzGroupService=true
+
+
+# ---------------------------- UI Configuration
+#
+# Number of quicklink site tabs
+portal.default.tabs=4
+
+# Set to true to enable the gateway page to render like any other site, opposed to using the home.html file
+portal.dynamicGateway=false
+
+# Links placed on the bottom nav - set the .count to the number of items, then add each item
+bottomnav.count=0
+#bottomnav.1=<a href="https://localhost/portal/site/!gateway">Gateway</a>
+#bottomnav.2=<a href="http://www.sakaiproject.org/" target="_blank">The Sakai Project</a>
+
+# Enable setting skin via sakai.brand http property
+brandIsSkin@com.rsmart.sakai.brand.BrandService=true
+
+# To hide presence in my workspaces
+#display.users.present.myworkspace=false
+
+# Add HTML snippet to a page SAK-15097
+#sakai:htmlInclude =true
+
+# ---------------------------- Templates
+#
+# Comma separated list of template sites - no longer supported in 2.7.0 must use sites tool to set a site property now
+#site.templates=template.course,template.project,template.portfolio
+
+# ---------------------------- Membership Options
+#
+# This setting removes the unjoin link from specified site types within the membership tool
+# wsetup.disable.unjoin.count=1
+# wsetup.disable.unjoin.1=course
+
+# ---------------------------- Mailtool
+#
+# Default group aware for mail tool, if this is set to a role, those users can not be selected as individual recipients
+mailtool.group.aware.role=
+
+# ---------------------------- View Site As
+#
+# Set roles for view as another user feature
+studentview.roles=Reviewer,Evaluator,Organizer,Student,Participant,Tech Support,Teaching Assistant
+
+# ---------------------------- ASpell
+#
+# Set to path to ASpell binary on server
+aspell.path=/usr/bin/aspell
+
+# ---------------------------- Sections information
+#
+section.category.count=5
+section.category.code.1=01.lct
+section.category.desc.1=Lecture
+section.category.code.2=02.lab
+section.category.desc.2=Lab
+section.category.code.3=03.dsc
+section.category.desc.3=Discussion
+section.category.code.4=04.rec
+section.category.desc.4=Recitation
+section.category.code.5=05.sto
+section.category.desc.5=Studio
+
+#setauto create for sections
+use_auto_create_sections=false
+
+# this is the default value
+sections_auto_create_max_value=25
+
+# ---------------------------- Gradebook
+#
+# Allows the system admin to control the number of decimals (up to 2 because of a limitation in the way gradebook handles decimals) used for display of the class average point values
+#gradebook.class.average.decimal.places=2
+
+# ---------------------------- Gradebook2 Settings
+#
+#gb2.help.url=http://yourschool.edu/Gradebook2Documents.html
+gb2.enabled.grade.types=points,percentages,letters
+gb2.gradable.role.names=Student,Participant,Open Campus,access
+gb2.enable.scaled.extra.credit=INSTRUCTOR
+gb2.limit.scaled.extra.credit=CATEGORIES,WEIGHTED CATEGORIES
+
+# ---------------------------- Message Bundle Management
+#
+load.bundles.from.db=true
+# Number of milliseconds before rechecking database for updates, the default is 10 minutes
+load.bundles.from.db.timeout=600000
+
+# ---------------------------- Google Docs Integration
+#
+
+# Turns Google Docs integration on or off.
+google-content.enabled=false
+
+
+# ---------------------------- CAS, Shibboleth, other SSO system
+#
+#container.login=true
+#top.login=false
+#xlogin.enabled=true
+#xlogin.text=Guest Login
+#login.use.xlogin.to.relogin=false
+#login.url=http://localhost:8080/xsl-portal/login
+## CAS logout URL
+#loggedOutUrl=https://idm.rsmart.com:9443/cas-server-webapp-3.4.2/logout?service=http://localhost:8080/xsl-portal
+
+#shib.runas.user=admin
+#shib.nouser.redirect.url
+#shib.updateUsers=false
+#shib.createUsers=false
+#shib.stripEppnScoping=true
+
+# ---------------------------- Logging
+#
+#log.config.count=1
+#log.config.1 = ALL.com.rsmart.content
+
+# ---------------------------- Message Center
+#
+# Set to true to sort threads by last date of activity
+#msgcntr.sort.thread.update=true
+#
+# Set to disable messages column and/or the forums column
+#msgcntr.synoptic.disable.forums=false
+#msgcntr.synoptic.disable.messages=false
+
+# ---------------------------- Resources
+#
+# Turns conditional release on in resources
+conditions.service.enabled=false
+
+# ---------------------------- SiteStats
+#
+# Option to control whether or not to allow site statistics to be exported using:
+#enableReportExport@org.sakaiproject.sitestats.api.StatsManager=false
+
+# ---------------------------- Portfolios
+#
+# Authorized users can review 'all' portfolios, regardless of whether the portfolio has been shard with them
+#osp.presentation.viewall = true
+
+# ---------------------------- Profile
+#
+# To disable search in Profile
+#profile.showSearch = false
+
+# ---------------------------- Profile2
+#
+# Set this to tell the ProfileManager to get it's data from Profile2
+#profile.manager.integration.bean=org.sakaiproject.profile2.legacy.ProfileManager
+
+# ---------------------------- Calendar
+#
+# External calendar subscriptions from other sites are merged into My Workspace
+#calendar.external.subscriptions.mergeIntoMyworkspace = true
+
+# ---------------------------- JForum
+#
+# Directory to store uploaded avatars
+etudes.jforum.avatar.path =/home/rsmart/cle/files/jforum/
+# Directory to store the uploaded files
+etudes.jforum.attachments.store.dir =/home/rsmart/cle/files/jforum/uploads/
+# Package files path for Import and Export for Task Topics.
+# Copy the cle.src/jforum/var/jforum/packagefiles directory contents to etudes.jforum.packaging.path
+etudes.jforum.packaging.path = /home/rsmart/cle/files/jforum/packagefiles
+#setup outgoing smpt address for jforum
+etudes.jforum.mail.smtp.host=localhost
+
+# ---------------------------- Jobscheduler
+#
+# On startup the jobscheduler can load pre-configured jobs defined in the scheduler-component component
+# The scheduler.loadjobs property controls this behavior.
+# Two values are understood:
+#  "init" - loads the preconfigured jobs on the first starup as determined by the absence of the
+#           QRTZ_TRIGGERS table. This is the DEFAULT option if nothing is specified or if the
+#           property is absent from the config.
+#  "true" - loads the preconfigured jobs every time. This may be useful to load jobs on a one-time basis.
+#           In such a scenario one would need to define the jobs in the scheduler-component component,
+#           set this property to "true", then restart the server. Subsequently one should reset this value
+#           to "init", "false" or blank to prevent the jobs from being reloaded every subsequent startup.
+# Any other value will be interpreted as "false". An empty value or a missing property will default to "init"
+#scheduler.loadjobs=init
+
+# ---------------------------- Active MQ/Message Service (CLE-9075)
+#
+# This setting alters the port used by the ActiveMQ Message Broker for this
+# instance of the CLE.  If you have > 1 Tomcat on a machine, port needs to be unique for each.
+#port@org.sakaiproject.messageservice.api.BrokerUriFactoryBean=61616
+
+# ---------------------------- News
+#
+wsetup.config.tool.title_sakai.news=News
+wsetup.config.tool.attribute.default_sakai.news=http://sakaiproject.org/feed
+
+# ---------------------------- Database settings - alter as needed
+#
+username@javax.sql.BaseDataSource=sakai-1
+password@javax.sql.BaseDataSource=sakai-1_pw
+
+#### MYSQL settings (this is the sakai default)
+vendor@org.sakaiproject.db.api.SqlService=mysql
+driverClassName@javax.sql.BaseDataSource=com.mysql.jdbc.Driver
+
+## NOTE: Use MySQLInnoDBDialect even for 5.x versions of MySQL due to a bug in Hibernate's column type selection
+## which causes tables with a large number of long string columns to fail to create (specifically SAKAI_PERSON_T)
+## See CLE-4707 for details
+# for MySQL 4.x
+#hibernate.dialect=org.hibernate.dialect.MySQLInnoDBDialect
+# for MySQL 5.x
+hibernate.dialect=org.hibernate.dialect.MySQL5InnoDBDialect
+
+validationQuery@javax.sql.BaseDataSource=select 1 from DUAL
+
+defaultTransactionIsolationString@javax.sql.BaseDataSource=TRANSACTION_READ_COMMITTED
+url@javax.sql.BaseDataSource=jdbc:mysql://localhost:3306/cle?useUnicode=true&characterEncoding=UTF-8&useServerPrepStmts=false&cachePrepStmts=true&prepStmtCacheSize=4096&prepStmtCacheLimit=4096
+
+#-------------------------Timeout Settings----------
+sakai.X-UA-Compatible=IE=EmulateIE8
+
+# Move the presence from an iFrame into a div - controllable by a series of
+# properties. If you set this property to true, Sakai will go back to its old behavior.
+display.users.present.iframe=false
+
+#enable popup timeout message
+timeoutDialogEnabled=true
+
+# Change the "settle time" before the timeout code starts to operate to 10 minutes.
+# This property is used in combination with the previous.
+timeoutDialogWarningSeconds=600
+
+# There is a footer added to the bottom of the page with a link 'Switch to classic view'. If followed, this will redirect back to the normal portal and set a cookie for that session which holds this preference. If this cookie is set, this will disable the redirect until the user closes and quits their browser.
+portal.pda.autoredirect=true
+
+# Existing property where the default setting has been changed from true to false. Presence is now turned off in MyWorkspace
+display.users.present.myworkspace=false
+
+#setup outgoing smpt address for jforum
+etudes.jforum.mail.smtp.host=localhost
+
+# there is a bug in gb2 that prevents additional gradebook2 specific security mechanism from working in 2.8, regular sakai security is still enforced even with this turned off
+gb2.security.enabled=false
+# ---------------------------- LDAP AUTHENTICATION SECTION
+#
+# review & change properties & uncomment for LDAP authentication
+#
+#  Use FilterUserDirectoryProvider if you have 2 ldap servers; use the rsmart one if you only have 1
+#  No other changes are necessary (i.e., to the bean name)
+#providerName@org.sakaiproject.user.api.UserDirectoryService=org.sakaiproject.provider.user.FilterUserDirectoryProvider
+#providerName@org.sakaiproject.user.api.UserDirectoryService=com.rsmart.ldap.JLDAPDirectoryProvider
+#ldapHost@com.rsmart.ldap.JLDAPDirectoryProvider=127.0.0.1
+#ldapPort@com.rsmart.ldap.JLDAPDirectoryProvider=389
+#
+## next 3 are for ldap over SSL
+#secureConnection@com.rsmart.ldap.JLDAPDirectoryProvider=false
+#keystoreLocation@com.rsmart.ldap.JLDAPDirectoryProvider=/opt/java/jdk15/jre/lib/security/cacerts
+#keystorePassword@com.rsmart.ldap.JLDAPDirectoryProvider=changeit
+#
+#basePath@com.rsmart.ldap.JLDAPDirectoryProvider=dc=myinst,dc=campus
+#emailAttribute@com.rsmart.ldap.JLDAPDirectoryProvider=mail
+#uidAttribute@com.rsmart.ldap.JLDAPDirectoryProvider=uid
+#firstNameAttribute@com.rsmart.ldap.JLDAPDirectoryProvider=givenName
+#lastNameAttribute@com.rsmart.ldap.JLDAPDirectoryProvider=sn
+#cacheTimeMs@com.rsmart.ldap.JLDAPDirectoryProvider=345600000
+## reader account needs read access to any users that will be authenticating
+## also, user lookups are performed with the reader's credentials
+#readerDN@com.rsmart.ldap.JLDAPDirectoryProvider=user
+#readerPassword@com.rsmart.ldap.JLDAPDirectoryProvider=password
+#userAccountType@com.rsmart.ldap.JLDAPDirectoryProvider=registered
+#bindRequired@com.rsmart.ldap.JLDAPDirectoryProvider=false
+#
+# set to true if you are using Oracle or if your ldap directory returns mixed case user id's
+# but your users log in with lower case id's.  It is recommended to set to true if you're unsure.
+#forceLowercaseId@com.rsmart.ldap.JLDAPDirectoryProvider=true
+#
+# To enable a 2nd ldap host (for a hot backup or for student/faculty split lookups) 
+# set provider to FilterUserDirectoryProvider above 
+#   and then uncomment the following settings and set their values correctly
+#
+#ldapHost@com.rsmart.ldap.JLDAPDirectoryProvider.provider2=127.0.0.1
+#ldapPort@com.rsmart.ldap.JLDAPDirectoryProvider.provider2=389
+#basePath@com.rsmart.ldap.JLDAPDirectoryProvider.provider2=dc=myinst,dc=campus
+#uidAttribute@com.rsmart.ldap.JLDAPDirectoryProvider.provider2=uid
+#readerDN@com.rsmart.ldap.JLDAPDirectoryProvider.provider2=user2
+#readerPassword@com.rsmart.ldap.JLDAPDirectoryProvider.provider2=password2
+#userAccountType@com.rsmart.ldap.JLDAPDirectoryProvider.provider2=registered
+#forceLowercaseId@com.rsmart.ldap.JLDAPDirectoryProvider.provider2=true
+
+
+# ---------------------------- CAS Configuration
+#
+## replace all instances of your.cas.server and your.sakai.server below
+## note: your CAS server may be listening on a different servlet path than 'cas', check with the server admin
+## note: sakai URLS assume the use of the xsl-portal in dynamic mode
+
+## uncomment these two lines to tell sakai not to display the login form, and to trust the container for login information
+#top.login=false
+#container.login=true
+
+## note: for the login/logout URLs and icons below to take effect you must be using the dynamic
+##   gateway - set portal.dynamicGateway=true above !!!  Otherwise you will need to hardcode the
+##    login url and icon in the static gateway page
+
+## uncomment these lines to supply images for login and logout buttons
+#login.icon=/library/image/cas_login.gif
+#logout.icon=/library/image/cas_logout.gif
+
+## uncomment this line and supply your server name to cause the login button to function
+## this url should cause the portal LoginHandler to redirec to the sakai-login-tool, which will defer to container login
+#login.url=http://localhost:8080/xsl-portal/login
+
+# Force logouts via CAS also - your requirements will be different for this.
+# The URL below allows us to logout via CAS and then be redirected back to our Sakai server.
+#loggedOutUrl=https://your.cas.server/cas/logout?service=http://your.sakai.server/xsl-portal
+
+# set configuration for CAS authentication
+#casServerLoginUrl@org.jasig.cas.client.authentication.AuthenticationFilter=https://your.cas.serer/cas
+#renew@org.jasig.cas.client.authentication.AuthenticationFilter=false
+#gateway@org.jasig.cas.client.authentication.AuthenticationFilter=false
+#service@org.jasig.cas.client.authentication.AuthenticationFilter=http://your.sakai.server/sakai-login-tool
+#service@org.jasig.cas.client.validation.Cas20ProxyReceivingTicketValidationFilter=http://your.sakai.server/sakai-login-tool
+
+# ---------------------------- TurnIt In Again
+#
+#The account ID of your institutions primary TurnitIn account
+#turnitin.aid=
+
+#The sub account ID to which Sakai will submit content
+#turnitin.said=
+
+#The TurnitIn API password for your Insititution. If you don't have one speak to your TurnitIn rep to have one set
+#turnitin.secretKey=
+
+#Set this if you wish to override the default API URL. Institutions in the UK may have to set this to "https://submit.ac.uk/api.asp?"
+#turnitin.apiURL=
+
+#The email of a default instructoir for the API to use
+#turnitin.defaultInstructorEmail=
+
+#A name for that instructor
+#turnitin.defaultInstructorFName=
+
+#A last name for the instructor
+#turnitin.defaultInstructorLName=
+
+#A password for that instructor
+#turnitin.defaultInstructorPassword=
+
+#The default join password set for classes the implementation sets up
+#turnitin.defaultClassPassword=
+
+#the Sakai userId of the default instructor
+#turnitin.defaultInstructorId=
+
+#A default assignment name to use if none is specified
+#turnitin.defaultAssignId=default assignment
+
+#A default assignment name to use if none is specified 
+#turnitin.defaultAssignmentName=default
+#assignment.useContentReview=true
+
+# ----------------------------- iRubric Settings
+#
+# uncomment to use irubric in all sites, otherwise need to add iRubricSite=true site property to specific sites to enable irubric support
+#irubric.switch=1
+
+#irubric.rootUrl = 
+#irubric.redirectUrl = 
+#irubric.initReqUrl = 
+#irubric.timeout = 10000
+#irubric.anonymousStudents = false
+
+#irubric.termPropertyName = term
+#irubric.isSSL = false
+#irubric.sslPort = 443
+#irubric.certID = 
+
+# debug configuration
+#irubric.logDebugInfo = false
+
+#irubric.evaluator.count = 3
+#irubric.evaluator.1 = instructor
+#irubric.evaluator.2 = assistant
+#irubric.evaluator.3 = TA/IA
+
+#irubric.evaluatee.count = 1 
+#irubric.evaluatee.1 = student
+
+
+# ---------------------------- Kaltura settings 
+# 
+#kaltura.enabled=true 
+# your kaltura account partner id 
+#kaltura.partnerid=
+# your kaltura account admin secret key 
+#kaltura.adminsecret=
+# your kaltura account secret key 
+#kaltura.secret= 
+# your kaltura server URL 
+#kaltura.endpoint=http://www.kaltura.com 
+# your kaltura CDN URL 
+#kaltura.cdn=http://cdn.kaltura.com 
+# custom kaltura widget ids 
+##kaltura.player.view=111111 
+#kaltura.player.edit=111111 
+#kaltura.uploader=1111111 
+#kaltura.editor=111111
+
+# ---------------------------- BigBlueButton settings
+# 
+### THE FOLLOWING TWO PROPERTIES ARE REQUIRED
+#bbb.url=http://yourdomain.com/bigbluebutton
+#bbb.salt=<secure key for encryption>
+
+# Whether the browser window of BBB should be automatically closed after logging out of meeting.
+# If false, the configured bigbluebutton.web.loggedOutUrl from BigBlueButton will be used instead.
+# default: true
+#bbb.autocloseMeetingWindow=true
+
+# Time - in milliseconds - to periodically check the API version of the configured BigBlueButton
+# server. This is useful for performing BBB upgrades without having to restart Sakai.
+# default: 0 (disabled)
+#bbb.versionCheckInterval=0
+
+# Optional text to be displayed on the tool main page.
+# default: (blank)
+#bbb.notice.text=
+
+# Message level in which the text will be displayed (see http://jira.sakaiproject.org/browse/BBB-37).
+# Valid values: info, warn, success
+# default: info
+#bbb.notice.level=info
+
+# ---------------------------- Elluminate Integration
+#
+# Elluminate and Live Virtual Classroom configuration
+elluminate.sys.user=serversupport
+elluminate.sys.pass=elluminate
+
+virtual_classroom.server.address=localhost
+virtual_classroom.server.adapter=default
+virtual_classroom.default_capacity=2
+virtual_classroom.server.grace_period=1
+virtual_classroom.server.max_capacity=10
+virtual_classroom.server.port=8888
+
+# ---------------------------- Scorm
+#
+enable.scorm=false
+
+# ---------------------------- Google Docs Integration
+#
+
+# Turns Google Docs integration on or off.
+google-content.enabled=false
+
+# Sets the default document type which will be used when downloading a document from Google Docs.
+# Must be one of: doc, txt, odt, pdf, png, rtf, html, zip
+google-content.defaultMime.document=pdf
+
+# Sets the default document type which will be used when downloading a spreadsheet from Google Docs.
+# Must be one of:  xls, ods, pdf, csv, tsv,  html
+google-content.defaultMime.spreadsheet=xls
+
+# Sets the default document type which will be used when downloading a presentation from Google Docs.
+# Must be one of: pdf, png, ppt, swf, txt
+google-content.defaultMime.presentation=pdf
+
+#If true the google.oauth.provider definition for an OAuth Provider for communicating with Google will be loaded into Sakai for use with Google Docs integration. If false the OAuth Provider will need to be manually added by admin through the OAuth Provider Tool before Google Docs integration can be used.
+google-content.loadOAuthProvider=false
+
+# turns on the Google Docs OAuth provider
+enabled@google.oauth.provider=true
+
+# required for Google Docs integration. Secret key provided by Google when registering for Google Docs use.
+consumerKey@google.oauth.provider=your consumer key
+
+# required for HMACSHA1 encryption for Google Docs communication. This or the following property MUST be set. Shared secret provided by Google when registering for Google Docs use.
+hmacSha1SharedSecret@google.oauth.provider=your shared secret
+
+#required for RSASHA1  encryption for Google Docs communication. This or the previous property MUST be set. A private RSA key generated at configuration time and encoded in an XML CDATA element. To use this encryption method, it must be enabled in the UI.
+rsaSha1Key@google.oauth.provider=
+
+
+# ------------------ Sakora (LIS Integration) ----------
+#
+# sets the return address for Sakora audit emails, if unset defaults to value of mail.support.property
+#sakora.audit.emailFrom=
+
+# a comma-delimited list of email addresses to which Sakora should send audit reports, if unset defaults to value of mail.support.property
+#sakora.audit.recipientEmailList=
+
+# ftp host provided by banner
+#hostName@net.unicon.sakora.api.handler.url.URLHandlingTemplate.sungard=localhost
+#userId@net.unicon.sakora.api.handler.url.URLHandlingTemplate.sungard=ftpuser
+#password@net.unicon.sakora.api.handler.url.URLHandlingTemplate.sungard=ftppassword
+
+# directory prefix adjustment.  Will modify ftp directory sent in bulk exchange message
+#homeDirectory@net.unicon.sakora.api.handler.url.URLHandlingTemplate.sungard
+
+# public url to sakai services used in published wsdl’s (should be SSL for prod)
+#sakora.saipEndpoint=http://localhost:8080/sakai-sakora-tool/services
+
+# whether to enforce basic auth in web services calls (any admin user id will work)
+#sakora.basicauth.enabled=false
+
+#eidXPathString@com.rsmart.sakora.impl.ims.sungard.CreatePerson.target=//*/roles/userid/useridtype[textstring='BannerID']/../useridvalue/textstring
+#generateUserId@com.rsmart.sakora.impl.ims.sungard.CreatePerson.target=true
+templateDirectory@com.rsmart.certification.api.CertificateService.wrapped=/home/rsmart/cle/files/certificate-templates

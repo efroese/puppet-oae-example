@@ -45,6 +45,7 @@ node oaenode inherits basenode {
 node devopsnode inherits oaenode {
 
     # non-production nodetype with added devops goodness
-		realize(Group['devops'])
-		realize(User['jenkins'])
+	realize(Group['devops'])
+	realize(User['jenkins'])
+	realize(Ssh_authorized_key['jenkins-home-pub'])
 }

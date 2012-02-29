@@ -18,22 +18,29 @@ class people ($sakai_user='sakaioae', $sakai_group='sakaioae', $uid='8080', $gid
 
     realize(Group['efroese'])
     realize(User['efroese'])
+    realize(Ssh_authorized_key['efroese-home-pub'])
 
     realize(Group['lspeelmon'])
     realize(User['lspeelmon'])
+    realize(Ssh_authorized_key['lspeelmon-pub'])
 
     realize(Group['dgillman'])
     realize(User['dgillman'])
+    realize(Ssh_authorized_key['dgillman-pub'])
 
     realize(Group['cramaker'])
     realize(User['cramaker'])
+    realize(Ssh_authorized_key['cramaker-pub'])
     
     realize(Group['dthomson'])
     realize(User['dthomson'])
+    realize(Ssh_authorized_key['dthomson-home-pub'])
 
     realize(Group['kcampos'])
     realize(User['kcampos'])
+    realize(Ssh_authorized_key['kcampos-home'])
 
     realize(Group['mdesimone'])
     realize(User['mdesimone'])
+    realize(Ssh_authorized_key['mdesimone-home'])
 }

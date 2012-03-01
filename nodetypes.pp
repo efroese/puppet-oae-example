@@ -23,6 +23,8 @@ node basenode {
 
 node oaenode inherits basenode {
 
+    include sudo
+
     # OAE cluster-specific configuration
     class { 'localconfig': }
     class { 'localconfig::hosts': }

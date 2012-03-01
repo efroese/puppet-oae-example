@@ -89,6 +89,7 @@ class localconfig {
     ###########################################################################
     # CLE App servers
     $cle_tarball_url  = 'https://rsmart-releases.s3.amazonaws.com/releases/CLE/2.8.0.29/upgrader_CLEv2.8.0.29.tar.bz2'
+    $cle_tarball_digest = '1a728b857db072aa28182cebba0f36ae'
     $cle_server_id    = 'sakai-nightly1'
     $tomcat_shutdown_password = 'downa56f3111'
 

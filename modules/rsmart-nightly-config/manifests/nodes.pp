@@ -201,6 +201,7 @@ node 'nightly.academic.rsmart.local' inherits devopsnode {
     # CLE Server
     #
 
+    # Install tomcat 5.5.35 from a mirror and configure it
     class { 'tomcat6':
         parentdir            => "${localconfig::homedir}/sakaicle",
         tomcat_version       => '5.5.35',
@@ -218,7 +219,7 @@ node 'nightly.academic.rsmart.local' inherits devopsnode {
     }
 
     # Base rSmart Tomcat customizations
-    tomcat6::overlay { 'rsmart-cle-prod-overlay':
+    tomcat6::overlay { 'tomcat6-overlay-rsmart-cle-prod':
         tomcat_home  => "${localconfig::homedir}/sakaicle/tomcat",
         tarball_path => "${localconfig::homedir}/sakaicle/rsmart-cle-prod-overlay.tbz",
         creates      => "${localconfig::homedir}/sakaicle/tomcat/webapps/ROOT/rsmart.jsp",
@@ -226,9 +227,26 @@ node 'nightly.academic.rsmart.local' inherits devopsnode {
         require      => Class['Tomcat6']
     }
 
+    archive::download { "upgrader_CLEv2.8.0.29.tar.bz2":
+        ensure        => present,
+        url           => $localconfig::cle_tarball_url,
+        digest_string => $localconfig::cle_tarball_digest,
+        src_target    => "${localconfig::homedir}/sakaicle/",
+        require       => Class['Tomcat6'],
+    }
+
+    # TODO - remove this once capistrano handles it.
+    # CLE rSmart Tomcat customizations
+    tomcat6::overlay { 'tomcat6-overlay-upgrader_CLEv2.8.0.29.tar.bz2':
+        tomcat_home  => "${localconfig::homedir}/sakaicle/tomcat",
+        tarball_path => "${localconfig::homedir}/sakaicle/rsmart-cle-prod-overlay.tbz",
+        creates      => "${localconfig::homedir}/sakaicle/tomcat/webapps/ROOT/rsmart.jsp",
+        user         => $oae::params::user,
+        require      => Archive::Download["upgrader_CLEv2.8.0.29.tar.bz2"],
+    }
+
     # CLE tomcat overlay and configuration
     class { 'cle':
-        cle_tarball_url => $localconfig::cle_tarball_url,
         user            => $oae::params::user,
         basedir         => "${localconfig::homedir}/sakaicle",
         tomcat_home     => "${localconfig::homedir}/sakaicle/tomcat",

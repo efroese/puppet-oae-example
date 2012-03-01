@@ -14,6 +14,7 @@ SAKAIOAE_JAR="<%= scope.lookupvar('oae::params::basedir') %>/sakaioae.jar"
 JAVA_BIN="<%= java %>"
 
 INIT_PID="/var/run/${SAKAIOAE_USER}.pid"
+PROG="SakaiOAE"
 
 # LOAD up JAVA_OPTS
 if [ -e $SAKAIOAE_HOME/bin/setenv.sh ]; then
@@ -26,14 +27,14 @@ echo "$0 {stop | start | debug | restart | status}"
 }
 
 start() {
-echo -n "Starting SakaiOAE: "
+echo -n "Starting ${PROG}: "
 su --login --command "cd ${SAKAIOAE_HOME} && ${JAVA_BIN} ${JAVA_OPTS} ${SAKAIOAE_JAVA_OPTS} ${SAKAIOAE_CLUSTER_JAVA_OPTS} -jar ${SAKAIOAE_JAR} > /dev/null 2>&1 &" ${SAKAIOAE_USER}
 echo $$ > ${INIT_PID};
 echo "done.";
 }
 
 debug() {
-    echo -n "Starting SakaiOAE with JVM remote debugging port 8500: "
+    echo -n "Starting ${PROG} with JVM remote debugging port 8500: "
     SAKAIOAE_JAVA_DEBUG_OPTS="-Xdebug -Xrunjdwp:transport=dt_socket,address=8500,server=y,suspend=n"
     su --login --command "cd ${SAKAIOAE_HOME} && ${JAVA_BIN} ${JAVA_OPTS} ${SAKAIOAE_JAVA_OPTS} ${SAKAIOAE_JAVA_DEBUG_OPTS} ${SAKAIOAE_CLUSTER_JAVA_OPTS} -jar ${SAKAIOAE_JAR} > /dev/null 2>&1 &" ${SAKAIOAE_USER}
     echo $$ > ${INIT_PID};
@@ -43,9 +44,9 @@ debug() {
 function killoae() {
   MAX_TRIES=3
   TRIES=1
-  PID=$1
+  PID=${1}
   while [[ $TRIES < $MAX_TRIES ]]; do
-    if [[ -d /proc/$1 ]]; then
+    if [[ -d /proc/${1} ]]; then
       su --login --command "kill ${PID}" ${SAKAIOAE_USER}
       sleep 5
     fi
@@ -58,21 +59,21 @@ function killoae() {
 }
 
 stop() {
-  echo "Stopping SakaiOAE: "
+  echo "Stopping ${PROG}: "
 
   # Use the pid file if it exists.
   if [[ -f ${INIT_PID} ]]; then
     PID=`cat ${INIT_PID}`
-    killoae $PID
+    killoae ${PID}
     rm -f ${INIT_PID}
   else
     # All the procs for the oae user
     PIDS=`ps -u ${SAKAIOAE_USER} | grep -v PID | awk '{ print $1 }'`
-    for PID in $PIDS; do
+    for PID in ${PIDS}; do
       # Check if sakaioae.jar was in the command line arguments
-      grep sakaioae.jar /proc/$PID/cmdline
+      grep sakaioae.jar /proc/${PID}/cmdline
       if [[ $? -eq 0 ]]; then
-        killoae $PID
+        killoae ${PID}
       fi
     done
   fi
@@ -86,10 +87,10 @@ start
 
 status() {
 if [ -f ${INIT_PID} ]; then
-  echo "It seems that the SakaiOAE app is still running.  If you have issued a stop command already, please wait." ;
+  echo "It seems that the ${PROG} app is still running.  If you have issued a stop command already, please wait." ;
   exit 0;
 else
-  echo "SakaiOAE is not running" ;
+  echo "${PROG} is not running" ;
   exit 2;
 fi
 }

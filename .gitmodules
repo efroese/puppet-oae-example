@@ -34,3 +34,9 @@
 [submodule "modules/cle"]
 	path = modules/cle
 	url = http://github.com/efroese/puppet-cle.git
+[submodule "puppet-sendmail"]
+	path = puppet-sendmail
+	url = http://github.com/efroese/puppet-sendmail.git
+[submodule "modules/sendmail"]
+	path = modules/sendmail
+	url = http://github.com/efroese/puppet-sendmail.git

@@ -124,9 +124,10 @@ node 'apache1.academic.rsmart.local' inherits oaenode {
         sp_cert => 'puppet:///modules/localconfig/sp-cert.pem',
         sp_key  => 'puppet:///modules/localconfig/sp-key.pem',
     }
-    class { 'shibboleth::shibd': }
-    apache::module { 'shib': }
 
+    class { 'shibboleth::shibd': }
+    
+    apache::module { 'shib': }
     file { "/var/www/vhosts/${localconfig::http_name}:443/conf/shib.conf":
         owner => root,
         group => root,
@@ -142,6 +143,13 @@ node 'apache1.academic.rsmart.local' inherits oaenode {
         mode  => 0644,
         source => 'puppet:///modules/localconfig/incommon.pem',
 	    notify => Service['httpd'],
+    }
+
+    ###########################################################################
+    # Sendmail
+
+    class { 'sendmail':
+        sendmail_mc_template => 'localconfig/sendmail.mc.erb',
     }
 }
 

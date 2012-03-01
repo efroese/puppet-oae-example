@@ -45,6 +45,9 @@ function killoae() {
   MAX_TRIES=3
   TRIES=1
   PID=${1}
+
+  echo "killing ${PROG} with pid=${PID}"
+
   while [[ $TRIES < $MAX_TRIES ]]; do
     if [[ -d /proc/${1} ]]; then
       su --login --command "kill ${PID}" ${SAKAIOAE_USER}
@@ -71,7 +74,7 @@ stop() {
     PIDS=`ps -u ${SAKAIOAE_USER} | grep -v PID | awk '{ print $1 }'`
     for PID in ${PIDS}; do
       # Check if sakaioae.jar was in the command line arguments
-      grep sakaioae.jar /proc/${PID}/cmdline
+      grep -q sakaioae.jar /proc/${PID}/cmdline
       if [[ $? -eq 0 ]]; then
         killoae ${PID}
       fi

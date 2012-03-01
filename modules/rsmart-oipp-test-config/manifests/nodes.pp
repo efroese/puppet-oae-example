@@ -242,7 +242,7 @@ node /oipp-test[2]?.academic.rsmart.local/ inherits oaenode {
     #
     class { 'postgres::repos': stage => init }
     class { 'postgres':
-        hba_conf_template => 'localconfig/pg_hba.conf.erb',
+        hba_conf_template => 'rsmart-common/standalone-pg_hba.conf.erb',
     }
 
     postgres::database { $localconfig::db:

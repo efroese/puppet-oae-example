@@ -304,6 +304,8 @@ node 'preview.academic.rsmart.local' inherits oaenode {
         nakamura_git => $localconfig::nakamura_git,
         nakamura_tag => $localconfig::nakamura_tag,
     }
+
+    class { 'kaleidoscope::analytics': }
 }
 
 ###########################################################################

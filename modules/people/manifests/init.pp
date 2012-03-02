@@ -1,14 +1,18 @@
-class people ($sakai_user='sakaioae', $sakai_group='sakaioae', $uid='8080', $gid='8080'){
-    class { 'people::groups':
-        sakai_group => $sakai_group,
-        gid => $gid,
-    }
+#
+# = Class: People
+# Users and groups
+#
+# Reserved UIDs and GIDs
+# 500 -> 600 - Humans from rSmart
+# 600 -> 999 - rSmart services, robots, puppets
+# 1000 -> infiniti - Others
+#
+class people {
 
-    class { 'people::users':
-        sakai_user => $sakai_user,
-        uid => $uid,
-        gid => $gid,
-    }
+    Class['Localconfig'] -> Class['People']
+
+    class { 'people::groups': }
+    class { 'people::users': }
 
     realize(Group['rsmartian'])
     realize(User['rsmartian'])

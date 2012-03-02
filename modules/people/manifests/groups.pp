@@ -1,11 +1,13 @@
 #
 # User resources for sakai
 #
-class people::groups ($sakai_group='sakaioae', $gid='8080') {
+class people::groups {
+
+    Class['Localconfig'] -> Class['People::Groups']
 
     # rsmart
-	@group { $sakai_group:
-		gid => $gid,
+	@group { "${localconfig::group}":
+		gid => $localconfig::gid,
 	}
 
     # Real live human beings!

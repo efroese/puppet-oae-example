@@ -1,15 +1,17 @@
 #
 # User resources for sakai
 #
-class people::users ($sakai_user='sakaioae', $uid='8080', $gid='8080') {
+class people::users {
+    Class['Localconfig'] -> Class['People::Users']
+    Class['People::Groups'] -> Class['People::Users']
 
-    #rsmart 
-	@user { $sakai_user:
-		ensure => present,
-		uid    => $uid,
-		gid    => $gid,
-		home   => "/home/${$sakai_user}",
-		managehome => true
+    # rsmart
+    @user { $localconfig::user:
+        ensure => present,
+		uid => $localconfig::uid,
+		gid => $localconfig::gid,
+		home => "/home/${localconfig::user}",
+		managehome => true,
 	}
 
 	@user { 'rsmartian':

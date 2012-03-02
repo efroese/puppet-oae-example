@@ -29,7 +29,7 @@ class kaleidoscope::analytics {
     cron { 'parse_logs':
         command => "${oae::params::basedir}/bin/run_kal_analytics.sh",
         },
-        user => $oae::params::user,
+        user => 'scp_internal',
         ensure => present,
         hour => '0',
         minute => '15',

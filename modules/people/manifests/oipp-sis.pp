@@ -3,7 +3,7 @@
 #
 class people::oipp-sis {
 
-    require => Class['rssh']
+    include rssh
 
     group { 'ucd_sis' : gid => '801' }
     user { 'ucd_sis':

@@ -68,6 +68,11 @@ class oae::app::setup($store_dir=undef){
         }
     }
 
+    file { '/etc/profile.d/sakaioae.sh':
+        mode => 0755,
+        content => "export OAE_HOME=${oae::params::basedir}",
+    }
+
     # Create a directory that is siblings of the sling directory.
     # Create a link underneath the sling directory to the sling sibling.
     # The allows us to delete the sling directory and preserve certain folders/data.

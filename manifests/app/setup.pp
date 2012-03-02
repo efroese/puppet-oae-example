@@ -70,7 +70,7 @@ class oae::app::setup($store_dir=undef){
 
     file { '/etc/profile.d/sakaioae.sh':
         mode => 0755,
-        content => "export OAE_HOME=${oae::params::basedir}",
+        content => "export OAE_HOME=${oae::params::basedir}\nexport LOG_DIR=${log_dir}",
     }
 
     # Create a directory that is siblings of the sling directory.

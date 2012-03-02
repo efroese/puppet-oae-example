@@ -6,7 +6,10 @@ class kaleidoscope::analytics {
 
     Class['oae::preview_processor::init'] -> Class ['Kaleidoscope::Analytics']
 
-    gem { 'net-scp': ensure => installed }
+    package { 'net-scp':
+        ensure => installed,
+        provider => gem
+    }
 
     ###########################################################################
     # Drop the ruby script

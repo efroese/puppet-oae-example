@@ -6,13 +6,27 @@
 # see modules/rsmart-config/manifests.init.pp for the config.
 
 # Install image
-node 'base.academic.rsmart.local' inherits oaenode { }
+node stagingnode inherits oaenode {
+
+    realize(Group['karagon'])
+    realize(User['karagon'])
+    realize(Ssh_authorized_key['karagon-laptop-pub'])
+    realize(Ssh_authorized_key['karagon-mbp-pub'])
+
+    realize(Group['ppilli'])
+    realize(User['ppilli'])
+    realize(Ssh_authorized_key['ppilli-home-pub'])
+
+    realize(Group['mflitsch'])
+    realize(User['mflitsch'])
+    realize(Ssh_authorized_key['mflitsch-home-pub'])
+}
 
 ###########################################################################
 #
 # Apache load balancer
 #
-node 'apache1.academic.rsmart.local' inherits oaenode {
+node 'apache1.academic.rsmart.local' inherits stagingnode {
 
     class { 'apache':
         httpd_conf_template => 'localconfig/httpd.conf.erb'
@@ -100,7 +114,7 @@ node 'apache1.academic.rsmart.local' inherits oaenode {
 #
 # OAE app nodes
 #
-node oaeappnode inherits oaenode {
+node oaeappnode inherits stagingnode {
 
     class { 'oae::app::server':
         jarsource      => $localconfig::jarsource,
@@ -241,13 +255,13 @@ node oaeappnode inherits oaenode {
     }
 }
 
-node /app[1-2].academic.rsmart.local/ inherits oaeappnode { }
+node /app[1-2].academic.rsmart.local/ inherits stagingnode { }
 
 ###########################################################################
 #
 # OAE Solr Nodes
 #
-node solrnode inherits oaenode {
+node solrnode inherits stagingnode {
     # All of the solr servers get tomcat
     class { 'tomcat6':
         parentdir      => $localconfig::basedir,
@@ -289,7 +303,7 @@ node /solr[2-3].academic.rsmart.local/ inherits solrnode {
 #
 # OAE Content Preview Processor Node
 #
-node 'preview.academic.rsmart.local' inherits oaenode {
+node 'preview.academic.rsmart.local' inherits stagingnode {
     class { 'oae::preview_processor::init':
         upload_url     => "https://${localconfig::http_name}/",
         admin_password => $localconfig::admin_password,
@@ -302,7 +316,7 @@ node 'preview.academic.rsmart.local' inherits oaenode {
 #
 # NFS Server
 #
-node 'nfs.academic.rsmart.local' inherits oaenode {
+node 'nfs.academic.rsmart.local' inherits stagingnode {
 
     class { 'nfs::server': }
 
@@ -332,7 +346,7 @@ node 'nfs.academic.rsmart.local' inherits oaenode {
 #
 # Postgres Database Server
 #
-node 'dbserv1.academic.rsmart.local' inherits oaenode {
+node 'dbserv1.academic.rsmart.local' inherits stagingnode {
 
     class { 'postgres::repos': stage => init }
 

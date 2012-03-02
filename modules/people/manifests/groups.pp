@@ -18,6 +18,9 @@ class people::groups {
     @group { 'kcampos':   gid => '505' }
     @group { 'dgillman':  gid => '506' }
     @group { 'mdesimone': gid => '507' }
+    @group { 'mflitsch':  gid => '508' }
+    @group { 'karagon':   gid => '509' }
+    @group { 'ppilli':    gid => '510' }
 
     # Services/Applications/Robots/Aliens
     @group { 'hyperic':   gid => '701' }

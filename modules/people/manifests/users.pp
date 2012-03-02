@@ -150,6 +150,65 @@ class people::users {
         require => User['mdesimone'],
     }
 
+    @user { 'mflitsch':
+        ensure     => present,
+        uid        => '508',
+        gid        => 'mflitsch',
+        home       => '/home/mflitsch',
+        managehome => true,
+        groups     => ['mflitsch', 'wheel',],
+    }
+
+    @ssh_authorized_key { 'mflitsch-home-pub':
+        ensure => present,
+        key  => 'AAAAB3NzaC1yc2EAAAABIwAAAQEA62NShmgqF5Z78YmMKJV4j9UP8VqC/nLyKmmJ1L6SuivGszXhNw6xsrIVzHkvfBGQq4Qcxh8WhvWJlTeamufLN3h7OXs/ieWs43YpC6K0h3EN54DnfVMnPcNjZZErT/NZUK3w17bb2MjPEZjjMtz49Txv5IVZxRBe2TUSJcnrTEURBPT5CEQUCciDpzWsGeTWh/SCKTnMWjOpr7GgKxnuIDrQ1dnuvVbwVu5cLqX3O+rM9YADD3t9yCwf6v4bzzk1MugC5SzptjO6DDoJrmZhpITN5T/sRmP1EA5TJXY1R0fWeqKf9v8yy9e3M/9qmdYlvZT1qlo4WuuyMSfZwvLjRQ==',
+        type => 'ssh-rsa',
+        user => 'mflitsch',
+        require => User['mflitsch'],
+    }
+
+    @user { 'karagon':
+        ensure     => present,
+        uid        => '509',
+        gid        => 'karagon',
+        home       => '/home/karagon',
+        managehome => true,
+        groups     => ['karagon', 'wheel',],
+    }
+
+    @ssh_authorized_key { 'karagon-laptop-pub':
+        ensure => present,
+        key  => 'AAAAB3NzaC1yc2EAAAABIwAAAQEAum3+O4EXUMyusGDiIDre1DIx/+T1DvNZM0emF4CM+0y/91jKt129hCOSoAmAzZx1XeXYHjcDBkFsgvRNxqyUH4veS5MFNi7xid8yJmMFasvxDrI+2NZXAFFIGl2eKq6jWKUssaYLBeJft8g+UiEPAgFpRk8GZv1k+0w62Arzk38JKFctEvs2eXfBXXYJx9TrzBwwmDbuCdEN0pfoASU6Gc4G5el9iod9aECpoI5GuyMTi2C8swqT6DASEzTILVqHyo7uPVBCJdt0jvGh40wc1QIjjgNCTwQWkqZHtQG14jNdiQdbFmS9UNKkELHtKDOfhYsWdFeSIlg4LXAKBcu5FQ==',
+        type => 'ssh-rsa',
+        user => 'karagon',
+        require => User['karagon'],
+    }
+
+    @ssh_authorized_key { 'karagon-mbp-pub':
+        ensure => present,
+        key  => 'AAAAB3NzaC1kc3MAAACBAI1hojKvAxCLNvfqVF8ijw9QdbLpeXuFAWqBRc/n+rLj53a3Wk/Vocs2eQ9atNHsi0R5mQ70v/I1fWpxWescQmZtvtJ2vr7PnPaJzLtWeNR/TdsclTnuQ6BCPj95FvFaEQp4cNWUerAR4H/ucw3WR/KxPc6WEjMjgyrKU3PNJkRLAAAAFQC18E+EHmzX8kvO5PAetfpemcwCRQAAAIBlC5oWcG6dCvizK4j3axPYrl3mvUSG4hXutgr8uBZjEyesLLsZ6wV7HjhNSv6Ag+sIU1mBs67q5LrkjeVOL3NSLhjRubdvrYvU+Haw5twRwDpt5tr7NzIFpAKNLZ7R7sYSHjyzMp8LYX6bBekbfagfMVCfGfn0WGIAbBN2s33xPAAAAIBL1fFDQ05YNJjeuhdxU2KYVGBaeQDEBPPEYe9ZVM7kwk4lOUFboMRXbQp3CFTA2gx/pKDrHWazo71qK7oAWc7tx8CzNin9WWvgqO1dF34feYAsUBm/yRiFEWiT6p1lHy096MAPgIR+jmQdf6E3m1xBDLvgqV9k6oA25TLcQYECTQ==',
+        type => 'ssh-dss',
+        user => 'karagon',
+        require => User['karagon'],
+    }
+
+    @user { 'ppilli':
+        ensure     => present,
+        uid        => '510',
+        gid        => 'ppilli',
+        home       => '/home/ppilli',
+        managehome => true,
+        groups     => ['ppilli', 'wheel',],
+    }
+
+    @ssh_authorized_key { 'ppilli-home-pub':
+        ensure => present,
+        key  => 'AAAAB3NzaC1yc2EAAAABJQAAAIEAnKpU9vs3tpZetpHWjXbPafiG1UOEh2MiNU0BU2ih3R15Wwr8hsbFEGTQH0AvdtCcnZWqyXBpgW9ze/hraNj5+9JVJS9oTSch2Qw5etTXb0qduNvFEM7Pu90rEBFMJrtsD+d/1utIYjFX+q6V5kA9rdFsOoGEvpwH6FDh3zs4x5U=',
+        type => 'ssh-rsa',
+        user => 'ppilli',
+        require => User['ppilli'],
+    }
+
     @user { 'jenkins':
         ensure     => present,
         uid        => '900',

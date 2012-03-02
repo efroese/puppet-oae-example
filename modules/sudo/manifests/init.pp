@@ -8,6 +8,6 @@ class sudo {
 		group => "root",
 		mode => 0440,
 		source => "puppet:///modules/sudo/etc/sudoers",
-		require => [Package["sudo"], Users['rsmartian']],
+		require => Package["sudo"],
 	}
 }

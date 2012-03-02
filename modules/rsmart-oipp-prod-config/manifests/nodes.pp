@@ -155,6 +155,11 @@ node 'apache1.academic.rsmart.local' inherits oaenode {
         virtusertable_template    => 'localconfig/virtusertable.mc.erb',
         local_host_names_template => 'localconfig/local_host_names.erb'
     }
+    ###########################################################################
+    # SIS integration
+
+    class { 'people::oipp-sis':
+    }
 }
 
 ###########################################################################

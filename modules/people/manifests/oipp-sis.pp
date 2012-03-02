@@ -3,6 +3,8 @@
 #
 class people::oipp-sis {
 
+    include rssh
+
     group { 'ucd_sis' : gid => '801' }
     user { 'ucd_sis':
         ensure     => present,

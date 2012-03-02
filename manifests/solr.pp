@@ -41,7 +41,7 @@ class oae::solr {
             user => $user,
             command => "curl '${solr_url}/replication?command=backup&location=${backup_dir}'",
             minute  => '0',
-            hour    => '*',
+            hour    => '1',
             require => File[$backup_dir],
         }
     }

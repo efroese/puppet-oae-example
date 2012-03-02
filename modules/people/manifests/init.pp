@@ -13,6 +13,14 @@ class people ($sakai_user='sakaioae', $sakai_group='sakaioae', $uid='8080', $gid
     realize(Group['rsmartian'])
     realize(User['rsmartian'])
 
+    file { "/home/rsmartian/.bash_profile":
+        owner => rsmartian,
+        group => rsmartian,
+        mode  => 0644,
+        content => template('people/rsmartian-bash_profile.sh.erb'),
+        require => User['rsmartian']
+    }
+
     realize(Group['hyperic'])
     realize(User['hyperic'])
 

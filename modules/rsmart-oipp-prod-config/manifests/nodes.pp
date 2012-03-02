@@ -150,9 +150,9 @@ node 'apache1.academic.rsmart.local' inherits oaenode {
 
     class { 'sendmail':
         sendmail_mc_template      => 'localconfig/sendmail.mc.erb',
-        access_template           => 'localconfig/access.mc.erb',
-        mailertable_template      => 'localconfig/mailertable.mc.erb',
-        virtusertable_template    => 'localconfig/virtusertable.mc.erb',
+        access_template           => 'localconfig/access.erb',
+        mailertable_template      => 'localconfig/mailertable.mc',
+        virtusertable_template    => 'localconfig/virtusertable.erb',
         local_host_names_template => 'localconfig/local_host_names.erb'
     }
     ###########################################################################

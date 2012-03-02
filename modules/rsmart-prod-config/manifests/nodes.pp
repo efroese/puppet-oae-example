@@ -97,6 +97,9 @@ node 'apache1.academic.rsmart.local' inherits oaenode {
         mode  => 644,
         content => 'TraceEnable Off',
     }
+
+    include people::kaleidoscope::internal
+    include people::kaleidoscope::external
 }
 
 ###########################################################################
@@ -242,6 +245,8 @@ node oaeappnode inherits oaenode {
             'sakai.email.replyAsName'    => $localconfig::reply_as_name,
         }
     }
+
+    include people::kaleidoscope::internal
 }
 
 node /app[1-2].academic.rsmart.local/ inherits oaeappnode { }

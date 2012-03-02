@@ -4,7 +4,7 @@ class kaleidoscope {
 
 class kaleidoscope::analytics {
 
-    include oae::preview_processor::init
+    Class['oae::preview_processor::init'] -> Class ['Kaleidoscope::Analytics']
 
     gem { 'net-scp': ensure => installed }
 
@@ -19,19 +19,15 @@ class kaleidoscope::analytics {
 
     ###########################################################################
     # Drop the script for the cron job
-    file { "${oae::params::basedir}/bin/run_preview_processor.sh":
+    file { "${oae::params::basedir}/bin/run_kal_analytics.sh":
         content => template('kaleidoscope/run_kal_analytics.sh.erb'),
         owner  => root,
         group  => root,
         mode   => 755,
     }
 
-    $full_os = "${operatingsystem}${lsbmajdistrelease}"
-
     cron { 'parse_logs':
-        command => $full_os ? {
-            /CentOS5|RedHat5/ => "PATH=/opt/local/bin:\$PATH ${oae::params::basedir}/bin/run_kal_analytics.sh",
-            default           => "${oae::params::basedir}/bin/run_kal_analytics.sh",
+        command => "${oae::params::basedir}/bin/run_kal_analytics.sh",
         },
         user => $oae::params::user,
         ensure => present,
@@ -39,7 +35,6 @@ class kaleidoscope::analytics {
         minute => '15',
         require => [
             File["${oae::params::basedir}/bin/run_kal_analytics.sh"],
-            File["${oae::params::basedir}/.oae_credentials.txt"],
         ],
     }
 

@@ -151,6 +151,11 @@ node 'apache1.academic.rsmart.local' inherits oaenode {
     class { 'sendmail':
         sendmail_mc_template => 'localconfig/sendmail.mc.erb',
     }
+    ###########################################################################
+    # SIS integration
+
+    class { 'people::oipp-sis':
+    }
 }
 
 ###########################################################################

@@ -3,7 +3,7 @@
 # OIPP Standalone App Server
 #
 # 
-node /oipp-test[2]?.academic.rsmart.local/ inherits oaenode {
+node 'oipp-test.academic.rsmart.local' inherits oaenode {
 
     ###########################################################################
     # System

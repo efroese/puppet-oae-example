@@ -26,7 +26,7 @@ node stagingnode inherits oaenode {
 #
 # Apache load balancer
 #
-node 'apache1.academic.rsmart.local' inherits stagingnode {
+node 'staging-apache1.academic.rsmart.local' inherits stagingnode {
 
     class { 'apache':
         httpd_conf_template => 'localconfig/httpd.conf.erb'
@@ -255,7 +255,7 @@ node oaeappnode inherits stagingnode {
     }
 }
 
-node /app[1-2].academic.rsmart.local/ inherits stagingnode { }
+node /staging-app[1-2].academic.rsmart.local/ inherits stagingnode { }
 
 ###########################################################################
 #
@@ -273,7 +273,7 @@ node solrnode inherits stagingnode {
     }
 }
 
-node 'solr1.academic.rsmart.local' inherits solrnode {
+node 'staging-solr1.academic.rsmart.local' inherits solrnode {
     class { 'oae::solr::tomcat':
         master_url   => "${localconfig::solr_remoteurl}/replication",
         solrconfig   => 'rsmart-common/master-solrconfig.xml.erb',
@@ -290,7 +290,7 @@ node 'solr1.academic.rsmart.local' inherits solrnode {
     }
 }
 
-node /solr[2-3].academic.rsmart.local/ inherits solrnode {
+node /staging-solr[2-3].academic.rsmart.local/ inherits solrnode {
     class { 'oae::solr::tomcat':
         master_url   => "${localconfig::solr_remoteurl}/replication",
         solrconfig   => 'rsmart-common/slave-solrconfig.xml.erb',
@@ -303,7 +303,7 @@ node /solr[2-3].academic.rsmart.local/ inherits solrnode {
 #
 # OAE Content Preview Processor Node
 #
-node 'preview.academic.rsmart.local' inherits stagingnode {
+node 'staging-preview.academic.rsmart.local' inherits stagingnode {
     class { 'oae::preview_processor::init':
         upload_url     => "https://${localconfig::http_name}/",
         admin_password => $localconfig::admin_password,
@@ -316,7 +316,7 @@ node 'preview.academic.rsmart.local' inherits stagingnode {
 #
 # NFS Server
 #
-node 'nfs.academic.rsmart.local' inherits stagingnode {
+node 'staging-nfs.academic.rsmart.local' inherits stagingnode {
 
     class { 'nfs::server': }
 
@@ -346,7 +346,7 @@ node 'nfs.academic.rsmart.local' inherits stagingnode {
 #
 # Postgres Database Server
 #
-node 'dbserv1.academic.rsmart.local' inherits stagingnode {
+node 'staging-dbserv1.academic.rsmart.local' inherits stagingnode {
 
     class { 'postgres::repos': stage => init }
 

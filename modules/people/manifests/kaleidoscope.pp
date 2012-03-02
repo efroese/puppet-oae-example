@@ -28,7 +28,7 @@ class people::kaleidoscope {
         gid        => 'scp_internal',
         home       => '/home/scp_internal',
         managehome => true,
-        groups     => ['scp_internal',],
+        groups     => ['scp_internal','rsshusers'],
         shell      => '/usr/bin/rssh'
     }
     @ssh_authorized_key { 'scp_internal-pub':
@@ -46,7 +46,7 @@ class people::kaleidoscope {
         gid        => 'kaleidoscope',
         home       => '/home/kaleidoscope',
         managehome => true,
-        groups     => ['kaleidoscope',],
+        groups     => ['kaleidoscope','rsshusers'],
         shell      => '/usr/bin/rssh'
     }
     @ssh_authorized_key { 'kaleidoscope-pub':

@@ -19,6 +19,12 @@ class kaleidoscope::analytics {
         group  => root,
         mode   => 755,
     }
+    file { "${oae::params::basedir}/bin/worlds.txt":
+        source => "puppet:///modules/kaleidoscope/worlds.txt",
+        owner  => root,
+        group  => root,
+        mode   => 644,
+    }
 
     ###########################################################################
     # Drop the script for the cron job

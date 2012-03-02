@@ -9,7 +9,7 @@
 #
 # Apache load balancer
 #
-node 'apache1.academic.rsmart.local' inherits oaenode {
+node 'oipp-prod-apache1.academic.rsmart.local' inherits oaenode {
 
     class { 'apache::ssl': }
 
@@ -328,7 +328,7 @@ node oaeappnode inherits oaenode {
 
 }
 
-node /app[1-2].academic.rsmart.local/ inherits oaeappnode { }
+node /oipp-prod-app[1-2].academic.rsmart.local/ inherits oaeappnode { }
 
 ###########################################################################
 #
@@ -345,7 +345,7 @@ node solrnode inherits oaenode {
     }
 }
 
-node 'solr1.academic.rsmart.local' inherits solrnode {
+node 'oipp-prod-solr1.academic.rsmart.local' inherits solrnode {
     class { 'oae::solr::tomcat':
         master_url   => "${localconfig::solr_remoteurl}/replication",
         solrconfig   => 'rsmart-common/master-solrconfig.xml.erb',
@@ -363,7 +363,7 @@ node 'solr1.academic.rsmart.local' inherits solrnode {
     }
 }
 
-node /solr[2-3].academic.rsmart.local/ inherits solrnode {
+node /oipp-prod-solr[2-3].academic.rsmart.local/ inherits solrnode {
     class { 'oae::solr::tomcat':
         master_url   => "${localconfig::solr_remoteurl}/replication",
         solrconfig   => 'rsmart-common/slave-solrconfig.xml.erb',
@@ -376,7 +376,7 @@ node /solr[2-3].academic.rsmart.local/ inherits solrnode {
 #
 # OAE Content Preview Processor Node
 #
-node 'preview.academic.rsmart.local' inherits oaenode {
+node 'oipp-prod-preview.academic.rsmart.local' inherits oaenode {
     class { 'oae::preview_processor::init':
         upload_url     => "https://${localconfig::http_name}/",
         admin_password => $localconfig::admin_password,
@@ -389,7 +389,7 @@ node 'preview.academic.rsmart.local' inherits oaenode {
 #
 # NFS Server
 #
-node 'nfs.academic.rsmart.local' inherits oaenode {
+node 'oipp-prod-nfs.academic.rsmart.local' inherits oaenode {
 
     class { 'nfs::server': }
 
@@ -419,7 +419,7 @@ node 'nfs.academic.rsmart.local' inherits oaenode {
 #
 # Postgres Database Server
 #
-node 'dbserv1.academic.rsmart.local' inherits oaenode {
+node 'oipp-prod-dbserv1.academic.rsmart.local' inherits oaenode {
 
     class { 'postgres::repos': stage => init }
 

@@ -22,22 +22,22 @@ if [ -e $SAKAIOAE_HOME/bin/setenv.sh ]; then
 fi
 
 help() {
-echo "$0 INVALID SYNTAX ::  Use:"
-echo "$0 {stop | start | debug | restart | status}"
+	echo "$0 INVALID SYNTAX ::  Use:"
+	echo "$0 {stop | start | debug | restart | status}"
 }
 
 start() {
-echo -n "Starting ${PROG}: "
-su --login --command "cd ${SAKAIOAE_HOME} && ${JAVA_BIN} ${JAVA_OPTS} ${SAKAIOAE_JAVA_OPTS} ${SAKAIOAE_CLUSTER_JAVA_OPTS} -jar ${SAKAIOAE_JAR} > /dev/null 2>&1 &" ${SAKAIOAE_USER}
-echo $$ > ${INIT_PID};
-echo "done.";
+	echo -n "Starting ${PROG}: "
+	su --login --command "cd ${SAKAIOAE_HOME} && ${JAVA_BIN} ${JAVA_OPTS} ${SAKAIOAE_JAVA_OPTS} ${SAKAIOAE_CLUSTER_JAVA_OPTS} -jar ${SAKAIOAE_JAR} > /dev/null 2>&1 &" ${SAKAIOAE_USER}
+	ps -u ${SAKAIOAE_USER} --no-headers -o pid,cmd | grep ${SAKAIOAE_JAR} | awk '{ print $1 }' > ${INIT_PID};
+	echo "done.";
 }
 
 debug() {
     echo -n "Starting ${PROG} with JVM remote debugging port 8500: "
     SAKAIOAE_JAVA_DEBUG_OPTS="-Xdebug -Xrunjdwp:transport=dt_socket,address=8500,server=y,suspend=n"
     su --login --command "cd ${SAKAIOAE_HOME} && ${JAVA_BIN} ${JAVA_OPTS} ${SAKAIOAE_JAVA_OPTS} ${SAKAIOAE_JAVA_DEBUG_OPTS} ${SAKAIOAE_CLUSTER_JAVA_OPTS} -jar ${SAKAIOAE_JAR} > /dev/null 2>&1 &" ${SAKAIOAE_USER}
-    echo $$ > ${INIT_PID};
+    ps -u ${SAKAIOAE_USER} --no-headers -o pid,cmd | grep ${SAKAIOAE_JAR} | awk '{ print $1 }' > ${INIT_PID};
     echo "done.";
 }
 
@@ -66,15 +66,14 @@ stop() {
 
   # Use the pid file if it exists.
   if [[ -f ${INIT_PID} ]]; then
-    PID=`cat ${INIT_PID}`
-    killoae ${PID}
+	for PID in `cat ${INIT_PID}`; do
+    	killoae ${PID}
+	done
     rm -f ${INIT_PID}
   else
-    # All the procs for the oae user
-    PIDS=`ps -u ${SAKAIOAE_USER} | grep -v PID | awk '{ print $1 }'`
+    # The OAE procs for the oae user
+    PIDS=`ps -u ${SAKAIOAE_USER} --no-headers -o pid,cmd | grep ${SAKAIOAE_JAR} | awk '{ print $1 }'`
     for PID in ${PIDS}; do
-      # Check if sakaioae.jar was in the command line arguments
-      grep -q sakaioae.jar /proc/${PID}/cmdline
       if [[ $? -eq 0 ]]; then
         killoae ${PID}
       fi

@@ -281,13 +281,6 @@ node 'staging-solr1.academic.rsmart.local' inherits solrnode {
         tomcat_user  => $localconfig::user,
         tomcat_group => $localconfig::group,
     }
-
-    oae::solr::backup { "solr-backup-${localconfig::solr_remoteurl}-${oae::params::basedir}/solr/backups":
-       solr_url   => $localconfig::solr_remoteurl,
-       backup_dir => "${oae::params::basedir}/solr/backups",
-       user       => $oae::params::user,
-       group      => $oae::params::group,
-    }
 }
 
 node /staging-solr[2-3].academic.rsmart.local/ inherits solrnode {

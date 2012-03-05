@@ -200,14 +200,13 @@ end
 
 def upload_to_server
   path = "#{@options[:uploadpath]}/#{(Time.now - 86400).strftime("%Y-%m-%d")}"
+  p @directory_name
   p path
   Net::SSH.start(@options[:uploadserver], @options[:user]) do |ssh|
     ssh.exec!("mkdir #{path}")
-  end
-  Net::SCP.start(@options[:uploadserver], @options[:user]) do |scp|
-    scp.upload!(@directory_name + "/activity.log", path + "/activity.log")
-    scp.upload!(@directory_name + "/loglines.log", path + "/loglines.log")
-    scp.upload!(@directory_name + "/roles.csv", path + "/roles.csv")
+    ssh.scp.upload!(@directory_name + "/activity.log", path + "/activity.log", {:verbose => true, :recursive => true})
+    ssh.scp.upload!(@directory_name + "/loglines.log", path + "/loglines.log")
+    ssh.scp.upload!(@directory_name + "/roles.csv", path + "/roles.csv")
   end
 end
 

@@ -1,5 +1,5 @@
 #!/bin/bash
-set -x
+
 # Configuration ##############################################################
 # SCRIPT_DIR: path to directory containing parse_logs.rb
 # PASSWORD_FILE: path to file containing: system_url admin_password
@@ -71,10 +71,10 @@ if [ "${?}" = "0" ] ; then
         --append --upload prod-apache1 --uploadpath /home/kaleidoscope --user scp_internal;
     # ruby scripts return 1 on success:
     ruby_return_code=${?};
-    if [ "${ruby_return_code}" = "1" ] ; then
+    if [ "${ruby_return_code}" = "0" ] ; then
         touch ${SCRIPT_DIR}/.kal_analytics.success;
     else
-        echo "ERROR: ruby ${SCRIPT_DIR}/parse_logs.rb returned non-one exit code: '${ruby_return_code}'";
+        echo "ERROR: ruby ${SCRIPT_DIR}/parse_logs.rb returned non-zero exit code: '${ruby_return_code}'";
         rm -f ${SCRIPT_DIR}/.kal_analytics.lock;
         exit 7;
     fi

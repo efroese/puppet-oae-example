@@ -200,8 +200,6 @@ end
 
 def upload_to_server
   path = "#{@options[:uploadpath]}/#{(Time.now - 86400).strftime("%Y-%m-%d")}"
-  p @directory_name
-  p path
   Net::SFTP.start(@options[:uploadserver], @options[:user]) do |sftp|
     sftp.mkdir!("#{path}")
     sftp.upload!(@directory_name + "/activity.log", path + "/activity.log")

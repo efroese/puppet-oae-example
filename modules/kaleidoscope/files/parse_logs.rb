@@ -8,8 +8,7 @@
 require 'rubygems'
 require 'net/http'
 require 'net/https'
-require 'net/ssh'
-require 'net/scp'
+require 'net/sftp'
 require 'optparse'
 require 'json'
 require 'csv'
@@ -202,11 +201,11 @@ def upload_to_server
   path = "#{@options[:uploadpath]}/#{(Time.now - 86400).strftime("%Y-%m-%d")}"
   p @directory_name
   p path
-  Net::SSH.start(@options[:uploadserver], @options[:user]) do |ssh|
-    ssh.exec!("mkdir #{path}")
-    ssh.scp.upload!(@directory_name + "/activity.log", path + "/activity.log", {:verbose => true, :recursive => true})
-    ssh.scp.upload!(@directory_name + "/loglines.log", path + "/loglines.log")
-    ssh.scp.upload!(@directory_name + "/roles.csv", path + "/roles.csv")
+  Net::SFTP.start(@options[:uploadserver], @options[:user]) do |sftp|
+    sftp.mkdir!("#{path}")
+    sftp.upload!(@directory_name + "/activity.log", path + "/activity.log")
+    sftp.upload!(@directory_name + "/loglines.log", path + "/loglines.log")
+    sftp.upload!(@directory_name + "/roles.csv", path + "/roles.csv")
   end
 end
 

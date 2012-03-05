@@ -200,6 +200,7 @@ end
 
 def upload_to_server
   path = "#{@options[:uploadpath]}/#{(Time.now - 86400).strftime("%Y-%m-%d")}"
+  p path
   Net::SSH.start(@options[:uploadserver], @options[:user]) do |ssh|
     ssh.exec!("mkdir #{path}")
   end

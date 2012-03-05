@@ -10,12 +10,19 @@ class oae::preview_processor::amazon {
         'fontconfig-devel', 'libcurl-devel',
         'GraphicsMagick', 'ImageMagick', 'ImageMagick-devel',
         'poppler-utils', 'rubygems',
-        'ruby-devel', 'libgcj', 'pdftk', ]
+        'ruby-devel', 'libgcj', ]
 
     package { $common_packages: ensure => installed }
 
     exec { 'yum-install-tk-centos6-repo':
         command => "yum -y -t --enablerepo=centos6-base install tk",
         unless  => 'rpm -q tk',
+    }
+
+    package { 'pdftk-1.44-1.el6.rf.x86_64':
+         ensure   => present,
+         source   => "http://dl.dropbox.com/u/24606888/puppet-oae-files/pdftk-1.44-1.el6.rf.x86_64.rpm",
+         provider => 'rpm',
+         require  => Package['libgcj']
     }
 }

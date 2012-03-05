@@ -68,7 +68,7 @@ if [ "${?}" = "0" ] ; then
     # Run the preview processol:
     ruby ${SCRIPT_DIR}/parse_logs.rb --server ${SAKAIOAE_URL} --password ${PASSWORD} \
         --remote prod-app1,prod-app2 --path /var/log/sakaioae/error.log \
-        --append --upload prod-apache1 --uploadpath /tmp --user scp_internal;
+        --append --upload prod-apache1 --uploadpath /home/kaleidoscope --user scp_internal;
     # ruby scripts return 1 on success:
     ruby_return_code=${?};
     if [ "${ruby_return_code}" = "1" ] ; then

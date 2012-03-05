@@ -95,4 +95,10 @@ class localconfig {
 
     $linktool_privkey = 'N?m:???8??.???a'
     $linktool_salt    = '}*?|xD?U?0??+*2?????6?O%F?as8???(??.??6??#??????0??'
+
+    $cle_email_test_mode = true
+    $cle_smtp_server     = 'localhost'
+    $cle_dns             = [ 'TODO_DNS_1', 'TODO_DNS_2']
+    $cle_mail_support    = 'bogus@mailinator.com'
+    $cle_mail_request    = 'bogus@mailinator.com'
 }

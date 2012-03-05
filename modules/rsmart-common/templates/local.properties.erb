@@ -44,30 +44,30 @@ version.sakai=2.8.0-b04
 # ---------------------------- Email Settings
 #
 # set to false to allow email to be sent, otherwise it's logged and not sent
-testMode@org.sakaiproject.email.api.EmailService=true
+testMode@org.sakaiproject.email.api.EmailService=<%= scope.lookupvar('localconfig::cle_email_test_mode') %>
 
 # SMTP server for outgoing email
-smtp@org.sakaiproject.email.api.EmailService=localhost
+smtp@org.sakaiproject.email.api.EmailService=<%= scope.lookupvar('localconfig::cle_smtp_server') %>
 
 # DNS addresses used by James for incoming email
-smtp.dns.1 = 255.255.255.1
-smtp.dns.2 = 255.255.255.1
+smtp.dns.1 = <%= scope.lookupvar('localconfig::cle_dns')[0] %>
+smtp.dns.2 = <%= scope.lookupvar('localconfig::cle_dns')[1] %>255.255.255.1
 
 # SMTP port James runs on - defaults to 25, but recommendation is to run on an
 # unprivileged port and use DNAT port-forwarding or a standard mailer on 25 to
 # relay traffic.
 #
-smtp.port = 8125
+smtp.port = 8025
 
 # enable or disable James for incoming email (true | false)
 #
 smtp.enabled = false
 
 # email support address used in incoming rejection messages
-mail.support =bogus@mailinator.com
+mail.support = <%= scope.lookupvar('localconfig::cle_mail_support') %>
 
 # email address to use as the from email when sending setup messages
-setup.request=bogus@mailinator.com
+setup.request = <%= scope.lookupvar('localconfig::cle_mail_request') %>
 
 #email address to send errors caught by the portal, and user bug reports in response
 # (should not be a bug tracking general email address)

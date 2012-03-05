@@ -178,7 +178,7 @@ samigo.answerUploadRepositoryPath=<%= scope.lookupvar('cle::basedir') %>/files/s
 # do not override the usual Sakai settings.
 #
 # outgoing SMTP server (required)
-samigo.smtp.server=localhost
+samigo.smtp.server=<%= scope.lookupvar('localconfig::samigo_stmp_server') %>
 #
 # Bypass SMTP AUTH for outgoing mail
 # if false, specify username/password

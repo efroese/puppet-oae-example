@@ -122,4 +122,5 @@ class localconfig {
     $cle_dns             = [ 'TODO_DNS_1', 'TODO_DNS_2']
     $cle_mail_support    = 'bogus@mailinator.com'
     $cle_mail_request    = 'bogus@mailinator.com'
+    $samigo_stmp_server  = $cle_smtp_server
 }

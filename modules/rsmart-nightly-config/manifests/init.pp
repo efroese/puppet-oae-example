@@ -11,12 +11,13 @@ class localconfig {
 
     ###########################################################################
     # OS
-    $user    = 'rsmart'
-    $group   = 'rsmart'
-    $uid     = 500
-    $gid     = 500
-    $homedir = '/home/rsmart'
-    $basedir = "${homedir}/sakaioae"
+    $user     = 'rsmart'
+    $user_ssh = 'rsmart-pub'
+    $group    = 'rsmart'
+    $uid      = 500
+    $gid      = 500
+    $homedir  = '/home/rsmart'
+    $basedir  = "${homedir}/sakaioae"
 
     ###########################################################################
     # Nodes

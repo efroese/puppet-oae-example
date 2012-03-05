@@ -6,6 +6,10 @@ class kaleidoscope::analytics {
 
     Class['oae::preview_processor::init'] -> Class ['Kaleidoscope::Analytics']
 
+    package { 'net-scp':
+        ensure => installed,
+        provider => gem
+    }
     package { 'net-sftp':
         ensure => installed,
         provider => gem

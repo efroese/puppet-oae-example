@@ -8,6 +8,7 @@
 require 'rubygems'
 require 'net/http'
 require 'net/https'
+require 'net/scp'
 require 'net/sftp'
 require 'optparse'
 require 'json'

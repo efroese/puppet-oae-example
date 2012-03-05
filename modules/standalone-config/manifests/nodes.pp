@@ -104,7 +104,6 @@ node 'oae-standalone.localdomain' inherits oaenode {
             'org.apache.sling.commons.log.names' => ["org.sakaiproject.nakamura.search","org.sakaiproject.nakamura.solr"],
             'org.apache.sling.commons.log.level' => "info",
             'org.apache.sling.commons.log.file'  => "logs/search.log",
-            'org.apache.sling.commons.log.pattern' => "{0,date,dd.MM.yyyy\ HH:mm:ss.SSS}\ *{4}*\ [{2}]\ {3}\ {5}",
         }
     }
 

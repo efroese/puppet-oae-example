@@ -2,16 +2,19 @@
 #
 # rSmart nightly build server
 # 
-node 'nightly.academic.rsmart.local' inherits devopsnode {
+node 'nightly.academic.rsmart.local' inherits oaenode {
     
     ###########################################################################
     # System
-
     limits::conf {
         "${localconfig::user}-soft": domain => $localconfig::user, type => soft, item => nofile, value => 20000;
         "${localconfig::user}-hard": domain => $localconfig::user, type => hard, item => nofile, value => 20000;
     }
 
+    class { 'people::devops': }
+
+    ###########################################################################
+    # Apache
     class { 'apache::ssl': }
 
     # Headers is not in the default set of enabled modules
@@ -23,9 +26,7 @@ node 'nightly.academic.rsmart.local' inherits devopsnode {
         template => 'rsmart-common/vhost-80.conf.erb',
     }
 
-    ###########################################################################
     # https://nightly.academic.rsmart.com:443
-
     # Serve the OAE app (trusted content) on 443
     apache::vhost-ssl { "${localconfig::http_name}:443":
         sslonly  => true,
@@ -78,7 +79,6 @@ node 'nightly.academic.rsmart.local' inherits devopsnode {
         }
     }
 
-    ###########################################################################
     # https://nightly-content.academic.rsmart.com:443
     apache::vhost-ssl { "${localconfig::http_name_untrusted}:443":
         sslonly  => true,

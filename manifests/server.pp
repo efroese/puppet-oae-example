@@ -237,7 +237,10 @@ class mysql::server {
   file { "mysql-slow-queries.log":
     ensure  => present,
     owner   => mysql,
-    group   => mysql,
+    group   => $operatingsystem ? {
+      /RedHat|Fedora|CentOS|Amazon/ => adm,
+      default => mysql,
+    },
     mode    => 640,
     seltype => mysqld_log_t,
     path    => $operatingsystem ? {

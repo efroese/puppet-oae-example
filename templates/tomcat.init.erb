@@ -26,35 +26,18 @@ start() {
 	echo "done.";
 }
 
-function killcle() {
-    MAX_TRIES=3
-    TRIES=1
-    PID=${1}
-
-    echo "killing ${PROG} with pid=${PID}"
-
-    while [[ $TRIES < $MAX_TRIES ]]; do
-        if [[ -d /proc/${1} ]]; then
-            su --login --command "kill ${PID}" ${TOMCAT_USER}
-            sleep 5
-        fi
-        TRIES=$[TRIES+1]
-    done
-
-    if [[ -d /proc/${PID} ]]; then
-        kill -9 ${PID}
-    fi
-}
-
 stop() {
     echo "Stopping ${PROG}: "
 
     su --login --command "{$CATALINA_HOME}/bin/shutdown.sh" ${TOMCAT_USER}
 
+    echo "Waiting 60 seconds before using kill to stop ${PROG}."
+    sleep 60
+
     # Use the pid file if it exists.
     if [[ -f ${INIT_PID} ]]; then
 	    for PID in `cat ${INIT_PID}`; do
-            killcle ${PID}
+            kill -9 ${PID}
 	    done
         rm -f ${INIT_PID}
     else
@@ -62,7 +45,7 @@ stop() {
         PIDS=`ps -u ${TOMCAT_USER} --no-headers -o pid,cmd | grep "${CATALINA_HOME}" | awk '{ print $1 }'`
         for PID in ${PIDS}; do
             if [[ $? -eq 0 ]]; then
-                killcle ${PID}
+                kill -9 ${PID}
             fi
         done
     fi

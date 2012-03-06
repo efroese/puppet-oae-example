@@ -287,6 +287,8 @@ node 'oipp-test.academic.rsmart.local' inherits oaenode {
         ensure        => present,
         url           => 'http://dl.dropbox.com/u/24606888/rsmart-cle-base-overlay.tbz',
         src_target    => "${localconfig::homedir}/sakaicle/",
+        checksum      => false,
+        timeout       => 0,
         require       => Class['Tomcat6'],
     }
 

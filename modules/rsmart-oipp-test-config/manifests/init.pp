@@ -110,7 +110,7 @@ class localconfig {
 
     ###########################################################################
     # CLE App servers
-    $cle_tarball_url  = 'https://rsmart-releases.s3.amazonaws.com/releases/CLE/2.8.0.29/upgrader_CLEv2.8.0.29.tar.bz2'
+    $cle_tarball_url  = 'https://rsmart-releases.s3.amazonaws.com/CLE/2.8.0.26/upgrader_CLEvoipp-2.8.0.26-M1_r34359.tar.bz2'
     $cle_server_id    = 'OIPP-CLE1'
     $tomcat_shutdown_password = 'downa56f3111'
 

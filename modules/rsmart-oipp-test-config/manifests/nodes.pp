@@ -110,7 +110,9 @@ node 'oipp-test.academic.rsmart.local' inherits oaenode {
         sp_cert => 'puppet:///modules/localconfig/sp-cert.pem',
         sp_key  => 'puppet:///modules/localconfig/sp-key.pem',
     }
-    class { 'shibboleth::shibd': }
+    class { 'shibboleth::shibd':
+        require => Class['Shibboleth::Sp'],
+    }
     apache::module { 'shib': }
 
     file { "/var/www/vhosts/${localconfig::http_name}:443/conf/shib.conf":
@@ -127,7 +129,7 @@ node 'oipp-test.academic.rsmart.local' inherits oaenode {
         group => root,
         mode  => 0644,
         source => 'puppet:///modules/localconfig/incommon.pem',
-	    notify => Service['httpd'],
+	    notify => [ Service['httpd'], Service['shibd'], ],
     }
 
     ###########################################################################

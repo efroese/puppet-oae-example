@@ -9,7 +9,7 @@ class people::users {
     @user { $localconfig::user:
         ensure => present,
 		uid => $localconfig::uid,
-		uid => $localconfig::gid,
+		gid => $localconfig::gid,
 		home => "/home/${localconfig::user}",
 		managehome => true,
 	}

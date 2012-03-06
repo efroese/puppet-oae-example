@@ -2,31 +2,14 @@
 #
 # Nodes
 #
-# make sure that modules/localconfig -> modules/rsmart-config
-# see modules/rsmart-config/manifests.init.pp for the config.
-
-# Install image
-node stagingnode inherits oaenode {
-
-    realize(Group['karagon'])
-    realize(User['karagon'])
-    realize(Ssh_authorized_key['karagon-laptop-pub'])
-    realize(Ssh_authorized_key['karagon-mbp-pub'])
-
-    realize(Group['ppilli'])
-    realize(User['ppilli'])
-    realize(Ssh_authorized_key['ppilli-home-pub'])
-
-    realize(Group['mflitsch'])
-    realize(User['mflitsch'])
-    realize(Ssh_authorized_key['mflitsch-home-pub'])
-}
+# make sure that modules/localconfig -> modules/rsmart-staging-config
+# see modules/rsmart-staging-config/manifests.init.pp for the config.
 
 ###########################################################################
-#
 # Apache load balancer
-#
-node 'staging-apache1.academic.rsmart.local' inherits stagingnode {
+node 'staging-apache1.academic.rsmart.local' inherits oaenode {
+
+    class { 'localconfig::extra_users': }
 
     class { 'apache':
         httpd_conf_template => 'localconfig/httpd.conf.erb'
@@ -111,11 +94,13 @@ node 'staging-apache1.academic.rsmart.local' inherits stagingnode {
 }
 
 ###########################################################################
-#
 # OAE app nodes
-#
-node oaeappnode inherits stagingnode {
+node oaeappnode inherits oaenode {
 
+    class { 'localconfig::extra_users': }
+
+    ###########################################################################
+    # OAE, Sling
     class { 'oae::app::server':
         jarsource      => $localconfig::jarsource,
         jarfile        => $localconfig::jarfile,
@@ -126,10 +111,9 @@ node oaeappnode inherits stagingnode {
         setenv_template => 'rsmart-common/setenv.sh.erb',
         store_dir       => $localconfig::storedir,
     }
-    
+
     ###########################################################################
     # Storage
-
     class { 'nfs::client': }
 
     file  { $localconfig::nfs_mountpoint: ensure => directory }
@@ -174,10 +158,12 @@ node oaeappnode inherits stagingnode {
         }
     }
 
-    # QoS filter rate-limits the app server so it won't fall over
-    oae::app::server::sling_config {
-        "org.sakaiproject.nakamura.http.qos.QoSFilter":
-        config => { 'qos.default.limit' => 10, }
+    if $localconfig::qos_limit {
+        # QoS filter rate-limits the app server so it won't fall over
+        oae::app::server::sling_config {
+            "org.sakaiproject.nakamura.http.qos.QoSFilter":
+            config => { 'qos.default.limit' => $localconfig::qos_limit, }
+        }
     }
 
     ###########################################################################
@@ -203,6 +189,7 @@ node oaeappnode inherits stagingnode {
 
     ###########################################################################
     # Clustering
+
     oae::app::server::sling_config {
         "org.sakaiproject.nakamura.cluster.ClusterTrackingServiceImpl":
         config => { 'secure-host-url' => "http://${ipaddress}:8081", }
@@ -221,26 +208,16 @@ node oaeappnode inherits stagingnode {
         remote_object_port => $localconfig::ehcache_remote_object_port,
     }
 
-    # Keep an eye on caching in staging
-    oae::app::server::sling_config {
-        'org.apache.sling.commons.log.LogManager.factory.config-caching':
-        locked => false,
-        config => {
-            'org.apache.sling.commons.log.names' => ["org.sakaiproject.nakamura.memory","net.sf.ehcache"],
-            'org.apache.sling.commons.log.level' => "info",
-            'org.apache.sling.commons.log.file'  => "logs/cache.log",
-            'service.factoryPid'                 => "org.apache.sling.commons.log.LogManager.factory.config",
-        }
-    }
-
     ###########################################################################
     # CLE integration
-    oae::app::server::sling_config {
-        "org.sakaiproject.nakamura.basiclti.CLEVirtualToolDataProvider":
-        config => {
-            'sakai.cle.basiclti.secret' => $localconfig::basiclti_secret,
-            'sakai.cle.server.url'      => "https://${localconfig::http_name}",
-            'sakai.cle.basiclti.key'    => $localconfig::basiclti_key,
+    if ($localconfig::basiclti_secret) and ($localconfig::basiclti_key) {
+        oae::app::server::sling_config {
+            "org.sakaiproject.nakamura.basiclti.CLEVirtualToolDataProvider":
+            config => {
+                'sakai.cle.basiclti.secret' => $localconfig::basiclti_secret,
+                'sakai.cle.server.url'      => "https://${localconfig::http_name}",
+                'sakai.cle.basiclti.key'    => $localconfig::basiclti_key,
+            }
         }
     }
 
@@ -253,6 +230,28 @@ node oaeappnode inherits stagingnode {
             'sakai.email.replyAsName'    => $localconfig::reply_as_name,
         }
     }
+
+    ###########################################################################
+    # Logs
+    oae::app::server::sling_config {
+        'org.apache.sling.commons.log.LogManager.factory.config.search-logger-uuid':
+        config => {
+            'service.factoryPid'                 => 'org.apache.sling.commons.log.LogManager.factory.config',
+            'org.apache.sling.commons.log.names' => ['org.sakaiproject.nakamura.search','org.sakaiproject.nakamura.solr'],
+            'org.apache.sling.commons.log.level' => 'info',
+            'org.apache.sling.commons.log.file'  => 'logs/search.log',
+        }
+    }
+
+    oae::app::server::sling_config {
+        'org.apache.sling.commons.log.LogManager.factory.config.cache-logger-uuid':
+        config => {
+            'service.factoryPid'                 => 'org.apache.sling.commons.log.LogManager.factory.config',
+            'org.apache.sling.commons.log.names' => ['org.sakaiproject.nakamura.memory','net.sf.ehcache'],
+            'org.apache.sling.commons.log.level' => 'info',
+            'org.apache.sling.commons.log.file'  => 'logs/cache.log',
+        }
+    }
 }
 
 node /staging-app[1-2].academic.rsmart.local/ inherits stagingnode { }
@@ -261,7 +260,10 @@ node /staging-app[1-2].academic.rsmart.local/ inherits stagingnode { }
 #
 # OAE Solr Nodes
 #
-node solrnode inherits stagingnode {
+node solrnode inherits oaenode {
+
+    class { 'localconfig::extra_users': }
+
     # All of the solr servers get tomcat
     class { 'tomcat6':
         parentdir      => $localconfig::basedir,
@@ -296,7 +298,10 @@ node /staging-solr[2-3].academic.rsmart.local/ inherits solrnode {
 #
 # OAE Content Preview Processor Node
 #
-node 'staging-preview.academic.rsmart.local' inherits stagingnode {
+node 'staging-preview.academic.rsmart.local' inherits oaenode {
+
+    class { 'localconfig::extra_users': }
+
     class { 'oae::preview_processor::init':
         upload_url     => "https://${localconfig::http_name}/",
         admin_password => $localconfig::admin_password,
@@ -309,7 +314,9 @@ node 'staging-preview.academic.rsmart.local' inherits stagingnode {
 #
 # NFS Server
 #
-node 'staging-nfs.academic.rsmart.local' inherits stagingnode {
+node 'staging-nfs.academic.rsmart.local' inherits oaenode {
+
+    class { 'localconfig::extra_users': }
 
     class { 'nfs::server': }
 
@@ -339,7 +346,9 @@ node 'staging-nfs.academic.rsmart.local' inherits stagingnode {
 #
 # Postgres Database Server
 #
-node 'staging-dbserv1.academic.rsmart.local' inherits stagingnode {
+node 'staging-dbserv1.academic.rsmart.local' inherits oaenode {
+
+    class { 'localconfig::extra_users': }
 
     class { 'postgres::repos': stage => init }
 

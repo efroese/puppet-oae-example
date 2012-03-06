@@ -83,6 +83,7 @@ class localconfig {
     # oae server protection service
     $serverprotectsec = 'shhh-its@secret'
     $sps_disabled = true
+    $qos_limit = '10'
 
     # ehcache
     $ehcache_tcp_port = '40001'
@@ -98,4 +99,19 @@ class localconfig {
 
     $tomcat_user    = 'admin'
     $tomcat_password = 't0msm@rt!'
+
+    class localconfig::extra_users {
+        realize(Group['karagon'])
+        realize(User['karagon'])
+        realize(Ssh_authorized_key['karagon-laptop-pub'])
+        realize(Ssh_authorized_key['karagon-mbp-pub'])
+
+        realize(Group['ppilli'])
+        realize(User['ppilli'])
+        realize(Ssh_authorized_key['ppilli-home-pub'])
+
+        realize(Group['mflitsch'])
+        realize(User['mflitsch'])
+        realize(Ssh_authorized_key['mflitsch-home-pub'])
+    }
 }

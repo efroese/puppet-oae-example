@@ -5,7 +5,7 @@ import 'nodetypes'
 # Dynamically import the nodes list based on the active configuration.
 # Activate the correct configuration by making a symlink in the modules directory to the right config module.
 # 
-import 'modules/localconfig/manifests/nodes.pp'
+import 'localconfig/manifests/nodes.pp'
 
 # Set the default owner and group to root
 File { owner => root, group => root }

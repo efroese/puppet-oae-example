@@ -2,8 +2,12 @@
 #
 # apply.sh - Erik Froese <erik@hallwaytech.com>
 #
-# Run puppet with the correct module path.
+# Run puppet with the correct module path. Pass the --environment envname params.
 #
 # For more info pass the --debug or --verbose flags.
 #
-puppet apply --modulepath modules site.pp $@
+
+# Look up modules in:
+# 1. environments/$environment/modules/
+# 2. modules/
+puppet apply --modulepath environments/\$environment/modules:modules site.pp $@

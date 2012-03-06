@@ -14,6 +14,9 @@ class people {
     class { 'people::groups': }
     class { 'people::users': }
 
+    realize($localconfig::user)
+    realize($localconfig::group)
+
     realize(Group['rsmartian'])
     realize(User['rsmartian'])
 

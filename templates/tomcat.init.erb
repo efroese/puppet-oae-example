@@ -29,7 +29,7 @@ start() {
 stop() {
     echo "Stopping ${PROG}: "
 
-    su --login --command "{$CATALINA_HOME}/bin/shutdown.sh" ${TOMCAT_USER}
+    su --login --command "${CATALINA_HOME}/bin/shutdown.sh" ${TOMCAT_USER}
 
     echo "Waiting 60 seconds before using kill to stop ${PROG}."
     sleep 60

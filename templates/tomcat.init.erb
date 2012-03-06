@@ -9,43 +9,78 @@
 # Source function library.
 . /etc/init.d/functions
 
-RUN_AS_USER="<%= tomcat_user %>"
-CATALINA_HOME=<%= basedir %>
+TOMCAT_USER="<%= tomcat_user %>"
+CATALINA_HOME="<%= basedir %>"
+
+PROG="tomcat"
+
+help() {
+    echo "$0 INVALID SYNTAX ::  Use:"
+	echo "$0 {stop | start | restart | status}"
+}
 
 start() {
-        echo "Starting Tomcat: "
-        if [ "x$USER" != "x$RUN_AS_USER" ]; then
-          su - $RUN_AS_USER -c "$CATALINA_HOME/bin/startup.sh"
-        else
-          $CATALINA_HOME/bin/startup.sh
-        fi
-        echo "done."
+	echo -n "Starting ${PROG}: "
+	su --login --command "${CATALINA_HOME}/bin/startup.sh" ${TOMCAT_USER}
+	ps -u ${TOMCAT_USER} --no-headers -o pid,cmd | grep "${CATALINA_HOME}" | awk '{ print $1 }' > ${INIT_PID};
+	echo "done.";
 }
-stop() {
-        echo "Shutting down Tomcat: "
-        if [ "x$USER" != "x$RUN_AS_USER" ]; then
-          su - $RUN_AS_USER -c "$CATALINA_HOME/bin/shutdown.sh"
-        else
-          $CATALINA_HOME/bin/shutdown.sh
+
+function killcle() {
+    MAX_TRIES=3
+    TRIES=1
+    PID=${1}
+
+    echo "killing ${PROG} with pid=${PID}"
+
+    while [[ $TRIES < $MAX_TRIES ]]; do
+        if [[ -d /proc/${1} ]]; then
+            su --login --command "kill ${PID}" ${TOMCAT_USER}
+            sleep 5
         fi
-        echo "done."
+        TRIES=$[TRIES+1]
+    done
+
+    if [[ -d /proc/${PID} ]]; then
+        kill -9 ${PID}
+    fi
+}
+
+stop() {
+    echo "Stopping ${PROG}: "
+
+    su --login --command "{$CATALINA_HOME}/bin/shutdown.sh" ${TOMCAT_USER}
+
+    # Use the pid file if it exists.
+    if [[ -f ${INIT_PID} ]]; then
+	    for PID in `cat ${INIT_PID}`; do
+            killcle ${PID}
+	    done
+        rm -f ${INIT_PID}
+    else
+        # The CLE procs for the cle user
+        PIDS=`ps -u ${TOMCAT_USER} --no-headers -o pid,cmd | grep "${CATALINA_HOME}" | awk '{ print $1 }'`
+        for PID in ${PIDS}; do
+            if [[ $? -eq 0 ]]; then
+                killcle ${PID}
+            fi
+        done
+    fi
+    echo 'done'
 }
 
 case "$1" in
-  start)
+    start)
         start
         ;;
-  stop)
+    stop)
         stop
         ;;
-  restart)
+    restart)
         stop
-        sleep 10
-        #echo "Hard killing any remaining threads.."
-        #kill -9 `cat $CATALINA_HOME/work/catalina.pid`
         start
         ;;
-  *)
+    *)
         echo "Usage: $0 {start|stop|restart}"
 esac
 

@@ -10,6 +10,10 @@ class kaleidoscope::analytics {
         ensure => installed,
         provider => gem
     }
+    package { 'net-sftp':
+        ensure => installed,
+        provider => gem
+    }
 
     ###########################################################################
     # Drop the ruby script

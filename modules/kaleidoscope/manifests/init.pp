@@ -6,7 +6,8 @@ class kaleidoscope::analytics {
 
     Class['oae::preview_processor::init'] -> Class ['Kaleidoscope::Analytics']
 
-    gem { ['net-scp', 'net-sftp', 'minitar', ]:
+    package { ['net-scp', 'net-sftp', 'minitar', ]:
+        provider => gem,
         ensure => installed,
     }
 

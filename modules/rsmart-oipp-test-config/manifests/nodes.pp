@@ -282,18 +282,24 @@ node 'oipp-test.academic.rsmart.local' inherits oaenode {
 	    setenv_template      => 'localconfig/cle-setenv.sh.erb',
     }
 
+    archive::download { 'rsmart-cle-prod-overlay.tbz':
+        ensure        => present,
+        url           => $localconfig::cle_tarball_url,
+        src_target    => "${localconfig::homedir}/sakaicle/",
+        require       => Class['Tomcat6'],
+    }
+
     # Base rSmart Tomcat customizations
     tomcat6::overlay { 'rsmart-cle-prod-overlay':
         tomcat_home  => "${localconfig::homedir}/sakaicle/tomcat",
         tarball_path => "${localconfig::homedir}/sakaicle/rsmart-cle-prod-overlay.tbz",
         creates      => "${localconfig::homedir}/sakaicle/tomcat/webapps/ROOT/rsmart.jsp",
         user         => $oae::params::user,
-        require      => Class['Tomcat6']
+        require      => [ Class['Tomcat6'], Archive::Download['rsmart-cle-prod-overlay.tbz'], ],
     }
 
     # CLE tomcat overlay and configuration
     class { 'cle':
-        cle_tarball_url => $localconfig::cle_tarball_url,
         user            => $oae::params::user,
         basedir         => "${localconfig::homedir}/sakaicle",
         tomcat_home     => "${localconfig::homedir}/sakaicle/tomcat",

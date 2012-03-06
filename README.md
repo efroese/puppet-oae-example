@@ -2,29 +2,38 @@
 
 Puppet is a system configuration tool that enables dev/ops to create reusable system configuration scripts. This module is meant as a full-blown example of a puppet configuration for one or more machines.
 
-There are two examples available. 
+There are three examples available. 
 ### Standlone
-A standalone OAE server that also runs a MySQL database. This is similar to the OAE "bug bash" servers. See nodes-standalone.pp.
+A full OAE installation on one machine. Apache, OAE, Postgres, and the preview processor.
+See environments/standalone-demo/modules/localconfig
 
 #### Usage
     git clone git://github.com/efroese/puppet-oae-example.git
     cd puppet-oae-example
-    git submodule update --init
-    # Edit site.pp to make sure nodes-standalone is imported.
-    puppet apply --modulepath modules site.pp --verbose
+    ./bin/pull.sh
+    ./bin/apply.sh --environment standalone-demo --verbose
 
 ### Cluster
-A cluster of OAE machines. See nodes-cluster.pp for the cluster description.
+A cluster of OAE machines.
+See environments/cluster-demo/modules/localconfig
 
 #### Usage
     git clone git://github.com/efroese/puppet-oae-example.git
     cd puppet-oae-example
-    git submodule update --init
-    cd modules
-    ln -s cluster-config localconfig
-    cd ..
-    # Edit site.pp to make sure nodes-cluster is imported.
-    puppet apply --modulepath modules site.pp --verbose
+    cd puppet-oae-example
+    ./bin/pull.sh
+    ./bin/apply.sh --environment cluster-demo --verbose
+
+#### BugBash
+A standalone OAE server that also runs a MySQL database. This is similar to the OAE "bug bash" servers.
+See environments/bugbash/modules/localconfig
+
+#### Usage
+    git clone git://github.com/efroese/puppet-oae-example.git
+    cd puppet-oae-example
+    cd puppet-oae-example
+    ./bin/pull.sh
+    ./bin/apply.sh --environment bugbash --verbose
 
 ### Required Puppet Modules 
 The OAE module itself is available at https://github.com/efroese/puppet-oae.git.

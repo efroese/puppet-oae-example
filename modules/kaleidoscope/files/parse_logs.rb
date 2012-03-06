@@ -14,6 +14,9 @@ require 'optparse'
 require 'json'
 require 'csv'
 require 'tempfile'
+require 'zlib'
+require 'archive/tar/minitar'
+include Archive::Tar
 
 # A Net::HTTP request wrapper
 # Modified version of existing code at
@@ -199,12 +202,30 @@ def write_users_roles
 end
 
 def upload_to_server
-  path = "#{@options[:uploadpath]}/#{(Time.now - 86400).strftime("%Y-%m-%d")}"
+  # Time.now - 86400 is yesterday
+  filename = "#{(Time.now - 86400).strftime("%Y-%m-%d")}"
+
+  # Crate the tar file
+  File.open("#{filename}.tar", 'wb') do |tar|
+    owd = Dir::pwd
+    # Minitar uses Find.find internally, so we have to be in the right directory
+    Dir.chdir @directory_name
+    Minitar.pack('.', tar)
+    Dir.chdir owd
+  end
+
+  # gzip the tar file
+  Zlib::GzipWriter.open("#{@directory_name}/#{filename}.tar.gz") do |gz|
+    gz.write IO.read("#{filename}.tar")
+  end
+
+  # remove the original tar file
+  FileUtils.rm_rf "#{filename}.tar"
+
+  # Upload the file
+  path = "#{@options[:uploadpath]}/#{filename}.tar.gz"
   Net::SFTP.start(@options[:uploadserver], @options[:user]) do |sftp|
-    sftp.mkdir!("#{path}")
-    sftp.upload!(@directory_name + "/activity.log", path + "/activity.log")
-    sftp.upload!(@directory_name + "/loglines.log", path + "/loglines.log")
-    sftp.upload!(@directory_name + "/roles.csv", path + "/roles.csv")
+    sftp.upload!("#{@directory_name}/#{filename}.tar.gz", path)
   end
 end
 
@@ -213,7 +234,7 @@ def parse_options
   options = {}
 
   optparse = OptionParser.new do |opts|
-    opts.banner = "Usage: ./parse_logs.rb -s server -p password -u remoteuser -r remoteserver1,remoteserver2 [-x uploadserver] [-m uploadpath] [-a,--append]"
+    opts.banner = "Usage: ./parse_logs.rb -s server -p password -u remoteuser -t /path/to/remote/file -r remoteserver1,remoteserver2 [-x uploadserver] [-m uploadpath] [-a,--append]"
     opts.on('-s', '--server SERVER', 'The server to connect to (ie. http://dev.academic.rsmart.com)') do |s|
       options[:server] = s
     end
@@ -226,8 +247,8 @@ def parse_options
     opts.on('-u', '--user USER', 'The user for the remote servers') do |u|
       options[:user] = u
     end
-    opts.on('-t', '--path PATH', 'The path to the file on the server') do |p|
-      options[:path] = p
+    opts.on('-t', '--path PATH', 'The path to the file on the server') do |t|
+      options[:path] = t
     end
     opts.on('-x', '--upload SERVER', 'The server to upload the results to') do |x|
       options[:uploadserver] = x

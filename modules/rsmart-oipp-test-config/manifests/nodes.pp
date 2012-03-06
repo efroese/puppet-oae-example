@@ -290,7 +290,7 @@ node 'oipp-test.academic.rsmart.local' inherits oaenode {
         require       => Class['Tomcat6'],
     }
 
-    tomcat6::overlay { 'rsmart-cle-prod-overlay':
+    tomcat6::overlay { 'rsmart-cle-base-overlay':
         tomcat_home  => "${localconfig::homedir}/sakaicle/tomcat",
         tarball_path => "${localconfig::homedir}/sakaicle/rsmart-cle-base-overlay.tbz",
         creates      => "${localconfig::homedir}/sakaicle/tomcat/webapps/ROOT/rsmart.jsp",
@@ -303,6 +303,8 @@ node 'oipp-test.academic.rsmart.local' inherits oaenode {
         ensure        => present,
         url           => $localconfig::cle_tarball_url,
         src_target    => "${localconfig::homedir}/sakaicle/",
+        checksum      => false,
+        timeout       => 0,
         require       => Class['Tomcat6'],
     }
 

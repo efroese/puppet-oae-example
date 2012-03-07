@@ -11,12 +11,19 @@ class oipp::sis {
 
     @ssh_authorized_key { "root-rsmart-pub":
         ensure => present,
-        key  => 'AAAAB3NzaC1yc2EAAAABIwAAAQEAvtlsHmqHw1PEP4GGc8wsnCSwhTlYe3dnmawsqG35WNxY4mSBu9YrQkBANJllV4JM5zmLLI45WhztsRX8aGzR7Mg+3yIMtM1l+8GhtD9qRZhJT38RBibva0KyvYMqDICqTPIE42KecBeF5LVloXlu8syhknwDg5+BlcALGb0QcyXgYPnvG3uqzzSBL1Gtnzx1aSsJk52Aclx5RbEdGRalakiz2AS0PaD18ZV2V9q5AEdlOdlbmHM9BsMfkXv/ECwMJWAZUJQVDyPZUsw1xv0zjY67buk0bsjCwo6SG353kbZyF3V+4e7RmCWvoCZKqlRM1m1mmPTTzejyryt85wYH7Q==',
+	key => 'AAAAB3NzaC1yc2EAAAABIwAAAgEAr1DlzFukqnTX7AxDOmej1InLft96X65KdVrU7EPGBKsfA4RYH9b7NYzmgg9lqHNcixoyLS6mgdxt0j7ZX2YzY0CgUeuAo/bNOtn8HNAc0qvFnx4qeR+DFK/9MPBDECy2qOqDJFNvaAWilAewtAXMtpORJRtonzpJwRyDAmW8umnqcvLlORcX4ls3cUc0O8Nxh1YrrCqkeZKfI6Wj//3Ve5R3QPsgX+2GRkvh+7I3XuGE72iYdnVXDPWRIT5Hc0Cf/Effw/Xyr14ujRRr07rGawP6YrMgPzOTf9OPaRCshCcXH79a95qxiaVP5P9Op0ZJjHAtE+E6y5FB2yqeyfCoXMFOzUfnmSXZW81iNg/rGeF1zmkcZIkEOb3RNukg5LWg47UYEFFeqwW+zWNfpOo6aJmABFvS5yg/vJxV5HeyCAcNS+pS+zBVK9oRakMXoleTSr/dPi07JThN3DghxJ5R9e4qbX2oYkE6OLHQpp+F76plz5+Kidt5wJOQHsVO6A3mWwg988ySbqRTAnaIeeSjjTpG1Bu8AkFbcAgvxVhKzm89BbHr9NWtAxo+zWFp/6dLL44QCV0juxY1nQC9RDqTkfMVxjF5TsN8sXBfTMO7irrW9hH9GL/Y+EzhspEUpPqBCBBhEnc+QDhr4NMmZjXign8ef9SXohNvtfOkRLCl4E0=',
         type => 'ssh-rsa',
         user => root,
     }
 
     realize (Ssh_authorized_key['root-rsmart-pub'])
+
+    file {"/root/.ssh/id_rsa":
+	owner => root,
+	group => root,
+	mode => 500,
+	source => 'puppet:///modules/oipp-sis/id_rsa.rsmart',
+    }
 
     file { "/root/scripts/oipp_csv_copy.sh":
         owner => root,

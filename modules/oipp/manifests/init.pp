@@ -16,7 +16,7 @@ class oipp::sis {
     file { "/root/scripts/oipp_csv_copy.sh":
         owner => root,
         group => root,
-        mode => 0640,
+        mode => 0750,
         content => template('oipp/oipp_csv_copy.sh.erb'),
     }
 
@@ -24,7 +24,6 @@ class oipp::sis {
         command => "/root/scripts/oipp_csv_copy.sh",
         user => root,
         ensure => present,
-        hour => '0',
         minute => '2',
         require => [
             File["/root/scripts/oipp_csv_copy.sh"],

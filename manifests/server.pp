@@ -14,7 +14,7 @@ Parameters:
 */
 class mysql::server (
     $mysql_user = 'root',
-    $mysql_password = undef,
+    $mysql_password = undef
     ) {
 
   include mysql::params

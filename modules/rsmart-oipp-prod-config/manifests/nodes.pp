@@ -165,7 +165,7 @@ node 'oipp-prod-apache1.academic.rsmart.local' inherits oaenode {
 	owner => root,
 	group => root,
 	mode => 0640,
-	source => 'localconfig/oipp_csv_copy.sh.erb'
+	content => template('localconfig/oipp_csv_copy.sh.erb'),
     }
 
     cron { 'transport_sis':

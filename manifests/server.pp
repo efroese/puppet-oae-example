@@ -3,15 +3,19 @@
 ==Class: mysql::server
 
 Parameters:
- $mysql_data_dir:
-   set the data directory path, which is used to store all the databases
+ $mysql_user:: The mysql user
+ $mysql_password:: The mysql root pw
+ $mysql_exists
 
    If set, copies the content of the default mysql data location. This is
    necessary on Debian systems because the package installation script
    creates a special user used by the init scripts.
 
 */
-class mysql::server {
+class mysql::server (
+    $mysql_user = 'root',
+    $mysql_password = undef,
+    ) {
 
   include mysql::params
 

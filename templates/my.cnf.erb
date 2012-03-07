@@ -1,12 +1,12 @@
 # file managed by puppet
 [mysqldump]
-user = <%= mysql_user %>
-password = <%= mysql_password %>
+user = <%= scope.lookupvar('mysql::mysql_user') %>
+password = <%= scope.lookupvar('mysql::mysql_password') %>
 
 [mysql]
-user = <%= mysql_user %>
-password = <%= mysql_password %>
+user = <%= scope.lookupvar('mysql::mysql_user') %>
+password = <%= scope.lookupvar('mysql::mysql_password') %>
 
 [mysqladmin]
-user = <%= mysql_user %>
-password = <%= mysql_password %>
+user = <%= scope.lookupvar('mysql::mysql_user') %>
+password = <%= scope.lookupvar('mysql::mysql_password') %>

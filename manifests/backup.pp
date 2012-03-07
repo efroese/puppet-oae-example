@@ -12,7 +12,7 @@ Attributes:
 $subversion_backupdir = "/var/backups/subversion"
 
 */
-class mysql::backup {
+class mysql::backup ($mysqldump_retention = 'week'){
 
   include mysql::common
   include mysql::params

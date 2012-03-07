@@ -26,3 +26,8 @@ class oipp::sis {
     }
 
 }
+
+class oipp::test {
+
+    class { 'people::oipp-sis::destination': }
+}

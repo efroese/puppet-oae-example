@@ -368,5 +368,5 @@ node 'oipp-test.academic.rsmart.local' inherits oaenode {
         notify => Service["mysql"],
     }
 
-    class { 'people::oipp-sis::destination': }
+    class { 'oipp::test': }
 }

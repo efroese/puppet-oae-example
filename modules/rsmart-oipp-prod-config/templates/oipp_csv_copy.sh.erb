@@ -1,0 +1,32 @@
+MAILTO=""
+
+# set correct permissions
+chown -fR "rsmart:rsmart" /home/ucb_sis/*csv
+chown -fR "rsmart:rsmart" /home/ucd_sis/*csv
+chown -fR "rsmart:rsmart" /home/ucm_sis/*csv
+chown -fR "rsmart:rsmart" /home/ucb_sis/test/*
+chown -fR "rsmart:rsmart" /home/ucd_sis/test/*
+chown -fR "rsmart:rsmart" /home/ucm_sis/test/*
+
+# temporary: copy UCD & UCM prod files to test also (will get overwritten if anything is uploaded to test)
+scp -p /home/ucd_sis/User.UCD.csv	rsmart@oipp-cle1:/files-cle/files/sis/test
+#scp -p /home/ucd_sis/*csv		rsmart@oipp-test:/home/rsmart/cle/files/sis
+scp -p /home/ucm_sis/User.UCMerced.csv	rsmart@oipp-cle1:/files-cle/files/sis/test
+#scp -p /home/ucm_sis/*csv		rsmart@oipp-test:/home/rsmart/cle/files/sis
+# end temporary
+
+# copy test user file to prod server for OAE user creation
+scp -p /home/ucb_sis/test/User.UCB.csv      rsmart@oipp-cle1:/files-cle/files/sis/test
+scp -p /home/ucd_sis/test/User.UCD.csv      rsmart@oipp-cle1:/files-cle/files/sis/test
+scp -p /home/ucm_sis/test/User.UCMerced.csv rsmart@oipp-cle1:/files-cle/files/sis/test
+
+# copy all test csv files to test server
+#scp -p /home/ucb_sis/test/* rsmart@oipp-test:/home/rsmart/cle/files/sis && rm -f /home/ucb_sis/test/*
+#scp -p /home/ucd_sis/test/* rsmart@oipp-test:/home/rsmart/cle/files/sis && rm -f /home/ucd_sis/test/*
+#scp -p /home/ucm_sis/test/* rsmart@oipp-test:/home/rsmart/cle/files/sis && rm -f /home/ucm_sis/test/*
+
+# copy all prod csv files to prod server
+scp -p /home/ucb_sis/*csv rsmart@oipp-cle1:/files-cle/files/sis && rm -f /home/ucb_sis/*csv
+scp -p /home/ucd_sis/*csv rsmart@oipp-cle1:/files-cle/files/sis && rm -f /home/ucd_sis/*csv
+scp -p /home/ucm_sis/*csv rsmart@oipp-cle1:/files-cle/files/sis && rm -f /home/ucm_sis/*csv
+

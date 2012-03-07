@@ -160,6 +160,25 @@ node 'oipp-prod-apache1.academic.rsmart.local' inherits oaenode {
 
     class { 'people::oipp-sis':
     }
+
+    file { "/root/scripts/oipp_csv_copy.sh":
+	owner => root,
+	group => root,
+	mode => 0640,
+	source => 'localconfig/oipp_csv_copy.sh.erb'
+    }
+
+    cron { 'transport_sis':
+        command => "/root/scripts/oipp_csv_copy.sh",
+        user => root,
+        ensure => present,
+        hour => '0',
+        minute => '2',
+        require => [
+            File["/root/scripts/oipp_csv_copy.sh"],
+        ],
+    }
+
 }
 
 ###########################################################################

@@ -100,7 +100,7 @@ class localconfig {
     $tomcat_user    = 'admin'
     $tomcat_password = 't0msm@rt!'
 
-    class localconfig::extra_users {
+    class extra_users {
         realize(Group['karagon'])
         realize(User['karagon'])
         realize(Ssh_authorized_key['karagon-laptop-pub'])

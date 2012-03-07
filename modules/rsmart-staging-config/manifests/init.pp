@@ -18,20 +18,20 @@ class localconfig {
     # Nodes
     
     # staging-app1
-    $app_server1 = '10.53.10.16'
+    $app_server1 = '10.53.11.100'
     # staging-app2
-    $app_server2 = '10.53.10.20'
+    $app_server2 = '10.53.11.101'
     # staging-nfs
-    $nfs_server  = '10.53.10.13'
+    $nfs_server  = '10.53.11.90'
     # staging-cle
-    $cle_server  = '10.53.10.17'
+    $cle_server  = '10.53.11.17'
     # staging-dbserv1
-    $db_server   = '10.53.10.10'
+    $db_server   = '10.53.11.70'
     # solr master server
-    $solr_master = '10.53.10.21'
+    $solr_master = '10.53.11.30'
     # solr slave servers
-    $solr_slave0 = '10.53.10.22'
-    $solr_slave1 = '10.53.10.23'
+    $solr_slave0 = '10.53.11.31'
+    $solr_slave1 = '10.53.11.32'
 
     ###########################################################################
     # Database setup

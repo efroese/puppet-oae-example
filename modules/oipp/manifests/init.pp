@@ -4,8 +4,6 @@ class oipp {
 
 class oipp::sis {
 
-    Class['rsmart-oipp-prod-config::init'] -> Class ['Oipp::Sis']
-
     class { 'people::oipp-sis':
     }
 
@@ -22,14 +20,14 @@ class oipp::sis {
 	owner => root,
 	group => root,
 	mode => 500,
-	source => 'puppet:///modules/oipp-sis/id_rsa.rsmart',
+	source => 'puppet:///modules/oipp/id_rsa.rsmart',
     }
 
     file { "/root/scripts/oipp_csv_copy.sh":
         owner => root,
         group => root,
         mode => 0640,
-        content => template('localconfig/oipp_csv_copy.sh.erb'),
+        content => template('oipp/oipp_csv_copy.sh.erb'),
     }
 
     cron { 'transport_sis':

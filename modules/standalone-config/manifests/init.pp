@@ -36,7 +36,7 @@ class localconfig {
 
     ###########################################################################
     # Git (Preview processor)
-    $nakamura_git = "http://github.com/sakaiproject/nakamura.git"
+    $nakamura_git = "https://github.com/sakaiproject/nakamura"
     $nakamura_tag = undef
 
     ###########################################################################

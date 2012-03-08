@@ -49,7 +49,18 @@ SSLCryptoDevice builtin
         allow from <%= admin_host %>
         <% end -%>
     </Location>
-    
+
+    # restrict access to balancer-manager
+    <Location /balancer-manager>
+        SetHandler balancer-manager
+
+        Order deny,allow
+        deny from all
+        <% scope.lookupvar('localconfig::oae_admin_hosts').each do |admin_host| -%>
+        allow from <%= admin_host %>
+        <% end -%>
+    </Location>
+
     # /dav goes to the utility server
     # ignore |sakai-axis.* for now to work around LTI webservices.allow=.+ issue
     <LocationMatch "^/(dav.*)">

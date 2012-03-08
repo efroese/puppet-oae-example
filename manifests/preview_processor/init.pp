@@ -41,6 +41,7 @@ class oae::preview_processor::init (
         command => $nakamura_tag? {
              undef   => "curl -o ${zipball} ${nakamura_git}/zipball/master",
              default => "curl -o ${zipball} ${nakamura_git}/zipball/${nakamura_tag}",
+        },
         cwd     => $oae::params::basedir,
         user    => $oae::params::user,
         creates => "${oae::params::basedir}/${zipball}",

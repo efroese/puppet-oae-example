@@ -29,6 +29,7 @@ class oae::preview_processor::gems {
     }
 
     $nakamura_gem_version = '0.6'
+    $bundler_gem_version  = '1.0.18'
     $curb_gem_version     = '0.7.15'
     $docsplit_gem_version = '0.6.3'
     $json_gem_version     = '1.6.3'
@@ -40,7 +41,8 @@ class oae::preview_processor::gems {
 
     if $operatingsystem == 'CentOS' and $lsbmajdistrelease == '5' {
         opt_gem { 'curb':     version => $curb_gem_version }
-        opt_gem { 'docsplit': version => $docsplit_gem_version}
+        opt_gem { 'bundler':  version => $bundler_gem_version }
+        opt_gem { 'docsplit': version => $docsplit_gem_version }
         opt_gem { 'json':     version => $json_gem_version }
         opt_gem { 'rmagick':  version => $rmagick_gem_version }
         opt_gem { 'getopt':   version => $getopt_gem_version }
@@ -51,6 +53,7 @@ class oae::preview_processor::gems {
     } 
     else {
         gem { 'curb':     version => $curb_gem_version }
+        gem { 'bundler':  version => $bundler_gem_version }
         gem { 'docsplit': version => $docsplit_gem_version }
         gem { 'json':     version => $json_gem_version }
         gem { 'rmagick':  version => $rmagick_gem_version }

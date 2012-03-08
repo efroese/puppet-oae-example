@@ -8,9 +8,8 @@
 #
 # $upload_protocol::   The protocol that the preview pocessor will use to upload images. (https or http)
 #
-# $nakamura_git::   The url to your git repository (optional)
+# $nakamura_zip::   The url to a zip of nakamura.
 #
-# $nakamura_tag::   The tag or branch tod download (optional)
 #
 class oae::preview_processor::init (
         $admin_password='admin',

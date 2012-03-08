@@ -44,7 +44,7 @@ class localconfig {
 
     ###########################################################################
     # Git (Preview processor)
-    $nakamura_zip = 'https://nodeload.github.com/rSmart/nakamura/zipball/develop'
+    $nakamura_zip = 'https://nodeload.github.com/rSmart/nakamura/zipball/base-1.1.2-rsmart'
 
     ###########################################################################
     # Apache load balancer

@@ -40,7 +40,7 @@ class localconfig {
 
     ###########################################################################
     # Content body storage
-    $storedir    = "/files-academic"
+    $storedir    = "/files-academic/store"
 
     ###########################################################################
     # Git (Preview processor)

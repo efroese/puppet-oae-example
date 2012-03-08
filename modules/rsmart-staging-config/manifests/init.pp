@@ -51,8 +51,8 @@ class localconfig {
 
     ###########################################################################
     # Git (Preview processor)
-    $nakamura_git = "http://github.com/rSmart/nakamura.git"
-    $nakamura_tag = "1.1"
+    $nakamura_git = "http://github.com/rSmart/nakamura"
+    $nakamura_tag = "develop"
 
     ###########################################################################
     # Apache load balancer

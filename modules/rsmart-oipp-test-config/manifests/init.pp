@@ -44,9 +44,9 @@ class localconfig {
 
     ###########################################################################
     # Git (Preview processor)
-    $nakamura_git = "http://github.com/rSmart/nakamura.git"
+    $nakamura_git = "http://github.com/rSmart/nakamura"
     # TODO - Set the tag once we have an oipp 1.1.1
-    $nakamura_tag = undef
+    $nakamura_tag = 'develop'
 
     ###########################################################################
     # Apache load balancer

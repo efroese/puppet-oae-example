@@ -15,8 +15,7 @@
 class oae::preview_processor::init (
         $admin_password='admin',
         $upload_url,
-        $nakamura_git='http://github.com/sakaiproject/nakamura',
-        $nakamura_tag=undef) {
+        $nakamura_zip='http://nodeload.github.com/sakaiproject/nakamura/zipball/master') {
 
     Class['oae::params'] -> Class['oae::preview_processor::init']
 
@@ -32,25 +31,17 @@ class oae::preview_processor::init (
         }
     }
 
-    $zipball = $nakamura_tag ? {
-        undef   => "nakamura.zip",
-        default => "nakamura-${nakamura_tag}.zip",
-    }
-
     exec { 'download nakamura':
-        command => $nakamura_tag? {
-             undef   => "curl -o ${zipball} ${nakamura_git}/zipball/master",
-             default => "curl -o ${zipball} ${nakamura_git}/zipball/${nakamura_tag}",
-        },
+        command => "curl -o nakamura.zip ${nakamura_zip}",
         cwd     => $oae::params::basedir,
         user    => $oae::params::user,
-        creates => "${oae::params::basedir}/${zipball}",
+        creates => "${oae::params::basedir}/nakamura.zip",
         notify  => Exec['unpack nakamura'],
         timeout => 0,
     }
 
     exec { 'unpack nakamura':
-        command => "unzip ${zipball}",
+        command => 'unzip nakamura.zip',
         cwd     => $oae::params::basedir,
         user    => $oae::params::user,
         refreshonly => true,

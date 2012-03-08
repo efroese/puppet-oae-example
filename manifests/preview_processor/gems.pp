@@ -31,11 +31,11 @@ class oae::preview_processor::gems {
     $nakamura_gem_version = '0.6'
     $bundler_gem_version  = '1.0.18'
     $curb_gem_version     = '0.7.15'
-    $docsplit_gem_version = '0.6.3'
+    $docsplit_gem_version = '0.6.0'
     $json_gem_version     = '1.6.3'
     $rmagick_gem_version  = '2.13.1'
     $getopt_gem_version   = '1.4.1'
-    $daemons_gem_version  = '1.1.5'
+    $daemons_gem_version  = '1.1.4'
     $rbtagger_version     = '0.4.7'
     $termextract_gem_version  = '0.5.2'
 

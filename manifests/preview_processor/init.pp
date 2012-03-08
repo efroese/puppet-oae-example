@@ -49,7 +49,7 @@ class oae::preview_processor::init (
     }
 
     exec { 'mv nakamura':
-        command => "mv `unzip -l ${zipball} | head -5 | tail -1 | awk '{ print \$4 }'` nakamura",
+        command => "mv `unzip -l nakamura.zip | head -5 | tail -1 | awk '{ print \$4 }'` nakamura",
         cwd     => $oae::params::basedir,
         user    => $oae::params::user,
         creates => "${oae::params::basedir}/nakamura",

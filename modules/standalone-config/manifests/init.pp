@@ -35,11 +35,6 @@ class localconfig {
     $storedir    = "${basedir}/store"
 
     ###########################################################################
-    # Git (Preview processor)
-    $nakamura_git = "https://github.com/sakaiproject/nakamura"
-    $nakamura_tag = undef
-
-    ###########################################################################
     # Apache load balancer
     $http_name                   = 'oae-standalone.localdomain'
     $http_name_untrusted         = "content-${http_name}"

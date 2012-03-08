@@ -256,7 +256,7 @@ node oaeappnode inherits oaenode {
     }
 }
 
-node /staging-app[1-2].academic.rsmart.local/ inherits stagingnode { }
+node /staging-app[1-2].academic.rsmart.local/ inherits oaeappnode { }
 
 ###########################################################################
 #

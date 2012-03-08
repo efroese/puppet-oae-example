@@ -10,12 +10,12 @@
 #
 # $nakamura_git::   The url to your git repository (optional)
 #
-# $nakamura_tag::   The tag to check out (optional)
+# $nakamura_tag::   The tag or branch tod download (optional)
 #
 class oae::preview_processor::init (
         $admin_password='admin',
         $upload_url,
-        $nakamura_git='http://github.com/sakaiproject/nakamura.git',
+        $nakamura_git='http://github.com/sakaiproject/nakamura',
         $nakamura_tag=undef) {
 
     Class['oae::params'] -> Class['oae::preview_processor::init']
@@ -32,36 +32,38 @@ class oae::preview_processor::init (
         }
     }
 
-    # Checkout a specific tag if specified
-    if $nakamura_tag != undef {
-        # clone a copy of nakamura to /usr/local/sakaioae/nakamura.
-        # technically we only need the preview_processor
-        exec { "clone nakamura":
-            command => "git clone ${nakamura_git} ${oae::params::basedir}/nakamura",
-            user    => $oae::params::user,
-            creates => "${oae::params::basedir}/nakamura",
-            require => Package['git'],
-            notify  => Exec['checkout nakamura tag'],
-            timeout => 0,
-        }
-        
-        exec { "checkout nakamura tag":
-            command => "git checkout ${nakamura_tag}",
-            user    => $oae::params::user,
-            cwd     => "${oae::params::basedir}/nakamura",
-            require => [ Package['git'], Exec['clone nakamura'], ],
-            refreshonly => true, # only do this when notified, not on every run
-        }
+    $zipball = $nakamura_tag ? {
+        undef   => "nakamura.zip",
+        default => "nakamura-${nakamura_tag}.zip",
     }
-    else {
-        # clone a copy of nakamura to /usr/local/sakaioae/nakamura.
-        # technically we only need the preview_processor
-        exec { "clone nakamura":
-            command => "git clone ${nakamura_git} ${oae::params::basedir}/nakamura",
-            user    => $oae::params::user,
-            creates => "${oae::params::basedir}/nakamura",
-            require => Package['git'],
-        }
+
+    exec { 'download nakamura':
+        command => $nakamura_tag? {
+             undef   => "curl -o ${zipball} ${nakamura_git}/zipball/master",
+             default => "curl -o ${zipball} ${nakamura_git}/zipball/${nakamura_tag}",
+        cwd     => $oae::params::basedir,
+        user    => $oae::params::user,
+        creates => "${oae::params::basedir}/${zipball}",
+        notify  => Exec['unpack nakamura'],
+        timeout => 0,
+    }
+
+    exec { 'unpack nakamura':
+        command => "unzip ${zipball}",
+        cwd     => $oae::params::basedir,
+        user    => $oae::params::user,
+        refreshonly => true,
+        require => Exec['download nakamura'],
+        timeout => 0,
+    }
+
+    exec { 'mv nakamura':
+        command => "mv `unzip -l ${zipball} | head -5 | tail -1 | awk '{ print \$4 }'` nakamura",
+        cwd     => $oae::params::basedir,
+        user    => $oae::params::user,
+        creates => "${oae::params::basedir}/nakamura",
+        require => Exec['download nakamura'],
+        timeout => 0,
     }
 
     file { "${oae::params::basedir}/.oae_credentials.txt":

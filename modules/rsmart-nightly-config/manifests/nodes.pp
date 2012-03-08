@@ -167,8 +167,7 @@ node 'nightly.academic.rsmart.local' inherits oaenode {
     class { 'oae::preview_processor::init':
         admin_password => $localconfig::admin_password,
         upload_url   => "https://${localconfig::http_name}/",
-        nakamura_git => $localconfig::nakamura_git,
-        nakamura_tag => $localconfig::nakamura_tag,
+        nakamura_zip => $localconfig::nakamura_zip,
     }
 
     ###########################################################################

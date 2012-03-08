@@ -233,9 +233,8 @@ node 'oipp-test.academic.rsmart.local' inherits oaenode {
     # Preview processor
     class { 'oae::preview_processor::init':
         admin_password => $localconfig::admin_password,
-        upload_url   => "https://${localconfig::http_name}/",
-        nakamura_git => $localconfig::nakamura_git,
-        nakamura_tag => $localconfig::nakamura_tag,
+        upload_url     => "https://${localconfig::http_name}/",
+        nakamura_zip   => $localconfig::nakamura_zip,
     }
 
     ###########################################################################

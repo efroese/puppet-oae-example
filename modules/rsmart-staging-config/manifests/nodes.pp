@@ -305,8 +305,7 @@ node 'staging-preview.academic.rsmart.local' inherits oaenode {
     class { 'oae::preview_processor::init':
         upload_url     => "https://${localconfig::http_name}/",
         admin_password => $localconfig::admin_password,
-        nakamura_git => $localconfig::nakamura_git,
-        nakamura_tag => $localconfig::nakamura_tag,
+        nakamura_zip   => $localconfig::nakamura_zip,
     }
 }
 

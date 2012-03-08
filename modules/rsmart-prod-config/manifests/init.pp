@@ -50,8 +50,7 @@ class localconfig {
     $storedir    = "/files-academic/store"
     ###########################################################################
     # Git (Preview processor)
-    $nakamura_git = 'http://github.com/rSmart/nakamura'
-    $nakamura_tag = "acad-1.1.0-M1-20120130"
+    $nakamura_zip = 'https://nodeload.github.com/rSmart/nakamura/zipball/acad-1.1.0-M1-20120130'
 
     ###########################################################################
     # Apache load balancer

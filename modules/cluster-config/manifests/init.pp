@@ -22,11 +22,6 @@ class localconfig {
     $db_password = 'ironchef'
 
     ###########################################################################
-    # Git (Preview processor)
-    $nakamura_git = "https://github.com/sakaiproject/nakamura"
-    $nakamura_tag = "1.1"
-
-    ###########################################################################
     # HA apache load balancer
     $http_name                = 'oae.localdomain'
     $apache_lb_http_name       = $http_name

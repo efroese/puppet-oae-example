@@ -53,7 +53,7 @@ class oae::preview_processor::init (
         cwd     => $oae::params::basedir,
         user    => $oae::params::user,
         creates => "${oae::params::basedir}/nakamura",
-        require => Exec['download nakamura'],
+        require => Exec['unpack nakamura'],
         timeout => 0,
     }
 

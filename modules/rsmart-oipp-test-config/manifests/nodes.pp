@@ -141,6 +141,8 @@ node 'oipp-test.academic.rsmart.local' inherits oaenode {
         sis_properties => 'localconfig/sis.properties.erb',
         csv_dir        => $localconfig::csv_dir,
         csv_user_filenames  => $localconfig::csv_user_filenames,
+        servel_url     => "https://${localconfig::http_name}/",
+        oae_password   => $localconfig::admin_password,
     }
 
     ###########################################################################

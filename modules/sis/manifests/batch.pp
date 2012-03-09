@@ -20,9 +20,12 @@ class sis::batch (
     $user,
     $executable_url,
     $artifact,
-    $sis_properties = false,
+    $sis_properties = 'sis/sis.properties.erb',
     $csv_dir        = false,
-    $csv_user_filenames = []
+    $csv_user_filenames = [],
+    $server_url,
+    $oae_user = 'admin',
+    $oae_password
     ) inherits sis {
 
     file { "${sis::basedir}/batch":
@@ -46,12 +49,10 @@ class sis::batch (
         require => File[$sis::batch::home],
     }
 
-    if $sis_properties {
-        file { "${sis::batch::home}/sis.properties":
-            mode => 0644,
-            content => template($sis_properties),
-            require => File[$sis::batch::home],
-        }
+    file { "${sis::batch::home}/sis.properties":
+        mode => 0644,
+        content => template($sis_properties),
+        require => File[$sis::batch::home],
     }
 
     file { "${sis::batch::home}/bin/run_sis_batch.sh":

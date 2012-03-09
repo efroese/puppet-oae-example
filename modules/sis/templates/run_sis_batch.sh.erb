@@ -10,7 +10,10 @@
 SIS_JAR=<%= scope.lookupvar('sis::batch::artifact') %>
 SIS_BATCH_HOME=<%= scope.lookupvar('sis::batch::home') %>
 
-JAVA_OPTS=""
+JAVA_OPTS=" -Doae.server.url=<%= scope.lookupvar('sis::batch::server_url') %> "
+JAVA_OPTS=" ${JAVA_OPTS} -Doae.admin.user=<%= scope.lookupvar('sis::batch::oae_user') %> "
+JAVA_OPTS=" ${JAVA_OPTS} -Doae.admin.password=<%= scope.lookupvar('sis::batch::oae_password') %> "
+
 <% if scope.lookupvar('sis::batch::sis_properties') -%>
 JAVA_OPTS="${JAVA_OPTS} -Dsis.config.file=${SIS_BATCH_HOME}/sis.properties "
 <% end -%>

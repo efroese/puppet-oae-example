@@ -1,0 +1,216 @@
+oae.server.url=http://localhost:8080
+oae.admin.user=admin
+oae.admin.password=admin
+
+# location of csv files to batch load
+staging.dir=sample
+
+# standard Basic SIS properties for course
+filename@com.rsmart.customer.integration.processor.cle.CleCourseProcessor=${staging.dir}/courses.csv
+columns@com.rsmart.customer.integration.processor.cle.CleCourseProcessor=16
+headerRowPresent@com.rsmart.customer.integration.processor.cle.CleCourseProcessor=false
+dateFormat@com.rsmart.customer.integration.processor.cle.CleCourseProcessor=d-MMM-yy
+extendedReporting@com.rsmart.customer.integration.processor.cle.CleCourseProcessor=true
+updateAllowed@com.rsmart.customer.integration.processor.cle.CleCourseProcessor=true
+
+# new for OAE
+
+# List of extra column property names, length of this list needs to be consistent with the number of
+# extra columns defined in the columns property.  Eg.  two items here, columns=11, 3 items columns=12, etc.
+extraPropertyNames@com.rsmart.customer.integration.processor.cle.CleCourseProcessor=["department", "college", "canjoin","cansee","provision-sections"]
+
+defaultPublicVisibility@com.rsmart.customer.integration.processor.cle.CleCourseProcessor=true
+defaultJoinability@com.rsmart.customer.integration.processor.cle.CleCourseProcessor=false
+
+# which extra property to look at to determine the visibility for this course, column data must be (true, false)
+# if empty, no column is available for this config
+visibilityColumnName@com.rsmart.customer.integration.processor.cle.CleCourseProcessor=cansee
+
+# which extra property to look at to determine the joinability for this course, column data must be (true, false)
+# if empty no column is available for this config
+joinabilityColumnName@com.rsmart.customer.integration.processor.cle.CleCourseProcessor=canjoin
+
+
+# apply message format to build course title string
+# where {0} is the course title, and {1} is the term title
+courseTitleFormat@com.rsmart.customer.integration.processor.cle.CleCourseProcessor={0} ({1})
+# use this format to display exactly what is in the csv file
+#courseTitleFormat@com.rsmart.customer.integration.processor.cle.CleCourseProcessor={0}
+
+
+# which extra property to look at to determine where or not to provision section groups in OAE for this course, column data must be (true,false)
+# if empty no column is available for this config
+provisionSectionsColumnName@com.rsmart.customer.integration.processor.cle.CleCourseProcessor=provision-sections
+
+# this value can be optionally prepended to every groupid created in order to help deal with name collisions
+# in a shared environment.  Leave blank if you do not need this feature.
+campusPrefix@com.rsmart.customer.integration.processor.cle.CleCourseProcessor=ucd
+
+# the world we be tagged with whatever this is set to, leave blank to not tag world at all
+sisTagName@com.rsmart.customer.integration.processor.cle.CleCourseProcessor=sis-provided
+
+# if using a prefix set this to true to tag all groups created with the prefix
+tagCampusPrefix@com.rsmart.customer.integration.processor.cle.CleCourseProcessor=true
+
+# set this to true to tag the world with the string located in the term column
+tagTerm@com.rsmart.customer.integration.processor.cle.CleCourseProcessor=true
+
+# set to true to disable course processing
+disabled@com.rsmart.customer.integration.processor.cle.CleCourseProcessor=true
+
+# maps masterSite column to a template path in OAE, expects a json string
+# if a section template is not configured this map should also map the sakai:templateid property in groups
+# to the full template path, as that will be consulted during section creation by looking at the parent group
+# value for sakai:templateid
+templateMap@com.rsmart.customer.integration.processor.cle.CleCourseProcessor=  \
+  {                                                                            \
+    "course": "/var/templates/worlds/course/basic-course",                     \
+    "portfolio": "/var/templates/worlds/group/simple-group",                   \
+    "project": "/var/templates/worlds/research/research-project",               \
+    "basic-course": "/var/templates/worlds/course/basic-course",               \
+    "simple-group": "/var/templates/worlds/group/simple-group",                \
+    "research-project": "/var/templates/worlds/research/research-project"      \
+  }
+
+# maps term column (typically a term eid) to a term title for tagging in OAE, expects a json string
+# used in conjunction with tagTerm property.  If value can't be found for a term eid, and tagTerm is on,
+# we fall back to term eid
+termMap@com.rsmart.customer.integration.processor.cle.CleCourseProcessor=  \
+  {                                                                            \
+    "W11": "Winter 2022",                     \
+    "Sp11": "Spring Semester 2011",                   \
+    "Su11": "Summer Session 2011"               \
+  }
+
+
+# standard Basic SIS properties for membership
+filename@com.rsmart.customer.integration.processor.cle.CleMembershipProcessor=${staging.dir}/members.csv
+columns@com.rsmart.customer.integration.processor.cle.CleMembershipProcessor=3
+headerRowPresent@com.rsmart.customer.integration.processor.cle.CleMembershipProcessor=false
+
+# new membership properties for OAE
+
+disabled@com.rsmart.customer.integration.processor.cle.CleMembershipProcessor=true
+
+# maps membership file roles to OAE roles, the roleMaps are key'd by the course template, in json syntax
+# for example, if course file mastersite/template column has value of "course"  then we use the following for mapping
+# the value of the membership role csv file to that in OAE
+#        "Instructor": "lecturer",                                                \
+#        "Student": "student",                                                    \
+#        "Teaching Assistant": "ta"
+roleMap@com.rsmart.customer.integration.processor.cle.CleMembershipProcessor=    \
+  {                                                                              \
+    "basic-course": {                                                            \
+        "Instructor": "lecturer",                                                \
+        "Student": "student",                                                    \
+        "Teaching Assistant": "ta"                                               \
+    },                                                                           \
+    "simple-group": {                                                            \
+        "Organizer": "manager",                                                  \
+        "Participant": "member"                                                  \
+    },                                                                           \
+    "research-project": {                                                        \
+        "Organizer": "leadresearcher",                                           \
+        "Participant": "contributor"                                             \
+    },                                                                           \
+    "course": {                                                                  \
+        "Instructor": "lecturer",                                                \
+        "Student": "student",                                                    \
+        "Teaching Assistant": "ta"                                               \
+    },                                                                           \
+    "portfolio": {                                                               \
+        "Organizer": "manager",                                                  \
+        "Participant": "member"                                                  \
+    },                                                                           \
+    "project": {                                                                 \
+        "Organizer": "leadresearcher",                                           \
+        "Participant": "contributor"                                             \
+    }                                                                            \
+  }
+
+
+# standard Basic SIS properties for User
+filename@com.rsmart.customer.integration.processor.cle.CleUserProcessor=${staging.dir}/ucd1.csv
+columns@com.rsmart.customer.integration.processor.cle.CleUserProcessor=8
+headerRowPresent@com.rsmart.customer.integration.processor.cle.CleUserProcessor=true
+updateAllowed@com.rsmart.customer.integration.processor.cle.CleUserProcessor=true
+generatePassword@com.rsmart.customer.integration.processor.cle.CleUserProcessor=false
+emailNotification@com.rsmart.customer.integration.processor.cle.CleUserProcessor=false
+
+# new user properties for OAE
+disabled@com.rsmart.customer.integration.processor.cle.CleUserProcessor=false
+
+# List of extra column property names, length of this list needs to be consistent with the number of
+# extra columns defined in the columns property.  Eg.  two items here, columns=9, 3 items columns=10, etc.
+extraPropertyNames@com.rsmart.customer.integration.processor.cle.CleUserProcessor=["eppn"]
+
+# standard Basic SIS properties for sections
+filename@com.rsmart.customer.integration.processor.cle.CleSectionProcessor=${staging.dir}/sections.csv
+columns@com.rsmart.customer.integration.processor.cle.CleSectionProcessor=5
+headerRowPresent@com.rsmart.customer.integration.processor.cle.CleSectionProcessor=false
+deleteSections@com.rsmart.customer.integration.processor.cle.CleSectionProcessor=false
+
+# new section properties for OAE
+
+# the section template to use for section creation, the key should match one configured in the templateMap property of
+# the course processor.  If this is empty we just inherit the template of the parent course.
+sectionTemplate@com.rsmart.customer.integration.processor.cle.CleSectionProcessor=
+disabled@com.rsmart.customer.integration.processor.cle.CleSectionProcessor=true
+
+# apply message format to build section title string
+# where {0} is the raw course title (raw meaning what is in the csv file vs what
+# may have been formatted), {1} is the section title, and {2} is the term title
+sectionTitleFormat@com.rsmart.customer.integration.processor.cle.CleSectionProcessor={0}: {1} ({2})
+# uncomment this to display exactly what is in the csv file
+#sectionTitleFormat@com.rsmart.customer.integration.processor.cle.CleSectionProcessor={1}
+
+
+# standard Basic SIS properties for remove user
+filename@com.rsmart.customer.integration.processor.cle.CleRemoveUserProcessor=${staging.dir}/remove_users.csv
+columns@com.rsmart.customer.integration.processor.cle.CleRemoveUserProcessor=10
+headerRowPresent@com.rsmart.customer.integration.processor.cle.CleRemoveUserProcessor=false
+
+# new remove user properties for OAE
+
+disabled@com.rsmart.customer.integration.processor.cle.CleRemoveUserProcessor=true
+
+# standard Basic SIS properties for section memberships
+filename@com.rsmart.customer.integration.processor.cle.CleSectionMembershipProcessor=${staging.dir}/section_members.csv
+columns@com.rsmart.customer.integration.processor.cle.CleSectionMembershipProcessor=4
+headerRowPresent@com.rsmart.customer.integration.processor.cle.CleSectionMembershipProcessor=false
+studentRole@com.rsmart.customer.integration.processor.cle.CleSectionMembershipProcessor=student
+taRole@com.rsmart.customer.integration.processor.cle.CleSectionMembershipProcessor=ta
+deleteStudents@com.rsmart.customer.integration.processor.cle.CleSectionMembershipProcessor=false
+deleteTeachingAssistants@com.rsmart.customer.integration.processor.cle.CleSectionMembershipProcessor=false
+
+# new section membership properties for OAE
+
+disabled@com.rsmart.customer.integration.processor.cle.CleSectionMembershipProcessor=true
+
+
+# these properties are not currently used
+
+UserService.userIdJsonPath=$.results[0].userid
+UserService.emailJsonPath=$.results[0].basic.elements.email.value
+UserService.firstNameJsonPath=$.results[0].basic.elements.firstName.value
+UserService.lastNameJsonPath=$.results[0].basic.elements.lastName.value
+
+# Logging Properties follow
+
+# Direct log messages to a log file
+log4j.appender.file=org.apache.log4j.RollingFileAppender
+log4j.appender.file.File=sis.log
+log4j.appender.file.MaxFileSize=1MB
+log4j.appender.file.MaxBackupIndex=1
+log4j.appender.file.layout=org.apache.log4j.PatternLayout
+log4j.appender.file.layout.ConversionPattern=%d{ABSOLUTE} %5p %c{1}:%L - %m%n
+
+# Direct log messages to stdout
+log4j.appender.stdout=org.apache.log4j.ConsoleAppender
+log4j.appender.stdout.Target=System.out
+log4j.appender.stdout.layout=org.apache.log4j.PatternLayout
+log4j.appender.stdout.layout.ConversionPattern=%d{ABSOLUTE} %5p %c{1}:%L - %m%n
+
+# Root logger option
+log4j.rootLogger=info, file, stdout
+

@@ -126,4 +126,7 @@ class localconfig {
     # SIS Integration
     $basic_sis_batch_executable_artifact = 'com.rsmart.nakamura.basic-sis-batch-1.0-20120307.222244-1-executable.jar'
     $basic_sis_batch_executable_url = 'https://rsmart-dev.s3.amazonaws.com/artifacts/maven/snapshot/com/rsmart/com.rsmart.nakamura.basic-sis-batch-1.0-20120307.222244-1-executable.jar'
+
+    $csv_dir = '/home/rsmart/cle/files/sis'
+    $csv_user_filenames = ['ucb1.csv', 'ucd1.csv', 'ucm.csv' ]
 }

@@ -133,8 +133,15 @@ node 'oipp-test.academic.rsmart.local' inherits oaenode {
     }
 
     ###########################################################################
-    # Apache global config
+    # SIS
+    class { 'sis::batch':
+        user           => $localconfig::user,
+        executable_url => $localconfig::basic_sis_batch_executable_url,
+        artifact       => $localconfig::basic_sis_batch_executable_artifact,
+    }
 
+    ###########################################################################
+    # Apache global config
     file { "/etc/httpd/conf.d/traceenable.conf":
         owner => root,
         group => root,

@@ -121,4 +121,9 @@ class localconfig {
     $cle_mail_support    = 'bogus@mailinator.com'
     $cle_mail_request    = 'bogus@mailinator.com'
     $samigo_stmp_server  = $cle_smtp_server
+
+    ###########################################################################
+    # SIS Integration
+    $basic_sis_batch_executable_artifact = 'com.rsmart.nakamura.basic-sis-batch-1.0-20120307.222244-1-executable.jar'
+    $basic_sis_batch_executable_url = 'https://rsmart-dev.s3.amazonaws.com/artifacts/maven/snapshot/com/rsmart/com.rsmart.nakamura.basic-sis-batch-1.0-20120307.222244-1-executable.jar'
 }

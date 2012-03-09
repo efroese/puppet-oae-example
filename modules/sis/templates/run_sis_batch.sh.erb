@@ -1,0 +1,12 @@
+#!/bin/bash
+
+#
+# run_sis_batch.sh
+# - Run the rSmart basic SIS batch job
+# 
+# Erik Froese <erik@hallwaytech.com>
+#
+
+SIS_JAR=<%= scope.lookupvar('sis::oipp::artifact') %>
+
+java -jar $SIS_JAR

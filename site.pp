@@ -7,6 +7,9 @@ import 'nodetypes'
 # 
 import 'modules/localconfig/manifests/nodes.pp'
 
+# Set the default owner and group to root
+File { owner => root, group => root }
+
 # Set the default path for exec resources
 Exec { path => '/usr/local/sbin:/usr/local/bin:/sbin:/bin:/usr/sbin:/usr/bin:/root/bin' }
 

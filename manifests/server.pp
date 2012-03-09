@@ -66,6 +66,8 @@ class mysql::server (
 
   file { "/usr/share/augeas/lenses/contrib/mysql.aug":
     ensure => present,
+    owner => root,
+    group => root,
     source => "puppet:///modules/mysql/mysql.aug",
   }
 

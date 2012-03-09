@@ -15,6 +15,7 @@ class sis::batch (
     $executable_url,
     $artifact,
     $sis_properties = false
+    $csv = false
     ) inherits sis {
 
     file { "${sis::basedir}/batch":

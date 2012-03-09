@@ -138,6 +138,8 @@ node 'oipp-test.academic.rsmart.local' inherits oaenode {
         user           => $localconfig::user,
         executable_url => $localconfig::basic_sis_batch_executable_url,
         artifact       => $localconfig::basic_sis_batch_executable_artifact,
+        sis_properties => 'localconfig/sis.properties.erb',
+        #csv           => 'something.csv',
     }
 
     ###########################################################################

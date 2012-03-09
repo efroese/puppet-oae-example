@@ -14,7 +14,7 @@ Example usage:
 
 */
 class apache ($httpd_conf_template='apache/httpd.conf.erb'){
-  case $operatingsystem {
+  case $::operatingsystem {
     Debian,Ubuntu: {
         class { 'apache::debian':
             httpd_conf_template => $httpd_conf_template,

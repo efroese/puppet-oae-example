@@ -90,7 +90,7 @@ define apache::balancer (
   file{ "${name} balancer on ${vhost}":
     ensure  => $ensure,
     content => template($template),
-    seltype => $operatingsystem ? {
+    seltype => $::operatingsystem ? {
       "RedHat" => "httpd_config_t",
       "CentOS" => "httpd_config_t",
       default  => undef,

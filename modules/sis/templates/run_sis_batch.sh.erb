@@ -9,12 +9,12 @@
 
 SIS_JAR=<%= scope.lookupvar('sis::batch::artifact') %>
 SIS_BATCH_HOME=<%= scope.lookupvar('sis::batch::home') %>
-SIS_BATCH_CSV=${SIS_BATCH_HOME}/<%= scope.lookupvar('sis::batch::csv') %>
 
-JAVA_OPTS = " -Dfilename@com.rsmart.customer.integration.processor.cle.CleUserProcessor=${SIS_BATCH_CSV} "
-
+JAVA_OPTS=""
 <% if scope.lookupvar('sis::batch::sis_properties') -%>
 JAVA_OPTS="${JAVA_OPTS} -Dsis.config.file=${SIS_BATCH_HOME}/sis.properties "
 <% end -%>
 
-java ${JAVA_OPTS} -jar $SIS_JAR
+<% scope.lookup('sis::batch::csv_user_filename').each do |csv_file| %>
+java ${JAVA_OPTS} " -Dfilename@com.rsmart.customer.integration.processor.cle.CleUserProcessor=<%= scope.lookupvar('sis::batch::csv_dir') %>/<%= csv_file %> " -jar $SIS_JAR
+<% end %>

@@ -293,6 +293,7 @@ node oaeappnode inherits oaenode {
             'sakai.cle.basiclti.secret' => $localconfig::basiclti_secret,
             'sakai.cle.server.url'      => "https://${localconfig::http_name}",
             'sakai.cle.basiclti.key'    => $localconfig::basiclti_key,
+            'sakai.cle.basiclti.tool.list' => $localconfig::basiclti_tool_list,
         }
     }
 

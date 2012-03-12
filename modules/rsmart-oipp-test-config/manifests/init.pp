@@ -80,7 +80,7 @@ class localconfig {
     # CLE
     $basiclti_secret = "rLKQsw6YBq4TUa"
     $basiclti_key    = "ColeUconlineEdu"
-    basiclti_tool_list = ["sakai.gradebook.gwt.rpc","sakai.assignment.grades","sakai.samigo","sakai.schedule","sakai.announcements","sakai.postem","sakai.profile2","sakai.profile","sakai.chat","sakai.resources","sakai.dropbox","sakai.rwiki","sakai.forums","sakai.gradebook.tool","sakai.mailbox","sakai.singleuser","sakai.messages","sakai.site.roster","sakai.news","sakai.summary.calendar","sakai.poll","sakai.syllabus","sakai.blogwow","sakai.sitestats","sakai.sections"]
+    $basiclti_tool_list = ["sakai.gradebook.gwt.rpc","sakai.assignment.grades","sakai.samigo","sakai.schedule","sakai.announcements","sakai.postem","sakai.profile2","sakai.profile","sakai.chat","sakai.resources","sakai.dropbox","sakai.rwiki","sakai.forums","sakai.gradebook.tool","sakai.mailbox","sakai.singleuser","sakai.messages","sakai.site.roster","sakai.news","sakai.summary.calendar","sakai.poll","sakai.syllabus","sakai.blogwow","sakai.sitestats","sakai.sections"]
     
     # Slideshare
     $slideshare_api_key       = "71YQYo1Q"

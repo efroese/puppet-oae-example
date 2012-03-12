@@ -398,3 +398,111 @@ node 'staging-dbserv1.academic.rsmart.local' inherits oaenode {
         unless  => 'grep 4194304 /etc/sysctl.conf',
     }
 }
+
+node 'staging-cle.academic.rsmart.local' inherits oaenode {
+
+    ###########################################################################
+    #
+    # CLE Server
+    #
+
+    class { 'tomcat6':
+        parentdir            => "${localconfig::homedir}/sakaicle",
+        tomcat_version       => '5.5.35',
+        tomcat_major_version => '5',
+        digest_string        => '1791951e1f2e03be9911e28c6145e177',
+        tomcat_user          => $oae::params::user,
+        tomcat_group         => $oae::params::group,
+        java_home            => $localconfig::java_home,
+        jmxremote_access_template   => 'localconfig/jmxremote.access.erb',
+        jmxremote_password_template => 'localconfig/jmxremote.password.erb',
+        jvm_route            => $localconfig::cle_server_id,
+        shutdown_password    => $localconfig::tomcat_shutdown_password,
+        tomcat_conf_template => 'rsmart-common/cle-server.xml.erb',
+        setenv_template      => 'localconfig/cle-setenv.sh.erb',
+    }
+
+    # Base rSmart Tomcat customizations
+    archive::download { 'rsmart-cle-base-overlay.tbz':
+        ensure        => present,
+        url           => 'http://dl.dropbox.com/u/24606888/rsmart-cle-base-overlay.tbz',
+        src_target    => "${localconfig::homedir}/sakaicle/",
+        checksum      => false,
+        timeout       => 0,
+        require       => Class['Tomcat6'],
+    }
+
+    tomcat6::overlay { 'rsmart-cle-base-overlay':
+        tomcat_home  => "${localconfig::homedir}/sakaicle/tomcat",
+        tarball_path => "${localconfig::homedir}/sakaicle/rsmart-cle-base-overlay.tbz",
+        creates      => "${localconfig::homedir}/sakaicle/tomcat/webapps/ROOT/rsmart.jsp",
+        user         => $oae::params::user,
+        require      => [ Class['Tomcat6'], Archive::Download['rsmart-cle-base-overlay.tbz'], ],
+    }
+
+    # CLE install
+    archive::download { 'rsmart-cle-prod-overlay.tbz':
+        ensure        => present,
+        url           => $localconfig::cle_tarball_url,
+        src_target    => "${localconfig::homedir}/sakaicle/",
+        checksum      => false,
+        timeout       => 0,
+        require       => Class['Tomcat6'],
+    }
+
+    tomcat6::overlay { 'rsmart-cle-prod-overlay':
+        tomcat_home  => "${localconfig::homedir}/sakaicle/tomcat",
+        tarball_path => "${localconfig::homedir}/sakaicle/rsmart-cle-prod-overlay.tbz",
+        creates      => "${localconfig::homedir}/sakaicle/tomcat/webapps/xsl-portal.war",
+        user         => $oae::params::user,
+        require      => [ Class['Tomcat6'], Archive::Download['rsmart-cle-prod-overlay.tbz'], ],
+    }
+
+    # CLE tomcat overlay and configuration
+    class { 'cle':
+        user            => $oae::params::user,
+        basedir         => "${localconfig::homedir}/sakaicle",
+        tomcat_home     => "${localconfig::homedir}/sakaicle/tomcat",
+        server_id       => $localconfig::cle_server_id,
+        db_url          => $localconfig::cle_db_url,
+        db_user         => $localconfig::cle_db_user,
+        db_password     => $localconfig::cle_db_password,
+        configuration_xml_template   => 'rsmart-common/cle-sakai-configuration.xml.erb',
+        sakai_properties_template    => 'localconfig/sakai.properties.erb',
+        local_properties_template    => 'localconfig/local.properties.erb',
+        instance_properties_template => 'localconfig/instance.properties.erb',
+        linktool_salt    => $localconfig::linktool_salt,
+        linktool_privkey => $localconfig::linktool_privkey,
+    }
+
+    ###########################################################################
+    #
+    # MySQL Database Server
+    #
+
+    $mysql_password = $localconfig::mysql_root_password
+
+    class { 'augeas': }
+    class { 'mysql::server': }
+
+    mysql::database{ $localconfig::cle_db:
+        ensure   => present
+    }
+
+    mysql::rights{ "mysql-grant-${localconfig::cle_db}-${localconfig::cle_db_user}":
+        ensure   => present,
+        database => $localconfig::cle_db,
+        user     => $localconfig::cle_db_user,
+        password => $localconfig::cle_db_password,
+    }
+    augeas { "my.cnf/mysqld-lower_case_table_names-1":
+        context => "${mysql::params::mycnfctx}/mysqld/",
+        load_path => "/usr/share/augeas/lenses/contrib/",
+        changes => [
+          "set lower_case_table_names 1",
+        ],
+        require => File["/etc/mysql/my.cnf"],
+        notify => Service["mysql"],
+    }
+
+}

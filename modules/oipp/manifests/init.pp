@@ -13,11 +13,19 @@ class oipp::sis {
 	    alias=> 'oipp-test',
     }
 
+    file { "/root/scripts":
+        owner => root,
+        group => root,
+        mode => 0770,
+        ensure => directory,
+    }
+
     file { "/root/scripts/oipp_csv_copy.sh":
         owner => root,
         group => root,
         mode => 0750,
         content => template('oipp/oipp_csv_copy.sh.erb'),
+        require => [ File["/root/scripts"], ],
     }
 
     cron { 'transport_sis':
@@ -37,20 +45,28 @@ class oipp::test {
     class { 'people::oipp-sis::external': }
     class { 'people::oipp-sis::destination': }
 
-    file { "/root/scripts/oipp_csv_copy_test.sh":
+    file { "/root/scripts":
+        owner => root,
+        group => root,
+        mode => 0770,
+        ensure => directory,
+    }
+
+    file { "/root/scripts/oipp_csv_copy.sh":
         owner => root,
         group => root,
         mode => 0750,
         content => template('oipp/oipp_csv_copy_test.sh.erb'),
+        require => [ File["/root/scripts"], ],
     }
 
     cron { 'transport_sis':
-        command => "/root/scripts/oipp_csv_copy_test.sh",
+        command => "/root/scripts/oipp_csv_copy.sh",
         user => root,
         ensure => present,
         minute => '2',
         require => [
-            File["/root/scripts/oipp_csv_copy_test.sh"],
+            File["/root/scripts/oipp_csv_copy.sh"],
         ],
     }
 }

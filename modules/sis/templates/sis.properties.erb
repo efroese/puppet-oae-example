@@ -7,8 +7,8 @@ staging.dir=sample
 
 # standard Basic SIS properties for course
 filename@com.rsmart.customer.integration.processor.cle.CleCourseProcessor=${staging.dir}/courses.csv
-columns@com.rsmart.customer.integration.processor.cle.CleCourseProcessor=16
-headerRowPresent@com.rsmart.customer.integration.processor.cle.CleCourseProcessor=false
+columns@com.rsmart.customer.integration.processor.cle.CleCourseProcessor=9
+headerRowPresent@com.rsmart.customer.integration.processor.cle.CleCourseProcessor=true
 dateFormat@com.rsmart.customer.integration.processor.cle.CleCourseProcessor=d-MMM-yy
 extendedReporting@com.rsmart.customer.integration.processor.cle.CleCourseProcessor=true
 updateAllowed@com.rsmart.customer.integration.processor.cle.CleCourseProcessor=true
@@ -17,37 +17,37 @@ updateAllowed@com.rsmart.customer.integration.processor.cle.CleCourseProcessor=t
 
 # List of extra column property names, length of this list needs to be consistent with the number of
 # extra columns defined in the columns property.  Eg.  two items here, columns=11, 3 items columns=12, etc.
-extraPropertyNames@com.rsmart.customer.integration.processor.cle.CleCourseProcessor=["department", "college", "canjoin","cansee","provision-sections"]
+extraPropertyNames@com.rsmart.customer.integration.processor.cle.CleCourseProcessor=
 
 defaultPublicVisibility@com.rsmart.customer.integration.processor.cle.CleCourseProcessor=true
 defaultJoinability@com.rsmart.customer.integration.processor.cle.CleCourseProcessor=false
 
 # which extra property to look at to determine the visibility for this course, column data must be (true, false)
 # if empty, no column is available for this config
-visibilityColumnName@com.rsmart.customer.integration.processor.cle.CleCourseProcessor=cansee
+visibilityColumnName@com.rsmart.customer.integration.processor.cle.CleCourseProcessor=
 
 # which extra property to look at to determine the joinability for this course, column data must be (true, false)
 # if empty no column is available for this config
-joinabilityColumnName@com.rsmart.customer.integration.processor.cle.CleCourseProcessor=canjoin
+joinabilityColumnName@com.rsmart.customer.integration.processor.cle.CleCourseProcessor=
 
 
 # apply message format to build course title string
 # where {0} is the course title, and {1} is the term title
-courseTitleFormat@com.rsmart.customer.integration.processor.cle.CleCourseProcessor={0} ({1})
+#courseTitleFormat@com.rsmart.customer.integration.processor.cle.CleCourseProcessor={0} ({1})
 # use this format to display exactly what is in the csv file
-#courseTitleFormat@com.rsmart.customer.integration.processor.cle.CleCourseProcessor={0}
+courseTitleFormat@com.rsmart.customer.integration.processor.cle.CleCourseProcessor={0}
 
 
 # which extra property to look at to determine where or not to provision section groups in OAE for this course, column data must be (true,false)
 # if empty no column is available for this config
-provisionSectionsColumnName@com.rsmart.customer.integration.processor.cle.CleCourseProcessor=provision-sections
+provisionSectionsColumnName@com.rsmart.customer.integration.processor.cle.CleCourseProcessor=
 
 # this value can be optionally prepended to every groupid created in order to help deal with name collisions
 # in a shared environment.  Leave blank if you do not need this feature.
 campusPrefix@com.rsmart.customer.integration.processor.cle.CleCourseProcessor=ucd
 
 # the world we be tagged with whatever this is set to, leave blank to not tag world at all
-sisTagName@com.rsmart.customer.integration.processor.cle.CleCourseProcessor=sis-provided
+sisTagName@com.rsmart.customer.integration.processor.cle.CleCourseProcessor=
 
 # if using a prefix set this to true to tag all groups created with the prefix
 tagCampusPrefix@com.rsmart.customer.integration.processor.cle.CleCourseProcessor=true
@@ -56,7 +56,7 @@ tagCampusPrefix@com.rsmart.customer.integration.processor.cle.CleCourseProcessor
 tagTerm@com.rsmart.customer.integration.processor.cle.CleCourseProcessor=true
 
 # set to true to disable course processing
-disabled@com.rsmart.customer.integration.processor.cle.CleCourseProcessor=true
+disabled@com.rsmart.customer.integration.processor.cle.CleCourseProcessor=false
 
 # maps masterSite column to a template path in OAE, expects a json string
 # if a section template is not configured this map should also map the sakai:templateid property in groups
@@ -86,11 +86,11 @@ termMap@com.rsmart.customer.integration.processor.cle.CleCourseProcessor=  \
 # standard Basic SIS properties for membership
 filename@com.rsmart.customer.integration.processor.cle.CleMembershipProcessor=${staging.dir}/members.csv
 columns@com.rsmart.customer.integration.processor.cle.CleMembershipProcessor=3
-headerRowPresent@com.rsmart.customer.integration.processor.cle.CleMembershipProcessor=false
+headerRowPresent@com.rsmart.customer.integration.processor.cle.CleMembershipProcessor=true
 
 # new membership properties for OAE
 
-disabled@com.rsmart.customer.integration.processor.cle.CleMembershipProcessor=true
+disabled@com.rsmart.customer.integration.processor.cle.CleMembershipProcessor=false
 
 # maps membership file roles to OAE roles, the roleMaps are key'd by the course template, in json syntax
 # for example, if course file mastersite/template column has value of "course"  then we use the following for mapping
@@ -130,7 +130,7 @@ roleMap@com.rsmart.customer.integration.processor.cle.CleMembershipProcessor=   
 
 
 # standard Basic SIS properties for User
-filename@com.rsmart.customer.integration.processor.cle.CleUserProcessor=${staging.dir}/ucd1.csv
+filename@com.rsmart.customer.integration.processor.cle.CleUserProcessor=${staging.dir}/users.csv
 columns@com.rsmart.customer.integration.processor.cle.CleUserProcessor=8
 headerRowPresent@com.rsmart.customer.integration.processor.cle.CleUserProcessor=true
 updateAllowed@com.rsmart.customer.integration.processor.cle.CleUserProcessor=true
@@ -147,7 +147,7 @@ extraPropertyNames@com.rsmart.customer.integration.processor.cle.CleUserProcesso
 # standard Basic SIS properties for sections
 filename@com.rsmart.customer.integration.processor.cle.CleSectionProcessor=${staging.dir}/sections.csv
 columns@com.rsmart.customer.integration.processor.cle.CleSectionProcessor=5
-headerRowPresent@com.rsmart.customer.integration.processor.cle.CleSectionProcessor=false
+headerRowPresent@com.rsmart.customer.integration.processor.cle.CleSectionProcessor=true
 deleteSections@com.rsmart.customer.integration.processor.cle.CleSectionProcessor=false
 
 # new section properties for OAE
@@ -155,20 +155,20 @@ deleteSections@com.rsmart.customer.integration.processor.cle.CleSectionProcessor
 # the section template to use for section creation, the key should match one configured in the templateMap property of
 # the course processor.  If this is empty we just inherit the template of the parent course.
 sectionTemplate@com.rsmart.customer.integration.processor.cle.CleSectionProcessor=
-disabled@com.rsmart.customer.integration.processor.cle.CleSectionProcessor=true
+disabled@com.rsmart.customer.integration.processor.cle.CleSectionProcessor=false
 
 # apply message format to build section title string
 # where {0} is the raw course title (raw meaning what is in the csv file vs what
 # may have been formatted), {1} is the section title, and {2} is the term title
-sectionTitleFormat@com.rsmart.customer.integration.processor.cle.CleSectionProcessor={0}: {1} ({2})
+#sectionTitleFormat@com.rsmart.customer.integration.processor.cle.CleSectionProcessor={0}: {1} ({2})
 # uncomment this to display exactly what is in the csv file
-#sectionTitleFormat@com.rsmart.customer.integration.processor.cle.CleSectionProcessor={1}
+sectionTitleFormat@com.rsmart.customer.integration.processor.cle.CleSectionProcessor={1}
 
 
 # standard Basic SIS properties for remove user
 filename@com.rsmart.customer.integration.processor.cle.CleRemoveUserProcessor=${staging.dir}/remove_users.csv
 columns@com.rsmart.customer.integration.processor.cle.CleRemoveUserProcessor=10
-headerRowPresent@com.rsmart.customer.integration.processor.cle.CleRemoveUserProcessor=false
+headerRowPresent@com.rsmart.customer.integration.processor.cle.CleRemoveUserProcessor=true
 
 # new remove user properties for OAE
 
@@ -177,7 +177,7 @@ disabled@com.rsmart.customer.integration.processor.cle.CleRemoveUserProcessor=tr
 # standard Basic SIS properties for section memberships
 filename@com.rsmart.customer.integration.processor.cle.CleSectionMembershipProcessor=${staging.dir}/section_members.csv
 columns@com.rsmart.customer.integration.processor.cle.CleSectionMembershipProcessor=4
-headerRowPresent@com.rsmart.customer.integration.processor.cle.CleSectionMembershipProcessor=false
+headerRowPresent@com.rsmart.customer.integration.processor.cle.CleSectionMembershipProcessor=true
 studentRole@com.rsmart.customer.integration.processor.cle.CleSectionMembershipProcessor=student
 taRole@com.rsmart.customer.integration.processor.cle.CleSectionMembershipProcessor=ta
 deleteStudents@com.rsmart.customer.integration.processor.cle.CleSectionMembershipProcessor=false
@@ -185,7 +185,7 @@ deleteTeachingAssistants@com.rsmart.customer.integration.processor.cle.CleSectio
 
 # new section membership properties for OAE
 
-disabled@com.rsmart.customer.integration.processor.cle.CleSectionMembershipProcessor=true
+disabled@com.rsmart.customer.integration.processor.cle.CleSectionMembershipProcessor=false
 
 
 # these properties are not currently used

@@ -37,7 +37,7 @@ class oipp::test {
     class { 'people::oipp-sis::external': }
     class { 'people::oipp-sis::destination': }
 
-    file { "/root/scripts/oipp_csv_copy.sh":
+    file { "/root/scripts/oipp_csv_copy_test.sh":
         owner => root,
         group => root,
         mode => 0750,
@@ -45,12 +45,12 @@ class oipp::test {
     }
 
     cron { 'transport_sis':
-        command => "/root/scripts/oipp_csv_copy.sh",
+        command => "/root/scripts/oipp_csv_copy_test.sh",
         user => root,
         ensure => present,
         minute => '2',
         require => [
-            File["/root/scripts/oipp_csv_copy.sh"],
+            File["/root/scripts/oipp_csv_copy_test.sh"],
         ],
     }
 }

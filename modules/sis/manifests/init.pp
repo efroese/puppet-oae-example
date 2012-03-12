@@ -4,7 +4,7 @@
 #
 class sis {
     
-    $basedir = "${localconfig::homedir}/sis/"
+    $basedir = "${localconfig::homedir}/sis"
     
     file { $basedir:
         ensure => directory,

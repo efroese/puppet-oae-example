@@ -7,8 +7,8 @@
 # Erik Froese <erik@hallwaytech.com>
 #
 
-SIS_JAR=<%= scope.lookupvar('sis::batch::artifact') %>
 SIS_BATCH_HOME=<%= scope.lookupvar('sis::batch::home') %>
+SIS_JAR=${SIS_BATCH_HOME}/<%= scope.lookupvar('sis::batch::artifact') %>
 
 JAVA_OPTS=" -Doae.server.url=<%= scope.lookupvar('sis::batch::server_url') %> "
 JAVA_OPTS=" ${JAVA_OPTS} -Doae.admin.user=<%= scope.lookupvar('sis::batch::oae_user') %> "

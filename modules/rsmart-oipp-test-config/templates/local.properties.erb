@@ -759,3 +759,17 @@ columns@com.rsmart.customer.integration.processor.cle.CleUserProcessor=8
 user.sis.property.count=1
 user.sis.property.1=eppn
 
+# to OAE provider 
+providerName@org.sakaiproject.user.api.UserDirectoryService=com.rsmart.sakai.providers.NonTrustedNakamuraUDP 
+
+principal@com.rsmart.sakai.providers.NonTrustedNakamuraUDP=admin 
+userLookupUrl@com.rsmart.sakai.providers.NonTrustedNakamuraUDP=https://oipp-test.academic.rsmart.com/system/userManager/user/ 
+
+# should match oae consumer key in cle, in other worlds this is the little bit that gets appended to all the cle userIds 
+# for OIPP 
+prefix@com.rsmart.sakai.providers.NonTrustedNakamuraUDP=coleuconlineedu
+
+hostname@com.rsmart.sakai.providers.NonTrustedNakamuraUDP=coleuconlineedu 
+
+x.sakai.token.coleuconlineedu.sharedSecret=yourSecret
+x.sakai.token.127.0.0.1.sharedSecret=yourSecret

@@ -13,9 +13,9 @@ scp -p /home/ucd_sis/*.UCD.csv	        rsmart@oipp-cle1:/files-cle/files/sis/tes
 scp -p /home/ucm_sis/*.UCMerced.csv	    rsmart@oipp-cle1:/files-cle/files/sis/test
 scp -p /home/ucb_sis/*.UCB.csv	        rsmart@oipp-cle1:/files-cle/files/sis/test
 
-scp -p /home/ucd_sis/*csv		        rsmart@oipp-test:/home/rsmart/cle/files/sis
-scp -p /home/ucm_sis/*csv		        rsmart@oipp-test:/home/rsmart/cle/files/sis
-scp -p /home/ucb_sis/*csv		        rsmart@oipp-test:/home/rsmart/cle/files/sis
+scp -p /home/ucd_sis/*csv		        rsmart@oipp-test:/home/ucd_sis
+scp -p /home/ucm_sis/*csv		        rsmart@oipp-test:/home/ucm_sis
+scp -p /home/ucb_sis/*csv		        rsmart@oipp-test:/home/ucb_sis
 # end temporary
 
 # copy test user file to prod server for OAE user creation
@@ -24,9 +24,9 @@ scp -p /home/ucd_sis/test/*.UCD.csv      rsmart@oipp-cle1:/files-cle/files/sis/t
 scp -p /home/ucm_sis/test/*.UCMerced.csv rsmart@oipp-cle1:/files-cle/files/sis/test
 
 # copy all test csv files to test server
-scp -p /home/ucb_sis/test/* rsmart@oipp-test:/home/rsmart/cle/files/sis && rm -f /home/ucb_sis/test/*
-scp -p /home/ucd_sis/test/* rsmart@oipp-test:/home/rsmart/cle/files/sis && rm -f /home/ucd_sis/test/*
-scp -p /home/ucm_sis/test/* rsmart@oipp-test:/home/rsmart/cle/files/sis && rm -f /home/ucm_sis/test/*
+scp -p /home/ucb_sis/test/* rsmart@oipp-test:/home/ucb_sis/test && rm -f /home/ucb_sis/test/*
+scp -p /home/ucd_sis/test/* rsmart@oipp-test:/home/ucd_sis/test && rm -f /home/ucd_sis/test/*
+scp -p /home/ucm_sis/test/* rsmart@oipp-test:/home/ucm_sis/test && rm -f /home/ucm_sis/test/*
 
 # copy all prod csv files to prod server
 scp -p /home/ucb_sis/*csv rsmart@oipp-cle1:/files-cle/files/sis && rm -f /home/ucb_sis/*csv

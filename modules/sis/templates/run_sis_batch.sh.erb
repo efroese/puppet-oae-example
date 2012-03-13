@@ -30,16 +30,20 @@ OUTPUT=`mktemp`
 SCHOOLS = `ls ${CSV_DIR} | awk -F . '{ print $2 }' | sort | uniq`
 
 for school in $SCHOOLS; do
+    FILENAME_OPTS="";
     for file in Course Membership User Section SectionMembership; do
         CSV_FILE="${CSV_DIR}/${file}.${school}.csv"
         if [[ -f ${CSV_FILE} ]]; then
-            java ${JAVA_OPTS} \
-                " -Dfilename@com.rsmart.customer.integration.processor.cle.Cle${file}Processor=${CSV_FILE} " \
-                -jar $SIS_JAR 2>&1 >> $OUTPUT
-            mv ${CSV_FILE} ${CSV_ARCHIVE}
+            FILENAME_OPTS="${FILENAME_OPTS} -Dfilename@com.rsmart.customer.integration.processor.cle.Cle${file}Processor=${CSV_FILE}" 
         else
             echo "No file for ${CSV_FILE}" >> $OUTPUT
         fi
+    done
+    java ${JAVA_OPTS} ${FILENAME_OPTS} \
+        -jar $SIS_JAR 2>&1 >> $OUTPUT
+    for file in Course Membership User Section SectionMembership; do
+        CSV_FILE="${CSV_DIR}/${file}.${school}.csv"
+        mv ${CSV_FILE} ${CSV_ARCHIVE}
     done
 done
 

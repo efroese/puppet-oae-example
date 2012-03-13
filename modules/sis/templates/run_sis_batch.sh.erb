@@ -9,7 +9,7 @@
 
 SIS_BATCH_HOME=<%= scope.lookupvar('sis::batch::home') %>
 SIS_JAR=${SIS_BATCH_HOME}/<%= scope.lookupvar('sis::batch::artifact') %>
-EMAIL_RECIPIENT=<%= scope.lookupvar('sis::batch::email_report') %>
+EMAIL_RECIPIENT="<%= scope.lookupvar('sis::batch::email_report') %>"
 
 CSV_DIR=<%= scope.lookupvar('sis::batch::csv_dir') %>
 
@@ -26,11 +26,24 @@ mkdir -p ${CSV_ARCHIVE}
 
 OUTPUT=`mktemp`
 
-<% scope.lookupvar('sis::batch::csv_user_filenames').each do |csv_file| %>
-CSV_FILE="${CSV_DIR}/<%= csv_file %>"
-java ${JAVA_OPTS} " -Dfilename@com.rsmart.customer.integration.processor.cle.CleUserProcessor=${CSV_FILE} " -jar $SIS_JAR 2>&1 >> $OUTPUT
-mv ${CSV_FILE}/ ${CSV_ARCHIVE}
-<% end %>
+# Files will be of the form name.school.csv
+SCHOOLS = `ls ${CSV_DIR} | awk -F . '{ print $2 }' | sort | uniq`
 
-mail -s "SIS batch update for $NOW" $EMAIL_RECIPIENT < $OUTPUT
-rm $OUTPUT
+for school in $SCHOOLS; do
+    for file in Course Membership User Section SectionMembership; do
+        CSV_FILE="${CSV_DIR}/${file}.${school}.csv"
+        if [[ -f ${CSV_FILE} ]]; then
+            java ${JAVA_OPTS} \
+                " -Dfilename@com.rsmart.customer.integration.processor.cle.Cle${file}Processor=${CSV_FILE} " \
+                -jar $SIS_JAR 2>&1 >> $OUTPUT
+            mv ${CSV_FILE} ${CSV_ARCHIVE}
+        else
+            echo "No file for ${CSV_FILE}" >> $OUTPUT
+        fi
+    done
+done
+
+if [[ $EMAIL_RECIPIENT != "undefined" ]]; then
+    mail -s "SIS batch update for $NOW" $EMAIL_RECIPIENT < $OUTPUT
+fi
+rm -f $OUTPUT

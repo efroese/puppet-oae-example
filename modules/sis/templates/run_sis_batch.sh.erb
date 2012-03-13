@@ -16,6 +16,7 @@ CSV_DIR=<%= scope.lookupvar('sis::batch::csv_dir') %>
 JAVA_OPTS=" -Doae.server.url=<%= scope.lookupvar('sis::batch::server_url') %> "
 JAVA_OPTS=" ${JAVA_OPTS} -Doae.admin.user=<%= scope.lookupvar('sis::batch::oae_user') %> "
 JAVA_OPTS=" ${JAVA_OPTS} -Doae.admin.password=<%= scope.lookupvar('sis::batch::oae_password') %> "
+JAVA_OPTS=" ${JAVA_OPTS} -DdateFormat@com.rsmart.customer.integration.processor.cle.CleCourseProcessor=yyyy-mm-dd "
 
 <% if scope.lookupvar('sis::batch::sis_properties') -%>
 JAVA_OPTS="${JAVA_OPTS} -Dsis.config.file=${SIS_BATCH_HOME}/sis.properties "

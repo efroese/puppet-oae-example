@@ -9,17 +9,17 @@ chown -fR "rsmart:rsmart" /home/ucd_sis/test/*
 chown -fR "rsmart:rsmart" /home/ucm_sis/test/*
 
 # temporary: copy UCD & UCM prod files to test also (will get overwritten if anything is uploaded to test)
-scp -p /home/ucd_sis/*.UCD.csv	        rsmart@oipp-cle1:/files-cle/files/sis/test
-scp -p /home/ucm_sis/*.UCMerced.csv	    rsmart@oipp-cle1:/files-cle/files/sis/test
-scp -p /home/ucb_sis/*.UCB.csv	        rsmart@oipp-cle1:/files-cle/files/sis/test
+scp -p /home/ucd_sis/*.UCD.csv	        rsmart@localhost:/files-cle/files/sis/test
+scp -p /home/ucm_sis/*.UCMerced.csv	    rsmart@localhost:/files-cle/files/sis/test
+scp -p /home/ucb_sis/*.UCB.csv	        rsmart@localhost:/files-cle/files/sis/test
 # end temporary
 
 # copy test user file to prod server for OAE user creation
-scp -p /home/ucb_sis/test/*.UCB.csv      rsmart@oipp-cle1:/files-cle/files/sis/test
-scp -p /home/ucd_sis/test/*.UCD.csv      rsmart@oipp-cle1:/files-cle/files/sis/test
-scp -p /home/ucm_sis/test/*.UCMerced.csv rsmart@oipp-cle1:/files-cle/files/sis/test
+scp -p /home/ucb_sis/test/*.UCB.csv      rsmart@localhost:/files-cle/files/sis/test
+scp -p /home/ucd_sis/test/*.UCD.csv      rsmart@localhost:/files-cle/files/sis/test
+scp -p /home/ucm_sis/test/*.UCMerced.csv rsmart@localhost:/files-cle/files/sis/test
 
 # copy all prod csv files to prod server
-scp -p /home/ucb_sis/*csv rsmart@oipp-cle1:/files-cle/files/sis && rm -f /home/ucb_sis/*csv
-scp -p /home/ucd_sis/*csv rsmart@oipp-cle1:/files-cle/files/sis && rm -f /home/ucd_sis/*csv
-scp -p /home/ucm_sis/*csv rsmart@oipp-cle1:/files-cle/files/sis && rm -f /home/ucm_sis/*csv
+scp -p /home/ucb_sis/*csv rsmart@localhost:/files-cle/files/sis && rm -f /home/ucb_sis/*csv
+scp -p /home/ucd_sis/*csv rsmart@localhost:/files-cle/files/sis && rm -f /home/ucd_sis/*csv
+scp -p /home/ucm_sis/*csv rsmart@localhost:/files-cle/files/sis && rm -f /home/ucm_sis/*csv

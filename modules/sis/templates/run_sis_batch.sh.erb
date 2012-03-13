@@ -27,7 +27,7 @@ mkdir -p ${CSV_ARCHIVE}
 OUTPUT=`mktemp`
 
 # Files will be of the form name.school.csv
-SCHOOLS = `ls ${CSV_DIR} | awk -F . '{ print $2 }' | sort | uniq`
+SCHOOLS=`ls ${CSV_DIR} | awk -F . '{ print $2 }' | sort | uniq`
 
 for school in $SCHOOLS; do
     FILENAME_OPTS="";

@@ -27,12 +27,13 @@ mkdir -p ${CSV_ARCHIVE}
 OUTPUT=`mktemp`
 
 # Files will be of the form name.school.csv
-SCHOOLS = `ls ${CSV_DIR} | awk -F . '{ print $2 }' | sort | uniq`
+SCHOOL_USERS = "<%=scope.lookupvar('sis::batch::sis_users') %>"
+#SCHOOLS = `ls ${CSV_DIR} | awk -F . '{ print $2 }' | sort | uniq`
 
-for school in $SCHOOLS; do
+for schooluser in $SCHOOL_USERS; do
     FILENAME_OPTS="";
     for file in Course Membership User Section SectionMembership; do
-        CSV_FILE="${CSV_DIR}/${file}.${school}.csv"
+        CSV_FILE="/home/${schooluser}/${file}.${school}.csv"
         if [[ -f ${CSV_FILE} ]]; then
             FILENAME_OPTS="${FILENAME_OPTS} -Dfilename@com.rsmart.customer.integration.processor.cle.Cle${file}Processor=${CSV_FILE}" 
         else
@@ -42,7 +43,7 @@ for school in $SCHOOLS; do
     java ${JAVA_OPTS} ${FILENAME_OPTS} \
         -jar $SIS_JAR 2>&1 >> $OUTPUT
     for file in Course Membership User Section SectionMembership; do
-        CSV_FILE="${CSV_DIR}/${file}.${school}.csv"
+        CSV_FILE="/home/${schooluser}/${file}.${school}.csv"
         mv ${CSV_FILE} ${CSV_ARCHIVE}
     done
 done

@@ -11,6 +11,7 @@
 
 TOMCAT_USER="<%= tomcat_user %>"
 CATALINA_HOME="<%= basedir %>"
+PID_FILE="<%= basedir %>/temp/tomcat.pid"
 
 PROG="tomcat"
 
@@ -22,7 +23,7 @@ help() {
 start() {
 	echo -n "Starting ${PROG}: "
 	su --login --command "${CATALINA_HOME}/bin/startup.sh" ${TOMCAT_USER}
-	ps -u ${TOMCAT_USER} --no-headers -o pid,cmd | grep "${CATALINA_HOME}" | awk '{ print $1 }' > ${INIT_PID};
+	ps -u ${TOMCAT_USER} --no-headers -o pid,cmd | grep "${CATALINA_HOME}" | awk '{ print $1 }' > ${PID_FILE};
 	echo "done.";
 }
 
@@ -31,20 +32,27 @@ stop() {
 
     su --login --command "${CATALINA_HOME}/bin/shutdown.sh" ${TOMCAT_USER}
 
-    echo "Waiting 60 seconds before using kill to stop ${PROG}."
-    sleep 60
-
     # Use the pid file if it exists.
-    if [[ -f ${INIT_PID} ]]; then
-	    for PID in `cat ${INIT_PID}`; do
-            kill -9 ${PID}
-	    done
-        rm -f ${INIT_PID}
+    if [[ -f ${PID_FILE} ]]; then
+	    for  i in 1 2 3; do
+            if [[ -d /proc/`cat ${PID_FILE}` ]]; then
+                kill `cat ${PID_FILE}`
+                sleep 2
+            fi
+        fi
+        rm -f ${PID_FILE}
     else
-        # The CLE procs for the cle user
+        # The tomcat procs for tomcat cle user
         PIDS=`ps -u ${TOMCAT_USER} --no-headers -o pid,cmd | grep "${CATALINA_HOME}" | awk '{ print $1 }'`
         for PID in ${PIDS}; do
-            if [[ $? -eq 0 ]]; then
+            for  i in 1 2 3; do
+                if [[ -d /proc/${PID} ]]; then
+                    kill ${PID}
+                    sleep 2
+                fi
+            fi
+            
+            if [[ -d /proc/${PID} ]]; then
                 kill -9 ${PID}
             fi
         done

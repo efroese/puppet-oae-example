@@ -348,6 +348,7 @@ node solrnode inherits oaenode {
 
 node 'oipp-prod-solr1.academic.rsmart.local' inherits solrnode {
     class { 'oae::solr::tomcat':
+        solr_tarball => $localconfig::solr_tarball,
         master_url   => "${localconfig::solr_remoteurl}/replication",
         solrconfig   => 'rsmart-common/master-solrconfig.xml.erb',
         tomcat_home  => "${localconfig::basedir}/tomcat",

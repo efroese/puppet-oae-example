@@ -7,8 +7,11 @@
 # Erik Froese <erik@hallwaytech.com>
 #
 
-SIS_JAR=<%= scope.lookupvar('sis::batch::artifact') %>
 SIS_BATCH_HOME=<%= scope.lookupvar('sis::batch::home') %>
+SIS_JAR=${SIS_BATCH_HOME}/<%= scope.lookupvar('sis::batch::artifact') %>
+EMAIL_RECIPIENT="<%= scope.lookupvar('sis::batch::email_report') %>"
+
+CSV_DIR=<%= scope.lookupvar('sis::batch::csv_dir') %>
 
 JAVA_OPTS=" -Doae.server.url=<%= scope.lookupvar('sis::batch::server_url') %> "
 JAVA_OPTS=" ${JAVA_OPTS} -Doae.admin.user=<%= scope.lookupvar('sis::batch::oae_user') %> "
@@ -18,6 +21,29 @@ JAVA_OPTS=" ${JAVA_OPTS} -Doae.admin.password=<%= scope.lookupvar('sis::batch::o
 JAVA_OPTS="${JAVA_OPTS} -Dsis.config.file=${SIS_BATCH_HOME}/sis.properties "
 <% end -%>
 
-<% scope.lookupvar('sis::batch::csv_user_filenames').each do |csv_file| %>
-java ${JAVA_OPTS} " -Dfilename@com.rsmart.customer.integration.processor.cle.CleUserProcessor=<%= scope.lookupvar('sis::batch::csv_dir') %>/<%= csv_file %> " -jar $SIS_JAR
-<% end %>
+CSV_ARCHIVE=${CSV_DIR}/`date +%Y%m%d-%H%M`
+mkdir -p ${CSV_ARCHIVE}
+
+OUTPUT=`mktemp`
+
+# Files will be of the form name.school.csv
+SCHOOLS = `ls ${CSV_DIR} | awk -F . '{ print $2 }' | sort | uniq`
+
+for school in $SCHOOLS; do
+    for file in Course Membership User Section SectionMembership; do
+        CSV_FILE="${CSV_DIR}/${file}.${school}.csv"
+        if [[ -f ${CSV_FILE} ]]; then
+            java ${JAVA_OPTS} \
+                " -Dfilename@com.rsmart.customer.integration.processor.cle.Cle${file}Processor=${CSV_FILE} " \
+                -jar $SIS_JAR 2>&1 >> $OUTPUT
+            mv ${CSV_FILE} ${CSV_ARCHIVE}
+        else
+            echo "No file for ${CSV_FILE}" >> $OUTPUT
+        fi
+    done
+done
+
+if [[ $EMAIL_RECIPIENT != "undefined" ]]; then
+    mail -s "SIS batch update for $NOW" $EMAIL_RECIPIENT < $OUTPUT
+fi
+rm -f $OUTPUT

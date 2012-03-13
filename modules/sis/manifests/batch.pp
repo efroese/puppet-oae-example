@@ -25,7 +25,8 @@ class sis::batch (
     $csv_user_filenames = [],
     $server_url,
     $oae_user = 'admin',
-    $oae_password
+    $oae_password,
+    $email_report
     ) inherits sis {
 
     file { "${sis::basedir}/batch":

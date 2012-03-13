@@ -46,6 +46,7 @@ class localconfig {
     ###########################################################################
     # Git (Preview processor)
     $nakamura_zip = 'https://nodeload.github.com/rSmart/nakamura/zipball/develop'
+    $solr_tarball = 'https://nodeload.github.com/rSmart/solr/tarball/1.3.2-rsmart'
 
     ###########################################################################
     # Apache load balancer

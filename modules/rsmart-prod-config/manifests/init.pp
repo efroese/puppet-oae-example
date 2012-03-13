@@ -51,6 +51,7 @@ class localconfig {
     ###########################################################################
     # Git (Preview processor)
     $nakamura_zip = 'https://nodeload.github.com/rSmart/nakamura/zipball/acad-1.1.0-M1-20120130'
+    $solr_tarball = 'https://nodeload.github.com/rSmart/solr/tarball/acad-1.3.1'
 
     ###########################################################################
     # Apache load balancer

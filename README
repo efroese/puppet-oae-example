@@ -1,7 +1,10 @@
 This is a puppet module to help you set up Sakai OAE servers.
 
-This is not a fully featured puppet setup. 
+This is not a fully featured puppet setup.
 For an example check out http://github.com/efroese/puppet-oae-example
+
+### Requires
+- http://github.com/camptocamp/puppet-archive
 
 Currently we can create a few different kinds of OAE servers.
 

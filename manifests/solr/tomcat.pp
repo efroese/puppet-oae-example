@@ -4,11 +4,9 @@
 #
 # == Parameters:
 #
-# $solr_git::     See oae::solr::common
+# $solr_tarball:: See oae::solr::common
 #
-# $solr_tag::     See oae::solr::common
-#
-# $solr_home_tarball:: A URL to a tarball of the solr home build.
+# $solr_home_tarball:: See oae::solr::common
 #
 # $solrconfig::   See oae::solr::common
 #
@@ -38,8 +36,7 @@
 #   }
 #
 class oae::solr::tomcat (
-                    $solr_git          = "http://github.com/sakaiproject/solr.git",
-                    $solr_tag          = "",
+                    $solr_tarball      = "http://nodeload.github.com/sakaiproject/solr/tarball/master",
                     $solr_home_tarball = "http://dl.dropbox.com/u/24606888/puppet-oae-files/home0.tgz",
                     $solrconfig        = 'oae/solrconfig.xml.erb',
                     $schema            = 'oae/schema.xml.erb',
@@ -53,12 +50,11 @@ class oae::solr::tomcat (
     Class['Tomcat6'] -> Class['oae::solr::tomcat']
 
     class { 'oae::solr::common':
-       solr_git => $solr_git,
-       solr_tag => $solr_tag,
+       solr_tarball      => $solr_tarball,
        solr_home_tarball => $solr_home_tarball,
-       solrconfig => $solrconfig,
-       schema => $schema,
-       master_url => $master_url,
+       solrconfig        => $solrconfig,
+       schema            => $schema,
+       master_url        => $master_url,
     }
 
     exec { 'download-war':

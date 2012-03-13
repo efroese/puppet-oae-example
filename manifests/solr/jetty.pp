@@ -4,17 +4,15 @@
 #
 # == Parameters:
 #
-# $solr_tarball:: A URL to a tarball of the solr build.
+# $solr_tarball:: See oae::solr::common
 #
-# $solrconfig::   A template to render the solrconfig.xml file.
+# $solr_home_tarball:: See oae::solr::common
 #
-# $schema::       A template to render the schema.xml file.
+# $solrconfig::   See oae::solr::common
 #
-# $solr_git::     The url for the solr git repository
+# $schema::       See oae::solr::common
 #
-# $solr_tag::     The tag to checkout (optional)
-#
-# $master_url::   The master url for solr clustering (necessary for slave configurations)
+# $master_url::   See oae::solr::common
 #
 # == Actions:
 #   Install a solr server.
@@ -28,16 +26,14 @@
 #   }
 #
 class oae::solr::jetty(
-                    $solr_git          = "http://github.com/sakaiproject/solr.git",
-                    $solr_tag          = "",
+                    $solr_tarball      = "http://nodeload.github.com/sakaiproject/solr/tarball/master",
                     $solr_home_tarball = "http://dl.dropbox.com/u/24606888/puppet-oae-files/home0.tgz",
                     $solrconfig        = 'oae/solrconfig.xml.erb',
                     $schema            = 'oae/schema.xml.erb',
                     $master_url        = 'set the master url' ) {
 
     class { 'oae::solr::common':
-        solr_git => $solr_git,
-        solr_tag => $solr_tag,
+        solr_tarball      => $solr_git,
         solr_home_tarball => $solr_home_tarball,
         solrconfig => $solrconfig,
         schema => $schema,

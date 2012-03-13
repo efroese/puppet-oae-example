@@ -6,7 +6,7 @@ oae.admin.password=admin
 staging.dir=sample
 
 # standard Basic SIS properties for course
-filename@com.rsmart.customer.integration.processor.cle.CleCourseProcessor=${staging.dir}/courses.csv
+filename@com.rsmart.customer.integration.processor.cle.CleCourseProcessor=\${staging.dir}/courses.csv
 columns@com.rsmart.customer.integration.processor.cle.CleCourseProcessor=9
 headerRowPresent@com.rsmart.customer.integration.processor.cle.CleCourseProcessor=true
 dateFormat@com.rsmart.customer.integration.processor.cle.CleCourseProcessor=d-MMM-yy
@@ -84,7 +84,7 @@ termMap@com.rsmart.customer.integration.processor.cle.CleCourseProcessor=  \
 
 
 # standard Basic SIS properties for membership
-filename@com.rsmart.customer.integration.processor.cle.CleMembershipProcessor=${staging.dir}/members.csv
+filename@com.rsmart.customer.integration.processor.cle.CleMembershipProcessor=\${staging.dir}/members.csv
 columns@com.rsmart.customer.integration.processor.cle.CleMembershipProcessor=3
 headerRowPresent@com.rsmart.customer.integration.processor.cle.CleMembershipProcessor=true
 
@@ -130,7 +130,7 @@ roleMap@com.rsmart.customer.integration.processor.cle.CleMembershipProcessor=   
 
 
 # standard Basic SIS properties for User
-filename@com.rsmart.customer.integration.processor.cle.CleUserProcessor=${staging.dir}/users.csv
+filename@com.rsmart.customer.integration.processor.cle.CleUserProcessor=\${staging.dir}/users.csv
 columns@com.rsmart.customer.integration.processor.cle.CleUserProcessor=8
 headerRowPresent@com.rsmart.customer.integration.processor.cle.CleUserProcessor=true
 updateAllowed@com.rsmart.customer.integration.processor.cle.CleUserProcessor=true
@@ -145,7 +145,7 @@ disabled@com.rsmart.customer.integration.processor.cle.CleUserProcessor=false
 extraPropertyNames@com.rsmart.customer.integration.processor.cle.CleUserProcessor=["eppn"]
 
 # standard Basic SIS properties for sections
-filename@com.rsmart.customer.integration.processor.cle.CleSectionProcessor=${staging.dir}/sections.csv
+filename@com.rsmart.customer.integration.processor.cle.CleSectionProcessor=\${staging.dir}/sections.csv
 columns@com.rsmart.customer.integration.processor.cle.CleSectionProcessor=5
 headerRowPresent@com.rsmart.customer.integration.processor.cle.CleSectionProcessor=true
 deleteSections@com.rsmart.customer.integration.processor.cle.CleSectionProcessor=false
@@ -166,7 +166,7 @@ sectionTitleFormat@com.rsmart.customer.integration.processor.cle.CleSectionProce
 
 
 # standard Basic SIS properties for remove user
-filename@com.rsmart.customer.integration.processor.cle.CleRemoveUserProcessor=${staging.dir}/remove_users.csv
+filename@com.rsmart.customer.integration.processor.cle.CleRemoveUserProcessor=\${staging.dir}/remove_users.csv
 columns@com.rsmart.customer.integration.processor.cle.CleRemoveUserProcessor=10
 headerRowPresent@com.rsmart.customer.integration.processor.cle.CleRemoveUserProcessor=true
 
@@ -175,7 +175,7 @@ headerRowPresent@com.rsmart.customer.integration.processor.cle.CleRemoveUserProc
 disabled@com.rsmart.customer.integration.processor.cle.CleRemoveUserProcessor=true
 
 # standard Basic SIS properties for section memberships
-filename@com.rsmart.customer.integration.processor.cle.CleSectionMembershipProcessor=${staging.dir}/section_members.csv
+filename@com.rsmart.customer.integration.processor.cle.CleSectionMembershipProcessor=\${staging.dir}/section_members.csv
 columns@com.rsmart.customer.integration.processor.cle.CleSectionMembershipProcessor=4
 headerRowPresent@com.rsmart.customer.integration.processor.cle.CleSectionMembershipProcessor=true
 studentRole@com.rsmart.customer.integration.processor.cle.CleSectionMembershipProcessor=student

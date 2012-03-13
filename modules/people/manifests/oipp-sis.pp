@@ -38,7 +38,7 @@ class people::oipp-sis::external {
         gid        => 'ucd_sis',
         home       => '/home/ucd_sis',
         managehome => true,
-        groups     => ['ucd_sis',],
+        groups     => ['ucd_sis','rsshusers',],
         shell      => '/usr/bin/rssh'
     }
     ssh_authorized_key { 'ucd_sis-pub':
@@ -56,7 +56,7 @@ class people::oipp-sis::external {
         gid        => 'ucb_sis',
         home       => '/home/ucb_sis',
         managehome => true,
-        groups     => ['ucb_sis',],
+        groups     => ['ucb_sis','rsshusers',],
         shell      => '/usr/bin/rssh'
     }
     ssh_authorized_key { 'ucb_sis-pub':
@@ -75,7 +75,7 @@ class people::oipp-sis::external {
         gid        => 'ucm_sis',
         home       => '/home/ucm_sis',
         managehome => true,
-        groups     => ['ucm_sis',],
+        groups     => ['ucm_sis','rsshusers',],
         shell      => '/usr/bin/rssh'
     }
     ssh_authorized_key { 'ucm_sis-pub':
@@ -93,7 +93,7 @@ class people::oipp-sis::external {
         gid        => 'ucla_sis',
         home       => '/home/ucla_sis',
         managehome => true,
-        groups     => ['ucla_sis',],
+        groups     => ['ucla_sis','rsshusers',],
         shell      => '/usr/bin/rssh'
     }
     ssh_authorized_key { 'ucla_sis-pub':
@@ -111,7 +111,7 @@ class people::oipp-sis::external {
         gid        => 'ucsc_sis',
         home       => '/home/ucsc_sis',
         managehome => true,
-        groups     => ['ucsc_sis',],
+        groups     => ['ucsc_sis','rsshusers',],
         shell      => '/usr/bin/rssh'
     }
     ssh_authorized_key { 'ucsc_sis-pub':

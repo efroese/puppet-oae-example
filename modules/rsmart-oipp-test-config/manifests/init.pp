@@ -65,8 +65,8 @@ class localconfig {
     $jarfile       = 'com.rsmart.academic.app.oipp-1.1.2-rsmart-SNAPSHOT.jar'
     $java          = '/usr/java/jdk1.6.0_30/bin/java'
     $java_home     = '/usr/java/jdk1.6.0_30'
-    $javamemorymax = '1024m'
-    $javamemorymin = '1024m'
+    $javamemorymax = '4096m'
+    $javamemorymin = '4096m'
     $javapermsize  = '512m'
 
     $admin_password = 'e4D7kYbQgswCHp'

@@ -168,6 +168,8 @@ node 'oipp-test.academic.rsmart.local' inherits oaenode {
         store_dir       => $localconfig::storedir,
     }
 
+    class { 'rsmart-common::logging': }
+
     oae::app::server::sling_config {
         "org.sakaiproject.nakamura.lite.storage.jdbc.JDBCStorageClientPool":
         config => {

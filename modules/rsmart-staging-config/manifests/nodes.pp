@@ -112,6 +112,8 @@ node oaeappnode inherits oaenode {
         store_dir       => $localconfig::storedir,
     }
 
+    class { 'rsmart-common::logging': }
+
     ###########################################################################
     # Storage
     class { 'nfs::client': }

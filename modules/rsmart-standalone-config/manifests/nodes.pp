@@ -111,6 +111,8 @@ node /oipp-test[2]?.academic.rsmart.local/ inherits oaenode {
         setenv_template => 'rsmart-common/setenv.sh.erb',
     }
 
+    class { 'rsmart-common::logging': }
+
     oae::app::server::sling_config {
         "org.sakaiproject.nakamura.lite.storage.jdbc.JDBCStorageClientPool":
         config => {

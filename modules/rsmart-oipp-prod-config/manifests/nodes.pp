@@ -178,6 +178,8 @@ node oaeappnode inherits oaenode {
         setenv_template => 'rsmart-common/setenv.sh.erb',
         store_dir       => $localconfig::storedir,
     }
+
+    class { 'rsmart-common::logging': }
     
     ###########################################################################
     # Storage

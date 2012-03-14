@@ -201,6 +201,7 @@ node 'nightly.academic.rsmart.local' inherits oaenode {
     #
     # CLE Server
     #
+    file { "${localconfig::homedir}/sakaicle": ensure => directory }
 
     # Install tomcat 5.5.35 from a mirror and configure it
     class { 'tomcat6':
@@ -217,33 +218,49 @@ node 'nightly.academic.rsmart.local' inherits oaenode {
         setenv_template      => 'localconfig/cle-setenv.sh.erb',
         jmxremote_access_template   => 'localconfig/jmxremote.access.erb',
         jmxremote_password_template => 'localconfig/jmxremote.password.erb',
+        require => File["${localconfig::homedir}/sakaicle"],
     }
 
-    # Base rSmart Tomcat customizations
-    tomcat6::overlay { 'tomcat6-overlay-rsmart-cle-prod':
-        tomcat_home  => "${localconfig::homedir}/sakaicle/tomcat",
-        tarball_path => "${localconfig::homedir}/sakaicle/rsmart-cle-prod-overlay.tbz",
-        creates      => "${localconfig::homedir}/sakaicle/tomcat/webapps/ROOT/rsmart.jsp",
-        user         => $oae::params::user,
-        require      => Class['Tomcat6']
+    archive { 'rsmart-tomcat-drivers-overlay':
+        ensure         => present,
+        url            => 'https://rsmart-releases.s3.amazonaws.com/Dev/CLE/rsmart-tomcat-drivers-overlay.tar.bz2',
+        digest_string  => '3cb7b906cde983cb4b92e0268898c68b',
+        target         => "${localconfig::homedir}/sakaicle/tomcat",
+        src_target     => "${localconfig::homedir}/sakaicle/",
+        extension      => 'tar.bz2',
+        timeout        => '0',
+        allow_insecure => true,
+        require        => Class['Tomcat6'],
     }
 
-    archive::download { "upgrader_CLEv2.8.0.29.tar.bz2":
-        ensure        => present,
-        url           => $localconfig::cle_tarball_url,
-        digest_string => $localconfig::cle_tarball_digest,
-        src_target    => "${localconfig::homedir}/sakaicle/",
-        require       => Class['Tomcat6'],
+    archive { 'rsmart-tomcat-cle-base-overlay':
+        ensure         => present,
+        url            => 'https://rsmart-releases.s3.amazonaws.com/Dev/CLE/rsmart-tomcat-cle-base-overlay.tar.bz2',
+        digest_string  => 'bd808832907f560486ac82567d09399c',
+        target         => "${localconfig::homedir}/sakaicle/tomcat",
+        src_target     => "${localconfig::homedir}/sakaicle/",
+        extension      => 'tar.bz2',
+        timeout        => '0',
+        allow_insecure => true,
+        require        => Class['Tomcat6'],
     }
 
-    # TODO - remove this once capistrano handles it.
-    # CLE rSmart Tomcat customizations
-    tomcat6::overlay { 'tomcat6-overlay-upgrader_CLEv2.8.0.29.tar.bz2':
-        tomcat_home  => "${localconfig::homedir}/sakaicle/tomcat",
-        tarball_path => "${localconfig::homedir}/sakaicle/rsmart-cle-prod-overlay.tbz",
-        creates      => "${localconfig::homedir}/sakaicle/tomcat/webapps/ROOT/rsmart.jsp",
-        user         => $oae::params::user,
-        require      => Archive::Download["upgrader_CLEv2.8.0.29.tar.bz2"],
+    archive { 'upgrader_CLEv2.8.0.29':
+        ensure         => present,
+        url            => $localconfig::cle_tarball_url,
+        digest_string  => $localconfig::cle_tarball_digest,
+        target         => "${localconfig::homedir}/sakaicle/tomcat",
+        src_target     => "${localconfig::homedir}/sakaicle/",
+        extension      => 'tar.bz2',
+        timeout        => '0',
+        allow_insecure => true,
+        require        => Class['Tomcat6'],
+    }
+
+    file { "${localconfig::homedir}/sakaicle/tomcat/sakai/files":
+        ensure => link,
+        target => "${localconfig::homedir}/sakaicle/tomcat/files",
+        require => Class['Tomcat6'],
     }
 
     # CLE tomcat overlay and configuration
@@ -258,7 +275,7 @@ node 'nightly.academic.rsmart.local' inherits oaenode {
         configuration_xml_template   => 'rsmart-common/cle-sakai-configuration.xml.erb',
         sakai_properties_template    => 'rsmart-common/sakai.properties.erb',
         local_properties_template    => 'rsmart-common/local.properties.erb',
-        instance_properties_template => 'rsmart-common/instance.properties.erb',
+        instance_properties_template => 'localconfig/instance.properties.erb',
         linktool_salt                => $localconfig::linktool_salt,
         linktool_privkey             => $localconfig::linktool_privkey,
     }

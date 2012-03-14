@@ -1,7 +1,5 @@
 class rsmart-common::logging {
 
-    Class['Oae::app::server'] -> Class['Rsmart-common::Logging']
-
     oae::app::server::sling_config {
         'org.apache.sling.commons.log.LogManager.factory.config.search-logger-uuid':
         config => {

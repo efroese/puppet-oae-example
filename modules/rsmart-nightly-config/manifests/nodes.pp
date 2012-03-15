@@ -257,7 +257,7 @@ node 'nightly.academic.rsmart.local' inherits oaenode {
         require        => Class['Tomcat6'],
     }
 
-    file { "${localconfig::homedir}/sakaicle/tomcat/sakai/files":
+    file { "${localconfig::homedir}/sakaicle/sakai/files":
         ensure => link,
         target => "${localconfig::homedir}/sakaicle/tomcat/files",
         require => Class['Tomcat6'],

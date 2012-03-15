@@ -1,7 +1,8 @@
 serverId=<%= scope.lookupvar('cle::server_id') %>
 
 # only have ddl & smtp enabled on one node
-auto.ddl=false
+# auto.ddl is enabled on nightly since we're going to drop the db between runs.
+auto.ddl=true
 smtp.enabled=true
 
 # when uploading the spreadsheet, overwrite realms, roles, tools & categories

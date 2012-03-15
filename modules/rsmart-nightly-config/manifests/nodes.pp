@@ -221,46 +221,64 @@ node 'nightly.academic.rsmart.local' inherits oaenode {
         require => File["${localconfig::homedir}/sakaicle"],
     }
 
-    archive { 'rsmart-tomcat-drivers-overlay':
+    archive::download { 'rsmart-tomcat-drivers-overlay.tar.bz2':
         ensure         => present,
         url            => 'https://rsmart-releases.s3.amazonaws.com/Dev/CLE/rsmart-tomcat-drivers-overlay.tar.bz2',
         digest_string  => '3cb7b906cde983cb4b92e0268898c68b',
-        target         => "${localconfig::homedir}/sakaicle/tomcat",
         src_target     => "${localconfig::homedir}/sakaicle/",
-        extension      => 'tar.bz2',
         timeout        => '0',
         allow_insecure => true,
-        require        => Class['Tomcat6'],
+        require        => File[$tomcat6::basedir],
+        notify         => Exec['unpack-rsmart-tomcat-drivers-overlay'],
+    }
+    exec { 'unpack-rsmart-tomcat-drivers-overlay':
+        cwd => "${localconfig::homedir}/sakaicle/tomcat",
+        command => "tar xjvf ../rsmart-tomcat-drivers-overlay.tar.bz2",
+        creates => "${localconfig::homedir}/sakaicle/tomcat/common/lib/mysql-connector-java-5.1.18-bin.jar",
+        require => Archive::Download['rsmart-tomcat-drivers-overlay.tar.bz2'],
+        notify  => Exec["chown-apache-tomcat-5.5.35"],
     }
 
-    archive { 'rsmart-tomcat-cle-base-overlay':
+    archive::download { 'rsmart-tomcat-cle-base-overlay.tar.bz2':
         ensure         => present,
-        url            => 'https://rsmart-releases.s3.amazonaws.com/Dev/CLE/rsmart-tomcat-cle-base-overlay.tar.bz2',
-        digest_string  => 'bd808832907f560486ac82567d09399c',
-        target         => "${localconfig::homedir}/sakaicle/tomcat",
+        url            => 'http://dl.dropbox.com/u/24606888/rsmart-tomcat-cle-base-overlay.tar.bz2',
+        digest_string  => '5d3ecd5500f50d7b9b4f7383e9220d30',
         src_target     => "${localconfig::homedir}/sakaicle/",
-        extension      => 'tar.bz2',
         timeout        => '0',
         allow_insecure => true,
-        require        => Class['Tomcat6'],
+        require        => File[$tomcat6::basedir],
+    }
+    exec { 'unpack-rsmart-tomcat-cle-base-overlay':
+        cwd     => "${localconfig::homedir}/sakaicle/tomcat",
+        command => "tar xjvf ../rsmart-tomcat-cle-base-overlay.tar.bz2",
+        creates => "${localconfig::homedir}/sakaicle/tomcat/webapps/ROOT/rsmart.jsp",
+        require => Archive::Download['rsmart-tomcat-cle-base-overlay.tar.bz2'],
+        notify  => Exec["chown-apache-tomcat-5.5.35"],
     }
 
-    archive { 'upgrader_CLEv2.8.0.29':
+    archive::download { 'upgrader_CLEv2.8.0.29.tar.bz2':
         ensure         => present,
         url            => $localconfig::cle_tarball_url,
         digest_string  => $localconfig::cle_tarball_digest,
-        target         => "${localconfig::homedir}/sakaicle/tomcat",
         src_target     => "${localconfig::homedir}/sakaicle/",
-        extension      => 'tar.bz2',
         timeout        => '0',
         allow_insecure => true,
-        require        => Class['Tomcat6'],
+        require        => File[$tomcat6::basedir],
+        notify        => Exec["chown-apache-tomcat-5.5.35"],
     }
+    exec { 'unpack-upgrader_CLEv2.8.0.29':
+        cwd     => "${localconfig::homedir}/sakaicle/tomcat",
+        command => "tar xjvf ../upgrader_CLEv2.8.0.29.tar.bz2",
+        creates => "${localconfig::homedir}/sakaicle/tomcat/common/lib/sakai-kernel-common-1.2.1.jar",
+        require => Archive::Download['upgrader_CLEv2.8.0.29.tar.bz2'],
+        notify  => Exec["chown-apache-tomcat-5.5.35"],
+    }
+    
 
     file { "${localconfig::homedir}/sakaicle/sakai/files":
         ensure => link,
         target => "${localconfig::homedir}/sakaicle/tomcat/files",
-        require => Class['Tomcat6'],
+        require => File[$tomcat6::basedir],
     }
 
     # CLE tomcat overlay and configuration
@@ -300,13 +318,50 @@ node 'nightly.academic.rsmart.local' inherits oaenode {
         password => $localconfig::cle_db_password,
     }
 
-    augeas { "my.cnf/mysqld-lower_case_table_names-1":
+    augeas { "my.cnf/mysqld-rsmart":
         context => "${mysql::params::mycnfctx}/mysqld/",
         load_path => "/usr/share/augeas/lenses/contrib/",
-        changes => [
-          "set lower_case_table_names 1",
-        ],
         require => File["/etc/mysql/my.cnf"],
         notify => Service["mysql"],
+        changes => [
+            # general settings
+            "set default-storage-engine InnoDB",
+            "set character_set_server   UTF8",
+            "set transaction_isolation  READ-COMMITTED",
+            "set wait_timeout           3600",
+            "set interactive_timeout    3600",
+            "set lower_case_table_names 1",
+
+            # network-related settings
+            # "set skip_name_resolve  1",
+            "set back_log			  500",
+            "set max_connections	  750",
+            "set max_connect_errors 1000",
+            "set max_allowed_packet 128M",
+
+            # logging
+            "set slow_query_log_file /var/log/mysql/mysqld-slow.log",
+            "set log_error           /var/log/mysql/mysql-errors.log",
+            # "set log_bin             /var/lib/mysql/binlogs/mysqld-binlog",
+            # "set log_bin_index       /var/lib/mysql/binlogs/mysqld-binlog",
+            # "set binlog_format          MIXED",
+            "set expire_logs_days     7",
+            "set sync_binlog          0",
+
+            # Replication (for future use, possibly)
+            "set server_id 10",
+
+            # general buffers and caches
+            "set max_heap_table_size      64M",
+            "set tmp_table_size           64M",
+            "set sort_buffer_size         4M",
+            "set join_buffer_size         2M",
+            "set key_buffer_size          64M",
+            "set read_buffer_size         2M",
+            "set read_rnd_buffer_size     1M",
+            "set bulk_insert_buffer_size  128M",
+            "set table_cache              4096",
+            "set thread_cache_size        32",
+        ],
     }
 }

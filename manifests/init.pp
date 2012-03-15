@@ -77,12 +77,14 @@ class tomcat6 ( $parentdir               = '/usr/local',
         target  => $parentdir,
         src_target => $parentdir,
         require => Archive::Download["apache-tomcat-${tomcat_version}.tar.gz"],
+        notify  => Exec["chown-apache-tomcat-${tomcat_version}"],
     }
 
     exec { "chown-apache-tomcat-${tomcat_version}":
         command => "chown -R ${tomcat_user}:${tomcat_group} ${parentdir}/apache-tomcat-${tomcat_version}/*",
         unless  => "[ `stat -c %U ${parentdir}/apache-tomcat-${tomcat_version}/conf` == ${tomcat_user} ]",
         require => Archive::Extract["apache-tomcat-${tomcat_version}"],
+        refreshonly => true,
     }
 
     file { $basedir: 

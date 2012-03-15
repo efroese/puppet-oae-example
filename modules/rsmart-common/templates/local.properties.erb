@@ -51,7 +51,7 @@ smtp@org.sakaiproject.email.api.EmailService=<%= scope.lookupvar('localconfig::c
 
 # DNS addresses used by James for incoming email
 smtp.dns.1 = <%= scope.lookupvar('localconfig::cle_dns')[0] %>
-smtp.dns.2 = <%= scope.lookupvar('localconfig::cle_dns')[1] %>255.255.255.1
+smtp.dns.2 = <%= scope.lookupvar('localconfig::cle_dns')[1] %>
 
 # SMTP port James runs on - defaults to 25, but recommendation is to run on an
 # unprivileged port and use DNAT port-forwarding or a standard mailer on 25 to

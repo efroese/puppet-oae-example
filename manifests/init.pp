@@ -106,7 +106,7 @@ class tomcat6 ( $parentdir               = '/usr/local',
         require => File[$basedir],
     }
 
-    file { "/var/log/tomcat":
+    file { '/var/log/tomcat':
         ensure => directory,
         owner  => root,
         group  => $tomcat_group,
@@ -116,7 +116,7 @@ class tomcat6 ( $parentdir               = '/usr/local',
     file { "${parentdir}/apache-tomcat-${tomcat_version}/logs":
         ensure => link,
         target => "/var/log/tomcat",
-        require => Exec["chown-apache-tomcat-${tomcat_version}"],
+        require => [ Archive::Extract["apache-tomcat-${tomcat_version}"], File['/var/log/tomcat'], ],
         force => true,
     }
 

@@ -39,7 +39,7 @@ stop() {
                 kill `cat ${PID_FILE}`
                 sleep 2
             fi
-        fi
+        done
         rm -f ${PID_FILE}
     else
         # The tomcat procs for tomcat cle user
@@ -50,7 +50,7 @@ stop() {
                     kill ${PID}
                     sleep 2
                 fi
-            fi
+            done
             
             if [[ -d /proc/${PID} ]]; then
                 kill -9 ${PID}

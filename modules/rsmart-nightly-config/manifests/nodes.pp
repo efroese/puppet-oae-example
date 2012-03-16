@@ -222,59 +222,47 @@ node 'nightly.academic.rsmart.local' inherits oaenode {
         require => File["${localconfig::homedir}/sakaicle"],
     }
 
-    archive::download { 'rsmart-tomcat-drivers-overlay.tar.bz2':
+    archive { 'rsmart-tomcat-drivers-overlay':
         ensure         => present,
         url            => 'https://rsmart-releases.s3.amazonaws.com/Dev/CLE/rsmart-tomcat-drivers-overlay.tar.bz2',
         digest_string  => '3cb7b906cde983cb4b92e0268898c68b',
         src_target     => "${localconfig::homedir}/sakaicle/",
+        target         => "${localconfig::homedir}/sakaicle/tomcat",
+        creates        => "${localconfig::homedir}/sakaicle/tomcat/common/lib/mysql-connector-java-5.1.18-bin.jar",
         timeout        => '0',
+        extension      => 'tar.bz2',
         allow_insecure => true,
         require        => File[$tomcat6::basedir],
-        notify         => Exec['unpack-rsmart-tomcat-drivers-overlay'],
-    }
-    exec { 'unpack-rsmart-tomcat-drivers-overlay':
-        cwd => "${localconfig::homedir}/sakaicle/tomcat",
-        command => "tar xjvf ../rsmart-tomcat-drivers-overlay.tar.bz2",
-        creates => "${localconfig::homedir}/sakaicle/tomcat/common/lib/mysql-connector-java-5.1.18-bin.jar",
-        require => Archive::Download['rsmart-tomcat-drivers-overlay.tar.bz2'],
-        notify  => Exec["chown-apache-tomcat-5.5.35"],
+        notify         => Exec["chown-apache-tomcat-5.5.35"],
     }
 
-    archive::download { 'rsmart-tomcat-cle-base-overlay.tar.bz2':
+    archive { 'rsmart-tomcat-cle-base-overlay':
         ensure         => present,
         url            => 'http://dl.dropbox.com/u/24606888/rsmart-tomcat-cle-base-overlay.tar.bz2',
         digest_string  => '5d3ecd5500f50d7b9b4f7383e9220d30',
         src_target     => "${localconfig::homedir}/sakaicle/",
+        target         => "${localconfig::homedir}/sakaicle/tomcat",
+        creates        => "${localconfig::homedir}/sakaicle/tomcat/webapps/ROOT/rsmart.jsp",
         timeout        => '0',
+        extension      => 'tar.bz2',
         allow_insecure => true,
         require        => File[$tomcat6::basedir],
-    }
-    exec { 'unpack-rsmart-tomcat-cle-base-overlay':
-        cwd     => "${localconfig::homedir}/sakaicle/tomcat",
-        command => "tar xjvf ../rsmart-tomcat-cle-base-overlay.tar.bz2",
-        creates => "${localconfig::homedir}/sakaicle/tomcat/webapps/ROOT/rsmart.jsp",
-        require => Archive::Download['rsmart-tomcat-cle-base-overlay.tar.bz2'],
-        notify  => Exec["chown-apache-tomcat-5.5.35"],
+        notify         => Exec["chown-apache-tomcat-5.5.35"],
     }
 
-    archive::download { 'upgrader_CLEv2.8.0.29.tar.bz2':
+    archive { 'upgrader_CLEv2.8.0.29':
         ensure         => present,
         url            => $localconfig::cle_tarball_url,
         digest_string  => $localconfig::cle_tarball_digest,
         src_target     => "${localconfig::homedir}/sakaicle/",
+        target         => "${localconfig::homedir}/sakaicle/tomcat",
+        creates        => "${localconfig::homedir}/sakaicle/tomcat/common/lib/sakai-kernel-common-1.2.1.jar",
         timeout        => '0',
+        extension      => 'tar.bz2',
         allow_insecure => true,
         require        => File[$tomcat6::basedir],
-        notify        => Exec["chown-apache-tomcat-5.5.35"],
+        notify         => Exec["chown-apache-tomcat-5.5.35"],
     }
-    exec { 'unpack-upgrader_CLEv2.8.0.29':
-        cwd     => "${localconfig::homedir}/sakaicle/tomcat",
-        command => "tar xjvf ../upgrader_CLEv2.8.0.29.tar.bz2",
-        creates => "${localconfig::homedir}/sakaicle/tomcat/common/lib/sakai-kernel-common-1.2.1.jar",
-        require => Archive::Download['upgrader_CLEv2.8.0.29.tar.bz2'],
-        notify  => Exec["chown-apache-tomcat-5.5.35"],
-    }
-    
 
     file { "${localconfig::homedir}/sakaicle/sakai/files":
         ensure => link,
@@ -284,19 +272,20 @@ node 'nightly.academic.rsmart.local' inherits oaenode {
 
     # CLE tomcat overlay and configuration
     class { 'cle':
-        user            => $oae::params::user,
-        basedir         => "${localconfig::homedir}/sakaicle",
-        tomcat_home     => "${localconfig::homedir}/sakaicle/tomcat",
-        server_id       => $localconfig::cle_server_id,
-        db_url          => $localconfig::cle_db_url,
-        db_user         => $localconfig::cle_db_user,
-        db_password     => $localconfig::cle_db_password,
+        user             => $oae::params::user,
+        basedir          => "${localconfig::homedir}/sakaicle",
+        tomcat_home      => "${localconfig::homedir}/sakaicle/tomcat",
+        server_id        => $localconfig::cle_server_id,
+        db_url           => $localconfig::cle_db_url,
+        db_user          => $localconfig::cle_db_user,
+        db_password      => $localconfig::cle_db_password,
+        linktool_salt    => $localconfig::linktool_salt,
+        linktool_privkey => $localconfig::linktool_privkey,
         configuration_xml_template   => 'rsmart-common/cle-sakai-configuration.xml.erb',
         sakai_properties_template    => 'rsmart-common/sakai.properties.erb',
         local_properties_template    => 'rsmart-common/local.properties.erb',
         instance_properties_template => 'localconfig/instance.properties.erb',
-        linktool_salt                => $localconfig::linktool_salt,
-        linktool_privkey             => $localconfig::linktool_privkey,
+        require                      => Mysql::Database[$localconfig::cle_db],
     }
 
     ###########################################################################

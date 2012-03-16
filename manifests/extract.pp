@@ -11,6 +11,7 @@ Parameters:
 - *$root_dir: Default value "".
 - *$extension: Default value ".tar.gz".
 - *$timeout: Default value 120.
+- *$creates: Optional, a file the archive creates.
 
 Example usage:
 
@@ -36,7 +37,8 @@ define archive::extract (
   $src_target="/usr/src",
   $root_dir="",
   $extension="tar.gz",
-  $timeout=120) {
+  $timeout=120,
+  $creates=false) {
 
   if $root_dir != "" {
     $extract_dir = "${target}/${root_dir}"
@@ -60,7 +62,10 @@ define archive::extract (
           'tgz2'    => "mkdir -p ${target} && ${extract_tarbz2}",
           default   => fail ( "Unknown extension value '${extension}'" ),
         },
-        creates => $extract_dir,
+        creates => $creates ? {
+          false => $extract_dir,
+          default => $creates
+        },
         timeout => $timeout
       }
     }

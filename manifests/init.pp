@@ -17,6 +17,7 @@ Parameters:
 - *$extension: Default value ".tar.gz"
 - *$timeout: Default value 120
 - *$allow_insecure: Default value false
+- *$creates: Default value false
 
 Example usage:
 
@@ -39,7 +40,8 @@ define archive (
   $root_dir='',
   $extension='tar.gz',
   $src_target='/usr/src',
-  $allow_insecure=false){
+  $allow_insecure=false,
+  $creates=false){
 
   archive::download {"${name}.${extension}":
     ensure => $ensure,
@@ -60,6 +62,7 @@ define archive (
     root_dir => $root_dir,
     extension => $extension,
     timeout => $timeout,
-    require => Archive::Download["${name}.${extension}"]
+    creates => $creates,
+    require => Archive::Download["${name}.${extension}"],
   }
 }

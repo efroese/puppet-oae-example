@@ -4,7 +4,19 @@
 #
 # 
 node /qa.academic.rsmart.local/ inherits oaenode {
-    
+
+    ###########################################################################
+    # System
+
+    limits::conf {
+        "${localconfig::user}-soft": domain => $localconfig::user, type => soft, item => nofile, value => 20000;
+        "${localconfig::user}-hard": domain => $localconfig::user, type => hard, item => nofile, value => 20000;
+    }
+
+    class { 'rsmart-common::mysql': stage => init }
+
+    ###########################################################################
+    # Apache
     class { 'apache::ssl': }
 
     # Headers is not in the default set of enabled modules
@@ -207,5 +219,15 @@ node /qa.academic.rsmart.local/ inherits oaenode {
         database => $localconfig::cle_db,
         user     => $localconfig::cle_db_user,
         password => $localconfig::cle_db_password,
+    }
+
+    augeas { "my.cnf/mysqld-rsmart":
+        context => "${mysql::params::mycnfctx}/mysqld/",
+        load_path => "/usr/share/augeas/lenses/contrib/",
+        require => File["/etc/mysql/my.cnf"],
+        notify => Service["mysql"],
+        changes => [
+            $rsmart-common::mysql::cle_changes,
+        ],
     }
 }

@@ -13,6 +13,10 @@ node 'oipp-test.academic.rsmart.local' inherits oaenode {
         "${localconfig::user}-hard": domain => $localconfig::user, type => hard, item => nofile, value => 20000;
     }
     
+    class { 'rsmart-common::mysql': stage => init }
+
+    ###########################################################################
+    # Apache
     class { 'apache::ssl': }
 
     # Headers is not in the default set of enabled modules
@@ -384,7 +388,7 @@ node 'oipp-test.academic.rsmart.local' inherits oaenode {
         context => "${mysql::params::mycnfctx}/mysqld/",
         load_path => "/usr/share/augeas/lenses/contrib/",
         changes => [
-          "set lower_case_table_names 1",
+            $rsmart-common::mysql::cle_changes
         ],
         require => File["/etc/mysql/my.cnf"],
         notify => Service["mysql"],

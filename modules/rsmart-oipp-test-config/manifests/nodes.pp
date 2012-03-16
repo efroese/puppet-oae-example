@@ -339,7 +339,7 @@ node 'oipp-test.academic.rsmart.local' inherits oaenode {
     }
 
     # CLE install
-    archive { 'rsmart-cle-prod-overlay.tar.bz2':
+    archive { 'rsmart-cle-prod-overlay':
         ensure         => present,
         url            => $localconfig::cle_tarball_url,
         checksum       => false,

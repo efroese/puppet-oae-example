@@ -58,4 +58,8 @@ class people {
     realize(Group['mdesimone'])
     realize(User['mdesimone'])
     realize(Ssh_authorized_key['mdesimone-home-pub'])
+
+    realize(Group['jbush'])
+    realize(User['jbush'])
+    realize(Ssh_authorized_key['jbush-pub'])
 }

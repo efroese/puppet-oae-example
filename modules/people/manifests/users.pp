@@ -233,4 +233,22 @@ class people::users {
         user => 'jenkins',
         require => User['jenkins'],
     }
+
+    @user { 'jbush': 
+        ensure     => present,
+        uid        => '511',
+        gid        => 'jbush',
+        home       => '/home/jbush',
+        managehome => true,
+        groups     => ['jbush', 'wheel',],
+    }
+
+    @ssh_authorized_key { 'jbush-pub':
+        ensure => present,
+        key  => 'AAAAB3NzaC1kc3MAAACBANvNMJtQDJJxPEQ8ljYELP7UupXyGragkOfvstm9vfSO7dLD0bGPdRl6MH4SvpmjwmVtbXQcrEAdKtMgdZSeQl6a17rCMUQFzt9QHRWXsIoTwppYse6E4J/wfGKaHtjKeb3t5apwrGV3sfwZoFiwMtcedm9E3LCi/6DhJSwwmIXfAAAAFQD1C0/0U/qbrvLPoainAbdK9T7UwwAAAIBCLuiKDXlL4x1mC1BnyI/oQASUuGR/+tmbAyzbmer+Er83ORa7wzhs2RhXHNcsHQvnfN9eVGZgGLhqddI9r+a0xXLJufb1z3ZIySPlsRE77qZr2is9BA0sMyxbIWIRX/gL5hdQNxRf4qzLc1rfWKkLDQhs2LUiphtY7yY9hj/FMQAAAIEAsVakTqKU7pC98TZvGTVmjc3FoRvjgnDxWI9pF0SSX+fSvE9ZcPsHj4SUBbD6YpNfZsjN1XGobaFYQdRn3izdm6HpsjomKUEb3QITRZ8nayy1kplcAR+IpNjI42GMQzcc3KnonGXopwMg5m7zUK4+mdPgW43zF0H9P3kW1v3bhQI=',
+        type => 'ssh-dss',
+        user => 'jbush',
+        require => User['jbush'],
+    }
+
 }

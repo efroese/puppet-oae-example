@@ -11,7 +11,7 @@
 
 TOMCAT_USER="<%= tomcat_user %>"
 CATALINA_HOME="<%= basedir %>"
-PID_FILE="<%= basedir %>/temp/tomcat.pid"
+PID_FILE="<%= basedir %>/work/tomcat.pid"
 
 PROG="tomcat"
 
@@ -23,7 +23,6 @@ help() {
 start() {
 	echo -n "Starting ${PROG}: "
 	su --login --command "${CATALINA_HOME}/bin/startup.sh" ${TOMCAT_USER}
-	ps -u ${TOMCAT_USER} --no-headers -o pid,cmd | grep "${CATALINA_HOME}" | awk '{ print $1 }' > ${PID_FILE};
 	echo "done.";
 }
 
@@ -37,7 +36,7 @@ stop() {
 	    for  i in 1 2 3; do
             if [[ -d /proc/`cat ${PID_FILE}` ]]; then
                 kill `cat ${PID_FILE}`
-                sleep 2
+                sleep 30
             fi
         done
         rm -f ${PID_FILE}
@@ -48,7 +47,7 @@ stop() {
             for  i in 1 2 3; do
                 if [[ -d /proc/${PID} ]]; then
                     kill ${PID}
-                    sleep 2
+                    sleep 20
                 fi
             done
             
@@ -58,6 +57,26 @@ stop() {
         done
     fi
     echo 'done'
+}
+
+status(){
+    PID=""
+    # Use the pid file if it exists.
+    if [[ -f ${PID_FILE} ]]; then
+	    PID=`cat ${PID_FILE}`
+    else
+        # The tomcat procs for tomcat cle user
+        PID=`ps -u ${TOMCAT_USER} --no-headers -o pid,cmd | grep "${CATALINA_HOME}" | awk '{ print $1 }'`
+    fi
+
+    EXIT=0
+    if [[ "x${PID}" == "x" ]]; then
+        echo "${PROG} is not running"
+        EXIT=1
+    else
+        echo "${PROG} is running with PID=${PID}"
+    fi
+    exit $EXIT
 }
 
 case "$1" in
@@ -71,8 +90,11 @@ case "$1" in
         stop
         start
         ;;
+    status)
+        status
+        ;;
     *)
-        echo "Usage: $0 {start|stop|restart}"
+        echo "Usage: $0 {start|stop|restart|status}"
 esac
 
 exit 0

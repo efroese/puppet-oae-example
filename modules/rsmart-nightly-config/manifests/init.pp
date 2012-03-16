@@ -97,7 +97,7 @@ class localconfig {
 
     $cle_email_test_mode = true
     $cle_smtp_server     = 'localhost'
-    $cle_dns             = [ 'TODO_DNS_1', 'TODO_DNS_2']
+    $cle_dns             = [ '172.16.0.23', '172.16.0.23']
     $cle_mail_support    = 'bogus@mailinator.com'
     $cle_mail_request    = 'bogus@mailinator.com'
     $samigo_stmp_server  = $cle_smtp_server

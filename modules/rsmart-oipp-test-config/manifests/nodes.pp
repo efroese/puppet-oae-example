@@ -339,22 +339,18 @@ node 'oipp-test.academic.rsmart.local' inherits oaenode {
     }
 
     # CLE install
-    archive::download { 'rsmart-cle-prod-overlay.tbz':
-        ensure        => present,
-        url           => $localconfig::cle_tarball_url,
-        src_target    => "${localconfig::homedir}/sakaicle/",
-        checksum      => false,
-        timeout       => 0,
-        require       => Class['Tomcat6'],
-    }
-
-    tomcat6::overlay { 'rsmart-cle-prod-overlay':
-        tomcat_home  => "${localconfig::homedir}/sakaicle/tomcat",
-        tarball_path => "${localconfig::homedir}/sakaicle/rsmart-cle-prod-overlay.tbz",
-        creates      => "${localconfig::homedir}/sakaicle/tomcat/webapps/xsl-portal.war",
-        user         => $oae::params::user,
-        require      => [ Class['Tomcat6'], Archive::Download['rsmart-cle-prod-overlay.tbz'], ],
-        notify       => Exec["chown-apache-tomcat-5.5.35"],
+    archive { 'rsmart-cle-prod-overlay.tar.bz2':
+        ensure         => present,
+        url            => $localconfig::cle_tarball_url,
+        checksum       => false,
+        src_target     => "${localconfig::homedir}/sakaicle/",
+        target         => "${localconfig::homedir}/sakaicle/tomcat",
+        creates        => "${localconfig::homedir}/sakaicle/tomcat/webapps/xsl-portal.war",
+        timeout        => 0,
+        extension      => 'tar.bz2',
+        allow_insecure => true,
+        require        => File[$tomcat6::basedir],
+        notify         => Exec["chown-apache-tomcat-5.5.35"],
     }
 
     # CLE tomcat overlay and configuration

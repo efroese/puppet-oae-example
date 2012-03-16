@@ -216,7 +216,7 @@ node 'nightly.academic.rsmart.local' inherits oaenode {
         jvm_route            => $localconfig::cle_server_id,
         shutdown_password    => $localconfig::tomcat_shutdown_password,
         tomcat_conf_template => 'rsmart-common/cle-server.xml.erb',
-        setenv_template      => 'localconfig/cle-setenv.sh.erb',
+        setenv_template      => 'rsmart-common/cle-setenv.sh.erb',
         jmxremote_access_template   => 'localconfig/jmxremote.access.erb',
         jmxremote_password_template => 'localconfig/jmxremote.password.erb',
         require => File["${localconfig::homedir}/sakaicle"],

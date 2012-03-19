@@ -328,6 +328,20 @@ node oaeappnode inherits oaenode {
              'sakai.auth.trusted.destination.default' => "/me"
         }
     }
+    
+    ###########################################################################
+    # SIS
+    class { 'sis::batch':
+        user           => $localconfig::user,
+        executable_url => $localconfig::basic_sis_batch_executable_url,
+        artifact       => $localconfig::basic_sis_batch_executable_artifact,
+        sis_properties => 'localconfig/sis.properties.erb',
+        csv_dir        => $localconfig::csv_dir,
+        csv_user_filenames  => $localconfig::csv_user_filenames,
+        server_url     => "https://${localconfig::http_name}/",
+        oae_password   => $localconfig::admin_password,
+        email_report   => $localconfig::basic_sis_batch_email_report,
+    }
 
 }
 

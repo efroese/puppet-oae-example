@@ -130,7 +130,9 @@ class localconfig {
     # $basic_sis_batch_email_report = "provision@uconline.edu"
     $basic_sis_batch_email_report = "mike@rsmart.com"
 
+    $oae_csv_dir = '/files-academic/sis/'
     $csv_dir = '/files-cle/files/sis/'
+    $csv_schools=[['/home/rsmart/sistest','UCB'],['/home/rsmart/sistest','UCD'],['/home/rsmart/sistest','UCMerced']]
 
     # TODO is this actually the secret?
     $trusted_shared_secret = "yourSecret"

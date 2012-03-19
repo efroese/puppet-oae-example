@@ -152,7 +152,13 @@ node 'oipp-prod-apache1.academic.rsmart.local' inherits oaenode {
     ###########################################################################
     # SIS integration
 
-    class { 'oipp::sis': }
+    class { 'oipp::sis':
+        cle_csv => $localconfig::csv_dir,
+        oae_csv => $localconfig::oae_csv_dir,
+        csv_schools => $localconfig::csv_schools,
+        use_scp => true,
+        production => true,
+    }
 
 }
 
@@ -321,6 +327,34 @@ node oaeappnode inherits oaenode {
         config => {
              'sakai.auth.trusted.destination.default' => "/me"
         }
+    }
+    
+    ###########################################################################
+    # SIS
+    file { "$localconfig::oae_csv_dir":
+        owner => $localconfig::user,
+        group => $localconfig::user,
+        mode  => 0770,
+        ensure => directory,
+    }
+
+    file { "$localconfig::oae_csv_dir/test":
+        owner => $localconfig::user,
+        group => $localconfig::user,
+        mode  => 0770,
+        ensure => directory,
+    }
+
+    class { 'sis::batch':
+        user           => $localconfig::user,
+        executable_url => $localconfig::basic_sis_batch_executable_url,
+        artifact       => $localconfig::basic_sis_batch_executable_artifact,
+        sis_properties => 'localconfig/sis.properties.erb',
+        csv_dir        => $localconfig::oae_csv_dir,
+        csv_user_filenames  => $localconfig::csv_user_filenames,
+        server_url     => "https://${localconfig::http_name}/",
+        oae_password   => $localconfig::admin_password,
+        email_report   => $localconfig::basic_sis_batch_email_report,
     }
 
 }

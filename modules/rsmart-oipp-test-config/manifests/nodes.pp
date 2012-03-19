@@ -138,12 +138,26 @@ node 'oipp-test.academic.rsmart.local' inherits oaenode {
 
     ###########################################################################
     # SIS
+    file { "$localconfig::oae_csv_dir":
+        owner => $localconfig::user,
+        group => $localconfig::user,
+        mode  => 0770,
+        ensure => directory,
+    }
+
+    file { "$localconfig::oae_csv_dir/test":
+        owner => $localconfig::user,
+        group => $localconfig::user,
+        mode  => 0770,
+        ensure => directory,
+    }
+
     class { 'sis::batch':
         user           => $localconfig::user,
         executable_url => $localconfig::basic_sis_batch_executable_url,
         artifact       => $localconfig::basic_sis_batch_executable_artifact,
         sis_properties => 'localconfig/sis.properties.erb',
-        csv_dir        => $localconfig::csv_dir,
+        csv_dir        => $localconfig::oae_csv_dir,
         csv_user_filenames  => $localconfig::csv_user_filenames,
         server_url     => "https://${localconfig::http_name}/",
         oae_password   => $localconfig::admin_password,
@@ -401,5 +415,11 @@ node 'oipp-test.academic.rsmart.local' inherits oaenode {
         notify => Service["mysql"],
     }
 
-    class { 'oipp::test': }
+    class { 'oipp::sis':
+        cle_csv => $localconfig::csv_dir,
+        oae_csv => $localconfig::oae_csv_dir,
+        csv_schools => $localconfig::csv_schools,
+        use_scp => false,
+        production => false,
+    }
 }

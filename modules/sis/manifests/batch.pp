@@ -12,6 +12,8 @@
 #
 # $sis_properties:: A path to a template used to render sis.properties
 #
+# $csv_schools:: Names of the schools to tranfer.
+#
 # $csv_dir:: The directory that holds the csv files to process
 #
 # $csv_user_filenames:: CSV files to be processed by the SIS user processor.
@@ -21,6 +23,7 @@ class sis::batch (
     $executable_url,
     $artifact,
     $sis_properties = 'sis/sis.properties.erb',
+    $csv_schools    = [],
     $csv_dir        = false,
     $csv_user_filenames = [],
     $server_url,

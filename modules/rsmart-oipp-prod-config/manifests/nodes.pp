@@ -17,13 +17,13 @@ node 'oipp-prod-apache1.academic.rsmart.local' inherits oaenode {
     apache::module { 'headers': }
     apache::module { 'deflate': }
 
-    # http://staging.academic.rsmart.com to redirects to 443
+    # http://cole.uconline.edu to redirects to https://cole.uconline.edu
     apache::vhost { "${localconfig::http_name}:80":
-        template => 'rsmart-common/vhost-80.conf.erb',
+        template => 'localconfig/vhost-80.conf.erb',
     }
 
     ###########################################################################
-    # https://staging.academic.rsmart.com:443
+    # https://cole.uconline.edu
 
     # Serve the OAE app (trusted content) on 443
     apache::vhost-ssl { "${localconfig::http_name}:443":
@@ -31,9 +31,6 @@ node 'oipp-prod-apache1.academic.rsmart.local' inherits oaenode {
         cert     => "puppet:///modules/localconfig/uconline.edu.crt",
         certkey  => "puppet:///modules/localconfig/uconline.edu.key",
         certchain => "puppet:///modules/localconfig/uconline.edu-intermediate.crt",
-        # cert      => "puppet:///modules/rsmart-common/academic.rsmart.com.crt",
-        # certkey   => "puppet:///modules/rsmart-common/academic.rsmart.com.key",
-        # certchain => "puppet:///modules/rsmart-common/academic.rsmart.com-intermediate.crt",
         template  => 'rsmart-common/vhost-trusted.conf.erb',
     }
 
@@ -87,9 +84,6 @@ node 'oipp-prod-apache1.academic.rsmart.local' inherits oaenode {
         cert     => "puppet:///modules/localconfig/uconline.edu.crt",
         certkey  => "puppet:///modules/localconfig/uconline.edu.key",
         certchain => "puppet:///modules/localconfig/uconline.edu-intermediate.crt",
-        # cert      => "puppet:///modules/rsmart-common/academic.rsmart.com.crt",
-        # certkey   => "puppet:///modules/rsmart-common/academic.rsmart.com.key",
-        # certchain => "puppet:///modules/rsmart-common/academic.rsmart.com-intermediate.crt",
         template  => 'rsmart-common/vhost-untrusted.conf.erb',
     }
 

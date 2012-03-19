@@ -27,7 +27,7 @@
 #
 # == Sample Usage:
 # 
-#   class { 'solr::jetty':
+#   class { 'solr::tomcat':
 #     solr_tarball => "http://source.sakaiproject.org/release/oae/solr/solr-example.tar.gz",
 #     solrconfig   => 'myconfig/solrconfig.xml.erb',
 #     schema       => 'myconfig/schema.xml.erb',

@@ -390,5 +390,9 @@ node 'oipp-test.academic.rsmart.local' inherits oaenode {
         notify => Service["mysql"],
     }
 
-    class { 'oipp::test': }
+    class { 'oipp::test':
+        cle_csv => $localconfig:csv_dir,
+        oae_csv => $localconfig:oae_csv_dir,
+        csv_schools => $localconfig:csv_schools,
+    }
 }

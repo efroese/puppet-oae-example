@@ -40,7 +40,13 @@ class oipp::sis {
 
 }
 
-class oipp::test {
+class oipp::test (
+    $cle_csv,
+    $oae_csv,
+    $sis_log = "/var/log/sakaioae/sis.log",
+    $sis_error_archive = "archive/",
+    $use_scp = false,
+    $csv_schools,) {
 
     class { 'people::oipp-sis::external': }
     class { 'people::oipp-sis::destination': }

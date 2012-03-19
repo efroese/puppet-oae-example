@@ -344,6 +344,13 @@ node oaeappnode inherits oaenode {
         ensure => directory,
     }
 
+    file { "$localconfig::oae_csv_dir/test":
+        owner => $localconfig::user,
+        group => $localconfig::user,
+        mode  => 0770,
+        ensure => directory,
+    }
+
     class { 'sis::batch':
         user           => $localconfig::user,
         executable_url => $localconfig::basic_sis_batch_executable_url,

@@ -49,7 +49,7 @@ class oipp::sis (
     if ! ($production) {
         class { 'people::oipp-sis::destination': }
 
-        file { "~/sistest/test":
+        file { "/home/rsmart/sistest/test":
             owner => rsmart,
             group => rsmart,
             mode => 0770,

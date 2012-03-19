@@ -37,6 +37,6 @@
 [submodule "puppet-sendmail"]
 	path = puppet-sendmail
 	url = http://github.com/efroese/puppet-sendmail.git
-[submodule "modules/sendmail"]
-	path = modules/sendmail
-	url = http://github.com/efroese/puppet-sendmail.git
+[submodule "modules/solr"]
+	path = modules/solr
+	url = http://github.com/efroese/puppet-solr.git

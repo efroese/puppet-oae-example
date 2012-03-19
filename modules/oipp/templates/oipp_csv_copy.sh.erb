@@ -74,10 +74,9 @@ transferSISFiles()
     chown -fR "$FILE_OWNER" "$SOURCE_FILES";
 
     if [ $? -ne 0 ] ; then
-    {
         error "Could not set permissions for $SOURCE_FILES"
         return $?
-    }
+    fi
 
     # copy files
     $CP "$SOURCE_FILES" "$DEST_DIR";

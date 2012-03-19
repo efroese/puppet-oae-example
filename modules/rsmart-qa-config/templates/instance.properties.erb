@@ -1,0 +1,20 @@
+serverId=<%= scope.lookupvar('cle::server_id') %>
+
+# only have ddl & smtp enabled on one node
+# auto.ddl is enabled on nightly since we're going to drop the db between runs.
+auto.ddl=true
+smtp.enabled=true
+
+# when uploading the spreadsheet, overwrite realms, roles, tools & categories
+destructiveMode@com.rsmart.admin.customizer.api.CustomizerService.target=false
+
+# rebuild !user templates
+applySiteOptions@org.theospi.portfolio.admin.intf.SakaiIntegrationService.rsmart=false
+
+# this setting will cause the realm info to be reset
+# set this to false to not reset realms and sites each time the app is started
+realm.reset=false
+
+search.enable = true
+
+startScheduler@org.sakaiproject.api.app.scheduler.SchedulerManager=true

@@ -131,7 +131,7 @@ class localconfig {
 
     $oae_csv_dir = '/files-academic/sis/'
     $csv_dir = '/files-cle/files/sis/'
-    $csv_schools=[['ucb_sis','UCB'],['ucd_sis','UCD'],['ucd_sis','UCMerced']]
+    $csv_schools=[['rsmart/sistest','UCB'],['rsmart/sistest','UCD'],['rsmart/sistest','UCMerced']]
 
     # TODO is this actually the secret?
     $trusted_shared_secret = "yourSecret"

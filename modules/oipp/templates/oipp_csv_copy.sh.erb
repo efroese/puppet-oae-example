@@ -39,7 +39,7 @@ info()
 
 archive()
 {
-    SOURCES="$1";
+    SOURCES=$1;
 
     if [ ! -e "$ARCHIVE_DIR" ] ; then
         mkdir -p "$ARCHIVE_DIR";
@@ -54,7 +54,7 @@ archive()
         error "Cannot archive. $ARCHIVE_DIR is not a directory";
     fi
 
-    mv "$SOURCES" "$ARCHIVE_DIR";
+    mv $SOURCES $ARCHIVE_DIR;
 }
 
 transferSISFiles()
@@ -70,16 +70,8 @@ transferSISFiles()
 
     debug "transferring $SOURCE_FILES to $DEST_DIR";
 
-    # set correct permissions
-    chown -fR "$FILE_OWNER" "$SOURCE_FILES";
-
-    if [ $? -ne 0 ] ; then
-        error "Could not set permissions for $SOURCE_FILES"
-        return $?
-    fi
-
     # copy files
-    $CP "$SOURCE_FILES" "$DEST_DIR";
+    $CP $SOURCE_FILES $DEST_DIR;
 }
 
 doAllTransfers ()
@@ -94,40 +86,42 @@ doAllTransfers ()
     debug "SOURCE_DIR=$SOURCE_DIR";
     debug "ABBREV=$ABBREV";
 
-    if [ -e $PROD_FILES ] ; then
+    ls $PROD_FILES >> /dev/null;
+
+    if [ $? -eq 0 ] ; then
 
         if $PRODUCTION; then
-            oipptest="oipp-test:$SOURCE_DIR";
+            oipptest="rsmart@oipp-test:~/sistest";
             info "copying $ABBREV files to OIPP test";
             transferSISFiles "$PROD_FILES" "$oipptest" scp;
             if [ $? -ne 0 ] ; then
                 ERRORS=true;
-                error "Failed to copy $PROD_FILES to $CLE_PROD_DIR/test";
+                error "Failed to copy $PROD_FILES to $CLE_PROC_DIR/test";
             fi;
         fi;
 
         info "copying $ABBREV files to CLE test";
-        transferSISFiles "$PROD_FILES" "$CLE_PROD_DIR/test" $CP;
+        transferSISFiles "$PROD_FILES" "$CLE_PROC_DIR/test" $CP;
         if [ $? -ne 0 ] ; then
             ERRORS=true;
-            error "Failed to copy $PROD_FILES to $CLE_PROD_DIR/test";
+            error "Failed to copy $PROD_FILES to $CLE_PROC_DIR/test";
         fi;
 
         info "copying $ABBREV files to CLE";
-        transferSISFiles "$PROD_FILES" "$CLE_PROD_DIR" $CP;
+        transferSISFiles "$PROD_FILES" "$CLE_PROC_DIR" $CP;
         if [ $? -ne 0 ] ; then
             ERRORS=true;
-            error "Failed to copy $PROD_FILES to $CLE_PROD_DIR";
+            error "Failed to copy $PROD_FILES to $CLE_PROC_DIR";
         fi;
 
         info "copying $ABBREV files to OAE";
-        transferSISFiles "$PROD_FILES" "$OAE_PROD_DIR" $CP;
+        transferSISFiles "$PROD_FILES" "$OAE_PROC_DIR" $CP;
         if [ $? -ne 0 ] ; then
             ERRORS=true;
-            error "Failed to copy $PROD_FILES to $OAE_PROD_DIR/test";
+            error "Failed to copy $PROD_FILES to $OAE_PROC_DIR/test";
         fi;
 
-        if [ $ERRORS ] ; then
+        if ! $ERRORS ; then
             info "production files successfully copied"
             rm -f $PROD_FILES;
         else
@@ -147,7 +141,7 @@ doAllTransfers ()
         fi;
 
         if $PRODUCTION ; then
-            oipptest="oipp-test:$SOURCE_DIR/test/";
+            oipptest="rsmart@oipp-test:~/sistest/test/";
             info "copying test files to OIPP test";
             transferSISFiles "$TEST_FILES" "$oipptest" scp;
             if [ $? -ne 0 ] ; then

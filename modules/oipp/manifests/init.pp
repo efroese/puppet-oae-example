@@ -22,6 +22,13 @@ class oipp::sis (
         ensure => directory,
     }
 
+    file { "$sis_log":
+        owner => root,
+        group => root,
+        mode => 0770,
+        ensure => present,
+    }
+
     file { "/root/scripts/oipp_csv_copy.sh":
         owner => root,
         group => root,
@@ -43,6 +50,13 @@ class oipp::sis (
     if ! ($production) {
         class { 'people::oipp-sis::destination': }
 
+        file { "~/sistest/test":
+            owner => rsmart,
+            group => rsmart,
+            mode => 0770,
+            ensure => directory,
+        }
+        
         # add root's key from oipp-apache1 to OIPP users on test to emulate file xfer
         ssh_authorized_key { 'ucb_sis-test-pub':
             ensure => present,

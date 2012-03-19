@@ -391,7 +391,7 @@ node 'oipp-test.academic.rsmart.local' inherits oaenode {
         password => $localconfig::cle_db_password,
     }
 
-    augeas { "my.cnf/mysqld-lower_case_table_names-1":
+    augeas { "my.cnf/mysqld-rsmart-cle":
         context => "${mysql::params::mycnfctx}/mysqld/",
         load_path => "/usr/share/augeas/lenses/contrib/",
         changes => [

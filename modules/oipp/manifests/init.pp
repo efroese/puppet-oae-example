@@ -2,16 +2,18 @@ class oipp {
     
 }
 
-class oipp::sis {
+class oipp::sis (
+    $cle_csv,
+    $oae_csv,
+    $file_owner,
+    $sis_log = "/var/log/sakaioae/sis.log",
+    $sis_error_archive = "archive/",
+    $use_scp = false,
+    $production = false,
+    $csv_schools,) {
 
     class { 'people::oipp-sis::internal': }
     class { 'people::oipp-sis::external': }
-
-    host { 'oipp-test':
-	    ensure => present,
-	    ip => '10.51.9.112',
-	    alias=> 'oipp-test',
-    }
 
     file { "/root/scripts":
         owner => root,
@@ -40,42 +42,9 @@ class oipp::sis {
 
 }
 
-class oipp::test (
-    $cle_csv,
-    $oae_csv,
-    $file_owner,
-    $sis_log = "/var/log/sakaioae/sis.log",
-    $sis_error_archive = "archive/",
-    $use_scp = false,
-    $csv_schools,) {
+class oipp::test inherits oipp::sis {
 
-    class { 'people::oipp-sis::external': }
     class { 'people::oipp-sis::destination': }
-
-    file { "/root/scripts":
-        owner => root,
-        group => root,
-        mode => 0770,
-        ensure => directory,
-    }
-
-    file { "/root/scripts/oipp_csv_copy.sh":
-        owner => root,
-        group => root,
-        mode => 0750,
-        content => template('oipp/oipp_csv_copy_test.sh.erb'),
-        require => [ File["/root/scripts"], ],
-    }
-
-    cron { 'transport_sis':
-        command => "/root/scripts/oipp_csv_copy.sh",
-        user => root,
-        ensure => present,
-        minute => '2',
-        require => [
-            File["/root/scripts/oipp_csv_copy.sh"],
-        ],
-    }
 
     # add root's key from oipp-apache1 to OIPP users on test to emulate file xfer
     ssh_authorized_key { 'ucb_sis-test-pub':
@@ -113,4 +82,23 @@ class oipp::test (
         user => 'ucsc_sis',
         require => User['ucsc_sis'],
     }
+
+    file { "/root/scripts/oipp_csv_copy.sh":
+        owner => root,
+        group => root,
+        mode => 0750,
+        content => template('oipp/oipp_csv_copy_test.sh.erb'),
+        require => [ File["/root/scripts"], ],
+    }
+
+    cron { 'transport_sis':
+        command => "/root/scripts/oipp_csv_copy.sh",
+        user => root,
+        ensure => present,
+        minute => '2',
+        require => [
+            File["/root/scripts/oipp_csv_copy.sh"],
+        ],
+    }
+
 }

@@ -2,13 +2,14 @@ MAILTO=""
 
 DEBUG_OUT=false;
 
-CLE_PROC_DIR=<%= scope.lookupvar('oipp::test::cle_csv') %>
-OAE_PROC_DIR=<%= scope.lookupvar('oipp::test::oae_csv') %>
-LOG=<%= scope.lookupvar('oipp::test::sis_log') %>
-ARCHIVE_ROOT=<%= scope.lookupvar('oipp::test::sis_error_archive') %>
-FILE_OWNER=<%= scope.lookupvar('oipp::test::file_owner') %>
+CLE_PROC_DIR=<%= scope.lookupvar('oipp::sis::cle_csv') %>
+OAE_PROC_DIR=<%= scope.lookupvar('oipp::sis::oae_csv') %>
+LOG=<%= scope.lookupvar('oipp::sis::sis_log') %>
+ARCHIVE_ROOT=<%= scope.lookupvar('oipp::sis::sis_error_archive') %>
+FILE_OWNER=<%= scope.lookupvar('oipp::sis::file_owner') %>
 ARCHIVE_DIR=$ARCHIVE_DIR/`date +%Y%m%d-%H%M`;
-REMOTE=<%= scope.lookupvar('oipp::test::use_scp') %>
+REMOTE=<%= scope.lookupvar('oipp::sis::use_scp') %>
+PRODUCTION=<%= scope.lookupvar('oipp::sis::production') %>;
 
 log()
 {
@@ -96,26 +97,36 @@ doAllTransfers ()
 
     if [ -e $PROD_FILES ] ; then
 
+        if $PRODUCTION; then
+            oipptest="oipp-test:$SOURCE_DIR";
+            info "copying $ABBREV files to OIPP test";
+            transferSISFiles "$PROD_FILES" "$oipptest" scp;
+            if [ $? -ne 0 ] ; then
+                ERRORS=true;
+                error "Failed to copy $PROD_FILES to $CLE_PROD_DIR/test";
+            fi;
+        fi;
+
         info "copying $ABBREV files to CLE test";
         transferSISFiles "$PROD_FILES" "$CLE_PROD_DIR/test" $CP;
         if [ $? -ne 0 ] ; then
             ERRORS=true;
             error "Failed to copy $PROD_FILES to $CLE_PROD_DIR/test";
-        }
+        fi;
 
         info "copying $ABBREV files to CLE";
         transferSISFiles "$PROD_FILES" "$CLE_PROD_DIR" $CP;
         if [ $? -ne 0 ] ; then
             ERRORS=true;
             error "Failed to copy $PROD_FILES to $CLE_PROD_DIR";
-        }
+        fi;
 
         info "copying $ABBREV files to OAE";
         transferSISFiles "$PROD_FILES" "$OAE_PROD_DIR" $CP;
         if [ $? -ne 0 ] ; then
             ERRORS=true;
             error "Failed to copy $PROD_FILES to $OAE_PROD_DIR/test";
-        }
+        fi;
 
         if [ $ERRORS ] ; then
             info "production files successfully copied"
@@ -126,20 +137,33 @@ doAllTransfers ()
         fi;
     fi;
 
-    fi [ -e $TEST_FILES ] ; then
+    if [ -e $TEST_FILES ] ; then
+        ERRORS=false;
 
         info "Copying test files to CLE test";
         transferSISFiles "$TEST_FILES" "$CLE_PROC_DIR/test" $CP;
         if [ $? -ne 0 ] ; then
-        {
+            ERRORS=true;
+            error "Failed to copy $TEST_FILES to $CLE_PROC_DIR/test";
+        fi;
+
+        if $PRODUCTION ; then
+            oipptest="oipp-test:$SOURCE_DIR/test/";
+            info "copying test files to OIPP test";
+            transferSISFiles "$TEST_FILES" "$oipptest" scp;
+            if [ $? -ne 0 ] ; then
+                ERRORS=true;
+                error "Failed to copy $TEST_FILES to $oipptest";
+            fi;
+        fi;
+
+        if $ERRORS ; then
             archive "$TEST_FILES";
             error "Errors occured transfering test files; Test import files have been copied to $ERROR_ARCHIVE";
-        }
         else
-        {
             info "test files successfully copied";
             rm -f "$TEST_FILES";
-        }
+        fi;
 
     fi;
 }

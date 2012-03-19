@@ -49,4 +49,10 @@ class localconfig::hosts {
         host_aliases => 'oipp-prod-nfs.academic.rsmart.local',
         comment => 'NFS server',
     }
+
+    host { 'oipp-test':
+        ensure => present,
+        ip => '10.51.9.112',
+        alias=> 'oipp-test',
+    }
 }

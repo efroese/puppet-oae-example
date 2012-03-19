@@ -19,7 +19,7 @@ class solr {
     #
     # == Sample Usage:
     #
-    #   solr::backup {
+    #   solr::backup { 'backup-solr0':
     #       solr_url   => "http://solr0:8080/solr",
     #       backup_dir => '/usr/local/solr/backups',
     #       user       => solr,

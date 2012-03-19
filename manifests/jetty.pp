@@ -30,11 +30,12 @@ class solr::jetty(
     $solrconfig        = 'solr/solrconfig.xml.erb',
     $master_url        = 'set the master url' ) {
 
+    Class['solr::common'] -> Class['solr::jetty']
+
     class { 'solr::common':
         solr_tarball      => $solr_git,
         solr_home_tarball => $solr_home_tarball,
         solrconfig        => $solrconfig,
-        schema            => $schema,
         master_url        => $master_url,
     }
 

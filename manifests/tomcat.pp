@@ -51,7 +51,6 @@ class solr::tomcat (
        solr_tarball      => $solr_tarball,
        solr_home_tarball => $solr_home_tarball,
        solrconfig        => $solrconfig,
-       schema            => $schema,
        master_url        => $master_url,
     }
 

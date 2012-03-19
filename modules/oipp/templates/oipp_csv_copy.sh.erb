@@ -36,6 +36,6 @@ scp -p /home/ucd_sis/*csv rsmart@oipp-cle1:/files-cle/files/sis
 scp -p /home/ucm_sis/*csv rsmart@oipp-cle1:/files-cle/files/sis
 
 # copy all prod csv files to prod OAE server and remove files
-scp -p /home/ucb_sis/*csv rsmart@oipp-cle1:$CSV_DIR && rm -f /home/ucb_sis/*csv
-scp -p /home/ucd_sis/*csv rsmart@oipp-cle1:$CSV_DIR && rm -f /home/ucd_sis/*csv
-scp -p /home/ucm_sis/*csv rsmart@oipp-cle1:$CSV_DIR && rm -f /home/ucm_sis/*csv
+scp -p /home/ucb_sis/*csv rsmart@oipp-prod-app1:$CSV_DIR && rm -f /home/ucb_sis/*csv
+scp -p /home/ucd_sis/*csv rsmart@oipp-prod-app1:$CSV_DIR && rm -f /home/ucd_sis/*csv
+scp -p /home/ucm_sis/*csv rsmart@oipp-prod-app1:$CSV_DIR && rm -f /home/ucm_sis/*csv

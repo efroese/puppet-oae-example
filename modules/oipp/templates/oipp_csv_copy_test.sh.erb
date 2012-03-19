@@ -1,5 +1,7 @@
 MAILTO=""
 
+CSV_DIR=<%= scope.lookupvar('sis::batch::csv_dir') %>
+
 # set correct permissions
 chown -fR "rsmart:rsmart" /home/ucb_sis/*csv
 chown -fR "rsmart:rsmart" /home/ucd_sis/*csv
@@ -19,7 +21,12 @@ cp /home/ucb_sis/test/*.UCB.csv      /files-cle/files/sis/test && rm -f /home/uc
 cp /home/ucd_sis/test/*.UCD.csv      /files-cle/files/sis/test && rm -f /home/ucd_sis/test/*csv
 cp /home/ucm_sis/test/*.UCMerced.csv /files-cle/files/sis/test && rm -f /home/ucm_sis/test/*csv
 
-# copy all prod csv files to prod server
-cp /home/ucb_sis/*csv /files-cle/files/sis && rm -f /home/ucb_sis/*csv
-cp /home/ucd_sis/*csv /files-cle/files/sis && rm -f /home/ucd_sis/*csv
-cp /home/ucm_sis/*csv /files-cle/files/sis && rm -f /home/ucm_sis/*csv
+# copy all prod csv files to CLE import directory
+cp /home/ucb_sis/*csv /files-cle/files/sis
+cp /home/ucd_sis/*csv /files-cle/files/sis
+cp /home/ucm_sis/*csv /files-cle/files/sis
+
+# copy all prod csv files to OAE import directory
+cp /home/ucb_sis/*csv $CSV_DIR && rm -f /home/ucb_sis/*csv
+cp /home/ucd_sis/*csv $CSV_DIR && rm -f /home/ucd_sis/*csv
+cp /home/ucm_sis/*csv $CSV_DIR && rm -f /home/ucm_sis/*csv

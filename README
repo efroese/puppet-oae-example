@@ -4,7 +4,7 @@ This is not a fully featured puppet setup.
 For an example check out http://github.com/efroese/puppet-oae-example
 
 ### Requires
-- http://github.com/camptocamp/puppet-archive
+- http://github.com/efroese/puppet-archive
 
 Currently we can create a few different kinds of OAE servers.
 
@@ -14,17 +14,6 @@ example:
 
     node oae-app0 inherits oaenode {
         class { 'oae::app::server': }
-    }
-
-### OAE Solr search nodes
-
-example:
-
-    node oae-solr0 inherits oaenode {
-        class { 'oae::solr::common':
-            solrconfig => 'oae/master-solrconfig.cfg',
-            master_url => 'http://192.168.1.70:8080/solr/replication',
-        }
     }
 
 ### OAE Preview processor nodes

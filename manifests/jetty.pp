@@ -1,6 +1,6 @@
 # = Class: solr
 #
-# This class installs a standalone solr master or slave for Sakai OAE
+# This class installs a standalone solr master or slave with jetty.
 #
 # == Parameters:
 #
@@ -23,6 +23,8 @@
 #   }
 #
 class solr::jetty(
+    $user              = 'root',
+    $group             = 'root',
     $solr_tarball      = "http://nodeload.github.com/sakaiproject/solr/tarball/master",
     $solr_home_tarball = "http://dl.dropbox.com/u/24606888/puppet-oae-files/home0.tgz",
     $solrconfig        = 'solr/solrconfig.xml.erb',
@@ -38,10 +40,10 @@ class solr::jetty(
 
     file { '/etc/init.d/solr':
         ensure => present,
-        owner  => $oae::params::user,
-        group  => $oae::params::user,
+        owner  => $user,
+        group  => $group,
         mode   => 0755,
-        content => template("oae/solr.erb"),
+        content => template("solr/solr.erb"),
     }
 
     service { 'solr':

@@ -42,9 +42,10 @@ class solr::tomcat (
     $tomcat_user,
     $tomcat_group,
     $webapp_url            = 'http://dl.dropbox.com/u/24606888/puppet-oae-files/apache-solr-4.0-SNAPSHOT.war',
-    $solr_context_template = 'oae/solr-context.xml.erb'){
+    $solr_context_template = 'solr/solr-context.xml.erb'){
 
     Class['Tomcat6'] -> Class['solr::tomcat']
+    Class['solr::common'] -> Class['solr::tomcat']
 
     class { 'solr::common':
        solr_tarball      => $solr_tarball,
@@ -55,9 +56,8 @@ class solr::tomcat (
     }
 
     exec { 'download-war':
-        cwd => "${oae::params::basedir}/solr/",
-        command => "curl -o solr.war http://dl.dropbox.com/u/24606888/puppet-oae-files/apache-solr-4.0-SNAPSHOT.war",
-        creates => "${oae::params::basedir}/solr/solr.war",
+        command => "curl -o ${solr::common::basedir}/solr.war ${webapp_url}",
+        creates => "${solr::common::basedir}/solr.war",
     }
 
     file { "${tomcat_home}/conf/Catalina/localhost/solr.xml":

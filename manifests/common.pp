@@ -1,6 +1,6 @@
 # = Class: solr::common
 #
-# This class installs a standalone solr master or slave for Sakai OAE
+# This class installs a standalone solr master or slave
 #
 # == Parameters:
 #
@@ -23,89 +23,89 @@
 #   }
 #
 class solr::common (
+    $basedir           = '/usr/local/solr',
+    $user              = 'root',
+    $group             = 'root',
     $solr_tarball      = 'http://nodeload.github.com/sakaiproject/solr/tarball/master',
     $solr_home_tarball = "http://dl.dropbox.com/u/24606888/puppet-oae-files/home0.tgz",
     $solrconfig        = 'solr/solrconfig.xml.erb', 
     $master_url        = 'set the master url') {
 
-    # Home for standalone solr servers
-    $solr_basedir = "${oae::params::basedir}/solr"
-
     # Solr installation
-    $solr_home    = "${solr_basedir}/home0"
+    $solr_home    = "${basedir}/home0"
 
     # Solr node config
     $solr_confdir   = "${solr_home}/conf"
     
-    # /usr/local/sakaioae/solr
-    file { $solr_basedir:
+    # /usr/local/solr
+    file { $basedir:
         ensure => directory,
-        owner => $oae::params::user,
-        group => $oae::params::user,
+        owner => $user,
+        group => $group,
         mode  => 0755,
     }
 
-    # /usr/local/sakaioae/solr/home0
+    # /usr/local/solr/home0
     archive { 'home0':
         ensure   => present,
         url      => $solr_home_tarball,
-        target   => $solr_basedir,
+        target   => $basedir,
         checksum => false,
-        src_target => $solr_basedir,
+        src_target => $basedir,
         extension => 'tgz',
-        require    => File[$solr_basedir],
+        require    => File[$basedir],
     }
 
-    # /usr/local/sakaioae/solr/home0/conf
+    # /usr/local/solr/home0/conf
     file { $solr_confdir:
         ensure => directory,
-        owner => $oae::params::user,
-        group => $oae::params::user,
+        owner => $user,
+        group => $group,
         mode  => 0755,
         require => Archive['home0'],
     }
 
     exec { 'chown-solr-home':
-        command => "chown -R ${oae::params::user}:${oae::params::group} ${solr_basedir}/home0",
-        unless  => "[ `stat --printf='%U'  ${solr_basedir}/home0` == '${$oae::params::user}' ]",
+        command => "chown -R ${user}:${group} ${basedir}/home0",
+        unless  => "[ `stat --printf='%U'  ${basedir}/home0` == '${user}' ]",
         require =>  Archive['home0'],
     }
 
-    # /usr/local/sakaioae/solr/solr-source
+    # /usr/local/solr/solr-source
     archive { 'solr-source':
         ensure     => present,
         url        => $solr_tarball,
-        target     => $solr_basedir,
+        target     => $basedir,
         checksum   => false,
-        src_target => $solr_basedir,
-        require    => File[$solr_basedir],
+        src_target => $basedir,
+        require    => File[$basedir],
     }
 
     # The expanded folder name will be ${organization}-${repository}-${revision}
     exec { 'mv-solr-source':
-        command => "mv `tar tf ${solr_basedir}/solr-source.tar.gz | head -1` solr-source",
-        cwd     => $solr_basedir,
+        command => "mv `tar tf ${basedir}/solr-source.tar.gz | head -1` solr-source",
+        cwd     => $basedir,
         require => Archive['solr-source'],
     }
 
-    # /usr/local/sakaioae/solr/home0/conf/{stopwords,synonyms,protwords,...}.txt
+    # /usr/local/solr/home0/conf/{stopwords,synonyms,protwords,...}.txt
     exec { 'copy-solr-resources':
-        command => "cp ${solr_basedir}/solr-source/src/main/resources/*.txt ${solr_confdir}",
+        command => "cp ${basedir}/solr-source/src/main/resources/*.txt ${solr_confdir}",
         creates => "${solr_confdir}/stopwords.txt",
         require => [ Exec['mv-solr-source'], File[$solr_confdir], ],
     }
 
-   # /usr/local/sakaioae/solr/home0/conf/schema.xml
+   # /usr/local/solr/home0/conf/schema.xml
    exec { 'copy-solr-schema':
-       command => "cp ${solr_basedir}/solr-source/src/main/resources/schema.xml ${solr_confdir}",
+       command => "cp ${basedir}/solr-source/src/main/resources/schema.xml ${solr_confdir}",
        creates => "${solr_confdir}/schema.xml",
        require => [ Exec['mv-solr-source'], File[$solr_confdir], ],
    }
 
-   # /usr/local/sakaioae/solr/home0/conf/solrconfig.xml
+   # /usr/local/solr/home0/conf/solrconfig.xml
    file { "${solr_confdir}/solrconfig.xml":
-       owner   => $oae::params::user,
-       group   => $oae::params::user,
+       owner   => $user,
+       group   => $group,
        mode    => "0644",
        content => template($solrconfig),
        require => File[$solr_confdir],

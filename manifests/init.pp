@@ -1,73 +1,57 @@
-# = Class: solr::tomcat
-#
-# Install solr as a webapp in a tomcat container.
-#
-# == Parameters:
-#
-# $solr_tarball:: See solr::common
-#
-# $solr_home_tarball:: See solr::common
-#
-# $solrconfig::   See solr::common
-#
-# $schema::       See solr::common
-#
-# $master_url::   See solr::common
-#
-# $tomcat_home::  Path tot he tomcat install
-#
-# $tomcat_user::  The user tomcat runs as.
-#
-# $tomcat_group::  The group tomcat runs as.
-#
-# $webapp_url::   The url where the solr webapp is (optional)
-#
-# $solr_context_template:: A template used to render the tomcat context xml file (optional)
-#
-# == Actions:
-#   Install a solr server.
-#
-# == Sample Usage:
-# 
-#   class { 'solr::jetty':
-#     solr_tarball => "http://source.sakaiproject.org/release/oae/solr/solr-example.tar.gz",
-#     solrconfig   => 'myconfig/solrconfig.xml.erb',
-#     schema       => 'myconfig/schema.xml.erb',
-#   }
-#
-class solr::tomcat (
-    $solr_tarball      = "http://nodeload.github.com/sakaiproject/solr/tarball/master",
-    $solr_home_tarball = "http://dl.dropbox.com/u/24606888/puppet-oae-files/home0.tgz",
-    $solrconfig        = 'solr/solrconfig.xml.erb',
-    $schema            = false,
-    $master_url        = 'set the master url',
-	$tomcat_home,
-    $tomcat_user,
-    $tomcat_group,
-    $webapp_url            = 'http://dl.dropbox.com/u/24606888/puppet-oae-files/apache-solr-4.0-SNAPSHOT.war',
-    $solr_context_template = 'oae/solr-context.xml.erb'){
+class solr {
 
-    Class['Tomcat6'] -> Class['solr::tomcat']
+    # = Define: solr::backup
+    #
+    # Set up solr backups
+    #
+    # == Parameters:
+    #
+    # $solr_url::  A URL to a solr server ( Example: http://solr0:8080/solr )
+    #
+    # $user::   The user who will own the backups
+    #
+    # $group::   The group who will own the backups
+    #
+    # $backup_dir::   A directory to store the backups
+    #
+    # == Actions:
+    #   Create the backup dir and a cron job.
+    #
+    # == Sample Usage:
+    #
+    #   solr::backup {
+    #       solr_url   => "http://solr0:8080/solr",
+    #       backup_dir => '/usr/local/solr/backups',
+    #       user       => solr,
+    #       group      => solr,
+    #   }
+    #
+    define backup($solr_url, $user, $group, $backup_dir) {
 
-    class { 'solr::common':
-       solr_tarball      => $solr_tarball,
-       solr_home_tarball => $solr_home_tarball,
-       solrconfig        => $solrconfig,
-       schema            => $schema,
-       master_url        => $master_url,
-    }
+        file { $backup_dir:
+            ensure => directory,
+            owner  => $user,
+            group  => $group,
+            mode   => 0750,
+        }
 
-    exec { 'download-war':
-        cwd => "${oae::params::basedir}/solr/",
-        command => "curl -o solr.war http://dl.dropbox.com/u/24606888/puppet-oae-files/apache-solr-4.0-SNAPSHOT.war",
-        creates => "${oae::params::basedir}/solr/solr.war",
-    }
+        cron { "solr-backup-${solr_url}-${backup_dir}":
+            user => $user,
+            command => "curl '${solr_url}/replication?command=backup&location=${backup_dir}'",
+            minute  => '0',
+            hour    => '1',
+            require => File[$backup_dir],
+            owner  => $user,
+            group  => $group,
+            mode   => 0750,
+        }
 
-    file { "${tomcat_home}/conf/Catalina/localhost/solr.xml":
-        owner => $tomcat_user,
-        group => $tomcat_group,
-        mode  => 0644,
-        content => template($solr_context_template),
-        require => Exec['download-war'],
+        cron { "solr-backup-${solr_url}-${backup_dir}":
+            user => $user,
+            command => "curl '${solr_url}/replication?command=backup&location=${backup_dir}'",
+            minute  => '0',
+            hour    => '1',
+            require => File[$backup_dir],
+        }
     }
 }

@@ -16,7 +16,7 @@ class people::users {
 		
 	@ssh_authorized_key { "${localconfig::user}-pub":
         ensure => present,
-        key  => 'AAAAB3NzaC1yc2EAAAABIwAAAQEAxcIV32jkMIEEfTVWHsDxNuUHHwaXMWviRAmU7dShSVw3BeMVDsh1syd54p1TRTKICD/9hlVtFDS0MQ7WEyNWUsC/XCO5vSkct5NCsivD1NO7g+Do3V6p+Hzj3Ja18GOjKBU+wi3QVIiyMFhTCqdM1VR9AT/1lPFBxPG+3RWRiwCn7w4YjfumGrDBLJsQh0cCs46kXV3F78VfLOR1QwECiyICBtP77Qzusq2wlVOBolSGrvytXLYDJs5WgdlpU1lSJsr4vHD2WjTicyP8dMbwZAXRUsB4YIT5k7blsEj1iezdZ5EntEvOgDFyWchIF8kzw+LmVw90aLTZco/kyeJYXw== rsmartian@deploy',
+        key  => 'AAAAB3NzaC1yc2EAAAABIwAAAQEAxcIV32jkMIEEfTVWHsDxNuUHHwaXMWviRAmU7dShSVw3BeMVDsh1syd54p1TRTKICD/9hlVtFDS0MQ7WEyNWUsC/XCO5vSkct5NCsivD1NO7g+Do3V6p+Hzj3Ja18GOjKBU+wi3QVIiyMFhTCqdM1VR9AT/1lPFBxPG+3RWRiwCn7w4YjfumGrDBLJsQh0cCs46kXV3F78VfLOR1QwECiyICBtP77Qzusq2wlVOBolSGrvytXLYDJs5WgdlpU1lSJsr4vHD2WjTicyP8dMbwZAXRUsB4YIT5k7blsEj1iezdZ5EntEvOgDFyWchIF8kzw+LmVw90aLTZco/kyeJYXw==',
         type => 'ssh-rsa',
         user => $localconfig::user,
         require => User[$localconfig::user],
@@ -33,7 +33,7 @@ class people::users {
 	
     @ssh_authorized_key { 'rsmartian-deploy-pub':
         ensure => present,
-        key  => 'AAAAB3NzaC1yc2EAAAABIwAAAQEAxcIV32jkMIEEfTVWHsDxNuUHHwaXMWviRAmU7dShSVw3BeMVDsh1syd54p1TRTKICD/9hlVtFDS0MQ7WEyNWUsC/XCO5vSkct5NCsivD1NO7g+Do3V6p+Hzj3Ja18GOjKBU+wi3QVIiyMFhTCqdM1VR9AT/1lPFBxPG+3RWRiwCn7w4YjfumGrDBLJsQh0cCs46kXV3F78VfLOR1QwECiyICBtP77Qzusq2wlVOBolSGrvytXLYDJs5WgdlpU1lSJsr4vHD2WjTicyP8dMbwZAXRUsB4YIT5k7blsEj1iezdZ5EntEvOgDFyWchIF8kzw+LmVw90aLTZco/kyeJYXw== rsmartian@deploy',
+        key  => 'AAAAB3NzaC1yc2EAAAABIwAAAQEAxcIV32jkMIEEfTVWHsDxNuUHHwaXMWviRAmU7dShSVw3BeMVDsh1syd54p1TRTKICD/9hlVtFDS0MQ7WEyNWUsC/XCO5vSkct5NCsivD1NO7g+Do3V6p+Hzj3Ja18GOjKBU+wi3QVIiyMFhTCqdM1VR9AT/1lPFBxPG+3RWRiwCn7w4YjfumGrDBLJsQh0cCs46kXV3F78VfLOR1QwECiyICBtP77Qzusq2wlVOBolSGrvytXLYDJs5WgdlpU1lSJsr4vHD2WjTicyP8dMbwZAXRUsB4YIT5k7blsEj1iezdZ5EntEvOgDFyWchIF8kzw+LmVw90aLTZco/kyeJYXw==',
         type => 'ssh-rsa',
         user => 'rsmartian',
         require => User['rsmartian'],

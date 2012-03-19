@@ -25,3 +25,6 @@
 [submodule "modules/archive"]
 	path = modules/archive
 	url = http://github.com/efroese/puppet-archive.git
+[submodule "modules/solr"]
+	path = modules/solr
+	url = http://github.com/efroese/puppet-solr.git

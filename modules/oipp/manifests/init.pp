@@ -83,22 +83,4 @@ class oipp::test inherits oipp::sis {
         require => User['ucsc_sis'],
     }
 
-    file { "/root/scripts/oipp_csv_copy.sh":
-        owner => root,
-        group => root,
-        mode => 0750,
-        content => template('oipp/oipp_csv_copy_test.sh.erb'),
-        require => [ File["/root/scripts"], ],
-    }
-
-    cron { 'transport_sis':
-        command => "/root/scripts/oipp_csv_copy.sh",
-        user => root,
-        ensure => present,
-        minute => '2',
-        require => [
-            File["/root/scripts/oipp_csv_copy.sh"],
-        ],
-    }
-
 }

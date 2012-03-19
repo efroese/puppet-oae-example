@@ -59,7 +59,7 @@ class localconfig {
     $apache_lb_params            = ["retry=20", "min=3", "flushpackets=auto", "max=1", "loadfactor=100", "timeout=300"]
 
     $mock_cle_content = false
-    $apache_cle_lb_members = [ "${cle_server1}:8009 route=OIPP-CLE1", "${cle_server1}:8010 route=OIPP-CLE2" ]
+    $apache_cle_lb_members = [ "${cle_server1}:8009 route=OIPP-CLE1", "${cle_server2}:8010 route=OIPP-CLE2" ]
     $apache_cle_location_match = "^/(xsl-portal.*|access.*|courier.*|dav.*|direct.*|imsblti.*|library.*|messageforums-tool.*|osp-common-tool.*|polls-tool.*|portal.*|profile-tool.*|profile2-tool.*|sakai.*|samigo-app.*|scheduler-tool.*|rsmart-customizer-tool.*|oauth-tool.*|emailtemplateservice-tool.*|sitestats-tool.*|rsmart-support-tool.*|mailsender-tool.*|tool.css|portool_base.css)" 
     $cle_dav_server0 = '10.52.10.19'
 

@@ -391,8 +391,9 @@ node 'oipp-test.academic.rsmart.local' inherits oaenode {
     }
 
     class { 'oipp::test':
-        cle_csv => $localconfig:csv_dir,
-        oae_csv => $localconfig:oae_csv_dir,
-        csv_schools => $localconfig:csv_schools,
+        cle_csv => $localconfig::csv_dir,
+        oae_csv => $localconfig::oae_csv_dir,
+        file_owner => $localconfig::user,
+        csv_schools => $localconfig::csv_schools,
     }
 }

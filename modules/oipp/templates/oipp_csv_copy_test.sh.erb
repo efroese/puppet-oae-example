@@ -152,11 +152,8 @@ else
     CP=cp;
 fi;
 
-<% schools.each do |school| -%>
+<% csv_schools.each do |school| -%>
 doAllTransfers "<%= school[0] %>" "<%= school[1] %>" $CP;
 <% end -%>
-#doAllTransfers "ucb_sis/" "UCB" $CP;
-#doAllTransfers "ucd_sis/" "UCD";
-#doAllTransfers "ucm_sis/" "UCMerced";
 
 info "SIS file transfers complete";

@@ -42,7 +42,16 @@ class oipp::sis (
 
 }
 
-class oipp::test inherits oipp::sis {
+class oipp::test inherits oipp::sis (
+    $cle_csv,
+    $oae_csv,
+    $file_owner,
+    $sis_log = "/var/log/sakaioae/sis.log",
+    $sis_error_archive = "archive/",
+    $use_scp = false,
+    $production = false,
+    $csv_schools,) {
+
 
     class { 'people::oipp-sis::destination': }
 

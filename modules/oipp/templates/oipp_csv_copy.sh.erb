@@ -1,5 +1,7 @@
 MAILTO=""
 
+CSV_DIR=<%= scope.lookupvar('sis::batch::csv_dir') %>
+
 # set correct permissions
 chown -fR "rsmart:rsmart" /home/ucb_sis/*csv
 chown -fR "rsmart:rsmart" /home/ucd_sis/*csv
@@ -28,7 +30,12 @@ scp -p /home/ucb_sis/test/* ucb_sis@oipp-test:/home/ucb_sis/test && rm -f /home/
 scp -p /home/ucd_sis/test/* ucd_sis@oipp-test:/home/ucd_sis/test && rm -f /home/ucd_sis/test/*
 scp -p /home/ucm_sis/test/* ucm_sis@oipp-test:/home/ucm_sis/test && rm -f /home/ucm_sis/test/*
 
-# copy all prod csv files to prod server
-scp -p /home/ucb_sis/*csv rsmart@oipp-cle1:/files-cle/files/sis && rm -f /home/ucb_sis/*csv
-scp -p /home/ucd_sis/*csv rsmart@oipp-cle1:/files-cle/files/sis && rm -f /home/ucd_sis/*csv
-scp -p /home/ucm_sis/*csv rsmart@oipp-cle1:/files-cle/files/sis && rm -f /home/ucm_sis/*csv
+# copy all prod csv files to prod CLE server
+scp -p /home/ucb_sis/*csv rsmart@oipp-cle1:/files-cle/files/sis
+scp -p /home/ucd_sis/*csv rsmart@oipp-cle1:/files-cle/files/sis
+scp -p /home/ucm_sis/*csv rsmart@oipp-cle1:/files-cle/files/sis
+
+# copy all prod csv files to prod OAE server and remove files
+scp -p /home/ucb_sis/*csv rsmart@oipp-cle1:$CSV_DIR && rm -f /home/ucb_sis/*csv
+scp -p /home/ucd_sis/*csv rsmart@oipp-cle1:$CSV_DIR && rm -f /home/ucd_sis/*csv
+scp -p /home/ucm_sis/*csv rsmart@oipp-cle1:$CSV_DIR && rm -f /home/ucm_sis/*csv

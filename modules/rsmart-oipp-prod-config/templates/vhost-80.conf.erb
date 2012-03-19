@@ -9,6 +9,6 @@
   # Force all clients to SSL port (trusted)
   RewriteEngine on
   RewriteCond %{HTTPS} off
-  RewriteRule (.*) https://<%= name %>%{REQUEST_URI} [R,L]
+  RewriteRule (.*) https://<%= scope.lookupvar('localconfig::http_name') %>%{REQUEST_URI} [R,L]
 
 </VirtualHost>

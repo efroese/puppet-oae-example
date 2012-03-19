@@ -12,6 +12,7 @@ SIS_JAR=${SIS_BATCH_HOME}/<%= scope.lookupvar('sis::batch::artifact') %>
 EMAIL_RECIPIENT="<%= scope.lookupvar('sis::batch::email_report') %>"
 
 CSV_DIR=<%= scope.lookupvar('sis::batch::csv_dir') %>
+CSV_SCHOOLS="<%= scope.lookupvar('sis::batch::csv_schools').each do |school_array| print "#{school_array[1]} " end %>"
 
 JAVA_OPTS=" -Doae.server.url=<%= scope.lookupvar('sis::batch::server_url') %> "
 JAVA_OPTS=" ${JAVA_OPTS} -Doae.admin.user=<%= scope.lookupvar('sis::batch::oae_user') %> "
@@ -27,28 +28,34 @@ mkdir -p ${CSV_ARCHIVE}
 
 OUTPUT=`mktemp`
 
-# Files will be of the form name.school.csv
-SCHOOLS=`ls ${CSV_DIR} | awk -F . '{ print $2 }' | sort | uniq`
-
-for school in $SCHOOLS; do
+for school in ${CSV_SCHOOLS}; do
     FILENAME_OPTS="";
     for file in Course Membership User Section SectionMembership; do
         CSV_FILE="${CSV_DIR}/${file}.${school}.csv"
         if [[ -f ${CSV_FILE} ]]; then
             FILENAME_OPTS="${FILENAME_OPTS} -Dfilename@com.rsmart.customer.integration.processor.cle.Cle${file}Processor=${CSV_FILE}" 
         else
-            echo "No file for ${CSV_FILE}" >> $OUTPUT
+            echo "No file for ${CSV_FILE}" >> ${OUTPUT}
         fi
     done
-    java ${JAVA_OPTS} ${FILENAME_OPTS} \
-        -jar $SIS_JAR 2>&1 >> $OUTPUT
-    for file in Course Membership User Section SectionMembership; do
-        CSV_FILE="${CSV_DIR}/${file}.${school}.csv"
-        mv ${CSV_FILE} ${CSV_ARCHIVE}
-    done
+
+    # TODO - What consitutes an error?
+    ERROR=false
+
+    # Run the importer
+    java ${JAVA_OPTS} ${FILENAME_OPTS} -jar ${SIS_JAR} 2>&1 >> ${OUTPUT}
+
+    if [[ ! ${ERROR} ]]; then
+        for file in Course Membership User Section SectionMembership; do
+            CSV_FILE="${CSV_DIR}/${file}.${school}.csv"
+            if [[ -f ${CSV_FILE} ]]; then
+                mv ${CSV_FILE} ${CSV_ARCHIVE}
+            fi
+        done
+    fi
 done
 
 if [[ $EMAIL_RECIPIENT != "undefined" ]]; then
-    mail -s "SIS batch update for $NOW" $EMAIL_RECIPIENT < $OUTPUT
+    mail -s "SIS batch update for ${NOW}" ${EMAIL_RECIPIENT} < ${OUTPUT}
 fi
 rm -f $OUTPUT

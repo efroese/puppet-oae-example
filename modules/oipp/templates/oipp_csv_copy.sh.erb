@@ -6,7 +6,6 @@ CLE_PROC_DIR=<%= scope.lookupvar('oipp::sis::cle_csv') %>
 OAE_PROC_DIR=<%= scope.lookupvar('oipp::sis::oae_csv') %>
 LOG=<%= scope.lookupvar('oipp::sis::sis_log') %>
 ARCHIVE_ROOT=<%= scope.lookupvar('oipp::sis::sis_error_archive') %>
-FILE_OWNER=<%= scope.lookupvar('oipp::sis::file_owner') %>
 ARCHIVE_DIR=$ARCHIVE_DIR/`date +%Y%m%d-%H%M`;
 REMOTE=<%= scope.lookupvar('oipp::sis::use_scp') %>
 PRODUCTION=<%= scope.lookupvar('oipp::sis::production') %>;
@@ -96,7 +95,7 @@ doAllTransfers ()
             transferSISFiles "$PROD_FILES" "$oipptest" scp;
             if [ $? -ne 0 ] ; then
                 ERRORS=true;
-                error "Failed to copy $PROD_FILES to $CLE_PROC_DIR/test";
+                error "Failed to copy $PROD_FILES to $oipptest";
             fi;
         fi;
 

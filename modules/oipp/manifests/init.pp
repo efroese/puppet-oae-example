@@ -5,7 +5,6 @@ class oipp {
 class oipp::sis (
     $cle_csv,
     $oae_csv,
-    $file_owner,
     $sis_log = "/var/log/sakaioae/sis.log",
     $sis_error_archive = "archive/",
     $use_scp = false,

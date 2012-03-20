@@ -156,7 +156,7 @@ node 'oipp-prod-apache1.academic.rsmart.local' inherits oaenode {
         cle_csv => $localconfig::cle_csv_destination_dir,
         oae_csv => $localconfig::oae_csv_destination_dir,
         csv_schools => $localconfig::csv_schools,
-        sis_error_archive => $sis_archive_dir,
+        sis_error_archive => $localconfig::sis_archive_dir,
         use_scp => true,
         production => true,
     }

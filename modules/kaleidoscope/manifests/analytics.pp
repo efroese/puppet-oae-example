@@ -1,34 +1,42 @@
-class kaleidoscope {
-    
-}
+#
+# = Class kaleidoscope::analytics
+# Set up the kaleidoscope log analytics
+#
+# = Parameters
+# $basedir:: The root of the installation
+# $user:: The user to run the cron job
+#
+# = Requires
+# Class['Oae::Preview_processor::Init']
+#
+class kaleidoscope::analytics(
+    $basedir,
+    $user) {
 
-class kaleidoscope::analytics {
-
-    Class['oae::preview_processor::init'] -> Class ['Kaleidoscope::Analytics']
+    Class['Oae::Preview_processor::Init'] -> Class ['Kaleidoscope::Analytics']
 
     package { ['net-scp', 'net-sftp', 'minitar', ]:
         provider => gem,
         ensure => installed,
     }
 
-    ###########################################################################
     # Drop the ruby script
-    file { "${oae::params::basedir}/bin/parse_logs.rb":
+    file { "${basedir}/bin/parse_logs.rb":
         source => "puppet:///modules/kaleidoscope/parse_logs.rb",
         owner  => root,
         group  => root,
         mode   => 755,
     }
-    file { "${oae::params::basedir}/bin/worlds.txt":
+
+    file { "${basedir}/bin/worlds.txt":
         source => "puppet:///modules/kaleidoscope/worlds.txt",
         owner  => root,
         group  => root,
         mode   => 644,
     }
 
-    ###########################################################################
     # Drop the script for the cron job
-    file { "${oae::params::basedir}/bin/run_kal_analytics.sh":
+    file { "${basedir}/bin/run_kal_analytics.sh":
         content => template('kaleidoscope/run_kal_analytics.sh.erb'),
         owner  => root,
         group  => root,
@@ -36,13 +44,13 @@ class kaleidoscope::analytics {
     }
 
     cron { 'parse_logs':
-        command => "${oae::params::basedir}/bin/run_kal_analytics.sh",
-        user => $oae::params::user,
+        command => "${basedir}/bin/run_kal_analytics.sh",
+        user => $user,
         ensure => present,
         hour => '0',
         minute => '15',
         require => [
-            File["${oae::params::basedir}/bin/run_kal_analytics.sh"],
+            File["${basedir}/bin/run_kal_analytics.sh"],
         ],
     }
 

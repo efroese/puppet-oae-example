@@ -307,7 +307,10 @@ node 'preview.academic.rsmart.local' inherits oaenode {
         nakamura_zip   => $localconfig::nakamura_zip,
     }
 
-    class { 'kaleidoscope::analytics': }
+    class { 'kaleidoscope::analytics':
+        user => $oae::params::user,
+        basedir => $oae::params::basedir,
+    }
 }
 
 ###########################################################################

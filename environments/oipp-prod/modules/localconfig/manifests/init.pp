@@ -114,7 +114,7 @@ class localconfig {
     $cle_csv_dir = '/files-cle/files/sis'
     $cle_csv_destination_dir = 'rsmart@oipp-cle1:/files-cle/files/sis/'
     $csv_schools=[['/home/ucb_sis','UCB'],['/home/ucd_sis','UCD'],['/home/ucm_sis','UCMerced']]
-    $sis_archive_dir = $homedir/sis-failed-transfers
+    $sis_archive_dir = "$homedir/sis-failed-transfers"
 
     # TODO is this actually the secret?
     $trusted_shared_secret = "yourSecret"

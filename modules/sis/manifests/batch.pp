@@ -34,7 +34,7 @@ class sis::batch (
 
     file { "${sis::basedir}/batch":
         ensure => directory,
-        require => File[${sis::basedir}],
+        require => File[$sis::basedir],
     }
 
     $home = "${sis::basedir}/batch"

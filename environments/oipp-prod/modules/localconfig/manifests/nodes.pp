@@ -345,6 +345,8 @@ node oaeappnode inherits oaenode {
         ensure => directory,
     }
 
+    class { "people::oipp-sis::destination": }
+
     class { 'sis::batch':
         user           => $localconfig::user,
         executable_url => $localconfig::basic_sis_batch_executable_url,

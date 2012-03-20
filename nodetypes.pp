@@ -14,8 +14,9 @@ node basenode {
         class { 'centos': stage => init }
     }
 
-    class { 'git': }
-    class { 'java': }
+    package { 'git' : ensure => installed }
+    package { 'java-1.6.0-openjdk': ensure => installed }
+
     class { 'ntp':
         time_zone =>  '/usr/share/zoneinfo/America/Phoenix',
     }
@@ -23,7 +24,7 @@ node basenode {
 
 node oaenode inherits basenode {
 
-    # OAE cluster-specific configuration
+    # The localconfig module is found in $environment/modules
     class { 'localconfig': }
     class { 'localconfig::hosts': }
 

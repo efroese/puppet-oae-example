@@ -15,6 +15,8 @@
 # For more info pass the --debug or --verbose flags.
 #
 
+. /etc/profile.d/puppet.sh
+
 ENV_FILE=`pwd`/.environment
 ENV_ARG=""
 

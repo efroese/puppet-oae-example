@@ -3,10 +3,13 @@ class nfs::client::redhat inherits nfs::base {
   package { "nfs-utils":
     ensure => present,
   }
-  
-  $portmap = "${operatingsystem}-${operatingsystemrelease}" ? {
-      /Amazon-2011.09/ => 'rpcbind',
-      default          => 'portmap',
+
+  $portmap = $::operatingsystem ? {
+      Amazon => 'rpcbind',
+      CentOS => $lsbmajdistrelease ? {
+          5 => 'portmap',
+          6 => 'rpcbind',
+      },
   }
 
   package { $portmap: ensure => installed }

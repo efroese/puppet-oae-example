@@ -1,0 +1,6 @@
+# AppDynamics support
+JAVA_OPTS="$JAVA_OPTS -javaagent:/home/rsmart/appdynfull/current/javaagent.jar "
+JAVA_OPTS="$JAVA_OPTS -Dappdynamics.agent.applicationName=Academic -Dappdynamics.agent.nodeName=<%= hostname %> " 
+JAVA_OPTS="$JAVA_OPTS -Dappdynamics.agent.tier"
+
+export JAVA_OPTS

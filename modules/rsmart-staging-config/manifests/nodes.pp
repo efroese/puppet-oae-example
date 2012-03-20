@@ -278,7 +278,7 @@ node solrnode inherits oaenode {
 }
 
 node 'staging-solr1.academic.rsmart.local' inherits solrnode {
-    class { 'oae::solr::tomcat':
+    class { 'solr::tomcat':
         solr_tarball => $localconfig::solr_tarball,
         master_url   => "${localconfig::solr_remoteurl}/replication",
         solrconfig   => 'rsmart-common/master-solrconfig.xml.erb',
@@ -289,7 +289,7 @@ node 'staging-solr1.academic.rsmart.local' inherits solrnode {
 }
 
 node /staging-solr[2-3].academic.rsmart.local/ inherits solrnode {
-    class { 'oae::solr::tomcat':
+    class { 'solr::tomcat':
         master_url   => "${localconfig::solr_remoteurl}/replication",
         solrconfig   => 'rsmart-common/slave-solrconfig.xml.erb',
         tomcat_user  => $localconfig::user,

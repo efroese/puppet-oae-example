@@ -270,7 +270,7 @@ node solrnode inherits oaenode {
 }
 
 node 'solr1.academic.rsmart.local' inherits solrnode {
-    class { 'oae::solr::tomcat':
+    class { 'solr::tomcat':
         solr_tarball => $localconfig::solr_tarball,
         master_url   => "${localconfig::solr_remoteurl}/replication",
         solrconfig   => 'rsmart-common/master-solrconfig.xml.erb',
@@ -279,7 +279,7 @@ node 'solr1.academic.rsmart.local' inherits solrnode {
         tomcat_group => $localconfig::group,
     }
 
-    oae::solr::backup { "solr-backup-${localconfig::solr_remoteurl}-${oae::params::basedir}/solr/backups":
+    solr::backup { "solr-backup-${localconfig::solr_remoteurl}-${oae::params::basedir}/solr/backups":
        solr_url   => $localconfig::solr_remoteurl,
        backup_dir => "${oae::params::basedir}/solr/backups",
        user       => $oae::params::user,
@@ -288,7 +288,7 @@ node 'solr1.academic.rsmart.local' inherits solrnode {
 }
 
 node /solr[2-3].academic.rsmart.local/ inherits solrnode {
-    class { 'oae::solr::tomcat':
+    class { 'solr::tomcat':
         master_url   => "${localconfig::solr_remoteurl}/replication",
         solrconfig   => 'rsmart-common/slave-solrconfig.xml.erb',
         tomcat_user  => $localconfig::user,

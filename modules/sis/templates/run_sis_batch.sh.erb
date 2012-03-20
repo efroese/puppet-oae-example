@@ -7,12 +7,15 @@
 # Erik Froese <erik@hallwaytech.com>
 #
 
+# file managed by puppet.
+# See https://github.com/rSmart/puppet-oae/modules/sis/templates/run_sis_batch.sh
+
 SIS_BATCH_HOME=<%= scope.lookupvar('sis::batch::home') %>
 SIS_JAR=${SIS_BATCH_HOME}/<%= scope.lookupvar('sis::batch::artifact') %>
 EMAIL_RECIPIENT="<%= scope.lookupvar('sis::batch::email_report') %>"
 
 CSV_DIR=<%= scope.lookupvar('sis::batch::csv_dir') %>
-CSV_SCHOOLS="<%= scope.lookupvar('sis::batch::csv_schools').each do |school_array| print "#{school_array[1]} " end %>"
+CSV_SCHOOLS="<% scope.lookupvar('sis::batch::csv_schools').each do |school_array| -%><%= school_array[1] %> <% end -%>"
 
 JAVA_OPTS=" -Doae.server.url=<%= scope.lookupvar('sis::batch::server_url') %> "
 JAVA_OPTS=" ${JAVA_OPTS} -Doae.admin.user=<%= scope.lookupvar('sis::batch::oae_user') %> "
@@ -23,7 +26,8 @@ JAVA_OPTS=" ${JAVA_OPTS} -DdateFormat@com.rsmart.customer.integration.processor.
 JAVA_OPTS="${JAVA_OPTS} -Dsis.config.file=${SIS_BATCH_HOME}/sis.properties "
 <% end -%>
 
-CSV_ARCHIVE=${CSV_DIR}/`date +%Y%m%d-%H%M`
+NOW=`date +%Y%m%d-%H%M`
+CSV_ARCHIVE=${CSV_DIR}/${NOW}
 mkdir -p ${CSV_ARCHIVE}
 
 OUTPUT=`mktemp`

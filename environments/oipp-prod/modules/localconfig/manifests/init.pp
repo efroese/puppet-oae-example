@@ -108,8 +108,10 @@ class localconfig {
     $basic_sis_batch_executable_url = 'https://rsmart-dev.s3.amazonaws.com/artifacts/maven/snapshot/com/rsmart/com.rsmart.nakamura.basic-sis-batch-1.0-20120307.222244-1-executable.jar'
     $basic_sis_batch_email_report = "TODO-get-email@rSmart.com"
 
-    $oae_csv_dir = 'rsmart@oipp-prod-app1:/files-academic/sis/'
-    $csv_dir = 'rsmart@oipp-cle1:/files-cle/files/sis/'
+    $oae_csv_dir = '/files-academic/sis/'
+    $oae_csv_destination_dir = 'rsmart@oipp-prod-app1:/files-academic/sis/'
+    $cle_csv_dir = '/files-cle/files/sis'
+    $cle_csv_destination_dir = 'rsmart@oipp-cle1:/files-cle/files/sis/'
     $csv_schools=[['/home/ucb_sis','UCB'],['/home/ucd_sis','UCD'],['/home/ucm_sis','UCMerced']]
 
     # TODO is this actually the secret?

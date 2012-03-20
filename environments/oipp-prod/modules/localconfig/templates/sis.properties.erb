@@ -200,7 +200,7 @@ UserService.lastNameJsonPath=$.results[0].basic.elements.lastName.value
 
 # Direct log messages to a log file
 log4j.appender.file=org.apache.log4j.RollingFileAppender
-log4j.appender.file.File=sis.log
+log4j.appender.file.File=<%= scope.lookupvar('sis::batch::sis_log') %>
 log4j.appender.file.MaxFileSize=1MB
 log4j.appender.file.MaxBackupIndex=1
 log4j.appender.file.layout=org.apache.log4j.PatternLayout

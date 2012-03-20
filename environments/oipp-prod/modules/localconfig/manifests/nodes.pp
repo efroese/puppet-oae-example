@@ -340,6 +340,12 @@ node oaeappnode inherits oaenode {
     }
     
     ###########################################################################
+    # AppDynamics
+    class { 'appdynamics':
+        basedir => $oae::params::basedir,
+    }
+
+    ###########################################################################
     # SIS
     file { "$localconfig::oae_csv_dir":
         owner => $localconfig::user,

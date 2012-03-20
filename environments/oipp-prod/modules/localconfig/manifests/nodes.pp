@@ -357,6 +357,7 @@ node oaeappnode inherits oaenode {
         server_url     => "https://${localconfig::http_name}/",
         oae_password   => $localconfig::admin_password,
         email_report   => $localconfig::basic_sis_batch_email_report,
+        require => [File["$localconfig::oae_csv_dir"], Ssh_authorized_key["root-rsmart-pub"]],
     }
 
 }

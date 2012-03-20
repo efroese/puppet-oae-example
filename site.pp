@@ -3,6 +3,11 @@ import 'nodetypes'
 
 #
 # Dynamically import the nodes list based on the active configuration.
+<<<<<<< HEAD
+=======
+# Activate the correct configuration by making a symlink in the modules directory to the right config module.
+# 
+>>>>>>> master
 import 'localconfig/nodes.pp'
 
 # Set the default owner and group to root

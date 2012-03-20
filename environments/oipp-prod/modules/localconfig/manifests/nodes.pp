@@ -373,6 +373,7 @@ node solrnode inherits oaenode {
         tomcat_group   => $localconfig::group,
         admin_user     => $localconfig::tomcat_user,
         admin_password => $localconfig::tomcat_password,
+        setenv_template => 'rsmart-common/solr-setenv.sh.erb',
     }
 }
 
@@ -384,7 +385,6 @@ node 'oipp-prod-solr1.academic.rsmart.local' inherits solrnode {
         tomcat_home  => "${localconfig::basedir}/tomcat",
         tomcat_user  => $localconfig::user,
         tomcat_group => $localconfig::group,
-        setenv_template => 'rsmart-common/solr-setenv.sh.erb',
     }
 
     solr::backup { "solr-backup-${localconfig::solr_remoteurl}-${oae::params::basedir}/solr/backups":

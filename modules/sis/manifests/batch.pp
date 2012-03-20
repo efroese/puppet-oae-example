@@ -33,6 +33,7 @@ class sis::batch (
     ) inherits sis {
 
     file { "${sis::basedir}/batch":
+        user => $user,
         ensure => directory,
         require => File[$sis::basedir],
     }
@@ -53,6 +54,14 @@ class sis::batch (
         ensure => directory,
         require => File[$sis::batch::home],
     }
+
+    file { "${sis::batch::home}/log":
+        user => user,
+        ensure => directory,
+        require => File[$sis::batch::home],
+    }
+
+    $sis_log = "${sis::batch::home}/log/sis.log";
 
     file { "${sis::batch::home}/sis.properties":
         mode => 0644,

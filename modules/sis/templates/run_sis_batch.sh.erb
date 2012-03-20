@@ -15,7 +15,7 @@ SIS_JAR=${SIS_BATCH_HOME}/<%= scope.lookupvar('sis::batch::artifact') %>
 EMAIL_RECIPIENT="<%= scope.lookupvar('sis::batch::email_report') %>"
 
 CSV_DIR=<%= scope.lookupvar('sis::batch::csv_dir') %>
-CSV_SCHOOLS="<%= scope.lookupvar('sis::batch::csv_schools').each do |school_array| print "#{school_array[1]} " end %>"
+CSV_SCHOOLS="<% scope.lookupvar('sis::batch::csv_schools').each do |school_array| -%><%= school_array[1] %> <% end -%>"
 
 JAVA_OPTS=" -Doae.server.url=<%= scope.lookupvar('sis::batch::server_url') %> "
 JAVA_OPTS=" ${JAVA_OPTS} -Doae.admin.user=<%= scope.lookupvar('sis::batch::oae_user') %> "

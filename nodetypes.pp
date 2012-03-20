@@ -1,6 +1,6 @@
 ###########################################################################
-#
 # Node Type Definitions
+
 #
 node basenode {
 
@@ -24,6 +24,7 @@ node basenode {
     }
 }
 
+# This should probably be called an academicnode
 node oaenode inherits basenode {
 
     include sudo

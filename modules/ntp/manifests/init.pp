@@ -1,3 +1,10 @@
+#
+# = Class ntp
+# Configure ntpd and make sure its running.
+#
+# == Paramters
+# $time_zone:: The path to the timezone file
+#
 class ntp($time_zone) {
     
     package { 'ntp': ensure => installed }

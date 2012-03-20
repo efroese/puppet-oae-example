@@ -156,6 +156,7 @@ node 'oipp-prod-apache1.academic.rsmart.local' inherits oaenode {
         cle_csv => $localconfig::cle_csv_destination_dir,
         oae_csv => $localconfig::oae_csv_destination_dir,
         csv_schools => $localconfig::csv_schools,
+        sis_error_archive => $localconfig::sis_archive_dir,
         use_scp => true,
         production => true,
     }
@@ -354,9 +355,11 @@ node oaeappnode inherits oaenode {
         sis_properties => 'localconfig/sis.properties.erb',
         csv_dir        => $localconfig::oae_csv_dir,
         csv_user_filenames  => $localconfig::csv_user_filenames,
+        csv_schools    => $localconfig::csv_schools,
         server_url     => "https://${localconfig::http_name}/",
         oae_password   => $localconfig::admin_password,
         email_report   => $localconfig::basic_sis_batch_email_report,
+        require => [File["$localconfig::oae_csv_dir"], Ssh_authorized_key["root-rsmart-pub"]],
     }
 
 }

@@ -12,6 +12,7 @@ class localconfig {
     $group   = 'rsmart'
     $uid     = 500
     $gid     = 500
+    $homedir = '/home/rsmart'
     $basedir = '/home/rsmart/sakaioae'
 
     ###########################################################################
@@ -65,8 +66,8 @@ class localconfig {
 
     ###########################################################################
     # App servers
-    $jarsource     = '/home/rsmart/com.rsmart.academic.app.oipp-1.1.1-SNAPSHOT.jar'
-    $jarfile       = 'com.rsmart.academic.app.oipp-1.1.1-SNAPSHOT.jar'
+    $jarsource     = '/home/rsmart/com.rsmart.academic.app.oipp-1.1.2-rsmart.jar'
+    $jarfile       = 'com.rsmart.academic.app.oipp-1.1.2-rsmart.jar'
     $java          = '/usr/java/jdk1.6.0_30/bin/java'
     $javamemorymax = '5g'
     $javamemorymin = '5g'
@@ -104,8 +105,8 @@ class localconfig {
 
     ###########################################################################
     # SIS Integration
-    $basic_sis_batch_executable_artifact = 'com.rsmart.nakamura.basic-sis-batch-1.0-20120307.222244-1-executable.jar'
-    $basic_sis_batch_executable_url = 'https://rsmart-dev.s3.amazonaws.com/artifacts/maven/snapshot/com/rsmart/com.rsmart.nakamura.basic-sis-batch-1.0-20120307.222244-1-executable.jar'
+    $basic_sis_batch_executable_artifact = 'com.rsmart.nakamura.basic-sis-batch-1.0.0-executable.jar'
+    $basic_sis_batch_executable_url = 'https://rsmart-dev.s3.amazonaws.com/artifacts/maven/release/com/rsmart/com.rsmart.nakamura.basic-sis-batch-1.0.0-executable.jar'
     $basic_sis_batch_email_report = "TODO-get-email@rSmart.com"
 
     $oae_csv_dir = '/files-academic/sis/'
@@ -113,6 +114,7 @@ class localconfig {
     $cle_csv_dir = '/files-cle/files/sis'
     $cle_csv_destination_dir = 'rsmart@oipp-cle1:/files-cle/files/sis/'
     $csv_schools=[['/home/ucb_sis','UCB'],['/home/ucd_sis','UCD'],['/home/ucm_sis','UCMerced']]
+    $sis_archive_dir = "$homedir/sis-failed-transfers"
 
     # TODO is this actually the secret?
     $trusted_shared_secret = "yourSecret"

@@ -20,7 +20,6 @@ ENV_ARG=""
 
 echo $@ | grep -q environment
 if [[ $? -eq 1 && -f $ENV_FILE ]]; then
-    echo "loaded environment from ${ENV_FILE}"
     echo "environment = `cat ${ENV_FILE}`"
     ENV_ARG="--environment `cat ${ENV_FILE}`"
 fi

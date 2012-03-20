@@ -36,18 +36,7 @@ class solr {
         }
 
         cron { "solr-backup-${solr_url}-${backup_dir}":
-            user => $user,
-            command => "curl '${solr_url}/replication?command=backup&location=${backup_dir}'",
-            minute  => '0',
-            hour    => '1',
-            require => File[$backup_dir],
-            owner  => $user,
-            group  => $group,
-            mode   => 0750,
-        }
-
-        cron { "solr-backup-${solr_url}-${backup_dir}":
-            user => $user,
+            user    => $user,
             command => "curl '${solr_url}/replication?command=backup&location=${backup_dir}'",
             minute  => '0',
             hour    => '1',

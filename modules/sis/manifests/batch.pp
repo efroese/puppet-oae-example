@@ -61,7 +61,7 @@ class sis::batch (
         require => File[$sis::batch::home],
     }
 
-    $sis_log = "${sis::batch::home}/log/sis.log";
+    $sis_log = "${sis::batch::home}/log/sis.log"
 
     file { "${sis::batch::home}/sis.properties":
         mode => 0644,

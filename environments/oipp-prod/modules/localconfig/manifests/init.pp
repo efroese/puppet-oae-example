@@ -12,6 +12,7 @@ class localconfig {
     $group   = 'rsmart'
     $uid     = 500
     $gid     = 500
+    $homedir = '/home/rsmart'
     $basedir = '/home/rsmart/sakaioae'
 
     ###########################################################################

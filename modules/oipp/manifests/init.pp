@@ -10,7 +10,8 @@ class oipp::sis (
     $sis_log = "/var/log/sakaioae/sis.log",
     $sis_error_archive = "archive/",
     $use_scp = false,
-    $debug = false) {
+    $debug = false,
+    $production = false) {
 
     class { 'people::oipp-sis::internal': }
     class { 'people::oipp-sis::external': }

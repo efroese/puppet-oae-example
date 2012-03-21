@@ -6,7 +6,7 @@ CLE_PROC_DIR=<%= scope.lookupvar('oipp::sis::cle_csv') %>
 OAE_PROC_DIR=<%= scope.lookupvar('oipp::sis::oae_csv') %>
 LOG=<%= scope.lookupvar('oipp::sis::sis_log') %>
 ARCHIVE_ROOT=<%= scope.lookupvar('oipp::sis::sis_error_archive') %>
-ARCHIVE_DIR=$ARCHIVE_DIR/`date +%Y%m%d-%H%M`;
+ARCHIVE_DIR=$ARCHIVE_ROOT/`date +%Y%m%d-%H%M`;
 REMOTE=<%= scope.lookupvar('oipp::sis::use_scp') %>
 PRODUCTION=<%= scope.lookupvar('oipp::sis::production') %>;
 

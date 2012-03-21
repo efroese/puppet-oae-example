@@ -3,13 +3,14 @@ class oipp {
 }
 
 class oipp::sis (
-    $cle_csv,
-    $oae_csv,
+    $csv_schools,
+    $batch_school_properties,
+    $transfer_definitions,
+    $transfer_test_definitions,
     $sis_log = "/var/log/sakaioae/sis.log",
     $sis_error_archive = "archive/",
     $use_scp = false,
-    $production = false,
-    $csv_schools,) {
+    $debug = false) {
 
     class { 'people::oipp-sis::internal': }
     class { 'people::oipp-sis::external': }

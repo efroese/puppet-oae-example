@@ -151,11 +151,11 @@ node 'oipp-prod-apache1.academic.rsmart.local' inherits oaenode {
     }
     ###########################################################################
     # SIS integration
-
     class { 'oipp::sis':
-        cle_csv => $localconfig::cle_csv_destination_dir,
-        oae_csv => $localconfig::oae_csv_destination_dir,
         csv_schools => $localconfig::csv_schools,
+        batch_school_properties => $localconfig::basic_sis_batch_school_properties,
+        transfer_definitions => $localconfig::sis_batch_transfers,
+        transfer_test_definitions => $localconfig::sis_batch_test_transfers,
         sis_error_archive => $localconfig::sis_archive_dir,
         use_scp => true,
         production => true,

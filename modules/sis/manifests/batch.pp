@@ -48,6 +48,7 @@ class sis::batch (
     $user,
     $executable_url,
     $artifact,
+    $csv_object_types,
     $csv_dir        = false,
     $school_properties = { 'not configured' => { 'not' => 'configured'}, },
     $email_report,

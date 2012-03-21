@@ -111,35 +111,58 @@ class localconfig {
     $basic_sis_batch_email_report = "mike@rSmart.com"
 
     $oae_csv_dir = '/files-academic/sis/'
-    $oae_csv_destination_dir = 'rsmart@oipp-prod-app1:/files-academic/sis/'
+    $cle_csv_dir = '/files-cle/files/sis/'
 
-    $cle_csv_dir = '/files-cle/files/sis'
-    $cle_csv_destination_dir = 'rsmart@oipp-cle1:/files-cle/files/sis/'
-
-    $csv_schools=[['/home/ucb_sis','UCB'],['/home/ucd_sis','UCD'],['/home/ucm_sis','UCMerced']]
     $sis_archive_dir = "${homedir}/sis-failed-transfers"
     $csv_object_types = [ 'Course', 'Membership', 'Section', 'SectionMembership']
+
+    $cle_csv_files = ['Course', 'Membership', 'Section', 'SectionMembership']
+    $oae_csv_files = ['Course', 'Membership', 'Section', 'SectionMembership', 'User']
+
+    $sis_batch_transfers = {
+        'rsmart@oipp-cle1:/files-cle/files/sis/'        => $cle_csv_files,
+        'rsmart@oipp-prod-app1:/files-academic/sis/'    => $oae_csv_files,
+        'rsmart@oipp-cle1:/files-cle/files/sis/test'    => $cle_csv_files,
+        'rsmart@oipp-test:~/sistest'                    => $oae_csv_files,
+    }
+
+    $sis_test_batch_transfers = {
+        'rsmart@oipp-cle1:/files-cle/files/sis/test'    => $cle_csv_files,
+        'rsmart@oipp-test:~/sistest'                    => $oae_csv_files,
+    }
 
     # TODO Get the full list of properties.
     # These are intended as a starting point and example.
     $basic_sis_batch_school_properties = {
         'UCB' => {
-            'oae.server.url'     => "https://${http_name}/",
-            'oae.admin.user'     => 'admin',
-            'oae.admin.password' => $admin_password,
-            'dateFormat@com.rsmart.customer.integration.processor.cle.CleCourseProcessor' => 'yyyy-mm-dd',
+            'upload_dir'          => '/home/ucb_sis',
+            'test_upload_dir'     => '/home/ucb_sis/test',
+            'oae_batch_params'    => {
+                'oae.server.url'     => "https://${http_name}/",
+                'oae.admin.user'     => 'admin',
+                'oae.admin.password' => $admin_password,
+                'dateFormat@com.rsmart.customer.integration.processor.cle.CleCourseProcessor' => 'yyyy-mm-dd',
+            },
         },
         'UCD' => {
-            'oae.server.url'     => "https://${http_name}/",
-            'oae.admin.user'     => 'admin',
-            'oae.admin.password' => $admin_password,
-            'dateFormat@com.rsmart.customer.integration.processor.cle.CleCourseProcessor' => 'yyyy-mm-dd',
+            'upload_dir'          => '/home/ucd_sis',
+            'test_upload_dir'     => '/home/ucd_sis/test',
+            'oae_batch_params'  => {
+                'oae.server.url'     => "https://${http_name}/",
+                'oae.admin.user'     => 'admin',
+                'oae.admin.password' => $admin_password,
+                'dateFormat@com.rsmart.customer.integration.processor.cle.CleCourseProcessor' => 'yyyy-mm-dd',
+            },
         },
         'UCMerced' => {
-            'oae.server.url'     => "https://${http_name}/",
-            'oae.admin.user'     => 'admin',
-            'oae.admin.password' => $admin_password,
-            'dateFormat@com.rsmart.customer.integration.processor.cle.CleCourseProcessor' => 'yyyy-mm-dd',
+            'upload_dir'          => '/home/ucm_sis',
+            'test_upload_dir'     => '/home/ucm_sis/test',
+            'oae_batch_params'  => {
+                'oae.server.url'     => "https://${http_name}/",
+                'oae.admin.user'     => 'admin',
+                'oae.admin.password' => $admin_password,
+                'dateFormat@com.rsmart.customer.integration.processor.cle.CleCourseProcessor' => 'yyyy-mm-dd',
+            },
         },
     }
 

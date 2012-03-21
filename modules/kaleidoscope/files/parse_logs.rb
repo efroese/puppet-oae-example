@@ -224,7 +224,7 @@ def upload_to_server
 
   # Upload the file
   path = "#{@options[:uploadpath]}/#{filename}.tar.gz"
-  Net::SFTP.start(@options[:uploadserver], @options[:user]) do |sftp|
+  Net::SFTP.start(@options[:uploadserver], @options[:uploaduser]) do |sftp|
     sftp.upload!("#{@directory_name}/#{filename}.tar.gz", path)
   end
 end
@@ -255,6 +255,9 @@ def parse_options
     end
     opts.on('-m', '--uploadpath PATH', 'The path on the upload server to upload to') do |m|
       options[:uploadpath] = m
+    end
+    opts.on('-z', '--uploaduser USER', 'The user for the remote upload') do |z|
+      options[:uploaduser] = z
     end
     opts.on('-a', '--append', 'If we should append yesterdays date to the remote log file name') do |a|
       options[:append] = true

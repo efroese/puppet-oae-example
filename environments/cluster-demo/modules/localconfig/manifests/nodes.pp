@@ -49,6 +49,10 @@ node /oae-lb[1-2].localdomain/ inherits oaenode {
     class { 'apache::ssl': }
     class { 'pacemaker::apache': }
 
+    # Headers is not in the default set of enabled modules
+    apache::module { 'headers': }
+    apache::module { 'deflate': }
+
     # Server trusted content on 443
     apache::vhost-ssl { "${http_name}:443":
         sslonly  => true,

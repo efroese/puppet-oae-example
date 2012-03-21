@@ -111,31 +111,26 @@ class localconfig {
     $basic_sis_batch_email_report = "mike@rSmart.com"
 
     $oae_csv_dir = '/files-academic/sis/'
-    $oae_csv_destination_dir = 'rsmart@oipp-prod-app1:/files-academic/sis/'
 
     $cle_csv_dir = '/files-cle/files/sis'
-    $cle_csv_destination_dir = 'rsmart@oipp-cle1:/files-cle/files/sis/'
-
-    $cle_csv_destination_test_dir = 'rsmart@oipp-cle1:/files-cle/files/sis/test'
-    $oipp_test_destination_dir = 'rsmart@oipp-test:~/sistest';
 
     $csv_schools=[['/home/ucb_sis','UCB'],['/home/ucd_sis','UCD'],['/home/ucm_sis','UCMerced']]
     $sis_archive_dir = "${homedir}/sis-failed-transfers"
     $csv_object_types = [ 'Course', 'Membership', 'Section', 'SectionMembership']
 
-    $cle_csv_files = ['Course', 'Membership', 'Section', 'SectionMembership'];
-    $oae_csv_files = ['Course', 'Membership', 'Section', 'SectionMembership', 'User'];
+    $cle_csv_files = ['Course', 'Membership', 'Section', 'SectionMembership']
+    $oae_csv_files = ['Course', 'Membership', 'Section', 'SectionMembership', 'User']
 
     $sis_batch_transfers = {
-        $cle_csv_destination_dir => $cls_csv_files,
-        $oae_csv_destination_dir => $oae_csv_files,
-        $cle_csv_destination_test_dir => $cls_csv_files,
-        $oipp_test_destination_dir => $oae_csv_files,
+        'rsmart@oipp-cle1:/files-cle/files/sis/'        => $cle_csv_files,
+        'rsmart@oipp-prod-app1:/files-academic/sis/'    => $oae_csv_files,
+        'rsmart@oipp-cle1:/files-cle/files/sis/test'    => $cle_csv_files,
+        'rsmart@oipp-test:~/sistest'                    => $oae_csv_files,
     }
 
     $sis_test_batch_transfers = {
-        $cle_csv_destination_test_dir => $cls_csv_files,
-        $oipp_test_destination_dir => $oae_csv_files,
+        'rsmart@oipp-cle1:/files-cle/files/sis/test'    => $cle_csv_files,
+        'rsmart@oipp-test:~/sistest'                    => $oae_csv_files,
     }
 
     # TODO Get the full list of properties.

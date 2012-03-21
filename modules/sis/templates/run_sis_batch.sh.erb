@@ -1,63 +1,89 @@
 #!/bin/bash
-
 #
 # run_sis_batch.sh
 # - Run the rSmart basic SIS batch job
 # 
 # Erik Froese <erik@hallwaytech.com>
 #
-
 # file managed by puppet.
 # See https://github.com/rSmart/puppet-oae/modules/sis/templates/run_sis_batch.sh
+#
 
 SIS_BATCH_HOME=<%= scope.lookupvar('sis::batch::home') %>
 SIS_JAR=${SIS_BATCH_HOME}/<%= scope.lookupvar('sis::batch::artifact') %>
 EMAIL_RECIPIENT="<%= scope.lookupvar('sis::batch::email_report') %>"
 
 CSV_DIR=<%= scope.lookupvar('sis::batch::csv_dir') %>
-CSV_SCHOOLS="<% scope.lookupvar('sis::batch::csv_schools').each do |school_array| -%><%= school_array[1] %> <% end -%>"
+CSV_SCHOOLS="<% scope.lookupvar('sis::batch::school_properties').keys.each do |school| -%><%= school %> <% end -%>"
+CSV_OBJECT_TYPES="<%= scope.lookupvar('sis::batch::csv_object_types').echo do |cot| -%><%= cot %> <% end -%>"
 
-JAVA_OPTS=" -Doae.server.url=<%= scope.lookupvar('sis::batch::server_url') %> "
-JAVA_OPTS=" ${JAVA_OPTS} -Doae.admin.user=<%= scope.lookupvar('sis::batch::oae_user') %> "
-JAVA_OPTS=" ${JAVA_OPTS} -Doae.admin.password=<%= scope.lookupvar('sis::batch::oae_password') %> "
-JAVA_OPTS=" ${JAVA_OPTS} -DdateFormat@com.rsmart.customer.integration.processor.cle.CleCourseProcessor=yyyy-mm-dd "
-
-<% if scope.lookupvar('sis::batch::sis_properties') -%>
-JAVA_OPTS="${JAVA_OPTS} -Dsis.config.file=${SIS_BATCH_HOME}/sis.properties "
-<% end -%>
+GLOBAL_JAVA_OPTS="${JAVA_OPTS} -Dsis.config.file=${SIS_BATCH_HOME}/sis.properties "
 
 NOW=`date +%Y%m%d-%H%M`
+
+ARCHIVE_CSV_FILES="<%= scope.lookupvar('sis::batch::archive_csv_files') %>"
+
 CSV_ARCHIVE=${CSV_DIR}/${NOW}
-mkdir -p ${CSV_ARCHIVE}
+if [[ $ARCHIVE_CSV_FILES == "1" ]]; then
+    mkdir -p ${CSV_ARCHIVE}
+fi
 
 OUTPUT=`mktemp`
+#
+# Run the batch processor for a single school.
+#
+# $1 school name
+# $2 JAVA_OPTS
+# 
+function do_batch(){
 
-for school in ${CSV_SCHOOLS}; do
-    FILENAME_OPTS="";
-    for file in Course Membership User Section SectionMembership; do
+    $school = $1
+    $java_opts = $2
+
+    # Collect the list of filenames
+    FILENAME_OPTS=""
+    for file in $CSV_OBJECT_TYPES; do
         CSV_FILE="${CSV_DIR}/${file}.${school}.csv"
         if [[ -f ${CSV_FILE} ]]; then
             FILENAME_OPTS="${FILENAME_OPTS} -Dfilename@com.rsmart.customer.integration.processor.cle.Cle${file}Processor=${CSV_FILE}" 
+            echo "processing file: ${CSV_FILE}" | tee -a ${OUTPUT}
         else
-            echo "No file for ${CSV_FILE}" >> ${OUTPUT}
+            echo "No file for ${CSV_FILE}" | tee -a ${OUTPUT}
         fi
     done
 
     # TODO - What consitutes an error?
-    ERROR=false
+    ERROR=""
 
     # Run the importer
-    java ${JAVA_OPTS} ${FILENAME_OPTS} -jar ${SIS_JAR} 2>&1 >> ${OUTPUT}
+    java ${java_opts} ${FILENAME_OPTS} -jar ${SIS_JAR} 2>&1 | tee -a ${OUTPUT}
 
-    if [[ ! ${ERROR} ]]; then
-        for file in Course Membership User Section SectionMembership; do
+    if [[ "x${ERROR}" == "x" ]]; then # No errors
+        for file in $CSV_OBJECT_TYPES; do
             CSV_FILE="${CSV_DIR}/${file}.${school}.csv"
             if [[ -f ${CSV_FILE} ]]; then
-                mv ${CSV_FILE} ${CSV_ARCHIVE}
+                echo "Removing ${CSV_FILE}" | tee -a ${OUTPUT}
+                rm -f ${CSV_FILE}
             fi
         done
+    else
+        if [[ -f ${CSV_FILE} && ${ARCHIVE_CSV_FILES} == 1 ]]; then
+            echo "Moving ${CSV_FILE} -> ${CSV_ARCHIVE}" | tee -a ${OUTPUT}
+            mv ${CSV_FILE} ${CSV_ARCHIVE}
+        fi
     fi
-done
+}
+
+<% scope.lookupvar('sis::batch::school_properties').keys.each do |school| -%>
+
+    JAVA_OPTS=${GLOBAL_JAVA_OPTS}
+    <% scope.lookupvar('sis::batch::school_properties')[school].each do |key,val| -%>
+        JAVA_OPTS="${JAVA_OPTS} -D<%= key %>=<%= val %> "
+    <% end %>
+
+    do_batch <%= school %> $JAVA_OPTS
+
+<% end %>
 
 if [[ $EMAIL_RECIPIENT != "undefined" ]]; then
     mail -s "SIS batch update for ${NOW}" ${EMAIL_RECIPIENT} < ${OUTPUT}

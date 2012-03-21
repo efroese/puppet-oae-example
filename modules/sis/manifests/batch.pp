@@ -10,26 +10,48 @@
 #
 # $artifact:: The name of the jar.
 #
-# $sis_properties:: A path to a template used to render sis.properties
-#
-# $csv_schools:: Names of the schools to tranfer.
-#
 # $csv_dir:: The directory that holds the csv files to process
 #
-# $csv_user_filenames:: CSV files to be processed by the SIS user processor.
+# $csv_object_types:: The object types to read from the CSV files. 
+#
+# $school_properties:: A hash that maps school name to its properties overrides
+#
+# $archive_csv_files:: Save csv files from failed runs. '1' is true, anything else is false.
+#
+# == Sample Usage:
+#
+# class { 'sis::batch':
+#     user           => 'rsmart',
+#     executable_url => 'https://url.to/sis-executable.jar',
+#     artifact       => 'sis-executable.jar',
+#     csv_dir        => '/files-cle/sis',
+#     csv_object_types => [ 'Course', 'Membership', 'Section', 'SectionMembership'],
+#     school_properties => {
+#         'school0' => {
+#             'oae.server.url' => 'https://school0.url/',
+#             'oae.admin.user' => 'admin',
+#             'oae.admin.password' => 'admin',
+#             'dateFormat@com.rsmart.customer.integration.processor.cle.CleCourseProcessor' => 'yyyy-mm-dd',
+#          },
+#         'school1' => {
+#             'oae.server.url' => 'https://school0=1.url/',
+#             'oae.admin.user' => 'admin',
+#             'oae.admin.password' => 'admin',
+#             'dateFormat@com.rsmart.customer.integration.processor.cle.CleCourseProcessor' => 'yyyy-mm-dd',
+#          },
+#     },
+#     email_report => 'reports@example.com',
+# }
+#
 
 class sis::batch (
     $user,
     $executable_url,
     $artifact,
-    $sis_properties = 'sis/sis.properties.erb',
-    $csv_schools    = [],
     $csv_dir        = false,
-    $csv_user_filenames = [],
-    $server_url,
-    $oae_user = 'admin',
-    $oae_password,
-    $email_report
+    $school_properties = { 'not configured' => { 'not' => 'configured'}, },
+    $email_report,
+    $archive_csv_files='0'
     ) inherits sis {
 
     file { "${sis::basedir}/batch":
@@ -65,7 +87,7 @@ class sis::batch (
 
     file { "${sis::batch::home}/sis.properties":
         mode => 0644,
-        content => template($sis_properties),
+        source => 'puppet://modules/sis/sis.properties',
         require => File[$sis::batch::home],
     }
 

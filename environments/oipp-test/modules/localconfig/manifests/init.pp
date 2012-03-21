@@ -127,12 +127,37 @@ class localconfig {
     # SIS Integration
     $basic_sis_batch_executable_artifact = 'com.rsmart.nakamura.basic-sis-batch-1.0.0-executable.jar'
     $basic_sis_batch_executable_url = 'https://rsmart-dev.s3.amazonaws.com/artifacts/maven/release/com/rsmart/com.rsmart.nakamura.basic-sis-batch-1.0.0-executable.jar'
-    # $basic_sis_batch_email_report = "provision@uconline.edu"
     $basic_sis_batch_email_report = "mike@rsmart.com"
 
     $oae_csv_dir = '/files-academic/sis/'
     $csv_dir = '/files-cle/files/sis/'
+
     $csv_schools=[['/home/rsmart/sistest','UCB'],['/home/rsmart/sistest','UCD'],['/home/rsmart/sistest','UCMerced']]
+    $sis_archive_dir = "${homedir}/sis-failed-transfers"
+    $csv_object_types = [ 'Course', 'Membership', 'Section', 'SectionMembership']
+    
+    # TODO Get the full list of properties.
+    # These are intended as a starting point and example.
+    $basic_sis_batch_school_properties = {
+        'UCB' => {
+            'oae.server.url'     => "https://${http_name}/",
+            'oae.admin.user'     => 'admin',
+            'oae.admin.password' => $admin_password,
+            'dateFormat@com.rsmart.customer.integration.processor.cle.CleCourseProcessor' => 'yyyy-mm-dd',
+        },
+        'UCD' => {
+            'oae.server.url'     => "https://${http_name}/",
+            'oae.admin.user'     => 'admin',
+            'oae.admin.password' => $admin_password,
+            'dateFormat@com.rsmart.customer.integration.processor.cle.CleCourseProcessor' => 'yyyy-mm-dd',
+        },
+        'UCMerced' => {
+            'oae.server.url'     => "https://${http_name}/",
+            'oae.admin.user'     => 'admin',
+            'oae.admin.password' => $admin_password,
+            'dateFormat@com.rsmart.customer.integration.processor.cle.CleCourseProcessor' => 'yyyy-mm-dd',
+        },
+    }
 
     # TODO is this actually the secret?
     $trusted_shared_secret = "yourSecret"

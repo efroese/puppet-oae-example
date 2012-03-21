@@ -107,14 +107,41 @@ class localconfig {
     # SIS Integration
     $basic_sis_batch_executable_artifact = 'com.rsmart.nakamura.basic-sis-batch-1.0.0-executable.jar'
     $basic_sis_batch_executable_url = 'https://rsmart-dev.s3.amazonaws.com/artifacts/maven/release/com/rsmart/com.rsmart.nakamura.basic-sis-batch/1.0.0/com.rsmart.nakamura.basic-sis-batch-1.0.0-executable.jar'
-    $basic_sis_batch_email_report = "TODO-get-email@rSmart.com"
+    # $basic_sis_batch_email_report = "provision@uconline.edu"
+    $basic_sis_batch_email_report = "mike@rSmart.com"
 
     $oae_csv_dir = '/files-academic/sis/'
     $oae_csv_destination_dir = 'rsmart@oipp-prod-app1:/files-academic/sis/'
+
     $cle_csv_dir = '/files-cle/files/sis'
     $cle_csv_destination_dir = 'rsmart@oipp-cle1:/files-cle/files/sis/'
+
     $csv_schools=[['/home/ucb_sis','UCB'],['/home/ucd_sis','UCD'],['/home/ucm_sis','UCMerced']]
-    $sis_archive_dir = "$homedir/sis-failed-transfers"
+    $sis_archive_dir = "${homedir}/sis-failed-transfers"
+    $csv_object_types = [ 'Course', 'Membership', 'Section', 'SectionMembership']
+
+    # TODO Get the full list of properties.
+    # These are intended as a starting point and example.
+    $basic_sis_batch_school_properties = {
+        'UCB' => {
+            'oae.server.url'     => "https://${http_name}/",
+            'oae.admin.user'     => 'admin',
+            'oae.admin.password' => $admin_password,
+            'dateFormat@com.rsmart.customer.integration.processor.cle.CleCourseProcessor' => 'yyyy-mm-dd',
+        },
+        'UCD' => {
+            'oae.server.url'     => "https://${http_name}/",
+            'oae.admin.user'     => 'admin',
+            'oae.admin.password' => $admin_password,
+            'dateFormat@com.rsmart.customer.integration.processor.cle.CleCourseProcessor' => 'yyyy-mm-dd',
+        },
+        'UCMerced' => {
+            'oae.server.url'     => "https://${http_name}/",
+            'oae.admin.user'     => 'admin',
+            'oae.admin.password' => $admin_password,
+            'dateFormat@com.rsmart.customer.integration.processor.cle.CleCourseProcessor' => 'yyyy-mm-dd',
+        },
+    }
 
     # x-sakai-token server-to-server authn semantics
     $trusted_shared_secret = "3pWkFWkybjnxKLKqrXdQTqIhmDRWExBXsxBKiLexTGJdJ4bhUP"

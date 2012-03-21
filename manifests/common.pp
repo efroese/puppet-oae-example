@@ -53,6 +53,8 @@ class solr::common (
         checksum => false,
         src_target => $basedir,
         extension => 'tgz',
+        allow_insecure => true,
+        timeout        => '0',
         require    => File[$basedir],
     }
 
@@ -73,19 +75,21 @@ class solr::common (
 
     # /usr/local/solr/solr-source
     archive { 'solr-source':
-        ensure     => present,
-        url        => $solr_tarball,
-        target     => $basedir,
-        checksum   => false,
-        src_target => $basedir,
-        require    => File[$basedir],
+        ensure         => present,
+        url            => $solr_tarball,
+        checksum       => false,
+        target         => $basedir,
+        src_target     => $basedir,
+        allow_insecure => true,
+        timeout        => '0',
+        require        => File[$basedir],
+        notify         => Exec['mv-solr-source'],
     }
 
     # The expanded folder name will be ${organization}-${repository}-${revision}
     exec { 'mv-solr-source':
-        command => "mv `tar tf ${basedir}/solr-source.tar.gz | head -1` solr-source",
-        cwd     => $basedir,
-        require => Archive['solr-source'],
+        command => "mv ${basedir}/`tar tf ${basedir}/solr-source.tar.gz 2>/dev/null | head -1` ${basedir}/solr-source",
+        refreshonly => true,
     }
 
     # /usr/local/solr/home0/conf/{stopwords,synonyms,protwords,...}.txt

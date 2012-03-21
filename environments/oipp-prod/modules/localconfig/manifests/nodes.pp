@@ -158,7 +158,6 @@ node 'oipp-prod-apache1.academic.rsmart.local' inherits oaenode {
         transfer_test_definitions => $localconfig::sis_test_batch_transfers,
         sis_error_archive => $localconfig::sis_archive_dir,
         use_scp => true,
-        production => true,
     }
 
 }

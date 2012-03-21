@@ -77,15 +77,16 @@ doAllTransfers ()
     ERRORS=false;
 
 <% scope.lookupvar('oipp::sis::batch_school_properties').each do |school,props| -%>
-        ## Transfers for <%= school %>
-    <% scope.lookupvar('oipp::sis::transfer_definitions').each do |destination, files| -%>
-        FILES="<% files.each do |file| -%><%= props['upload_dir'] %>/<%=file%>.$school.csv <% end %>";
+    ## Transfers for <%= school %>
 
-        info "copying \"$FILES\" to <%= destination %> for $school";
+    <% scope.lookupvar('oipp::sis::transfer_definitions').each do |destination, files| -%>
+        FILES="<% files.each do |file| -%><%= props['upload_dir'] %>/<%=file%>.<%=school%>.csv <% end %>";
+
+        info "copying \"$FILES\" to <%= destination %> for <%=school%>";
         transferSISFiles "$FILES" "<%= destination %>" $CP;
         if [ $? -ne 0 ] ; then
             ERRORS=true;
-            error "Failed to copy \"$FILES\" to <%= destination %> for $school";
+            error "Failed to copy \"$FILES\" to <%= destination %> for <%=school%>";
         fi;
 
     <% end %>
@@ -103,15 +104,16 @@ doAllTransfers ()
     ERRORS=false;
 
 <% scope.lookupvar('oipp::sis::batch_school_properties').each do |school,props| -%>
-        ## Transfers for <%= school %>
-    <% scope.lookupvar('oipp::sis::transfer_test_definitions').each do |destination, files| -%>
-        FILES="<% files.each do |file| -%><%= props['upload_test_dir'] %>/<%=file%>.$school.csv <% end %>";
+    ## Transfers for <%= school %>
 
-        info "copying \"$FILES\" to <%= destination %> for $school";
+    <% scope.lookupvar('oipp::sis::transfer_test_definitions').each do |destination, files| -%>
+        FILES="<% files.each do |file| -%><%= props['upload_test_dir'] %>/<%=file%>.<%=school%>.csv <% end %>";
+
+        info "copying \"$FILES\" to <%= destination %> for <%=school%>";
         transferSISFiles "$FILES" "<%= destination %>" $CP;
         if [ $? -ne 0 ] ; then
             ERRORS=true;
-            error "Failed to copy \"$FILES\" to <%= destination %> for $school";
+            error "Failed to copy \"$FILES\" to <%= destination %> for <%=school%>";
         fi;
 
     <% end %>

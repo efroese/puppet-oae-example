@@ -72,6 +72,8 @@ transferSISFiles()
 
 doAllTransfers ()
 {
+    CP=$1;
+
     ##########################################
     # preform transfer of all production files
     ERRORS=false;
@@ -135,5 +137,7 @@ if $REMOTE ; then
 else
     CP=cp;
 fi;
+
+doAllTransfers $CP;
 
 info "SIS file transfers complete";

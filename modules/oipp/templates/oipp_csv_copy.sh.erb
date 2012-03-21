@@ -107,7 +107,7 @@ doAllTransfers ()
     ## Transfers for <%= school %>
 
     <% scope.lookupvar('oipp::sis::transfer_test_definitions').each do |destination, files| -%>
-        FILES="<% files.each do |file| -%><%= props['upload_test_dir'] %>/<%=file%>.<%=school%>.csv <% end %>";
+        FILES="<% files.each do |file| -%><%= props['test_upload_dir'] %>/<%=file%>.<%=school%>.csv <% end %>";
 
         info "copying \"$FILES\" to <%= destination %> for <%=school%>";
         transferSISFiles "$FILES" "<%= destination %>" $CP;

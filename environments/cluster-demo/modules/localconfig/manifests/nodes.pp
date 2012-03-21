@@ -192,32 +192,38 @@ node solrnode inherits oaenode {
         parentdir => "${localconfig::basedir}",
         tomcat_user  => $localconfig::user,
         tomcat_group => $localconfig::group,
+        require      => File[$oae::params::basedir],
     }
 }
 
 node 'oae-solr0.localdomain' inherits solrnode {
 
     class { 'solr::tomcat':
-        master_url => "$localconfig::solr_remoteurl/replication",
-        solrconfig => 'localconfig/master-solrconfig.xml.erb',
+        solr_tarball => 'http://nodeload.github.com/sakaiproject/solr/tarball/org.sakaiproject.nakamura.solr-1.3-20120215',
+        master_url   => "$localconfig::solr_remoteurl/replication",
+        solrconfig   => 'localconfig/master-solrconfig.xml.erb',
         tomcat_home  => "${localconfig::basedir}/tomcat",
         tomcat_user  => $localconfig::user,
         tomcat_group => $localconfig::group,
+        require      => Class['tomcat6'],
     }
 
     solr::backup { "backup-${localconfig::solr_remoteurl}":
         solr_url   => $localconfig::solr_remoteurl,
-        backup_dir => "${oae::params::basedir}/solr/backups",
+        backup_dir => "${oae::params::basedir}/backups",
         user       => $oae::params::user,
         group      => $oae::params::group,
+        require    => Class['Solr::Tomcat'],
     }
 }
 
 node /oae-solr[1-3].localdomain/ inherits solrnode {
 
     class { 'solr::tomcat':
-        master_url => "$localconfig::solr_remoteurl/replication",
-        solrconfig => 'localconfig/slave-solrconfig.xml.erb',
+        solr_tarball => 'http://nodeload.github.com/sakaiproject/solr/tarball/org.sakaiproject.nakamura.solr-1.3-20120215',
+        master_url   => "${localconfig::solr_remoteurl}/replication",
+        solrconfig   => 'localconfig/slave-solrconfig.xml.erb',
+        tomcat_home  => "${localconfig::basedir}/tomcat",
         tomcat_user  => $localconfig::user,
         tomcat_group => $localconfig::group, 
     }
@@ -244,6 +250,7 @@ node 'oae-db0.localdomain' inherits oaenode {
 
     postgres::database { $localconfig::db:
         ensure => present,
+        require => Class['Postgres'],
     }
 
     postgres::role { $localconfig::db_user:

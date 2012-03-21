@@ -414,9 +414,10 @@ node 'oipp-test.academic.rsmart.local' inherits oaenode {
     }
 
     class { 'oipp::sis':
-        cle_csv => $localconfig::csv_dir,
-        oae_csv => $localconfig::oae_csv_dir,
-        csv_schools => $localconfig::csv_schools,
+        batch_school_properties => $localconfig::basic_sis_batch_school_properties,
+        transfer_definitions => $localconfig::sis_batch_transfers,
+        transfer_test_definitions => $localconfig::sis_test_batch_transfers,
+        sis_error_archive => $localconfig::sis_archive_dir,
         use_scp => false,
         production => false,
     }

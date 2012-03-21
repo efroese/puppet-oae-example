@@ -111,10 +111,8 @@ class localconfig {
     $basic_sis_batch_email_report = "mike@rSmart.com"
 
     $oae_csv_dir = '/files-academic/sis/'
+    $cle_csv_dir = '/files-cle/files/sis/'
 
-    $cle_csv_dir = '/files-cle/files/sis'
-
-    $csv_schools=[['/home/ucb_sis','UCB'],['/home/ucd_sis','UCD'],['/home/ucm_sis','UCMerced']]
     $sis_archive_dir = "${homedir}/sis-failed-transfers"
     $csv_object_types = [ 'Course', 'Membership', 'Section', 'SectionMembership']
 

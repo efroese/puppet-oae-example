@@ -3,7 +3,6 @@ class oipp {
 }
 
 class oipp::sis (
-    $csv_schools,
     $batch_school_properties,
     $transfer_definitions,
     $transfer_test_definitions,

@@ -104,9 +104,9 @@ doAllTransfers ()
 
 <% scope.lookupvar('oipp::sis::batch_school_properties').each do |school,props| -%>
         ## Transfers for <%= school %>
+    <% scope.lookupvar('oipp::sis::transfer_test_definitions').each do |destination, files| -%>
         FILES="<% files.each do |file| -%><%= props['upload_test_dir'] %>/<%=file%>.$school.csv <% end %>";
 
-    <% scope.lookupvar('oipp::sis::transfer_test_definitions').each do |destination, files| -%>
         info "copying \"$FILES\" to <%= destination %> for $school";
         transferSISFiles "$FILES" "<%= destination %>" $CP;
         if [ $? -ne 0 ] ; then

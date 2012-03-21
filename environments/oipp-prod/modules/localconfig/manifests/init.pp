@@ -116,7 +116,7 @@ class localconfig {
     $csv_schools=[['/home/ucb_sis','UCB'],['/home/ucd_sis','UCD'],['/home/ucm_sis','UCMerced']]
     $sis_archive_dir = "$homedir/sis-failed-transfers"
 
-    # TODO is this actually the secret?
-    $trusted_shared_secret = "yourSecret"
+    # x-sakai-token server-to-server authn semantics
+    $trusted_shared_secret = "3pWkFWkybjnxKLKqrXdQTqIhmDRWExBXsxBKiLexTGJdJ4bhUP"
 
 }

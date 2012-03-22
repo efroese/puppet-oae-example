@@ -209,7 +209,7 @@ node 'oae-solr0.localdomain' inherits solrnode {
         tomcat_home  => "${localconfig::basedir}/tomcat",
         tomcat_user  => $localconfig::user,
         tomcat_group => $localconfig::group,
-        require      => Class['tomcat6'],
+        require      => Class['Tomcat6'],
     }
 
     solr::backup { "backup-${localconfig::solr_remoteurl}":
@@ -217,7 +217,6 @@ node 'oae-solr0.localdomain' inherits solrnode {
         backup_dir => "${oae::params::basedir}/backups",
         user       => $oae::params::user,
         group      => $oae::params::group,
-        require    => Class['Solr::Tomcat'],
     }
 }
 
@@ -254,7 +253,6 @@ node 'oae-db0.localdomain' inherits oaenode {
 
     postgres::database { $localconfig::db:
         ensure => present,
-        require => Class['Postgres'],
     }
 
     postgres::role { $localconfig::db_user:

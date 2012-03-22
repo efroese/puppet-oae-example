@@ -40,7 +40,7 @@
 #
 node /oae-lb[1-2].localdomain/ inherits oaenode {
 
-    $http_name            = $localconfig::apache_lb_http_name
+    $http_name            = $localconfig::http_name
     $sslcert_country      = "US"
     $sslcert_state        = "NY"
     $sslcert_locality     = "New York"
@@ -107,7 +107,7 @@ node /oae-lb[1-2].localdomain/ inherits oaenode {
 #
 node /oae-app[0-1].localdomain/ inherits oaenode {
 
-    $http_name = $localconfig::apache_lb_http_name
+    $http_name = $localconfig::http_name
 
     class { 'oae::app::server':
         downloadurl    => $localconfig::downloadurl,

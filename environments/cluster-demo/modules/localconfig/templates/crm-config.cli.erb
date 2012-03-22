@@ -6,7 +6,7 @@ primitive P_IP ocf:heartbeat:IPaddr2 \
 	op monitor interval="5s"
 group G_APACHE P_IP P_APACHE \
 	meta target-role="Started"
-<% apache_lb_hostnames.each_with_index do |lbhost, i| -%>
+<% scope.lookupvar('localconfig::apache_lb_hostnames').each_with_index do |lbhost, i| -%>
 location L_IP_LB<%= i %> P_IP 100: <%= lbhost %>
 <% end %>
 colocation WEB_SITE inf: P_IP P_APACHE

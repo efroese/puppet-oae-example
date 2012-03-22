@@ -97,7 +97,7 @@ node /oae-lb[1-2].localdomain/ inherits oaenode {
 
     # The crm cli defines the nodes, virtual ip, and managed Apache
     class { 'pacemaker':
-        $crmcli    = 'localconfig/crm-config.cli.erb'
+        crmcli => 'localconfig/crm-config.cli.erb'
     }
 }
 

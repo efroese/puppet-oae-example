@@ -91,7 +91,7 @@ node /oae-lb[1-2].localdomain/ inherits oaenode {
 
     class { 'pacemaker::corosync':
         bindnetaddr => $::network_eth0,
-        authkey_file => 'puppet:///modules/localconfig/corosync.authkeyfile',
+        authkey_file => 'puppet:///modules/localconfig/corosync.authkey',
         conf_template => 'localconfig/corosync.conf.erb',
     }
 

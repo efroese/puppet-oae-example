@@ -40,7 +40,6 @@
 #
 node /oae-lb[1-2].localdomain/ inherits oaenode {
 
-    $http_name            = $localconfig::http_name
     $sslcert_country      = "US"
     $sslcert_state        = "NY"
     $sslcert_locality     = "New York"
@@ -53,8 +52,12 @@ node /oae-lb[1-2].localdomain/ inherits oaenode {
     apache::module { 'headers': }
     apache::module { 'deflate': }
 
+    apache::vhost { "${localconfig::http_name}:80":
+        template => 'localconfig/vhost-80.conf.erb',
+    }
+
     # Server trusted content on 443
-    apache::vhost-ssl { "${http_name}:443":
+    apache::vhost-ssl { "${localconfig::http_name}:443":
         sslonly  => true,
     }
 
@@ -62,14 +65,14 @@ node /oae-lb[1-2].localdomain/ inherits oaenode {
     # The puppet module takes care of 80 and 443 automatically.
     apache::listen { "8443": }
     apache::namevhost { "*:8443": }
-    apache::vhost-ssl { "${http_name}:8443": 
+    apache::vhost-ssl { "${localconfig::http_name}:8443":
         sslonly  => true,
         sslports => ['*:8443'],
     }
 
     # Server pool for trusted content
     apache::balancer { "apache-balancer-oae-app":
-        vhost      => "${http_name}:443",
+        vhost      => "${localconfig::http_name}:443",
         location   => "/",
         locations_noproxy => ['/server-status', '/balancer-manager'],
         proto      => "http",
@@ -81,7 +84,7 @@ node /oae-lb[1-2].localdomain/ inherits oaenode {
 
     # Server pool for untrusted content
     apache::balancer { "apache-balancer-oae-app-untrusted":
-        vhost      => "${http_name}:8443",
+        vhost      => "${localconfig::http_name}:8443",
         location   => "/",
         proto      => "http",
         members    => $localconfig::apache_lb_members_untrusted,
@@ -106,8 +109,6 @@ node /oae-lb[1-2].localdomain/ inherits oaenode {
 # OAE app nodes
 #
 node /oae-app[0-1].localdomain/ inherits oaenode {
-
-    $http_name = $localconfig::http_name
 
     class { 'oae::app::server':
         downloadurl    => $localconfig::downloadurl,
@@ -138,8 +139,8 @@ node /oae-app[0-1].localdomain/ inherits oaenode {
         config => {
             'disable.protection.for.dev.mode' => false,
             'trusted.hosts'  => [
-                "localhost\\ \\=\\ https://localhost:8443", 
-                "${http_name}\\ \\=\\ https://${http_name}:8443",
+                "localhost\\ \\=\\ https://localhost:8081",
+                "${localconfig::http_name}\\ \\=\\ https://${localconfig::http_name}:8443",
             ],
             'trusted.secret' => $localconfig::serverprotectsec,
         }

@@ -89,22 +89,16 @@ node /oae-lb[1-2].localdomain/ inherits oaenode {
         standbyurl => $localconfig::apache_lb_standbyurl,
     }
 
-    # Pacemaker manages which machine is the active LB
-    # TODO: parameterize the pacemaker module.
-    $pacemaker_authkey   = $localconfig::apache_lb_pacemaker_authkey
-    $pacemaker_interface = $localconfig::apache_lb_pacemaker_interface
-    $pacemaker_nodes     = $localconfig::apache_lb_pacemaker_nodes
-    # Configure heartbeat to monitor the health of the lb servers
-    $pacemaker_hacf      = 'localconfig/ha.cf.erb'
-    # Configure Pacemaker to manage the VIP and Apache
-    $pacemaker_crmcli    = 'localconfig/crm-config.cli.erb'
+    class { 'pacemaker::corosync':
+        bindnetaddr => $::network_eth0,
+        authkeyfile => 'puppet:///modules/localconfig/corosync.authkeyfile',
+        conf_template => 'localconfig/corosync.conf.erb',
+    }
 
-    # The HA master will respond to the VIP
-    $virtual_ip          = $localconfig::apache_lb_virtual_ip
-    $virtual_netmask     = $localconfig::apache_lb_virtual_netmask
-    $apache_lb_hostnames = $localconfig::apache_lb_hostnames
-
-    class { 'pacemaker': }
+    # The crm cli defines the nodes, virtual ip, and managed Apache
+    class { 'pacemaker':
+        $crmcli    = 'localconfig/crm-config.cli.erb'
+    }
 }
 
 ###########################################################################

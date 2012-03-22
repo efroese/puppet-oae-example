@@ -2,18 +2,20 @@ primitive P_APACHE ocf:heartbeat:apache \
 	params configfile="/etc/httpd/conf/httpd.conf" statusurl="http://localhost/server-status" \
 	op monitor interval="40s"
 primitive P_IP ocf:heartbeat:IPaddr2 \
-	params ip="<%= virtual_ip %>" cidr_netmask="<%= virtual_netmask %>" \
+	params ip="<%= scope.lookupvar('localconfig::virtual_ip') %>" cidr_netmask="<%= scope.lookupvar('localconfig::virtual_netmask') %>" \
 	op monitor interval="5s"
-<% apache_lb_hostnames.each_with_index do |lbhost, i| %>
+group G_APACHE P_IP P_APACHE \
+	meta target-role="Started"
+<% apache_lb_hostnames.each_with_index do |lbhost, i| -%>
 location L_IP_LB<%= i %> P_IP 100: <%= lbhost %>
 <% end %>
-colocation WEB_SITE inf: P_APACHE P_IP
+colocation WEB_SITE inf: P_IP P_APACHE
 order START_ORDER inf: P_IP P_APACHE
 property $id="cib-bootstrap-options" \
-	dc-version="1.0.12-unknown" \
-	cluster-infrastructure="Heartbeat" \
+	dc-version="1.1.6-3.el6-a02c0f19a00c1eb2527ad38f146ebc0834814558" \
+	cluster-infrastructure="openais" \
 	expected-quorum-votes="1" \
 	stonith-enabled="false" \
 	no-quorum-policy="ignore"
 rsc_defaults $id="rsc-options" \
-	resource-stickiness="110"
+	resource-stickiness="100"

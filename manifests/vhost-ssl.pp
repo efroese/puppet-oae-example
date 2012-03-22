@@ -119,7 +119,7 @@ define apache::vhost-ssl (
   $ports=['*:80'],
   $sslports=['*:443'],
   $accesslog_format="combined",
-  $template='apache/vhost.erb'
+  $template='apache/vhost-ssl.erb'
 ) {
 
   # these 2 values are required to generate a valid SSL certificate.

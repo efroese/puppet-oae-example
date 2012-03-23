@@ -33,3 +33,5 @@ mercy-college-freshman-seminar-section-3099
 mercy-college-freshman-seminar-section-4628
 mercy-college-freshman-seminar-section-4630
 mercy-college-freshman-seminar-section-5728
+eng-135-comp-i
+eng-135-comp-i-kmetz-79b2

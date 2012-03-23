@@ -1,14 +1,11 @@
 MAILTO=""
 
-DEBUG_OUT=false;
+DEBUG_OUT=<%= scope.lookupvar('oipp::sis::debug') %>;
 
-CLE_PROC_DIR=<%= scope.lookupvar('oipp::sis::cle_csv') %>
-OAE_PROC_DIR=<%= scope.lookupvar('oipp::sis::oae_csv') %>
 LOG=<%= scope.lookupvar('oipp::sis::sis_log') %>
 ARCHIVE_ROOT=<%= scope.lookupvar('oipp::sis::sis_error_archive') %>
 ARCHIVE_DIR=$ARCHIVE_ROOT/`date +%Y%m%d-%H%M`;
 REMOTE=<%= scope.lookupvar('oipp::sis::use_scp') %>
-PRODUCTION=<%= scope.lookupvar('oipp::sis::production') %>;
 
 log()
 {
@@ -75,89 +72,62 @@ transferSISFiles()
 
 doAllTransfers ()
 {
-    SOURCE_DIR=$1;
-    ABBREV=$2;
-    CP=$3;
-    PROD_FILES=$SOURCE_DIR/*.$ABBREV.csv;
-    TEST_FILES=$SOURCE_DIR/test/*;
+    CP=$1;
+
+    ##########################################
+    # preform transfer of all production files
     ERRORS=false;
 
-    debug "SOURCE_DIR=$SOURCE_DIR";
-    debug "ABBREV=$ABBREV";
+<% scope.lookupvar('oipp::sis::batch_school_properties').each do |school,props| -%>
+    ## Transfers for <%= school %>
 
-    ls $PROD_FILES >> /dev/null;
+    <% scope.lookupvar('oipp::sis::transfer_definitions').each do |destination, files| -%>
+        FILES="<% files.each do |file| -%><%= props['upload_dir'] %>/<%=file%>.<%=school%>.csv <% end %>";
 
-    if [ $? -eq 0 ] ; then
-
-        if $PRODUCTION; then
-            oipptest="rsmart@oipp-test:~/sistest";
-            info "copying $ABBREV files to OIPP test";
-            transferSISFiles "$PROD_FILES" "$oipptest" scp;
-            if [ $? -ne 0 ] ; then
-                ERRORS=true;
-                error "Failed to copy $PROD_FILES to $oipptest";
-            fi;
-        fi;
-
-        info "copying $ABBREV files to CLE test";
-        transferSISFiles "$PROD_FILES" "$CLE_PROC_DIR/test" $CP;
+        info "copying \"$FILES\" to <%= destination %> for <%=school%>";
+        transferSISFiles "$FILES" "<%= destination %>" $CP;
         if [ $? -ne 0 ] ; then
             ERRORS=true;
-            error "Failed to copy $PROD_FILES to $CLE_PROC_DIR/test";
+            error "Failed to copy \"$FILES\" to <%= destination %> for <%=school%>";
         fi;
 
-        info "copying $ABBREV files to CLE";
-        transferSISFiles "$PROD_FILES" "$CLE_PROC_DIR" $CP;
-        if [ $? -ne 0 ] ; then
-            ERRORS=true;
-            error "Failed to copy $PROD_FILES to $CLE_PROC_DIR";
-        fi;
-
-        info "copying $ABBREV files to OAE";
-        transferSISFiles "$PROD_FILES" "$OAE_PROC_DIR" $CP;
-        if [ $? -ne 0 ] ; then
-            ERRORS=true;
-            error "Failed to copy $PROD_FILES to $OAE_PROC_DIR/test";
-        fi;
-
-        if ! $ERRORS ; then
-            info "production files successfully copied"
-            rm -f $PROD_FILES;
-        else
-            archive $PROD_FILES;
-            error "Errors occured during file transfer; Import files have been copied to $ARCHIVE_DIR";
-        fi;
-    fi;
-
-    if [ -e $TEST_FILES ] ; then
-        ERRORS=false;
-
-        info "Copying test files to CLE test";
-        transferSISFiles "$TEST_FILES" "$CLE_PROC_DIR/test" $CP;
-        if [ $? -ne 0 ] ; then
-            ERRORS=true;
-            error "Failed to copy $TEST_FILES to $CLE_PROC_DIR/test";
-        fi;
-
-        if $PRODUCTION ; then
-            oipptest="rsmart@oipp-test:~/sistest/test/";
-            info "copying test files to OIPP test";
-            transferSISFiles "$TEST_FILES" "$oipptest" scp;
-            if [ $? -ne 0 ] ; then
-                ERRORS=true;
-                error "Failed to copy $TEST_FILES to $oipptest";
-            fi;
-        fi;
-
+    <% end %>
         if $ERRORS ; then
-            archive "$TEST_FILES";
-            error "Errors occured transfering test files; Test import files have been copied to $ERROR_ARCHIVE";
+            archive "$FILES";
+            error "Errors occured transfering files for <%= school %>; Import files have been copied to $ERROR_ARCHIVE";
         else
-            info "test files successfully copied";
-            rm -f "$TEST_FILES";
+            info "<%= school %> files successfully copied";
+            rm -f "$FILES";
+        fi;
+<% end %>
+
+    ##########################################
+    # preform transfer of all test files
+    ERRORS=false;
+
+<% scope.lookupvar('oipp::sis::batch_school_properties').each do |school,props| -%>
+    ## Transfers for <%= school %>
+
+    <% scope.lookupvar('oipp::sis::transfer_test_definitions').each do |destination, files| -%>
+        FILES="<% files.each do |file| -%><%= props['test_upload_dir'] %>/<%=file%>.<%=school%>.csv <% end %>";
+
+        info "copying \"$FILES\" to <%= destination %> for <%=school%>";
+        transferSISFiles "$FILES" "<%= destination %>" $CP;
+        if [ $? -ne 0 ] ; then
+            ERRORS=true;
+            error "Failed to copy \"$FILES\" to <%= destination %> for <%=school%>";
         fi;
 
-    fi;
+    <% end %>
+        if $ERRORS ; then
+            archive "$FILES";
+            error "Errors occured transfering test files for <%= school %>; Test files have been copied to $ERROR_ARCHIVE";
+        else
+            info "<%= school %> files successfully copied";
+            rm -f "$FILES";
+        fi;
+<% end %>
+
 }
 
 info "Started SIS file transfer";
@@ -168,8 +138,6 @@ else
     CP=cp;
 fi;
 
-<% csv_schools.each do |school| -%>
-doAllTransfers "<%= school[0] %>" "<%= school[1] %>" $CP;
-<% end -%>
+doAllTransfers $CP;
 
 info "SIS file transfers complete";

@@ -151,11 +151,10 @@ node 'oipp-prod-apache1.academic.rsmart.local' inherits oaenode {
     }
     ###########################################################################
     # SIS integration
-
     class { 'oipp::sis':
-        cle_csv => $localconfig::cle_csv_destination_dir,
-        oae_csv => $localconfig::oae_csv_destination_dir,
-        csv_schools => $localconfig::csv_schools,
+        batch_school_properties => $localconfig::basic_sis_batch_school_properties,
+        transfer_definitions => $localconfig::sis_batch_transfers,
+        transfer_test_definitions => $localconfig::sis_test_batch_transfers,
         sis_error_archive => $localconfig::sis_archive_dir,
         use_scp => true,
         production => true,
@@ -364,13 +363,14 @@ node oaeappnode inherits oaenode {
     class { "people::oipp-sis::destination": }
 
     class { 'sis::batch':
-        user           => $localconfig::user,
-        executable_url => $localconfig::basic_sis_batch_executable_url,
-        artifact       => $localconfig::basic_sis_batch_executable_artifact,
-        csv_dir        => $localconfig::oae_csv_dir,
-        school_properties => $localconfig::basic_sis_batch_school_properties,
-        email_report   => $localconfig::basic_sis_batch_email_report,
-        require => [File["$localconfig::oae_csv_dir"], Ssh_authorized_key["root-rsmart-pub"]],
+        user                => $localconfig::user,
+        executable_url      => $localconfig::basic_sis_batch_executable_url,
+        artifact            => $localconfig::basic_sis_batch_executable_artifact,
+        csv_object_types    => $localconfig::csv_object_types,
+        csv_dir             => $localconfig::oae_csv_dir,
+        school_properties   => $localconfig::basic_sis_batch_school_properties,
+        email_report        => $localconfig::basic_sis_batch_email_report,
+        require             => [File["$localconfig::oae_csv_dir"], Ssh_authorized_key["root-rsmart-pub"]],
     }
 
 }

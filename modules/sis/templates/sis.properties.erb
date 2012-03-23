@@ -77,13 +77,7 @@ templateMap@com.rsmart.customer.integration.processor.cle.CleCourseProcessor=  \
 # maps term column (typically a term eid) to a term title for tagging in OAE, expects a json string
 # used in conjunction with tagTerm property.  If value can't be found for a term eid, and tagTerm is on,
 # we fall back to term eid
-termMap@com.rsmart.customer.integration.processor.cle.CleCourseProcessor=  \
-  {                                                                            \
-    "W11": "Winter 2022",                     \
-    "Sp11": "Spring Semester 2011",                   \
-    "Su11": "Summer Session 2011"               \
-  }
-
+termMap@com.rsmart.customer.integration.processor.cle.CleCourseProcessor= { "W11": "Winter 2022", "Sp11": "Spring Semester 2011", "Su11": "Summer Session 2011" }
 
 # standard Basic SIS properties for membership
 filename@com.rsmart.customer.integration.processor.cle.CleMembershipProcessor=\${staging.dir}/members.csv

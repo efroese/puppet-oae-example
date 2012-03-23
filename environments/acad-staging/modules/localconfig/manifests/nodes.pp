@@ -174,17 +174,14 @@ node oaeappnode inherits oaenode {
     # Specify the client type
     oae::app::server::sling_config {
         "org.sakaiproject.nakamura.solr.SolrServerServiceImpl":
-        config => { "solr-impl" => "multiremote", }
+        config => { "solr-impl" => "remote", }
     }
-    # Configure the client with the master/slave(s) info
+    # Configure the client with the master/[slave(s)] info
     oae::app::server::sling_config {
-        "org.sakaiproject.nakamura.solr.MultiMasterRemoteSolrClient":
+        "org.sakaiproject.nakamura.solr.RemoteSolrClient":
         config => {
             "remoteurl"  => $localconfig::solr_remoteurl,
-            "query-urls" => $localconfig::solr_queryurls,
-            "query-so-timeout" => 10000,
-            "query-connection-timeout" => 1000,
-            "query-connection-manager-timeout" => 1000,
+            "socket-timeout" => 10000,
             "connection.timeout" => 1000,
         }
     }
@@ -262,7 +259,8 @@ node /staging-app[1-2].academic.rsmart.local/ inherits oaeappnode { }
 #
 # OAE Solr Nodes
 #
-node solrnode inherits oaenode {
+
+node 'staging-solr1.academic.rsmart.local' inherits oaenode {
 
     class { 'localconfig::extra_users': }
 
@@ -275,23 +273,12 @@ node solrnode inherits oaenode {
         admin_password => $localconfig::tomcat_password,
         setenv_template => 'rsmart-common/solr-setenv.sh.erb',
     }
-}
 
-node 'staging-solr1.academic.rsmart.local' inherits solrnode {
     class { 'solr::tomcat':
         solr_tarball => $localconfig::solr_tarball,
         master_url   => "${localconfig::solr_remoteurl}/replication",
         solrconfig   => 'rsmart-common/master-solrconfig.xml.erb',
         tomcat_home  => "${localconfig::basedir}/tomcat",
-        tomcat_user  => $localconfig::user,
-        tomcat_group => $localconfig::group,
-    }
-}
-
-node /staging-solr[2-3].academic.rsmart.local/ inherits solrnode {
-    class { 'solr::tomcat':
-        master_url   => "${localconfig::solr_remoteurl}/replication",
-        solrconfig   => 'rsmart-common/slave-solrconfig.xml.erb',
         tomcat_user  => $localconfig::user,
         tomcat_group => $localconfig::group,
     }

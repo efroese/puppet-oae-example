@@ -29,9 +29,6 @@ class localconfig {
     $db_server   = '10.53.11.70'
     # solr master server
     $solr_master = '10.53.11.30'
-    # solr slave servers
-    $solr_slave0 = '10.53.11.31'
-    $solr_slave1 = '10.53.11.32'
 
     ###########################################################################
     # Database setup
@@ -91,7 +88,6 @@ class localconfig {
 
     # solr
     $solr_remoteurl = "http://${solr_master}:8080/solr"
-    $solr_queryurls = "http://${solr_master}:8080/solr|http://${solr_slave0}:8080/solr|http://${solr_slave1}:8080/solr"
 
     # outgoing email
     $reply_as_address = 'noreply@rsmart.com'

@@ -15,7 +15,7 @@ EMAIL_RECIPIENT="<%= scope.lookupvar('sis::batch::email_report') %>"
 
 CSV_DIR=<%= scope.lookupvar('sis::batch::csv_dir') %>
 CSV_SCHOOLS="<% scope.lookupvar('sis::batch::school_properties').keys.each do |school| -%><%= school %> <% end -%>"
-CSV_OBJECT_TYPES="<% scope.lookupvar('sis::batch::csv_object_types').each do |cot| -%><%= cot %> <% end -%>"
+CSV_OBJECT_TYPES="<% scope.lookupvar('sis::batch::oae_csv_files').each do |cot| -%><%= cot %> <% end -%>"
 
 GLOBAL_JAVA_OPTS="${JAVA_OPTS} -Dsis.config.file=${SIS_BATCH_HOME}/sis.properties "
 

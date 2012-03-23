@@ -133,7 +133,6 @@ class localconfig {
     $cle_csv_dir = '/files-cle/files/sis/'
 
     $sis_archive_dir = "${homedir}/sis-failed-transfers"
-    $csv_object_types = [ 'Course', 'Membership', 'Section', 'SectionMembership']
 
     $cle_csv_files = ['Course', 'Membership', 'Section', 'SectionMembership']
     $oae_csv_files = ['Course', 'Membership', 'Section', 'SectionMembership', 'User']

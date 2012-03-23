@@ -21,13 +21,6 @@ GLOBAL_JAVA_OPTS="${JAVA_OPTS} -Dsis.config.file=${SIS_BATCH_HOME}/sis.propertie
 
 NOW=`date +%Y%m%d-%H%M`
 
-ARCHIVE_CSV_FILES="<%= scope.lookupvar('sis::batch::archive_csv_files') %>"
-
-CSV_ARCHIVE=${CSV_DIR}/${NOW}
-if [[ $ARCHIVE_CSV_FILES == "1" ]]; then
-    mkdir -p ${CSV_ARCHIVE}
-fi
-
 OUTPUT=`mktemp`
 #
 # Run the batch processor for a single school.

@@ -28,7 +28,6 @@
 # == Sample Usage:
 #
 #   class { 'oae::app::server':
-#     downloadurl   => 'http://192.168.1.124/jars/org.sakaiproject.nakamura.app-1.1-postgres.jar',
 #     jarfile       => 'org.sakaiproject.nakamura.app-1.1-postgres.jar',
 #     javamemorymax => 512,
 #     javapermsize  => 256,
@@ -41,7 +40,7 @@
 #     javapermsize  => 256,
 #   }
 #
-class oae::app::server( $downloadurl = undef,
+class oae::app::server( $downloadurl = 'http://source.sakaiproject.org/maven2/org/sakaiproject/nakamura/org.sakaiproject.nakamura.app/1.1/org.sakaiproject.nakamura.app-1.1.jar',
                         $jarsource = "",
                         $jarfile,
                         $java="/usr/bin/java",

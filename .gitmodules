@@ -40,3 +40,6 @@
 [submodule "modules/solr"]
 	path = modules/solr
 	url = http://github.com/efroese/puppet-solr.git
+[submodule "modules/selinux"]
+	path = modules/selinux
+	url = http://github.com/camptocamp/puppet-selinux.git

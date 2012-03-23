@@ -85,7 +85,7 @@ class sis::batch (
 
     file { "${sis::batch::home}/sis.properties":
         mode => 0644,
-        source => 'puppet://modules/sis/sis.properties',
+        source => 'puppet:///modules/sis/sis.properties',
         require => File[$sis::batch::home],
     }
 

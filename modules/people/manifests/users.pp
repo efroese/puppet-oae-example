@@ -259,4 +259,20 @@ class people::users {
         require => User['jbush'],
     }
 
+    @user { 'skamali':
+        ensure     => present,
+        uid        => '512',
+        gid        => 'skamali',
+        home       => '/home/skamali',
+        managehome => true,
+        groups     => ['skamali', ],
+    }
+    @ssh_authorized_key { 'skamali-pub':
+        ensure => present,
+        key  => 'AAAAB3NzaC1yc2EAAAABIwAAAQEA2/S+x09aiFyXg3Fr1j6vgxjc3YRaxp+4xfxLf59MsaQkBLhgUBtLUO0RulOEcRveCPu8QF4FnywN69wF54enW5zQO2vB8jfuiVy+3ggA9CVUU3Heyyye4JtCKTYbPZLZbRycnxsF1WYE5rN6w3xYa+o8ON4FjY5xICGxv4JcPMZ74gTvfFVM/eEc6TS0SlvjZ6RmeRSQFJrDLdSu94h5lkU+7wiKY2BvID9dt8+anr3I6AQK7kD7M53HELb1T3o/WzOROVUObCaFIaieyXpBkPOO8R7/tu1n+cCnGOW+6VojOpjjh26BcE2aSZ5yXphS+4kmeS/IO/bxOfGyXgJroQ==',
+        type => 'ssh-rsa',
+        user => 'skamali',
+        require => User['skamali'],
+    }
+
 }

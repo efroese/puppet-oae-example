@@ -163,7 +163,7 @@ class localconfig {
                 'dateFormat@com.rsmart.customer.integration.processor.cle.CleCourseProcessor' => 'yyyy-mm-dd',
                 'extraPropertyNames@com.rsmart.customer.integration.processor.cle.CleUserProcessor' => '["eppn"]',
                 'columns@com.rsmart.customer.integration.processor.cle.CleUserProcessor' => '8',
-                'termMap@com.rsmart.customer.integration.processor.cle.CleCourseProcessor' => '{ "W11": "Winter 2022", "Sp11": "Spring Semester 2011", "Su11": "Summer Session 2011" }',
+                'termMap@com.rsmart.customer.integration.processor.cle.CleCourseProcessor' => '{ "Win Qtr 12": "Winter Quarter 2012", "Spr Sem 12": "Spring Semester 2012", "Spr Qtr 12": "Spring Quarter 2012" }',
             },
         },
         'UCD' => {
@@ -177,7 +177,7 @@ class localconfig {
                 'dateFormat@com.rsmart.customer.integration.processor.cle.CleCourseProcessor' => 'yyyy-mm-dd',
                 'extraPropertyNames@com.rsmart.customer.integration.processor.cle.CleUserProcessor' => '["eppn"]',
                 'columns@com.rsmart.customer.integration.processor.cle.CleUserProcessor' => '8',
-                'termMap@com.rsmart.customer.integration.processor.cle.CleCourseProcessor' => '{ "W11": "Winter 2022", "Sp11": "Spring Semester 2011", "Su11": "Summer Session 2011" }',
+                'termMap@com.rsmart.customer.integration.processor.cle.CleCourseProcessor' => '{ "Win Qtr 12": "Winter Quarter 2012", "Spr Sem 12": "Spring Semester 2012", "Spr Qtr 12": "Spring Quarter 2012" }',
             },
         },
         'UCMerced' => {
@@ -191,7 +191,7 @@ class localconfig {
                 'dateFormat@com.rsmart.customer.integration.processor.cle.CleCourseProcessor' => 'yyyy-mm-dd',
                 'extraPropertyNames@com.rsmart.customer.integration.processor.cle.CleUserProcessor' => '["eppn"]',
                 'columns@com.rsmart.customer.integration.processor.cle.CleUserProcessor' => '8',
-                'termMap@com.rsmart.customer.integration.processor.cle.CleCourseProcessor' => '{ "W11": "Winter 2022", "Sp11": "Spring Semester 2011", "Su11": "Summer Session 2011" }',
+                'termMap@com.rsmart.customer.integration.processor.cle.CleCourseProcessor' => '{ "Win Qtr 12": "Winter Quarter 2012", "Spr Sem 12": "Spring Semester 2012", "Spr Qtr 12": "Spring Quarter 2012" }',
             },
         },
     }

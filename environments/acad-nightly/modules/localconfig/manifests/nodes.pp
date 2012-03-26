@@ -121,7 +121,7 @@ node 'nightly.academic.rsmart.local' inherits oaenode {
     }
 
     class { 'rsmart-common::logging':
-        locked                  => false,
+        locked => false,
     }
 
     oae::app::server::sling_config {
@@ -132,7 +132,8 @@ node 'nightly.academic.rsmart.local' inherits oaenode {
             'username'    => $localconfig::db_user,
             'password'    => $localconfig::db_password,
             'long-string-size' => 16384,
-        }
+        },
+	locked => false
     }
 
     # Separates trusted vs untrusted content.
@@ -145,7 +146,8 @@ node 'nightly.academic.rsmart.local' inherits oaenode {
                 "${localconfig::http_name}\\ \\=\\ https://${localconfig::http_name_untrusted}",
             ],
             'trusted.secret' => $localconfig::serverprotectsec,
-        }
+        },
+	locked => false
     }
 
     # Email integration
@@ -154,7 +156,8 @@ node 'nightly.academic.rsmart.local' inherits oaenode {
         config => {
             'sakai.email.replyAsAddress' => $localconfig::reply_as_address,
             'sakai.email.replyAsName'    => $localconfig::reply_as_name,
-        }
+        },
+	locked => false
     }
 
     oae::app::server::sling_config {
@@ -163,7 +166,8 @@ node 'nightly.academic.rsmart.local' inherits oaenode {
              'sakai.cle.server.url'      => "https://${localconfig::http_name}",
              'sakai.cle.basiclti.key'    => $localconfig::basiclti_key,
              'sakai.cle.basiclti.secret' => $localconfig::basiclti_secret,
-        }
+        },
+	locked => false
     }
 
     ###########################################################################

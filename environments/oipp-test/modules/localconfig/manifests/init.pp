@@ -62,7 +62,6 @@ class localconfig {
     ###########################################################################
     # OAE App servers
     $jarsource     = '/home/rsmart/com.rsmart.academic.app.oipp-1.1.3-rsmart.jar'
-    $jarfile       = 'com.rsmart.academic.app.oipp-1.1.3-rsmart.jar'
     $java          = '/usr/java/jdk1.6.0_30/bin/java'
     $java_home     = '/usr/java/jdk1.6.0_30'
     $javamemorymax = '4096m'

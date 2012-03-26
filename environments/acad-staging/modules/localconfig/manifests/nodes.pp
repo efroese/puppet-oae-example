@@ -103,7 +103,6 @@ node oaeappnode inherits oaenode {
     # OAE, Sling
     class { 'oae::app::server':
         jarsource      => $localconfig::jarsource,
-        jarfile        => $localconfig::jarfile,
         java           => $localconfig::java,
         javamemorymin  => $localconfig::javamemorymin,
         javamemorymax  => $localconfig::javamemorymax,

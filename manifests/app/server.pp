@@ -86,7 +86,7 @@ class oae::app::server( $downloadurl = 'http://source.sakaiproject.org/maven2/or
         default => inline_template("<%= File.basename('$downloadurl') %>"),
     }
 
-    $jar_dest = "${oae::params::basedir}/jars/${jarfile}"
+    $jar_dest = "${oae::params::basedir}/jars/${jar_file}"
     $app_jar = "${oae::params::basedir}/sakaioae.jar"
 
     exec { 'fetch-package':

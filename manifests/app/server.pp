@@ -8,8 +8,6 @@
 #
 # $jarsource::     The path to the jar on the local machine.
 #
-# $jarfile::       The name of the jar
-#
 # $jav::           The path to java
 #
 # $javamemorymin:: The min java heap size
@@ -28,21 +26,18 @@
 # == Sample Usage:
 #
 #   class { 'oae::app::server':
-#     jarfile       => 'org.sakaiproject.nakamura.app-1.1-postgres.jar',
 #     javamemorymax => 512,
 #     javapermsize  => 256,
 #   }
 #
 #   class { 'oae::app::server':
-#     jarsource     => '/home/sakaioae/jars/org.sakaiproject.nakamura.app-1.1-postgres.jar',
-#     jarfile       => 'org.sakaiproject.nakamura.app-1.1-postgres.jar',
+#     jarsource     => '/home/sakaioae/jars/org.sakaiproject.nakamura.app-1.1-custom.jar',
 #     javamemorymax => 512,
 #     javapermsize  => 256,
 #   }
 #
 class oae::app::server( $downloadurl = 'http://source.sakaiproject.org/maven2/org/sakaiproject/nakamura/org.sakaiproject.nakamura.app/1.1/org.sakaiproject.nakamura.app-1.1.jar',
                         $jarsource = "",
-                        $jarfile,
                         $java="/usr/bin/java",
                         $javamemorymax,
                         $javamemorymin,
@@ -84,6 +79,11 @@ class oae::app::server( $downloadurl = 'http://source.sakaiproject.org/maven2/or
             content => template($sparseconfig_properties_template),
             notify  => Service['sakaioae']
         }
+    }
+
+    $jar_file = $downloadurl ? {
+        undef => inline_template("<%= File.basename('$jarsource') %>"),
+        default => inline_template("<%= File.basename('$downloadurl') %>"),
     }
 
     $jar_dest = "${oae::params::basedir}/jars/${jarfile}"

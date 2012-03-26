@@ -171,16 +171,16 @@ class oae::app::server( $downloadurl = 'http://source.sakaiproject.org/maven2/or
             mkdir_p { "${sling_config}/${dirname}":
                 owner => $locked ? { false => $oae::params::user, default => 'root' },
                 group => $locked ? { false => $oae::params::group, default => 'root' },
-                mode => 0644,
+                mode => '0644',
                 notify  => Exec["chown_sling_config_org_apache"],
             }
         }
 
         # Write the config file
         file { "${sling_config}/${dirname}/${basename}.config":
-            owner => root,
-            group => root,
-            mode  => 0444,
+            owner => $locked ? { false => $oae::params::user, default => 'root' },
+            group => $locked ? { false => $oae::params::group, default => 'root' },
+            mode => $locked ? { true => '0444', false => '0644' },
             content => template("oae/sling_config.erb"),
             require => Mkdir_p["${sling_config}/${dirname}"],
         }

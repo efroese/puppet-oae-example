@@ -56,7 +56,7 @@ function do_batch(){
 
 JAVA_OPTS=${GLOBAL_JAVA_OPTS}
 <% scope.lookupvar('sis::batch::school_properties')[school]['oae_batch_params'].keys.sort.each do |key| -%>
-JAVA_OPTS="${JAVA_OPTS} -D<%= key %>='<%= scope.lookupvar('sis::batch::school_properties')[school]['oae_batch_params']['key'] %>' "
+JAVA_OPTS="${JAVA_OPTS} -D<%= key %>='<%= scope.lookupvar('sis::batch::school_properties')[school]['oae_batch_params'][key] %>' "
 <% end %>
 
 do_batch <%= school %> $JAVA_OPTS

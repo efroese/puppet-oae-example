@@ -1,4 +1,4 @@
-class rsmart-common::logging {
+class rsmart-common::logging ( locked = true ) {
 
     oae::app::server::sling_config {
         'org.apache.sling.commons.log.LogManager.factory.config.search-logger-uuid':
@@ -9,7 +9,8 @@ class rsmart-common::logging {
             'org.apache.sling.commons.log.names' => [ 'org.sakaiproject.nakamura.search',
                                                       'org.sakaiproject.nakamura.solr',
                                                       'org.sakaiproject.nakamura.activity.search',],
-        }
+        },
+        locked => $locked,
     }
 
     oae::app::server::sling_config {
@@ -19,7 +20,8 @@ class rsmart-common::logging {
             'org.apache.sling.commons.log.names' => [ 'org.sakaiproject.nakamura.lite.storage.jdbc', ],
             'org.apache.sling.commons.log.level' => 'info',
             'org.apache.sling.commons.log.file'  => 'logs/storage.log',
-        }
+        },
+        locked => $locked,
     }
 
     oae::app::server::sling_config {
@@ -32,6 +34,7 @@ class rsmart-common::logging {
                                                       'org.sakaiproject.nakamura.version',
                                                       'org.sakaiproject.nakamura.message',
                                                       'org.sakaiproject.nakamura.api.resource.lite',],
-        }
+        },
+        locked => $locked,
     }
 }

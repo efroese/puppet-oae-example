@@ -121,7 +121,9 @@ node 'nightly.academic.rsmart.local' inherits oaenode {
         setenv_template => 'rsmart-common/setenv.sh.erb',
     }
 
-    class { 'rsmart-common::logging': }
+    class { 'rsmart-common::logging':
+        locked                  => false,
+    }
 
     oae::app::server::sling_config {
         "org.sakaiproject.nakamura.lite.storage.jdbc.JDBCStorageClientPool":

@@ -322,4 +322,11 @@ node 'nightly.academic.rsmart.local' inherits oaenode {
             $rsmart-common::mysql::cle_changes,
         ],
     }
+
+    file { "${oae::params::basedir}/sling/config":
+	mode	=> 0644,
+	owner	=> $oae::params::user,
+	group	=> $oae::params::group,
+	recurse	=> true,
+    }
 }

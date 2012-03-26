@@ -16,8 +16,6 @@
 #
 # $school_properties:: A hash that maps school name to its properties overrides
 #
-# $archive_csv_files:: Save csv files from failed runs. '1' is true, anything else is false.
-#
 # == Sample Usage:
 #
 # class { 'sis::batch':
@@ -51,8 +49,7 @@ class sis::batch (
     $csv_object_types,
     $csv_dir        = false,
     $school_properties = { 'not configured' => { 'not' => 'configured'}, },
-    $email_report,
-    $archive_csv_files='0'
+    $email_report
     ) inherits sis {
 
     file { "${sis::basedir}/batch":
@@ -88,7 +85,7 @@ class sis::batch (
 
     file { "${sis::batch::home}/sis.properties":
         mode => 0644,
-        source => 'puppet://modules/sis/sis.properties',
+        source => 'puppet:///modules/sis/sis.properties',
         require => File[$sis::batch::home],
     }
 

@@ -22,6 +22,7 @@ class people::groups {
     @group { 'karagon':   gid => '509' }
     @group { 'ppilli':    gid => '510' }
     @group { 'jbush':     gid => '511' }
+    @group { 'skamali':   gid => '512' }
 
     # Services/Applications/Robots/Aliens
     @group { 'hyperic':   gid => '701' }

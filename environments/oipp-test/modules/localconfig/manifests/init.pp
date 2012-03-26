@@ -61,8 +61,7 @@ class localconfig {
 
     ###########################################################################
     # OAE App servers
-    $jarsource     = '/home/rsmart/com.rsmart.academic.app.oipp-1.1.2-rsmart-SNAPSHOT.jar'
-    $jarfile       = 'com.rsmart.academic.app.oipp-1.1.2-rsmart-SNAPSHOT.jar'
+    $jarsource     = '/home/rsmart/com.rsmart.academic.app.oipp-1.1.3-rsmart.jar'
     $java          = '/usr/java/jdk1.6.0_30/bin/java'
     $java_home     = '/usr/java/jdk1.6.0_30'
     $javamemorymax = '4096m'
@@ -125,15 +124,14 @@ class localconfig {
 
     ###########################################################################
     # SIS Integration
-    $basic_sis_batch_executable_artifact = 'com.rsmart.nakamura.basic-sis-batch-1.0.0-executable.jar'
+    $basic_sis_batch_executable_artifact = 'com.rsmart.nakamura.basic-sis-batch-1.0-SNAPSHOT-executable.jar'
     $basic_sis_batch_executable_url = 'https://rsmart-dev.s3.amazonaws.com/artifacts/maven/release/com/rsmart/com.rsmart.nakamura.basic-sis-batch-1.0.0-executable.jar'
-    $basic_sis_batch_email_report = "mike@rsmart.com"
+    $basic_sis_batch_email_report = "jutter@rsmart.com,mike@rsmart.com,mpd@rsmart.com"
 
     $oae_csv_dir = '/files-academic/sis/'
     $cle_csv_dir = '/files-cle/files/sis/'
 
     $sis_archive_dir = "${homedir}/sis-failed-transfers"
-    $csv_object_types = [ 'Course', 'Membership', 'Section', 'SectionMembership']
 
     $cle_csv_files = ['Course', 'Membership', 'Section', 'SectionMembership']
     $oae_csv_files = ['Course', 'Membership', 'Section', 'SectionMembership', 'User']
@@ -160,7 +158,11 @@ class localconfig {
                 'oae.server.url'     => "https://${http_name}/",
                 'oae.admin.user'     => 'admin',
                 'oae.admin.password' => $admin_password,
+                'staging.dir'        => '/files-cle/files/sis',
                 'dateFormat@com.rsmart.customer.integration.processor.cle.CleCourseProcessor' => 'yyyy-mm-dd',
+                'extraPropertyNames@com.rsmart.customer.integration.processor.cle.CleUserProcessor' => '["eppn"]',
+                'columns@com.rsmart.customer.integration.processor.cle.CleUserProcessor' => '8',
+                'termMap@com.rsmart.customer.integration.processor.cle.CleCourseProcessor' => '{ \"Win Qtr 12\": \"Winter Quarter 2012\", \"Spr Sem 12\": \"Spring Semester 2012\", \"Spr Qtr 12\": \"Spring Quarter 2012\" }',
             },
         },
         'UCD' => {
@@ -170,7 +172,11 @@ class localconfig {
                 'oae.server.url'     => "https://${http_name}/",
                 'oae.admin.user'     => 'admin',
                 'oae.admin.password' => $admin_password,
+                'staging.dir'        => '/files-cle/files/sis',
                 'dateFormat@com.rsmart.customer.integration.processor.cle.CleCourseProcessor' => 'yyyy-mm-dd',
+                'extraPropertyNames@com.rsmart.customer.integration.processor.cle.CleUserProcessor' => '["eppn"]',
+                'columns@com.rsmart.customer.integration.processor.cle.CleUserProcessor' => '8',
+                'termMap@com.rsmart.customer.integration.processor.cle.CleCourseProcessor' => '{ \"Win Qtr 12\": \"Winter Quarter 2012\", \"Spr Sem 12\": \"Spring Semester 2012\", \"Spr Qtr 12\": \"Spring Quarter 2012\" }',
             },
         },
         'UCMerced' => {
@@ -180,7 +186,11 @@ class localconfig {
                 'oae.server.url'     => "https://${http_name}/",
                 'oae.admin.user'     => 'admin',
                 'oae.admin.password' => $admin_password,
+                'staging.dir'        => '/files-cle/files/sis',
                 'dateFormat@com.rsmart.customer.integration.processor.cle.CleCourseProcessor' => 'yyyy-mm-dd',
+                'extraPropertyNames@com.rsmart.customer.integration.processor.cle.CleUserProcessor' => '["eppn"]',
+                'columns@com.rsmart.customer.integration.processor.cle.CleUserProcessor' => '8',
+                'termMap@com.rsmart.customer.integration.processor.cle.CleCourseProcessor' => '{ \"Win Qtr 12\": \"Winter Quarter 2012\", \"Spr Sem 12\": \"Spring Semester 2012\", \"Spr Qtr 12\": \"Spring Quarter 2012\" }',
             },
         },
     }

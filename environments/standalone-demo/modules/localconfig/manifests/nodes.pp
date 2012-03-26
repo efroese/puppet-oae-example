@@ -64,8 +64,6 @@ node 'oae-standalone.localdomain' inherits oaenode {
     }
 
     class { 'oae::app::server':
-        downloadurl    => $localconfig::downloadurl,
-        jarfile        => $localconfig::jarfile,
         java           => $localconfig::java,
         javamemorymin  => $localconfig::javamemorymin,
         javamemorymax  => $localconfig::javamemorymax,

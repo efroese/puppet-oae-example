@@ -68,4 +68,9 @@ class people {
 	realize(User['karagon'])
 	realize(Ssh_authorized_key['karagon-laptop-pub'])
 	realize(Ssh_authorized_key['karagon-mbp-pub'])
+
+    realize(Group['skamali'])
+    realize(User['skamali'])
+    realize(Ssh_authorized_key['skamali-pub'])
+
 }

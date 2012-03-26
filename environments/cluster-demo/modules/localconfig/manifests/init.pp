@@ -24,9 +24,8 @@ class localconfig {
     ###########################################################################
     # HA apache load balancer
     $http_name                = 'oae.localdomain'
-    $apache_lb_http_name       = $http_name
-    $apache_lb_virtual_ip      = '192.168.1.40'
-    $apache_lb_virtual_netmask = '255.255.255.0'
+    $virtual_ip      = '192.168.1.40'
+    $virtual_netmask = '255.255.255.0'
     $apache_lb_hostnames       = ['oae-lb1.localdomain', 'oae-lb2.localdomain']
     $apache_lb_members         = ['192.168.1.50:8080', '192.168.1.51:8080']
     $apache_lb_members_untrusted = ['192.168.1.50:8082', '192.168.1.51:8082']
@@ -39,8 +38,6 @@ class localconfig {
 
     ###########################################################################
     # App servers
-    $downloadurl   = 'http://192.168.1.200/jars/org.sakaiproject.nakamura.app-1.1-postgres.jar'
-    $jarfile       = 'org.sakaiproject.nakamura.app-1.1-postgres.jar'
     $javamemorymax = '512'
     $javamemorymin = '256'
     $javapermsize  = '256'

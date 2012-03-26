@@ -14,19 +14,12 @@ SIS_JAR=${SIS_BATCH_HOME}/<%= scope.lookupvar('sis::batch::artifact') %>
 EMAIL_RECIPIENT="<%= scope.lookupvar('sis::batch::email_report') %>"
 
 CSV_DIR=<%= scope.lookupvar('sis::batch::csv_dir') %>
-CSV_SCHOOLS="<% scope.lookupvar('sis::batch::school_properties').keys.each do |school| -%><%= school %> <% end -%>"
+CSV_SCHOOLS="<% scope.lookupvar('sis::batch::school_properties').keys.sort.each do |school| -%><%= school %> <% end -%>"
 CSV_OBJECT_TYPES="<% scope.lookupvar('sis::batch::csv_object_types').each do |cot| -%><%= cot %> <% end -%>"
 
 GLOBAL_JAVA_OPTS="${JAVA_OPTS} -Dsis.config.file=${SIS_BATCH_HOME}/sis.properties "
 
 NOW=`date +%Y%m%d-%H%M`
-
-ARCHIVE_CSV_FILES="<%= scope.lookupvar('sis::batch::archive_csv_files') %>"
-
-CSV_ARCHIVE=${CSV_DIR}/${NOW}
-if [[ $ARCHIVE_CSV_FILES == "1" ]]; then
-    mkdir -p ${CSV_ARCHIVE}
-fi
 
 OUTPUT=`mktemp`
 #
@@ -37,8 +30,8 @@ OUTPUT=`mktemp`
 # 
 function do_batch(){
 
-    $school = $1
-    $java_opts = $2
+    school=$1
+    java_opts=$2
 
     # Collect the list of filenames
     FILENAME_OPTS=""
@@ -57,31 +50,16 @@ function do_batch(){
 
     # Run the importer
     java ${java_opts} ${FILENAME_OPTS} -jar ${SIS_JAR} 2>&1 | tee -a ${OUTPUT}
-
-    if [[ "x${ERROR}" == "x" ]]; then # No errors
-        for file in $CSV_OBJECT_TYPES; do
-            CSV_FILE="${CSV_DIR}/${file}.${school}.csv"
-            if [[ -f ${CSV_FILE} ]]; then
-                echo "Removing ${CSV_FILE}" | tee -a ${OUTPUT}
-                rm -f ${CSV_FILE}
-            fi
-        done
-    else
-        if [[ -f ${CSV_FILE} && ${ARCHIVE_CSV_FILES} == 1 ]]; then
-            echo "Moving ${CSV_FILE} -> ${CSV_ARCHIVE}" | tee -a ${OUTPUT}
-            mv ${CSV_FILE} ${CSV_ARCHIVE}
-        fi
-    fi
 }
 
 <% scope.lookupvar('sis::batch::school_properties').keys.each do |school| -%>
 
-    JAVA_OPTS=${GLOBAL_JAVA_OPTS}
-    <% scope.lookupvar('sis::batch::school_properties')[school]['oae_batch_params'].each do |key,val| -%>
-        JAVA_OPTS="${JAVA_OPTS} -D<%= key %>=<%= val %> "
-    <% end %>
+JAVA_OPTS=${GLOBAL_JAVA_OPTS}
+<% scope.lookupvar('sis::batch::school_properties')[school]['oae_batch_params'].keys.sort.each do |key| -%>
+JAVA_OPTS="${JAVA_OPTS} -D<%= key %>='<%= scope.lookupvar('sis::batch::school_properties')[school]['oae_batch_params'][key] %>' "
+<% end %>
 
-    do_batch <%= school %> $JAVA_OPTS
+do_batch <%= school %> $JAVA_OPTS
 
 <% end %>
 

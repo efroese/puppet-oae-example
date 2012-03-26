@@ -40,7 +40,6 @@
 #
 node /oae-lb[1-2].localdomain/ inherits oaenode {
 
-    $http_name            = $localconfig::apache_lb_http_name
     $sslcert_country      = "US"
     $sslcert_state        = "NY"
     $sslcert_locality     = "New York"
@@ -49,8 +48,16 @@ node /oae-lb[1-2].localdomain/ inherits oaenode {
     class { 'apache::ssl': }
     class { 'pacemaker::apache': }
 
+    # Headers is not in the default set of enabled modules
+    apache::module { 'headers': }
+    apache::module { 'deflate': }
+
+    apache::vhost { "${localconfig::http_name}:80":
+        template => 'localconfig/vhost-80.conf.erb',
+    }
+
     # Server trusted content on 443
-    apache::vhost-ssl { "${http_name}:443":
+    apache::vhost-ssl { "${localconfig::http_name}:443":
         sslonly  => true,
     }
 
@@ -58,14 +65,14 @@ node /oae-lb[1-2].localdomain/ inherits oaenode {
     # The puppet module takes care of 80 and 443 automatically.
     apache::listen { "8443": }
     apache::namevhost { "*:8443": }
-    apache::vhost-ssl { "${http_name}:8443": 
+    apache::vhost-ssl { "${localconfig::http_name}:8443":
         sslonly  => true,
         sslports => ['*:8443'],
     }
 
     # Server pool for trusted content
     apache::balancer { "apache-balancer-oae-app":
-        vhost      => "${http_name}:443",
+        vhost      => "${localconfig::http_name}:443",
         location   => "/",
         locations_noproxy => ['/server-status', '/balancer-manager'],
         proto      => "http",
@@ -77,7 +84,7 @@ node /oae-lb[1-2].localdomain/ inherits oaenode {
 
     # Server pool for untrusted content
     apache::balancer { "apache-balancer-oae-app-untrusted":
-        vhost      => "${http_name}:8443",
+        vhost      => "${localconfig::http_name}:8443",
         location   => "/",
         proto      => "http",
         members    => $localconfig::apache_lb_members_untrusted,
@@ -85,22 +92,16 @@ node /oae-lb[1-2].localdomain/ inherits oaenode {
         standbyurl => $localconfig::apache_lb_standbyurl,
     }
 
-    # Pacemaker manages which machine is the active LB
-    # TODO: parameterize the pacemaker module.
-    $pacemaker_authkey   = $localconfig::apache_lb_pacemaker_authkey
-    $pacemaker_interface = $localconfig::apache_lb_pacemaker_interface
-    $pacemaker_nodes     = $localconfig::apache_lb_pacemaker_nodes
-    # Configure heartbeat to monitor the health of the lb servers
-    $pacemaker_hacf      = 'localconfig/ha.cf.erb'
-    # Configure Pacemaker to manage the VIP and Apache
-    $pacemaker_crmcli    = 'localconfig/crm-config.cli.erb'
+    class { 'pacemaker::corosync':
+        bindnetaddr => $::network_eth0,
+        authkey_file => 'puppet:///modules/localconfig/corosync.authkey',
+        conf_template => 'localconfig/corosync.conf.erb',
+    }
 
-    # The HA master will respond to the VIP
-    $virtual_ip          = $localconfig::apache_lb_virtual_ip
-    $virtual_netmask     = $localconfig::apache_lb_virtual_netmask
-    $apache_lb_hostnames = $localconfig::apache_lb_hostnames
-
-    class { 'pacemaker': }
+    # The crm cli defines the nodes, virtual ip, and managed Apache
+    class { 'pacemaker':
+        crmcli => 'localconfig/crm-config.cli.erb'
+    }
 }
 
 ###########################################################################
@@ -109,11 +110,7 @@ node /oae-lb[1-2].localdomain/ inherits oaenode {
 #
 node /oae-app[0-1].localdomain/ inherits oaenode {
 
-    $http_name = $localconfig::apache_lb_http_name
-
     class { 'oae::app::server':
-        downloadurl    => $localconfig::downloadurl,
-        jarfile        => $localconfig::jarfile,
         javamemorymax  => $localconfig::javamemorymax,
         javamemorymin  => $localconfig::javamemorymin,
         javapermsize   => $localconfig::javapermsize,
@@ -140,8 +137,8 @@ node /oae-app[0-1].localdomain/ inherits oaenode {
         config => {
             'disable.protection.for.dev.mode' => false,
             'trusted.hosts'  => [
-                "localhost\\ \\=\\ https://localhost:8443", 
-                "${http_name}\\ \\=\\ https://${http_name}:8443",
+                "localhost\\ \\=\\ https://localhost:8081",
+                "${localconfig::http_name}\\ \\=\\ https://${localconfig::http_name}:8443",
             ],
             'trusted.secret' => $localconfig::serverprotectsec,
         }
@@ -192,22 +189,25 @@ node solrnode inherits oaenode {
         parentdir => "${localconfig::basedir}",
         tomcat_user  => $localconfig::user,
         tomcat_group => $localconfig::group,
+        require      => File[$oae::params::basedir],
     }
 }
 
 node 'oae-solr0.localdomain' inherits solrnode {
 
     class { 'solr::tomcat':
-        master_url => "$localconfig::solr_remoteurl/replication",
-        solrconfig => 'localconfig/master-solrconfig.xml.erb',
+        solr_tarball => 'http://nodeload.github.com/sakaiproject/solr/tarball/org.sakaiproject.nakamura.solr-1.3-20120215',
+        master_url   => "$localconfig::solr_remoteurl/replication",
+        solrconfig   => 'localconfig/master-solrconfig.xml.erb',
         tomcat_home  => "${localconfig::basedir}/tomcat",
         tomcat_user  => $localconfig::user,
         tomcat_group => $localconfig::group,
+        require      => Class['Tomcat6'],
     }
 
     solr::backup { "backup-${localconfig::solr_remoteurl}":
         solr_url   => $localconfig::solr_remoteurl,
-        backup_dir => "${oae::params::basedir}/solr/backups",
+        backup_dir => "${oae::params::basedir}/backups",
         user       => $oae::params::user,
         group      => $oae::params::group,
     }
@@ -216,8 +216,10 @@ node 'oae-solr0.localdomain' inherits solrnode {
 node /oae-solr[1-3].localdomain/ inherits solrnode {
 
     class { 'solr::tomcat':
-        master_url => "$localconfig::solr_remoteurl/replication",
-        solrconfig => 'localconfig/slave-solrconfig.xml.erb',
+        solr_tarball => 'http://nodeload.github.com/sakaiproject/solr/tarball/org.sakaiproject.nakamura.solr-1.3-20120215',
+        master_url   => "${localconfig::solr_remoteurl}/replication",
+        solrconfig   => 'localconfig/slave-solrconfig.xml.erb',
+        tomcat_home  => "${localconfig::basedir}/tomcat",
         tomcat_user  => $localconfig::user,
         tomcat_group => $localconfig::group, 
     }

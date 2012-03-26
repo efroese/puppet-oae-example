@@ -176,7 +176,6 @@ node 'oipp-test.academic.rsmart.local' inherits oaenode {
     # OAE App server
     class { 'oae::app::server':
         jarsource      => $localconfig::jarsource,
-        jarfile        => $localconfig::jarfile,
         java           => $localconfig::java,
         javamemorymin  => $localconfig::javamemorymin,
         javamemorymax  => $localconfig::javamemorymax,

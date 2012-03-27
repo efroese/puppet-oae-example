@@ -163,6 +163,10 @@ class localconfig {
             'upload_dir'          => '/home/ucm_sis',
             'test_upload_dir'     => '/home/ucm_sis/test',
         },
+        'UCLA' => {
+            'upload_dir'          => '/home/ucla_sis',
+            'test_upload_dir'     => '/home/ucla_sis/test',
+        },
     }
 
     # TODO is this actually the secret?

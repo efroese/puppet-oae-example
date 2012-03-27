@@ -153,14 +153,23 @@ node 'oipp-test.academic.rsmart.local' inherits oaenode {
     }
 
     class { 'sis::batch':
-        user           => $localconfig::user,
-        executable_url => $localconfig::basic_sis_batch_executable_url,
-        artifact       => $localconfig::basic_sis_batch_executable_artifact,
-        csv_dir        => $localconfig::oae_csv_dir,
-        csv_object_types => $localconfig::oae_csv_files,
-        school_properties => $localconfig::basic_sis_batch_school_properties,
+        user              => $localconfig::user,
+        executable_url    => $localconfig::basic_sis_batch_executable_url,
+        artifact          => $localconfig::basic_sis_batch_executable_artifact,
+        csv_dir           => $localconfig::oae_csv_dir,
+        csv_object_types  => $localconfig::oae_csv_files,
         require           => [File["$localconfig::oae_csv_dir"], Ssh_authorized_key["root-rsmart-pub"]],
         email_report      => $localconfig::basic_sis_batch_email_report,
+    }
+
+    sis::batch::school { 'UCB':
+        local_properties => 'localconfig/sis-local.properties.erb',
+    }
+    sis::batch::school { 'UCD':
+        local_properties => 'localconfig/sis-local.properties.erb',
+    }
+    sis::batch::school { 'UCMerced':
+        local_properties => 'localconfig/sis-local.properties.erb',
     }
 
     ###########################################################################

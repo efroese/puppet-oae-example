@@ -14,7 +14,7 @@ SIS_JAR=${SIS_BATCH_HOME}/<%= scope.lookupvar('sis::batch::artifact') %>
 EMAIL_RECIPIENT="<%= scope.lookupvar('sis::batch::email_report') %>"
 
 CSV_DIR=<%= scope.lookupvar('sis::batch::csv_dir') %>
-CSV_SCHOOLS="<% scope.lookupvar('sis::batch::school_properties').keys.sort.each do |school| -%><%= school %> <% end -%>"
+CSV_SCHOOLS=`ls <%= scope.lookupvar('sis::batch::home') %>/etc/schools`
 CSV_OBJECT_TYPES="<% scope.lookupvar('sis::batch::csv_object_types').each do |cot| -%><%= cot %> <% end -%>"
 
 GLOBAL_JAVA_OPTS="${JAVA_OPTS} -Dsis.config.file=${SIS_BATCH_HOME}/sis.properties "
@@ -22,18 +22,11 @@ GLOBAL_JAVA_OPTS="${JAVA_OPTS} -Dsis.config.file=${SIS_BATCH_HOME}/sis.propertie
 NOW=`date +%Y%m%d-%H%M`
 
 OUTPUT=`mktemp`
-#
-# Run the batch processor for a single school.
-#
-# $1 school name
-# $2 JAVA_OPTS
-# 
-function do_batch(){
 
-    school=$1
-    java_opts=$2
+for school in $CSV_SCHOOLS; do
 
-    # Collect the list of filenames
+    JAVA_OPTS="${GLOBAL_JAVA_OPTS} -Dlocal.sis.file=<%= scope.lookupvar('sis::batch::home') %>/etc/schools/${school}/local.properties "
+     # Collect the list of filenames
     FILENAME_OPTS=""
     for file in $CSV_OBJECT_TYPES; do
         CSV_FILE="${CSV_DIR}/${file}.${school}.csv"
@@ -49,19 +42,9 @@ function do_batch(){
     ERROR=""
 
     # Run the importer
-    java ${java_opts} ${FILENAME_OPTS} -jar ${SIS_JAR} 2>&1 | tee -a ${OUTPUT}
-}
+    java ${JAVA_OPTS} ${FILENAME_OPTS} -jar ${SIS_JAR} 2>&1 | tee -a ${OUTPUT}
 
-<% scope.lookupvar('sis::batch::school_properties').keys.each do |school| -%>
-
-JAVA_OPTS=${GLOBAL_JAVA_OPTS}
-<% scope.lookupvar('sis::batch::school_properties')[school]['oae_batch_params'].keys.sort.each do |key| -%>
-JAVA_OPTS="${JAVA_OPTS} -D<%= key %>='<%= scope.lookupvar('sis::batch::school_properties')[school]['oae_batch_params'][key] %>' "
-<% end %>
-
-do_batch <%= school %> $JAVA_OPTS
-
-<% end %>
+done
 
 if [[ $EMAIL_RECIPIENT != "undefined" ]]; then
     mail -s "SIS batch update for ${NOW}" ${EMAIL_RECIPIENT} < ${OUTPUT}

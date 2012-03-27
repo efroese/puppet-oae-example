@@ -152,8 +152,8 @@ node 'oipp-test.academic.rsmart.local' inherits oaenode {
         artifact          => $localconfig::basic_sis_batch_executable_artifact,
         csv_dir           => $localconfig::oae_csv_dir,
         csv_object_types  => $localconfig::oae_csv_files,
-        require           => [File["$localconfig::oae_csv_dir"], Ssh_authorized_key["root-rsmart-pub"]],
         email_report      => $localconfig::basic_sis_batch_email_report,
+        require           => [File["$localconfig::oae_csv_dir"], Ssh_authorized_key["root-rsmart-pub"]],
     }
 
     sis::batch::school { ['UCB', 'UCD', 'UCMerced', 'UCLA', ]:

@@ -41,4 +41,24 @@ node oaenode inherits basenode {
         group   => $localconfig::group,
         basedir => $localconfig::basedir,
     }
+
+    limits::conf { "${localconfig::user}-soft":
+        domain => $localconfig::user,
+        type => soft,
+        item => nofile,
+        value => $localconfig::max_open_files ? {
+            undef => 20480,
+            default => $localconfig::max_open_files,
+        },
+    }
+
+    limits::conf { "${localconfig::user}-hard":
+        domain => $localconfig::user,
+        type => hard,
+        item => nofile,
+        value => $localconfig::max_open_files ? {
+            undef => 20480,
+            default => $localconfig::max_open_files,
+        },
+    }
 }

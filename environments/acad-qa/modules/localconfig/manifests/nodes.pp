@@ -7,12 +7,6 @@ node /qa.academic.rsmart.local/ inherits oaenode {
 
     ###########################################################################
     # System
-
-    limits::conf {
-        "${localconfig::user}-soft": domain => $localconfig::user, type => soft, item => nofile, value => 20000;
-        "${localconfig::user}-hard": domain => $localconfig::user, type => hard, item => nofile, value => 20000;
-    }
-
     class { 'rsmart-common::mysql': stage => init }
 
     ###########################################################################

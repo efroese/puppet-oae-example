@@ -162,13 +162,7 @@ node 'oipp-test.academic.rsmart.local' inherits oaenode {
         email_report      => $localconfig::basic_sis_batch_email_report,
     }
 
-    sis::batch::school { 'UCB':
-        local_properties => 'localconfig/sis-local.properties.erb',
-    }
-    sis::batch::school { 'UCD':
-        local_properties => 'localconfig/sis-local.properties.erb',
-    }
-    sis::batch::school { 'UCMerced':
+    sis::batch::school { ['UCB', 'UCD', 'UCMerced', 'UCLA', ]:
         local_properties => 'localconfig/sis-local.properties.erb',
     }
 

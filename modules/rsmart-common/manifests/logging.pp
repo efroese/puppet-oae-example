@@ -1,4 +1,4 @@
-class rsmart-common::logging ( locked = true ) {
+class rsmart-common::logging ( $locked = true ) {
 
     oae::app::server::sling_config {
         'org.apache.sling.commons.log.LogManager.factory.config.search-logger-uuid':

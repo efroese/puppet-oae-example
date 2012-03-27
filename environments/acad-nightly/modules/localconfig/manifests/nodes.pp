@@ -108,7 +108,6 @@ node 'nightly.academic.rsmart.local' inherits oaenode {
 
     class { 'oae::app::server':
         jarsource      => $localconfig::jarsource,
-        downloadurl    => undef,
         java           => $localconfig::java,
         javamemorymin  => $localconfig::javamemorymin,
         javamemorymax  => $localconfig::javamemorymax,

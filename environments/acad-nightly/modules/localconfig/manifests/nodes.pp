@@ -323,10 +323,4 @@ node 'nightly.academic.rsmart.local' inherits oaenode {
         ],
     }
 
-    file { "${oae::params::basedir}/sling/config":
-	mode	=> 0644,
-	owner	=> $oae::params::user,
-	group	=> $oae::params::group,
-	recurse	=> true,
-    }
 }

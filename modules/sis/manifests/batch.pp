@@ -89,7 +89,7 @@ class sis::batch (
         minute  => 0,
     }
 
-    define sis::batch::school($local_properties){
+    define school($local_properties){
 
         file { "${sis::batch::home}/etc/schools/${name}":
             ensure => directory,

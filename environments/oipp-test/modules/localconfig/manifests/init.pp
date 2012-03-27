@@ -148,21 +148,19 @@ class localconfig {
         'rsmart@oipp-test:~/sistest'                    => $oae_csv_files,
     }
 
-    # TODO Get the full list of properties.
-    # These are intended as a starting point and example.
     $basic_sis_batch_school_properties = {
-        'UCB' => {
-            'upload_dir'          => '/home/ucb_sis',
-            'test_upload_dir'     => '/home/ucb_sis/test',
-        },
+        # 'UCB' => {
+        #     'upload_dir'          => '/home/ucb_sis',
+        #     'test_upload_dir'     => '/home/ucb_sis/test',
+        # },
         'UCD' => {
             'upload_dir'          => '/home/ucd_sis',
             'test_upload_dir'     => '/home/ucd_sis/test',
         },
-        'UCMerced' => {
-            'upload_dir'          => '/home/ucm_sis',
-            'test_upload_dir'     => '/home/ucm_sis/test',
-        },
+        # 'UCMerced' => {
+        #     'upload_dir'          => '/home/ucm_sis',
+        #     'test_upload_dir'     => '/home/ucm_sis/test',
+        # },
         'UCLA' => {
             'upload_dir'          => '/home/ucla_sis',
             'test_upload_dir'     => '/home/ucla_sis/test',

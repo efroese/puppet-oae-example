@@ -156,7 +156,9 @@ node 'oipp-test.academic.rsmart.local' inherits oaenode {
         require           => [File["$localconfig::oae_csv_dir"], Ssh_authorized_key["root-rsmart-pub"]],
     }
 
-    sis::batch::school { ['UCB', 'UCD', 'UCMerced', 'UCLA', ]:
+    # ACAD-890 disable UCMerced
+    # sis::batch::school { ['UCB', 'UCD', 'UCMerced', 'UCLA', ]:
+    sis::batch::school { [ 'UCD', 'UCLA', ]:
         local_properties => 'localconfig/sis-local.properties.erb',
     }
 

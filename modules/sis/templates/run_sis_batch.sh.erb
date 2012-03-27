@@ -25,7 +25,7 @@ OUTPUT=`mktemp`
 
 for school in $CSV_SCHOOLS; do
 
-    JAVA_OPTS="${GLOBAL_JAVA_OPTS} -Dlocal.sis.file=<%= scope.lookupvar('sis::batch::home') %>/etc/schools/${school}/local.properties "
+    JAVA_OPTS="${GLOBAL_JAVA_OPTS} -Dlocal.config.file=<%= scope.lookupvar('sis::batch::home') %>/etc/schools/${school}/local.properties "
      # Collect the list of filenames
     FILENAME_OPTS=""
     for file in $CSV_OBJECT_TYPES; do

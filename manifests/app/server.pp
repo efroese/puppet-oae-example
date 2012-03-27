@@ -36,7 +36,7 @@
 #     javapermsize  => 256,
 #   }
 #
-class oae::app::server( $downloadurl = 'http://source.sakaiproject.org/maven2/org/sakaiproject/nakamura/org.sakaiproject.nakamura.app/1.1/org.sakaiproject.nakamura.app-1.1.jar',
+class oae::app::server( $downloadurl,
                         $jarsource = "",
                         $java="/usr/bin/java",
                         $javamemorymax,

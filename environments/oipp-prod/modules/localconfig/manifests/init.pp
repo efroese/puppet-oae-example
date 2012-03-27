@@ -136,32 +136,18 @@ class localconfig {
         'UCB' => {
             'upload_dir'          => '/home/ucb_sis',
             'test_upload_dir'     => '/home/ucb_sis/test',
-            'oae_batch_params'    => {
-                'oae.server.url'     => "https://${http_name}/",
-                'oae.admin.user'     => 'admin',
-                'oae.admin.password' => $admin_password,
-                'dateFormat@com.rsmart.customer.integration.processor.cle.CleCourseProcessor' => 'yyyy-mm-dd',
-            },
         },
         'UCD' => {
             'upload_dir'          => '/home/ucd_sis',
             'test_upload_dir'     => '/home/ucd_sis/test',
-            'oae_batch_params'  => {
-                'oae.server.url'     => "https://${http_name}/",
-                'oae.admin.user'     => 'admin',
-                'oae.admin.password' => $admin_password,
-                'dateFormat@com.rsmart.customer.integration.processor.cle.CleCourseProcessor' => 'yyyy-mm-dd',
-            },
         },
         'UCMerced' => {
             'upload_dir'          => '/home/ucm_sis',
             'test_upload_dir'     => '/home/ucm_sis/test',
-            'oae_batch_params'  => {
-                'oae.server.url'     => "https://${http_name}/",
-                'oae.admin.user'     => 'admin',
-                'oae.admin.password' => $admin_password,
-                'dateFormat@com.rsmart.customer.integration.processor.cle.CleCourseProcessor' => 'yyyy-mm-dd',
-            },
+        },
+        'UCLA' => {
+            'upload_dir'          => '/home/ucla_sis',
+            'test_upload_dir'     => '/home/ucla_sis/test',
         },
     }
 

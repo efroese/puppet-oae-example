@@ -6,11 +6,6 @@ node 'nightly.academic.rsmart.local' inherits oaenode {
     
     ###########################################################################
     # System
-    limits::conf {
-        "${localconfig::user}-soft": domain => $localconfig::user, type => soft, item => nofile, value => 20000;
-        "${localconfig::user}-hard": domain => $localconfig::user, type => hard, item => nofile, value => 20000;
-    }
-
     class { 'people::devops': }
     class { 'rsmart-common::mysql': stage => init }
 
@@ -323,10 +318,4 @@ node 'nightly.academic.rsmart.local' inherits oaenode {
         ],
     }
 
-    file { "${oae::params::basedir}/sling/config":
-	mode	=> 0644,
-	owner	=> $oae::params::user,
-	group	=> $oae::params::group,
-	recurse	=> true,
-    }
 }

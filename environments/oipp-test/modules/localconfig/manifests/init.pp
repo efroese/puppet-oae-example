@@ -154,44 +154,18 @@ class localconfig {
         'UCB' => {
             'upload_dir'          => '/home/ucb_sis',
             'test_upload_dir'     => '/home/ucb_sis/test',
-            'oae_batch_params'    => {
-                'oae.server.url'     => "https://${http_name}/",
-                'oae.admin.user'     => 'admin',
-                'oae.admin.password' => $admin_password,
-                'staging.dir'        => '/files-cle/files/sis',
-                'dateFormat@com.rsmart.customer.integration.processor.cle.CleCourseProcessor' => 'yyyy-mm-dd',
-                'extraPropertyNames@com.rsmart.customer.integration.processor.cle.CleUserProcessor' => '["eppn"]',
-                'columns@com.rsmart.customer.integration.processor.cle.CleUserProcessor' => '8',
-                'termMap@com.rsmart.customer.integration.processor.cle.CleCourseProcessor' => '{ \"Win Qtr 12\": \"Winter Quarter 2012\", \"Spr Sem 12\": \"Spring Semester 2012\", \"Spr Qtr 12\": \"Spring Quarter 2012\" }',
-            },
         },
         'UCD' => {
             'upload_dir'          => '/home/ucd_sis',
             'test_upload_dir'     => '/home/ucd_sis/test',
-            'oae_batch_params'    => {
-                'oae.server.url'     => "https://${http_name}/",
-                'oae.admin.user'     => 'admin',
-                'oae.admin.password' => $admin_password,
-                'staging.dir'        => '/files-cle/files/sis',
-                'dateFormat@com.rsmart.customer.integration.processor.cle.CleCourseProcessor' => 'yyyy-mm-dd',
-                'extraPropertyNames@com.rsmart.customer.integration.processor.cle.CleUserProcessor' => '["eppn"]',
-                'columns@com.rsmart.customer.integration.processor.cle.CleUserProcessor' => '8',
-                'termMap@com.rsmart.customer.integration.processor.cle.CleCourseProcessor' => '{ \"Win Qtr 12\": \"Winter Quarter 2012\", \"Spr Sem 12\": \"Spring Semester 2012\", \"Spr Qtr 12\": \"Spring Quarter 2012\" }',
-            },
         },
         'UCMerced' => {
             'upload_dir'          => '/home/ucm_sis',
             'test_upload_dir'     => '/home/ucm_sis/test',
-            'oae_batch_params'    => {
-                'oae.server.url'     => "https://${http_name}/",
-                'oae.admin.user'     => 'admin',
-                'oae.admin.password' => $admin_password,
-                'staging.dir'        => '/files-cle/files/sis',
-                'dateFormat@com.rsmart.customer.integration.processor.cle.CleCourseProcessor' => 'yyyy-mm-dd',
-                'extraPropertyNames@com.rsmart.customer.integration.processor.cle.CleUserProcessor' => '["eppn"]',
-                'columns@com.rsmart.customer.integration.processor.cle.CleUserProcessor' => '8',
-                'termMap@com.rsmart.customer.integration.processor.cle.CleCourseProcessor' => '{ \"Win Qtr 12\": \"Winter Quarter 2012\", \"Spr Sem 12\": \"Spring Semester 2012\", \"Spr Qtr 12\": \"Spring Quarter 2012\" }',
-            },
+        },
+        'UCLA' => {
+            'upload_dir'          => '/home/ucla_sis',
+            'test_upload_dir'     => '/home/ucla_sis/test',
         },
     }
 

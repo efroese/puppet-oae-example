@@ -14,8 +14,6 @@
 #
 # $csv_object_types:: The object types to read from the CSV files. 
 #
-# $school_properties:: A hash that maps school name to its properties overrides
-#
 # == Sample Usage:
 #
 # class { 'sis::batch':
@@ -24,20 +22,6 @@
 #     artifact       => 'sis-executable.jar',
 #     csv_dir        => '/files-cle/sis',
 #     csv_object_types => [ 'Course', 'Membership', 'Section', 'SectionMembership'],
-#     school_properties => {
-#         'school0' => {
-#             'oae.server.url' => 'https://school0.url/',
-#             'oae.admin.user' => 'admin',
-#             'oae.admin.password' => 'admin',
-#             'dateFormat@com.rsmart.customer.integration.processor.cle.CleCourseProcessor' => 'yyyy-mm-dd',
-#          },
-#         'school1' => {
-#             'oae.server.url' => 'https://school0=1.url/',
-#             'oae.admin.user' => 'admin',
-#             'oae.admin.password' => 'admin',
-#             'dateFormat@com.rsmart.customer.integration.processor.cle.CleCourseProcessor' => 'yyyy-mm-dd',
-#          },
-#     },
 #     email_report => 'reports@example.com',
 # }
 #
@@ -48,7 +32,6 @@ class sis::batch (
     $artifact,
     $csv_object_types,
     $csv_dir        = false,
-    $school_properties = { 'not configured' => { 'not' => 'configured'}, },
     $email_report
     ) inherits sis {
 
@@ -70,9 +53,14 @@ class sis::batch (
         require => File[$sis::batch::home],
     }
 
-    file { "${sis::batch::home}/bin":
+    file { ["${sis::batch::home}/bin", "${sis::batch::home}/etc"]:
         ensure => directory,
         require => File[$sis::batch::home],
+    }
+
+    file { "${sis::batch::home}/etc/schools":
+        ensure => directory,
+        require => File["${sis::batch::home}/etc"],
     }
 
     file { "${sis::batch::home}/log":
@@ -99,5 +87,18 @@ class sis::batch (
         command => "${sis::batch::home}/bin/run_sis_batch.sh",
         user    => $user,
         minute  => 0,
+    }
+
+    define school($local_properties){
+
+        file { "${sis::batch::home}/etc/schools/${name}":
+            ensure => directory,
+        }
+
+        file { "${sis::batch::home}/etc/schools/${name}/local.properties":
+            ensure  => present,
+            content => template($local_properties),
+            require => File["${sis::batch::home}/etc/schools/${name}"],
+        }
     }
 }

@@ -36,14 +36,14 @@
 #     javapermsize  => 256,
 #   }
 #
-class oae::app::server( $downloadurl,
-                        $jarsource = "",
-                        $java="/usr/bin/java",
+class oae::app::server( $downloadurl = '',
+                        $jarsource   = '',
+                        $java        = '/usr/bin/java',
                         $javamemorymax,
                         $javamemorymin,
                         $javapermsize,
-                        $setenv_template='oae/setenv.sh.erb',
-                        $sparseconfig_properties_template=undef,
+                        $setenv_template ='oae/setenv.sh.erb',
+                        $sparseconfig_properties_template = undef,
                         $store_dir=undef) {
 
     Class['oae::app::setup'] -> Class['oae::app::server']
@@ -81,9 +81,13 @@ class oae::app::server( $downloadurl,
         }
     }
 
+    if ($downloadurl == '') and ($jarsource == '') {
+        fail("You must pass either the downloadurl or jarsource parameter.")
+    }
+
     $jar_file = $downloadurl ? {
-        undef => inline_template("<%= File.basename('$jarsource') %>"),
-        default => inline_template("<%= File.basename('$downloadurl') %>"),
+        ''      => inline_template("<%= File.basename('${jarsource}') %>"),
+        default => inline_template("<%= File.basename('${downloadurl}') %>"),
     }
 
     $jar_dest = "${oae::params::basedir}/jars/${jar_file}"
@@ -91,7 +95,7 @@ class oae::app::server( $downloadurl,
 
     exec { 'fetch-package':
         command => $downloadurl ? {
-            undef   => "cp ${jarsource} .",
+            ''      => "cp ${jarsource} .",
             default => "curl --silent ${downloadurl} --output ${jar_dest}",
         },
         cwd     => "${oae::params::basedir}/jars/",

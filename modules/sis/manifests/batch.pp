@@ -86,7 +86,7 @@ class sis::batch (
     cron { 'rsmart-basic-sis-batch':
         command => "${sis::batch::home}/bin/run_sis_batch.sh",
         user    => $user,
-        minute  => 0,
+        minute  => 5,
     }
 
     define school($local_properties){

@@ -126,7 +126,7 @@ class localconfig {
     # SIS Integration
     $basic_sis_batch_executable_artifact = 'com.rsmart.nakamura.basic-sis-batch-1.0.1-executable.jar'
     $basic_sis_batch_executable_url = 'http://rsmart-dev.s3.amazonaws.com/artifacts/maven/release/com/rsmart/com.rsmart.nakamura.basic-sis-batch/1.0.1/com.rsmart.nakamura.basic-sis-batch-1.0.1-executable.jar'
-    $basic_sis_batch_email_report = "jutter@rsmart.com,mike@rsmart.com,mpd@rsmart.com"
+    $basic_sis_batch_email_report = "mpd@rsmart.com"
 
     $oae_csv_dir = '/files-academic/sis/'
     $cle_csv_dir = '/files-cle/files/sis/'

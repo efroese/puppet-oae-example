@@ -232,16 +232,6 @@ node oaeappnode inherits oaenode {
     ###########################################################################
     # Logs
     oae::app::server::sling_config {
-        'org.apache.sling.commons.log.LogManager.factory.config.search-logger-uuid':
-        config => {
-            'service.factoryPid'                 => 'org.apache.sling.commons.log.LogManager.factory.config',
-            'org.apache.sling.commons.log.names' => ['org.sakaiproject.nakamura.search','org.sakaiproject.nakamura.solr'],
-            'org.apache.sling.commons.log.level' => 'info',
-            'org.apache.sling.commons.log.file'  => 'logs/search.log',
-        }
-    }
-
-    oae::app::server::sling_config {
         'org.apache.sling.commons.log.LogManager.factory.config.cache-logger-uuid':
         config => {
             'service.factoryPid'                 => 'org.apache.sling.commons.log.LogManager.factory.config',

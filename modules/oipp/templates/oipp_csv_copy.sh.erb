@@ -67,7 +67,7 @@ transferSISFiles()
     debug "transferring $SOURCE_FILES to $DEST_DIR";
 
     # copy files
-    $CP $SOURCE_FILES $DEST_DIR;
+    $CP -p $SOURCE_FILES $DEST_DIR;
 }
 
 doAllTransfers ()

@@ -336,6 +336,13 @@ node oaeappnode inherits oaenode {
              'sakai.auth.trusted.destination.default' => "/me"
         }
     }
+
+    oae::app::server::sling_config {
+        "org.sakaiproject.nakamura.proxy.TrustedLoginTokenProxyPreProcessor":
+        config => {
+             'sharedSecret' => $localconfig::trusted_shared_secret,
+        }
+    }
     
     ###########################################################################
     # AppDynamics

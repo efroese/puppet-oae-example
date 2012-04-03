@@ -148,6 +148,14 @@ class people::users {
         user => 'kcampos',
         require => User['kcampos'],
     }
+    
+    @ssh_authorized_key { 'kcampos-ops-pub':
+        ensure => present,
+        key  => 'AAAAB3NzaC1kc3MAAACBALM5Vz53AZ1CKvs/fYRKqF84IPKg8rmw0QFWtOqq8z5cbJ80HQ1IjZ2j33XwXjIoEiZ/h/ZP2uqHZssZc4zt3wNJWvYU3rEidVsPd7jMO0i2sYxOlb1OUxiVWL/cXLqhCH2L6GlpQWSa2isPZ5JwDcwskJ6T4ryBwUNKBhxJ1mx1AAAAFQDWPGx985BtprXWOuFHjfGckVM8DwAAAIBeVeC3CCQOjuD4bOsAHpowWY2gD3G8yWDdT9l8OFEmQcu3cblzmuNzzUanuMNfNBVkmetTK83aCX0zyRf/cgXFP++9x+OktMakRI164trBXcs7SGzEhmwm0XjQSgDEYJvtzvQQOb42falGu+KD7FTcfHk5UWL7IMfS4IYnG43UCAAAAIEAnQJ810Nw+0EqdLyvDNXlNK2sbLIxAtjXPrc1g8u+F6GQO7186C7UOA4EWQZyknBhYl3dfju/UeqOBGr/K3/hnTCmOzWKXkn6gcp/1WyM1KCySzbEjiC/jRPdoq/NHZT/h4dRNZovZq7au3jIUSzKxgR/7k1X78riNdyeO5JLNZI=',
+        type => 'ssh-dss',
+        user => 'kcampos',
+        require => User['kcampos'],
+    }
 
     @user { 'mdesimone':
         ensure     => present,

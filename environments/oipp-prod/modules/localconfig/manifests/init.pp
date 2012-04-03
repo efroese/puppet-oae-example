@@ -104,8 +104,8 @@ class localconfig {
 
     ###########################################################################
     # SIS Integration
-    $basic_sis_batch_executable_artifact = 'com.rsmart.nakamura.basic-sis-batch-1.0.2-executable.jar'
-    $basic_sis_batch_executable_url = 'http://rsmart-dev.s3.amazonaws.com/artifacts/maven/release/com/rsmart/com.rsmart.nakamura.basic-sis-batch/1.0.2/com.rsmart.nakamura.basic-sis-batch-1.0.2-executable.jar'
+    $basic_sis_batch_executable_artifact = 'com.rsmart.nakamura.basic-sis-batch-1.0.3-executable.jar'
+    $basic_sis_batch_executable_url = 'http://rsmart-dev.s3.amazonaws.com/artifacts/maven/release/com/rsmart/com.rsmart.nakamura.basic-sis-batch/1.0.3/com.rsmart.nakamura.basic-sis-batch-1.0.3-executable.jar'
     # $basic_sis_batch_email_report = "provision@uconline.edu"
     $basic_sis_batch_email_report = "mike@rSmart.com"
 

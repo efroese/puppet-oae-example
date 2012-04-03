@@ -55,6 +55,7 @@ class people {
     realize(Group['kcampos'])
     realize(User['kcampos'])
     realize(Ssh_authorized_key['kcampos-home-pub'])
+    realize(Ssh_authorized_key['kcampos-ops-pub'])
 
     realize(Group['mdesimone'])
     realize(User['mdesimone'])

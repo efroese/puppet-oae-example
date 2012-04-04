@@ -65,7 +65,7 @@ class localconfig {
 
     ###########################################################################
     # App servers
-    $jarsource     = '/home/rsmart/com.rsmart.academic.app-1.1.3-rsmart.jar'
+    $jarsource     = '/home/rsmart/deploy/current'
     $java          = '/usr/java/jdk1.6.0_30/bin/java'
     $javamemorymax = '5g'
     $javamemorymin = '5g'

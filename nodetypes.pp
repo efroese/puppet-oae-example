@@ -51,7 +51,17 @@ node oaenode inherits basenode {
             default => $localconfig::max_open_files,
         },
     }
-
+	
+    limits::conf { "root-soft":
+        domain => 'root',
+        type => soft,
+        item => nofile,
+        value => $localconfig::max_open_files ? {
+            undef => 20480,
+            default => $localconfig::max_open_files,
+        },
+    }
+	
     limits::conf { "${localconfig::user}-hard":
         domain => $localconfig::user,
         type => hard,
@@ -61,4 +71,15 @@ node oaenode inherits basenode {
             default => $localconfig::max_open_files,
         },
     }
+    
+    limits::conf { "root-hard":
+        domain => 'root',
+        type => hard,
+        item => nofile,
+        value => $localconfig::max_open_files ? {
+            undef => 20480,
+            default => $localconfig::max_open_files,
+        },
+    }
+    
 }

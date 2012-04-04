@@ -16,6 +16,7 @@ class people {
 
     realize(Group[$localconfig::group])
     realize(User[$localconfig::user])
+    realize(Ssh_authorized_key["${localconfig::user}-rsmartian-deploy-pub"])
 
     realize(Group['rsmartian'])
     realize(User['rsmartian'])

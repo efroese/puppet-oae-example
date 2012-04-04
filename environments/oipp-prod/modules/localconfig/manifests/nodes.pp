@@ -21,6 +21,10 @@ node 'oipp-prod-apache1.academic.rsmart.local' inherits oaenode {
     apache::vhost { "${localconfig::http_name}:80":
         template => 'localconfig/vhost-80.conf.erb',
     }
+    # http://uconline.edu to redirects to https://cole.uconline.edu
+    apache::vhost { "uconline.edu:80":
+        template => 'localconfig/vhost-80.conf.erb',
+    }
 
     ###########################################################################
     # https://cole.uconline.edu
@@ -31,7 +35,7 @@ node 'oipp-prod-apache1.academic.rsmart.local' inherits oaenode {
         cert     => "puppet:///modules/localconfig/uconline.edu.crt",
         certkey  => "puppet:///modules/localconfig/uconline.edu.key",
         certchain => "puppet:///modules/localconfig/uconline.edu-intermediate.crt",
-        template  => 'rsmart-common/vhost-trusted.conf.erb',
+        template  => 'localconfig/vhost-trusted.conf.erb',
     }
 
     # Balancer pool for trusted content

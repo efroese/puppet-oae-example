@@ -303,7 +303,7 @@ node oaeappnode inherits oaenode {
         config => {
             'sakai.auth.trusted.server.secret' => $localconfig::trusted_shared_secret,
             'sakai.auth.trusted.server.safe-hostsaddress' =>
-              '10.51.10.15;10.51.10.16;10.51.10.17;localhost;127.0.0.1;0:0:0:0:0:0:0:1%0',
+              '50.18.194.134;10.51.10.15;10.51.10.16;10.51.10.17;localhost;127.0.0.1;0:0:0:0:0:0:0:1%0',
             'sakai.auth.trusted.server.enabled' => true,
         }
     }

@@ -179,17 +179,14 @@ node oaeappnode inherits oaenode {
     # Specify the client type
     oae::app::server::sling_config {
         "org.sakaiproject.nakamura.solr.SolrServerServiceImpl":
-        config => { "solr-impl" => "multiremote", }
+        config => { "solr-impl" => "remote", }
     }
-    # Configure the client with the master/slave(s) info
+    # Configure the client with the master/[slave(s)] info
     oae::app::server::sling_config {
-        "org.sakaiproject.nakamura.solr.MultiMasterRemoteSolrClient":
+        "org.sakaiproject.nakamura.solr.RemoteSolrClient":
         config => {
             "remoteurl"  => $localconfig::solr_remoteurl,
-            "query-urls" => $localconfig::solr_queryurls,
-            "query-so-timeout" => 10000,
-            "query-connection-timeout" => 1000,
-            "query-connection-manager-timeout" => 1000,
+            "socket-timeout" => 10000,
             "connection.timeout" => 1000,
         }
     }

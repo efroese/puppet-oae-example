@@ -23,7 +23,6 @@ class localconfig {
     $nfs_server  = '10.51.11.90'
     $db_server   = '10.51.11.70'
     $solr_master = '10.51.11.30'
-    $solr_slave1 = '10.51.11.31'
 
 	# prod-cle
     $cle_server1  = '10.51.10.16'
@@ -87,8 +86,6 @@ class localconfig {
 
     # solr
     $solr_remoteurl = "http://${solr_master}:8080/solr"
-    # $solr_queryurls = "http://${solr_master}:8080/solr|http://${solr_slave1}:8080/solr"
-    $solr_queryurls = "http://${solr_master}:8080/solr"
 
     #CLE
     $basiclti_secret = "rLKQsw6YBq4TUa"

@@ -240,6 +240,40 @@ node oaeappnode inherits oaenode {
             'org.apache.sling.commons.log.file'  => 'logs/cache.log',
         }
     }
+
+    ###########################################################################
+    # HubSpot integration
+    oae::app::server::sling_config {
+        "com.rsmart.oae.registration.bundle.MarketingDataPostProcessor":
+        config => {
+            'postprocessor.enabled' => true,
+        }
+    }
+
+    oae::app::server::sling_config {
+        "com.rsmart.oae.registration.bundle.UserRegistrationEventHandler":
+        config => {
+            'handler.enabled' => true,
+        }
+    }
+
+    oae::app::server::sling_config {
+        "com.rsmart.oae.registration.bundle.UserRegistrationPreferencesUpdater":
+        config => {
+            'schedule.wait' => '180',
+            'updater.enabled' => true,
+        }
+    }
+
+    oae::app::server::sling_config {
+        "com.rsmart.oae.user.hubspot.RestHubSpotService":
+        config => {
+            'hubspot.portalId' => $localconfig::hubspot_portalId,
+            'hubspot.apiKey' => $localconfig::hubspot_apiKey,
+            'hubspot.url' => $localconfig::hubspot_url,
+            'campaignmap.refresh.interval' => '86400000',
+        }
+    }
 }
 
 node /staging-app[1-2].academic.rsmart.local/ inherits oaeappnode { }

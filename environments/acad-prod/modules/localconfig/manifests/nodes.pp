@@ -245,6 +245,41 @@ node oaeappnode inherits oaenode {
     }
 
     include people::kaleidoscope::internal
+
+    ###########################################################################
+    # HubSpot integration
+    oae::app::server::sling_config {
+        "com.rsmart.oae.registration.bundle.MarketingDataPostProcessor":
+        config => {
+            'postprocessor.enabled' => true,
+        }
+    }
+
+    oae::app::server::sling_config {
+        "com.rsmart.oae.registration.bundle.UserRegistrationEventHandler":
+        config => {
+            'handler.enabled' => true,
+        }
+    }
+
+    oae::app::server::sling_config {
+        "com.rsmart.oae.registration.bundle.UserRegistrationPreferencesUpdater":
+        config => {
+            'schedule.wait' => '180',
+            'updater.enabled' => true,
+        }
+    }
+
+    oae::app::server::sling_config {
+        "com.rsmart.oae.user.hubspot.RestHubSpotService":
+        config => {
+            'hubspot.portalId' => '85099',
+            'hubspot.apiKey' => '30510b72-5b73-4cdf-8cf9-99ae3c119252',
+            'hubspot.url' => 'http://rsmart.app8.hubspot.com/?app=leaddirector&FormName=acad-registration',
+            'campaignmap.refresh.interval' => '86400000',
+        }
+    }
+
 }
 
 node /app[1-2].academic.rsmart.local/ inherits oaeappnode { }

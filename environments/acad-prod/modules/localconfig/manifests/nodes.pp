@@ -273,9 +273,9 @@ node oaeappnode inherits oaenode {
     oae::app::server::sling_config {
         "com.rsmart.oae.user.hubspot.RestHubSpotService":
         config => {
-            'hubspot.portalId' => '85099',
-            'hubspot.apiKey' => '30510b72-5b73-4cdf-8cf9-99ae3c119252',
-            'hubspot.url' => 'http://rsmart.app8.hubspot.com/?app=leaddirector&FormName=acad-registration',
+            'hubspot.portalId' => $localconfig::hubspot_portalId,
+            'hubspot.apiKey' => $localconfig::hubspot_apiKey,
+            'hubspot.url' => $localconfig::hubspot_url,
             'campaignmap.refresh.interval' => '86400000',
         }
     }

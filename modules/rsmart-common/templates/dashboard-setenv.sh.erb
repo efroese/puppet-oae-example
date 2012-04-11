@@ -1,0 +1,33 @@
+#!/bin/sh
+
+JAVA_HOME=<%= java_home %>
+
+JAVA_OPTS="-server -d64 -Xms2g -Xmx2g -Djava.awt.headless=true -XX:MaxNewSize=1500m -XX:PermSize=512m -XX:MaxPermSize=768m -XX:+UseConcMarkSweepGC -XX:+CMSIncrementalMode -XX:+CMSIncrementalPacing -XX:+DisableExplicitGC"
+CATALINA_PID="$CATALINA_HOME/work/dashboard.pid"
+
+JAVA_OPTS="$JAVA_OPTS -Dorg.apache.jasper.compiler.Parser.STRICT_QUOTE_ESCAPING=false"
+
+# Dashboard options
+JAVA_OPTS="$JAVA_OPTS -Ddashboard.config.file=<%= scope.lookupvar('localconfig::dashboard_config') %> -Dlog4j.configuration=<%= scope.lookupvar('localconfig::dashboard_config') %>"
+
+# Uncomment the following line if using JDK 1.6
+JAVA_OPTS="$JAVA_OPTS -Dsun.lang.ClassLoader.allowArraySyntax=true"
+
+#uncomment the following line and enter the timezone if different than server's
+#  some examples for the U.S.:  US/Eastern, US/Central, US/Mountain, US/Pacific, US/Arizona
+JAVA_OPTS="$JAVA_OPTS -Duser.timezone=US/Arizona"
+
+## for debugging--print garbage collection info
+JAVA_OPTS="$JAVA_OPTS -verbose:gc -XX:+PrintGCTimeStamps -XX:+PrintGCDetails"
+
+# app dynamics config is specifc to server, so must be a local file, not shared like this one.
+#. ${CATALINA_HOME}/bin/appdynamics.sh
+
+JAVA_OPTS="$JAVA_OPTS -Djavax.net.ssl.trustStore=/home/rsmart/ssl/cacerts -Djavax.net.ssl.trustStorePassword=s3cUreD -Djavax.net.ssl.keyStore=/home/rsmart/ssl/cacerts -Djavax.net.ssl.keyStorePassword=s3cUreD"
+
+CATALINA_OPTS="-Dcom.sun.management.jmxremote \
+    -Dcom.sun.management.jmxremote.port=8995 \
+    -Dcom.sun.management.jmxremote.ssl=false \
+    -Dcom.sun.management.jmxremote.authenticate=true \
+    -Dcom.sun.management.jmxremote.password.file=$CATALINA_HOME/conf/jmxremote.password \
+    -Dcom.sun.management.jmxremote.access.file=$CATALINA_HOME/conf/jmxremote.access"

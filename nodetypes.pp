@@ -24,6 +24,60 @@ node basenode {
     }
 }
 
+# Dashboard
+node dashboardnode inherits basenode {
+
+    include sudo
+
+    # The localconfig module is found in $environment/modules
+    class { 'localconfig': }
+    class { 'localconfig::hosts': }
+
+    class { 'people': }
+    
+    limits::conf { "${localconfig::user}-soft":
+        domain => $localconfig::user,
+        type => soft,
+        item => nofile,
+        value => $localconfig::max_open_files ? {
+            undef => 20480,
+            default => $localconfig::max_open_files,
+        },
+    }
+	
+    limits::conf { "root-soft":
+        domain => 'root',
+        type => soft,
+        item => nofile,
+        value => $localconfig::max_open_files ? {
+            undef => 20480,
+            default => $localconfig::max_open_files,
+        },
+    }
+	
+    limits::conf { "${localconfig::user}-hard":
+        domain => $localconfig::user,
+        type => hard,
+        item => nofile,
+        value => $localconfig::max_open_files ? {
+            undef => 20480,
+            default => $localconfig::max_open_files,
+        },
+    }
+    
+    limits::conf { "root-hard":
+        domain => 'root',
+        type => hard,
+        item => nofile,
+        value => $localconfig::max_open_files ? {
+            undef => 20480,
+            default => $localconfig::max_open_files,
+        },
+    }
+    
+    
+}
+
 # This should probably be called an academicnode
 node oaenode inherits basenode {
 

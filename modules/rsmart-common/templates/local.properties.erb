@@ -905,3 +905,21 @@ rsaSha1Key@google.oauth.provider=
 #eidXPathString@com.rsmart.sakora.impl.ims.sungard.CreatePerson.target=//*/roles/userid/useridtype[textstring='BannerID']/../useridvalue/textstring
 #generateUserId@com.rsmart.sakora.impl.ims.sungard.CreatePerson.target=true
 templateDirectory@com.rsmart.certification.api.CertificateService.wrapped=<%= scope.lookupvar('cle::sakaidir') %>/files/certificate-templates
+
+# enabled Basic LTI provider
+basiclti.provider.enabled=true
+basiclti.provider.TODO-basic-lti-key.secret=TODO-basic-lti-secret
+basiclti.provider.allowedtools=sakai.announcements:sakai.assignment.grades:sakai.bbb:sakai.blogwow:sakai.chat:\
+sakai.clog:sakai.dropbox:sakai.forums:sakai.gradebook.gwt.rpc:sakai.gradebook.tool:sakai.iTunesU:sakai.iframe:\
+sakai.kaltura:sakai.mailbox:sakai.mailtool:sakai.melete:sakai.messages:sakai.mneme:sakai.news:sakai.podcasts:\
+sakai.poll:sakai.postem:sakai.profile2:sakai.profile:sakai.resources:sakai.rwiki:sakai.samigo:sakai.schedule:\
+sakai.search:sakai.sections:sakai.signup:sakai.singleuser:sakai.site.roster:sakai.sitestats:sakai.summary.calendar:\
+sakai.syllabus:sakai.synoptic.announcement:sakai.synoptic.chat:sakai.synoptic.messagecenter:sakai.blogwow
+# no longer need in 2.8.2; are we running 2.8.2?
+webservices.allow=.+
+
+log.config.count=4
+log.config.1 = ALL.org.sakaiproject.log.impl
+log.config.2 = WARN.org.sakaiproject
+log.config.3 = DEBUG.org.sakaiproject.blti
+log.config.4 = DEBUG.org.sakaiproject.hybrid

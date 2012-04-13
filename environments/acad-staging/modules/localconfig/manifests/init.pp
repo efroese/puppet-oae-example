@@ -112,7 +112,7 @@ class localconfig {
 
     ###########################################################################
     # HubSpot Configuration
-    $hubspot_portalId' = '62515'
-    $hubspot_apiKey' = 'demo'
-    $hubspot_url' = 'http://demohubapi.app6.hubspot.com/?app=leaddirector&FormName=testform'
+    $hubspot_portalId = '62515'
+    $hubspot_apiKey = 'demo'
+    $hubspot_url = 'http://demohubapi.app6.hubspot.com/?app=leaddirector&FormName=testform'
 }

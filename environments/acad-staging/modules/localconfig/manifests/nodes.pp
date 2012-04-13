@@ -274,6 +274,25 @@ node oaeappnode inherits oaenode {
             'campaignmap.refresh.interval' => '86400000',
         }
     }
+
+    ###########################################################################
+    # Configuration Override
+    oae::app::server::sling_config {
+        "org.sakaiproject.nakamura.dynamicconfig.file.FileBackedDynamicConfigurationServiceImpl":
+        config => {
+            'config.master.dir' => $localconfig::dynamic_config_root,
+            'config.master.filename' => $localconfig::dynamic_config_masterfile,
+            'config.custom.dir' => $localconfig::dynamic_config_customdir,
+        }
+    }
+
+    oae::app::server::sling_config {
+        "org.sakaiproject.nakamura.dynamicconfig.override.ConfigurationOverrideServiceImpl":
+        config => {
+            'override.dirs' => $localconfig::dynamic_config_jcroverrides,
+        }
+    }
+
 }
 
 node /staging-app[1-2].academic.rsmart.local/ inherits oaeappnode { }

@@ -293,6 +293,14 @@ node oaeappnode inherits oaenode {
         }
     }
 
+    file { "${localconfig::dynamic_config_customdir}":
+            ensure => directory }
+
+    file { "${localconfig::dynamic_config_customdir}/config_custom.json":
+        mode => 0644,
+        source => 'puppet:///modules/localconfig/config_custom.json'
+    }
+
 }
 
 node /staging-app[1-2].academic.rsmart.local/ inherits oaeappnode { }

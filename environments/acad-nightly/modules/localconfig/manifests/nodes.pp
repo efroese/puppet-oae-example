@@ -183,6 +183,9 @@ node 'nightly.academic.rsmart.local' inherits oaenode {
         }
     }
 
+    file { "${localconfig::dynamic_config_root}":
+            ensure => directory }
+
     file { "${localconfig::dynamic_config_customdir}":
             ensure => directory }
 

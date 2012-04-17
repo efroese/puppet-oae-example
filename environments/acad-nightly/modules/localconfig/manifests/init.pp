@@ -103,7 +103,7 @@ class localconfig {
 
     ###########################################################################
     # Dynamic Configuration
-    $dynamic_config_root = '${basedir}/dynamicconfig'
+    $dynamic_config_root = "${basedir}/dynamicconfig"
     $dynamic_config_masterfile = 'config.json'
     $dynamic_config_customdir = "${dynamic_config_root}/custom"
     $dynamic_config_jcroverrides = ["com.rsmart.nakamura.com.rsmart.nakamura.uxloader:${dynamic_config_root}/jcroverrides", ]

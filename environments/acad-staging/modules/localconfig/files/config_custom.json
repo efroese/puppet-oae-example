@@ -1,5 +1,4 @@
 {
-
     /**
      * rSmart default customizations
      */
@@ -72,7 +71,7 @@
         "SEARCH_USERS_GROUPS_KNOWN": "/var/search/usersgroups-known.json",
         "USER_CHANGEPASS_SERVICE": "/system/userManager/user/__USERID__.changePassword.html",
     //rSmart custom
-        "USER_EMAIL_EXISTENCE_SERVICE": "/system/userManager/user.emailexists.html?email=__EMAIL__"
+        "USER_EMAIL_EXISTENCE_SERVICE": "/system/userManager/user.emailexists.html?email=__EMAIL__",
         "USER_EXISTENCE_SERVICE": "/system/userManager/user.exists.html?userid=__USERID__"
     },
 
@@ -448,7 +447,6 @@
                 "newWindow": true
         }]
     },
-
 //rSmart custom -- revised Directory
     "Directory": {
         "01":{"title":"Agriculture","children":{
@@ -1258,7 +1256,6 @@
         "mygroups",
         "recentchangedcontent"
     ],
-
     "Navigation": [{
         "url": "/me#l=dashboard",
         "id": "navigation_you_link",

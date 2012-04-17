@@ -100,4 +100,11 @@ class localconfig {
     $cle_mail_support    = 'bogus@mailinator.com'
     $cle_mail_request    = 'bogus@mailinator.com'
     $samigo_stmp_server  = $cle_smtp_server
+
+    ###########################################################################
+    # Dynamic Configuration
+    $dynamic_config_root = '/home/rsmart/sakaioae/dynamicconfig';
+    $dynamic_config_masterfile = 'config.json';
+    $dynamic_config_customdir = "${dynamic_config_root}/custom";
+    $dynamic_config_jcroverrides = ["com.rsmart.nakamura.com.rsmart.nakamura.uxloader:${dynamic_config_root}/jcroverrides", ];
 }

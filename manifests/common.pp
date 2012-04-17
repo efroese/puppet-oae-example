@@ -4,6 +4,10 @@
 #
 # == Parameters:
 #
+# $user:: The user that will own solr files
+# 
+# $group:: The group solr will own solr files
+#
 # $solr_tarball:: The url for the solr tarball.
 #
 # $solr_home_tarball:: A URL to a tarball of the solr home skeleton.

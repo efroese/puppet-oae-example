@@ -4,6 +4,8 @@
 #
 # == Parameters:
 #
+# $basedir:: See solr::common
+#
 # $solr_tarball:: See solr::common
 #
 # $solr_home_tarball:: See solr::common
@@ -34,6 +36,9 @@
 #   }
 #
 class solr::tomcat (
+    $basedir           = '/usr/local/solr',
+    $user              = 'root',
+    $group             = 'root',
     $solr_tarball      = "http://nodeload.github.com/sakaiproject/solr/tarball/master",
     $solr_home_tarball = "http://dl.dropbox.com/u/24606888/puppet-oae-files/home0.tgz",
     $solrconfig        = 'solr/solrconfig.xml.erb',
@@ -48,6 +53,9 @@ class solr::tomcat (
     Class['solr::common'] -> Class['solr::tomcat']
 
     class { 'solr::common':
+       basedir           => $basedir,
+       user              => $user,
+       group             => $group,
        solr_tarball      => $solr_tarball,
        solr_home_tarball => $solr_home_tarball,
        solrconfig        => $solrconfig,

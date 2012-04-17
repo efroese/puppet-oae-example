@@ -183,9 +183,10 @@ node 'nightly.academic.rsmart.local' inherits oaenode {
         }
     }
 
-    file { "${dynamic_config_customdir}": ensure => directory }
+    file { "${localconfig::dynamic_config_customdir}":
+            ensure => directory }
 
-    file { "${dynamic_config_customdir}/config_custom.json":
+    file { "${localconfig::dynamic_config_customdir}/config_custom.json":
         mode => 0644,
         source => 'puppet:///modules/localconfig/config_custom.json'
     }

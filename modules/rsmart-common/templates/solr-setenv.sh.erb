@@ -1,2 +1,52 @@
+# filled out via puppet templating
 export JAVA_HOME=/usr/java/jdk1.6.0_30
-export JAVA_OPTS="-server -Xms5g -Xmx5g -XX:PermSize=256m -XX:NewRatio=3 -XX:+UseParNewGC -XX:+UseConcMarkSweepGC -XX:+CMSParallelRemarkEnabled -XX:MaxTenuringThreshold=0 -XX:-DisableExplicitGC -XX:CMSInitiatingOccupancyFraction=80 -XX:+UseStringCache -XX:+UseCompressedStrings -XX:+OptimizeStringConcat -Djava.awt.headless=true -verbose:gc -XX:+PrintGCDetails -XX:+PrintGCTimeStamps -XX:+PrintGCDateStamps -XX:+PrintTenuringDistribution -XX:+PrintCommandLineFlags"
+export JAVA_OPTS="-server -Xms6656m -Xmx6656m -XX:PermSize=256m -XX:MaxPermSize=256m \
+-XX:NewRatio=3 -XX:+UseParNewGC -XX:+UseConcMarkSweepGC -XX:+CMSParallelRemarkEnabled \
+-XX:MaxTenuringThreshold=0 -XX:-DisableExplicitGC -XX:CMSInitiatingOccupancyFraction=40 \
+-XX:+UseCMSInitiatingOccupancyOnly -XX:+UseCompressedOops -XX:+UseStringCache \
+-XX:+UseCompressedStrings -XX:+OptimizeStringConcat -Djava.awt.headless=true \
+-verbose:gc -XX:+PrintGCDetails -XX:+PrintGCTimeStamps -XX:+PrintGCDateStamps \
+-XX:+PrintTenuringDistribution -XX:+PrintCommandLineFlags"
+
+# Load up the AppDynamics options if present
+test -f appdynamics.setenv.sh && source appdynamics.setenv.sh
+
+# http://randomlyrr.blogspot.it/2012/03/java-tuning-in-nutshell-part-1.html
+
+# -Xmx should be equal to -Xms Growing from Xms to Xmx requires Full GC’s to
+# resize the heap. Set these to the same value if Full GC’s are to be completely
+# eliminated in production.
+
+# –XX:PermSize should be equal to –XX:MaxPermSize
+# Both params need to be specified and should have the same value. Otherwise,
+# a full GC is required for each Perm Gen resize while it grows up to MaxPermSize
+
+# –XX:NewSize is specified but not equal to –XX:MaxNewSize
+# Like the other heap params, resize of new/young gen requires a Full GC. The
+# preferred approach is to avoid these two parameters and use -Xmn instead.
+# This eliminates the problem as setting, say "-Xmn1g", is the same as setting
+# "-XX:NewSize=1g -XX:MaxNewSize=1g".
+
+# Although UseConcMarkSweepGC is specified, CMS can and often will kick in too
+# late, causing a Full GC when it can’t catch up. In other words, although CMS
+# is collecting garbage, the application threads that are executing concurrently
+# run out of heap for allocation because CMS couldn't free garbage soon enough.
+# At this point, the JVM stops all application threads and does a Full GC.
+# This is also called a “concurrent mode failure” in GC logs. The reason for
+# concurrent mode failure - the JVM dynamically finds a value for when CMS
+# should be initiated and changes this value based on statistics. However, in
+# production, load is often bursty which leads to misses/miscalculation for the
+# last dynamically computed initiation value. To prevent this, provide a static
+# value for CMSInitiation. Use –XX:CMSInitiatingOccupancyFraction (as percentage
+# of total heap) to tell the JVM what point it should initiate CMS. A value
+# between 40 to 70 usually works for most Fusion middleware products. Start
+# with the higher value (70) and tune down only if you still see the string
+# "concurrent mode failure" in GC log
+
+# Secondly, always specify –XX:+UseCMSInitiatingOccupancyOnly when
+# CMSInitiatingOccupancyFraction is used, otherwise the value you specify
+# does not stick (JVM will dynamically change it on the fly again). This is
+# very important and commonly missed.
+
+# -XX:+UseCompressedOops  Highly recommended on 64-bit JVM's with an Xmx value
+# less than 32g. However, this is available only on JDK6 update 14+.

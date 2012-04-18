@@ -8,9 +8,6 @@ export JAVA_OPTS="-server -Xms6656m -Xmx6656m -XX:PermSize=256m -XX:MaxPermSize=
 -verbose:gc -XX:+PrintGCDetails -XX:+PrintGCTimeStamps -XX:+PrintGCDateStamps \
 -XX:+PrintTenuringDistribution -XX:+PrintCommandLineFlags"
 
-# Load up the AppDynamics options if present
-test -f appdynamics.setenv.sh && source appdynamics.setenv.sh
-
 # http://randomlyrr.blogspot.it/2012/03/java-tuning-in-nutshell-part-1.html
 
 # -Xmx should be equal to -Xms Growing from Xms to Xmx requires Full GC’s to

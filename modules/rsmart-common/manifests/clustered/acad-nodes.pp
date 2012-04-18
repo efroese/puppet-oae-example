@@ -12,7 +12,7 @@ node /.*apache1.academic.rsmart.local/ inherits oaenode {
     class { 'localconfig::extra_users': }
 
     class { 'apache':
-        httpd_conf_template => 'localconfig/httpd.conf.erb'
+        httpd_conf_template => 'rsmart-common/httpd.conf.erb'
     }
 
     class { 'apache::ssl': }
@@ -443,7 +443,7 @@ node /.*dbserv1.academic.rsmart.local/ inherits oaenode {
     class { 'postgres::repos': stage => init }
 
     class { 'postgres':
-        postgresql_conf_template => 'localconfig/postgresql.conf.erb',
+        postgresql_conf_template => 'rsmart-common/postgresql.conf.erb',
     }
 
     postgres::database { $localconfig::db:
@@ -506,12 +506,12 @@ node /.*cle.academic.rsmart.local/ inherits oaenode {
         tomcat_user          => $oae::params::user,
         tomcat_group         => $oae::params::group,
         java_home            => $localconfig::java_home,
-        jmxremote_access_template   => 'localconfig/jmxremote.access.erb',
-        jmxremote_password_template => 'localconfig/jmxremote.password.erb',
+        jmxremote_access_template   => 'rsmart-common/jmxremote.access.erb',
+        jmxremote_password_template => 'rsmart-common/jmxremote.password.erb',
         jvm_route            => $localconfig::cle_server_id,
         shutdown_password    => $localconfig::tomcat_shutdown_password,
         tomcat_conf_template => 'rsmart-common/cle-server.xml.erb',
-        setenv_template      => 'localconfig/cle-setenv.sh.erb',
+        setenv_template      => 'rsmart-common/cle-setenv.sh.erb',
     }
 
     # Base rSmart Tomcat customizations
@@ -560,7 +560,7 @@ node /.*cle.academic.rsmart.local/ inherits oaenode {
         db_user         => $localconfig::cle_db_user,
         db_password     => $localconfig::cle_db_password,
         configuration_xml_template   => 'rsmart-common/cle-sakai-configuration.xml.erb',
-        sakai_properties_template    => 'localconfig/sakai.properties.erb',
+        sakai_properties_template    => 'rsmart-common/sakai.properties.erb',
         local_properties_template    => 'localconfig/local.properties.erb',
         instance_properties_template => 'localconfig/instance.properties.erb',
         linktool_salt    => $localconfig::linktool_salt,

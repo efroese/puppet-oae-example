@@ -49,12 +49,12 @@ class localconfig {
     ###########################################################################
     # Git (Preview processor)
     $nakamura_zip = 'https://nodeload.github.com/rSmart/nakamura/zipball/develop'
-    $solr_tarball = 'https://nodeload.github.com/rSmart/solr/tarball/develop'
+    $solr_tarball = 'https://nodeload.github.com/rSmart/solr/tarball/1.3.2-rsmart'
 
     ###########################################################################
     # Apache load balancer
     $http_name                   = 'staging.academic.rsmart.com'
-    $http_name_untrusted         = 'content-staging.academic.rsmart.com'
+    $http_name_untrusted         = "content-${http_name}"
     $apache_lb_members           = [ "${app_server1}:8080", "${app_server2}:8080" ]
     $apache_lb_members_untrusted = [ "${app_server1}:8082", "${app_server2}:8082" ]
     $apache_lb_params            = ["retry=20", "min=3", "flushpackets=auto", "max=250", "loadfactor=100", "timeout=60"]

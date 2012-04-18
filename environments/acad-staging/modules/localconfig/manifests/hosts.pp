@@ -30,11 +30,11 @@ class localconfig::hosts {
         comment => 'CLE server'
     }
 
-    host { 'staging-dbserv1':
+    host { 'staging-preview':
         ensure => present,
-        ip => '10.53.11.70',
-        host_aliases => 'staging-dbserv1.academic.rsmart.local',
-        comment => 'Database master',
+        ip => '10.53.11.200',
+        host_aliases => 'staging-preview.academic.rsmart.local',
+        comment => 'Preview processor',
     }
 
     host { 'staging-solr1':
@@ -44,18 +44,18 @@ class localconfig::hosts {
         comment => 'Solr master',
     }
 
+    host { 'staging-dbserv1':
+        ensure => present,
+        ip => '10.53.11.70',
+        host_aliases => 'staging-dbserv1.academic.rsmart.local',
+        comment => 'Database master',
+    }
+
     host { 'staging-nfs':
         ensure => present,
         ip => '10.53.11.90',
         host_aliases => 'staging-nfs.academic.rsmart.local',
         comment => 'NFS server',
-    }
-
-    host { 'staging-preview':
-    ensure => present,
-        ip => '10.53.11.200',
-        host_aliases => 'staging-preview.academic.rsmart.local',
-        comment => 'Preview processor',
     }
 
     host { 'staging-appdyn':

@@ -23,6 +23,13 @@ class localconfig::hosts {
         comment => 'OAE app server'
     }
 
+    host { 'staging-cle':
+        ensure => present,
+        ip => '10.52.11.17',
+        host_aliases => 'prod-cle.academic.rsmart.local',
+        comment => 'CLE server'
+    }
+
 	host { 'prod-preview':
     	ensure => present,
         ip => '10.52.11.200',

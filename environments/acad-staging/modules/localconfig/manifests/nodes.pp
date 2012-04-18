@@ -2,12 +2,12 @@
 #
 # Nodes
 #
-# make sure that modules/localconfig -> modules/rsmart-staging-config
-# see modules/rsmart-staging-config/manifests.init.pp for the config.
 
 ###########################################################################
+#
 # Apache load balancer
-node 'staging-apache1.academic.rsmart.local' inherits oaenode {
+#
+node /.*apache1.academic.rsmart.local/ inherits oaenode {
 
     class { 'localconfig::extra_users': }
 
@@ -61,7 +61,7 @@ node 'staging-apache1.academic.rsmart.local' inherits oaenode {
     }
 
     ###########################################################################
-    # https://staging-content.academic.rsmart.com:443
+    # https://*academic.rsmart.com:443
 
     # Serve untrusted content from another hostname on port 443
     apache::vhost-ssl { "${localconfig::http_name_untrusted}:443":
@@ -91,10 +91,15 @@ node 'staging-apache1.academic.rsmart.local' inherits oaenode {
         mode  => 644,
         content => 'TraceEnable Off',
     }
+
+    include people::kaleidoscope::internal
+    include people::kaleidoscope::external
 }
 
 ###########################################################################
+#
 # OAE app nodes
+#
 node oaeappnode inherits oaenode {
 
     class { 'localconfig::extra_users': }
@@ -115,6 +120,7 @@ node oaeappnode inherits oaenode {
 
     ###########################################################################
     # Storage
+
     class { 'nfs::client': }
 
     file  { $localconfig::nfs_mountpoint: ensure => directory }
@@ -141,6 +147,8 @@ node oaeappnode inherits oaenode {
             'store-base-dir'   => $localconfig::storedir,
         }
     }
+
+    class { 'rsmart-common::logging': }
 
     ###########################################################################
     # Security
@@ -206,6 +214,18 @@ node oaeappnode inherits oaenode {
         remote_object_port => $localconfig::ehcache_remote_object_port,
     }
 
+    # Keep an eye on caching in staging
+    oae::app::server::sling_config {
+        'org.apache.sling.commons.log.LogManager.factory.config-caching':
+        locked => false,
+        config => {
+            'org.apache.sling.commons.log.names' => ["org.sakaiproject.nakamura.memory","net.sf.ehcache"],
+            'org.apache.sling.commons.log.level' => "info",
+            'org.apache.sling.commons.log.file'  => "logs/cache.log",
+            'service.factoryPid'                 => "org.apache.sling.commons.log.LogManager.factory.config",
+        }
+    }
+
     ###########################################################################
     # CLE integration
     if ($localconfig::basiclti_secret) and ($localconfig::basiclti_key) {
@@ -229,6 +249,7 @@ node oaeappnode inherits oaenode {
         }
     }
 
+    include people::kaleidoscope::internal
     ###########################################################################
     # Logs
     oae::app::server::sling_config {
@@ -306,14 +327,14 @@ node oaeappnode inherits oaenode {
 
 }
 
-node /staging-app[1-2].academic.rsmart.local/ inherits oaeappnode { }
+node /.*app[1-2].academic.rsmart.local/ inherits oaeappnode { }
 
 ###########################################################################
 #
 # OAE Solr Nodes
 #
 
-node 'staging-solr1.academic.rsmart.local' inherits oaenode {
+node '.*solr1.academic.rsmart.local' inherits oaenode {
 
     class { 'localconfig::extra_users': }
 
@@ -338,13 +359,34 @@ node 'staging-solr1.academic.rsmart.local' inherits oaenode {
         tomcat_user  => $localconfig::user,
         tomcat_group => $localconfig::group,
     }
+
+    solr::backup { "solr-backup-${localconfig::solr_remoteurl}-${oae::params::basedir}/solr/backups":
+       solr_url   => $localconfig::solr_remoteurl,
+       backup_dir => "${oae::params::basedir}/solr/backups",
+       user       => $oae::params::user,
+       group      => $oae::params::group,
+    }
+}
+
+node /.*solr[2-3].academic.rsmart.local/ inherits solrnode {
+    class { 'solr::tomcat':
+        basedir      => "${localconfig::basedir}/solr",
+        user         => $localconfig::user,
+        group        => $localconfig::group,
+        solr_tarball => $localconfig::solr_tarball,
+        master_url   => "${localconfig::solr_remoteurl}/replication",
+        solrconfig   => 'rsmart-common/slave-solrconfig.xml.erb',
+        tomcat_home  => "${localconfig::basedir}/tomcat",
+        tomcat_user  => $localconfig::user,
+        tomcat_group => $localconfig::group,
+    }
 }
 
 ###########################################################################
 #
 # OAE Content Preview Processor Node
 #
-node 'staging-preview.academic.rsmart.local' inherits oaenode {
+node '.*preview.academic.rsmart.local' inherits oaenode {
 
     class { 'localconfig::extra_users': }
 
@@ -353,13 +395,18 @@ node 'staging-preview.academic.rsmart.local' inherits oaenode {
         admin_password => $localconfig::admin_password,
         nakamura_zip   => $localconfig::nakamura_zip,
     }
+
+    class { 'kaleidoscope::analytics':
+        user => $oae::params::user,
+        basedir => $oae::params::basedir,
+}
 }
 
 ###########################################################################
 #
 # NFS Server
 #
-node 'staging-nfs.academic.rsmart.local' inherits oaenode {
+node '.*nfs.academic.rsmart.local' inherits oaenode {
 
     class { 'localconfig::extra_users': }
 
@@ -391,7 +438,7 @@ node 'staging-nfs.academic.rsmart.local' inherits oaenode {
 #
 # Postgres Database Server
 #
-node 'staging-dbserv1.academic.rsmart.local' inherits oaenode {
+node '.*dbserv1.academic.rsmart.local' inherits oaenode {
 
     class { 'localconfig::extra_users': }
 
@@ -403,6 +450,7 @@ node 'staging-dbserv1.academic.rsmart.local' inherits oaenode {
 
     postgres::database { $localconfig::db:
         ensure => present,
+        require  => Postgres::Role[$localconfig::user],
     }
 
     postgres::role { $localconfig::db_user:
@@ -445,7 +493,7 @@ node 'staging-dbserv1.academic.rsmart.local' inherits oaenode {
     }
 }
 
-node 'staging-cle.academic.rsmart.local' inherits oaenode {
+node '.*cle.academic.rsmart.local' inherits oaenode {
 
     ###########################################################################
     #

@@ -2,17 +2,14 @@
 #
 # Nodes
 #
-# make sure that modules/localconfig -> modules/rsmart-config
-# see modules/rsmart-config/manifests.init.pp for the config.
-
-# Install image
-node 'base.academic.rsmart.local' inherits oaenode { }
 
 ###########################################################################
 #
 # Apache load balancer
 #
-node 'apache1.academic.rsmart.local' inherits oaenode {
+node /.*apache1.academic.rsmart.local/ inherits oaenode {
+
+    class { 'localconfig::extra_users': }
 
     class { 'apache':
         httpd_conf_template => 'localconfig/httpd.conf.erb'
@@ -48,7 +45,7 @@ node 'apache1.academic.rsmart.local' inherits oaenode {
         locations_noproxy => ['/server-status', '/balancer-manager'],
         proto      => "http",
         members    => $localconfig::apache_lb_members,
-        params     => ["retry=20", "min=3", "flushpackets=auto"],
+        params     => $localconfig::apache_lb_params,
         standbyurl => $localconfig::apache_lb_standbyurl,
         template   => 'rsmart-common/balancer-trusted.erb',
     }
@@ -64,14 +61,11 @@ node 'apache1.academic.rsmart.local' inherits oaenode {
     }
 
     ###########################################################################
-    # https://academic.rsmart.com:8443
+    # https://*academic.rsmart.com:443
 
-    apache::listen { "8443": }
-    apache::namevhost { "*:8443": }
-    # Serve untrusted content from another hostname
-    apache::vhost-ssl { "${localconfig::http_name}:8443":
+    # Serve untrusted content from another hostname on port 443
+    apache::vhost-ssl { "${localconfig::http_name_untrusted}:443":
         sslonly  => true,
-        sslports => ['*:8443'],
         cert     => "puppet:///modules/rsmart-common/academic.rsmart.com.crt",
         certkey  => "puppet:///modules/rsmart-common/academic.rsmart.com.key",
         certchain => "puppet:///modules/rsmart-common/academic.rsmart.com-intermediate.crt",
@@ -80,7 +74,7 @@ node 'apache1.academic.rsmart.local' inherits oaenode {
 
     # Balancer pool for untrusted content
     apache::balancer { "apache-balancer-oae-app-untrusted":
-        vhost      => "${localconfig::http_name}:8443",
+        vhost      => "${localconfig::http_name_untrusted}:443",
         location   => "/",
         proto      => "http",
         members    => $localconfig::apache_lb_members_untrusted,
@@ -108,6 +102,10 @@ node 'apache1.academic.rsmart.local' inherits oaenode {
 #
 node oaeappnode inherits oaenode {
 
+    class { 'localconfig::extra_users': }
+
+    ###########################################################################
+    # OAE, Sling
     class { 'oae::app::server':
         jarsource      => $localconfig::jarsource,
         java           => $localconfig::java,
@@ -118,6 +116,8 @@ node oaeappnode inherits oaenode {
         store_dir       => $localconfig::storedir,
     }
     
+    class { 'rsmart-common::logging': }
+
     ###########################################################################
     # Storage
 
@@ -133,9 +133,9 @@ node oaeappnode inherits oaenode {
         require => File[$localconfig::nfs_mountpoint],
     }
 
+    # Connect OAE to the DB
     class { 'postgres::repos': stage => init }
     class { 'postgres::client': }
-    # Connect OAE to the DB
     oae::app::server::sling_config {
         "org.sakaiproject.nakamura.lite.storage.jdbc.JDBCStorageClientPool":
         config => {
@@ -161,16 +161,18 @@ node oaeappnode inherits oaenode {
             'trusted.hosts'  => [
                 "localhost:8080\\ \\=\\ http://localhost:8081",
                 "${hostname}:8080\\ \\=\\ http://${hostname}:8081",
-                "${localconfig::http_name}\\ \\=\\ https://${localconfig::http_name}:8443",
+                "${localconfig::http_name}\\ \\=\\ https://${localconfig::http_name_untrusted}",
             ],
             'trusted.secret' => $localconfig::serverprotectsec,
         }
     }
 
-    # QoS filter rate-limits the app server so it won't fall over
-    oae::app::server::sling_config {
-        "org.sakaiproject.nakamura.http.qos.QoSFilter":
-        config => { 'qos.default.limit' => 10, }
+    if $localconfig::qos_limit {
+        # QoS filter rate-limits the app server so it won't fall over
+        oae::app::server::sling_config {
+            "org.sakaiproject.nakamura.http.qos.QoSFilter":
+                config => { 'qos.default.limit' => $localconfig::qos_limit, }
+        }
     }
 
     ###########################################################################
@@ -193,6 +195,7 @@ node oaeappnode inherits oaenode {
 
     ###########################################################################
     # Clustering
+
     oae::app::server::sling_config {
         "org.sakaiproject.nakamura.cluster.ClusterTrackingServiceImpl":
         config => { 'secure-host-url' => "http://${ipaddress}:8081", }
@@ -225,12 +228,14 @@ node oaeappnode inherits oaenode {
 
     ###########################################################################
     # CLE integration
-    oae::app::server::sling_config {
-        "org.sakaiproject.nakamura.basiclti.CLEVirtualToolDataProvider":
-        config => {
-            'sakai.cle.basiclti.secret' => $localconfig::basiclti_secret,
-            'sakai.cle.server.url'      => "https://${localconfig::http_name}",
-            'sakai.cle.basiclti.key'    => $localconfig::basiclti_key,
+    if ($localconfig::basiclti_secret) and ($localconfig::basiclti_key) {
+        oae::app::server::sling_config {
+            "org.sakaiproject.nakamura.basiclti.CLEVirtualToolDataProvider":
+            config => {
+                'sakai.cle.basiclti.secret' => $localconfig::basiclti_secret,
+                'sakai.cle.server.url'      => "https://${localconfig::http_name}",
+                'sakai.cle.basiclti.key'    => $localconfig::basiclti_key,
+            }
         }
     }
 
@@ -245,6 +250,17 @@ node oaeappnode inherits oaenode {
     }
 
     include people::kaleidoscope::internal
+    ###########################################################################
+    # Logs
+    oae::app::server::sling_config {
+        'org.apache.sling.commons.log.LogManager.factory.config.cache-logger-uuid':
+        config => {
+            'service.factoryPid'                 => 'org.apache.sling.commons.log.LogManager.factory.config',
+            'org.apache.sling.commons.log.names' => ['org.sakaiproject.nakamura.memory','net.sf.ehcache'],
+            'org.apache.sling.commons.log.level' => 'info',
+            'org.apache.sling.commons.log.file'  => 'logs/cache.log',
+        }
+    }
 
     ###########################################################################
     # HubSpot integration
@@ -280,15 +296,48 @@ node oaeappnode inherits oaenode {
         }
     }
 
+    ###########################################################################
+    # Configuration Override
+    oae::app::server::sling_config {
+        "org.sakaiproject.nakamura.dynamicconfig.file.FileBackedDynamicConfigurationServiceImpl":
+        config => {
+            'config.master.dir' => $localconfig::dynamic_config_root,
+            'config.master.filename' => $localconfig::dynamic_config_masterfile,
+            'config.custom.dir' => $localconfig::dynamic_config_customdir,
+}
+    }
+
+    oae::app::server::sling_config {
+        "org.sakaiproject.nakamura.dynamicconfig.override.ConfigurationOverrideServiceImpl":
+        config => {
+            'override.dirs' => $localconfig::dynamic_config_jcroverrides,
+        }
+    }
+
+    file { "${localconfig::dynamic_config_root}":
+            ensure => directory }
+
+    file { "${localconfig::dynamic_config_customdir}":
+            ensure => directory }
+
+    file { "${localconfig::dynamic_config_customdir}/config_custom.json":
+        mode => 0644,
+        source => 'puppet:///modules/localconfig/config_custom.json'
+    }
+
 }
 
-node /app[1-2].academic.rsmart.local/ inherits oaeappnode { }
+node /.*app[1-2].academic.rsmart.local/ inherits oaeappnode { }
 
 ###########################################################################
 #
 # OAE Solr Nodes
 #
-node solrnode inherits oaenode {
+
+node '.*solr1.academic.rsmart.local' inherits oaenode {
+
+    class { 'localconfig::extra_users': }
+
     # All of the solr servers get tomcat
     class { 'tomcat6':
         parentdir      => $localconfig::basedir,
@@ -298,10 +347,11 @@ node solrnode inherits oaenode {
         admin_password => $localconfig::tomcat_password,
         setenv_template => 'rsmart-common/solr-setenv.sh.erb',
     }
-}
 
-node 'solr1.academic.rsmart.local' inherits solrnode {
     class { 'solr::tomcat':
+        basedir      => "${localconfig::basedir}/solr",
+        user         => $localconfig::user,
+        group        => $localconfig::group,
         solr_tarball => $localconfig::solr_tarball,
         master_url   => "${localconfig::solr_remoteurl}/replication",
         solrconfig   => 'rsmart-common/master-solrconfig.xml.erb',
@@ -318,10 +368,15 @@ node 'solr1.academic.rsmart.local' inherits solrnode {
     }
 }
 
-node /solr[2-3].academic.rsmart.local/ inherits solrnode {
+node /.*solr[2-3].academic.rsmart.local/ inherits solrnode {
     class { 'solr::tomcat':
+        basedir      => "${localconfig::basedir}/solr",
+        user         => $localconfig::user,
+        group        => $localconfig::group,
+        solr_tarball => $localconfig::solr_tarball,
         master_url   => "${localconfig::solr_remoteurl}/replication",
         solrconfig   => 'rsmart-common/slave-solrconfig.xml.erb',
+        tomcat_home  => "${localconfig::basedir}/tomcat",
         tomcat_user  => $localconfig::user,
         tomcat_group => $localconfig::group,
     }
@@ -331,7 +386,10 @@ node /solr[2-3].academic.rsmart.local/ inherits solrnode {
 #
 # OAE Content Preview Processor Node
 #
-node 'preview.academic.rsmart.local' inherits oaenode {
+node '.*preview.academic.rsmart.local' inherits oaenode {
+
+    class { 'localconfig::extra_users': }
+
     class { 'oae::preview_processor::init':
         upload_url     => "https://${localconfig::http_name}/",
         admin_password => $localconfig::admin_password,
@@ -348,7 +406,9 @@ node 'preview.academic.rsmart.local' inherits oaenode {
 #
 # NFS Server
 #
-node 'nfs.academic.rsmart.local' inherits oaenode {
+node '.*nfs.academic.rsmart.local' inherits oaenode {
+
+    class { 'localconfig::extra_users': }
 
     class { 'nfs::server': }
 
@@ -378,7 +438,9 @@ node 'nfs.academic.rsmart.local' inherits oaenode {
 #
 # Postgres Database Server
 #
-node 'dbserv1.academic.rsmart.local' inherits oaenode {
+node '.*dbserv1.academic.rsmart.local' inherits oaenode {
+
+    class { 'localconfig::extra_users': }
 
     class { 'postgres::repos': stage => init }
 
@@ -394,6 +456,7 @@ node 'dbserv1.academic.rsmart.local' inherits oaenode {
     postgres::role { $localconfig::db_user:
         ensure   => present,
         password => $localconfig::db_password,
+        require  => Postgres::Database[$localconfig::db],
     }
 
     postgres::clientauth { "host-${localconfig::db}-${localconfig::db_user}-all-md5":
@@ -428,4 +491,112 @@ node 'dbserv1.academic.rsmart.local' inherits oaenode {
         command => 'echo kernel.shmall=4194304 | tee -a /etc/sysctl.conf',
         unless  => 'grep 4194304 /etc/sysctl.conf',
     }
+}
+
+node '.*cle.academic.rsmart.local' inherits oaenode {
+
+    ###########################################################################
+    #
+    # CLE Server
+    #
+
+    class { 'tomcat6':
+        parentdir            => "${localconfig::homedir}/sakaicle",
+        tomcat_version       => '5.5.35',
+        tomcat_major_version => '5',
+        digest_string        => '1791951e1f2e03be9911e28c6145e177',
+        tomcat_user          => $oae::params::user,
+        tomcat_group         => $oae::params::group,
+        java_home            => $localconfig::java_home,
+        jmxremote_access_template   => 'localconfig/jmxremote.access.erb',
+        jmxremote_password_template => 'localconfig/jmxremote.password.erb',
+        jvm_route            => $localconfig::cle_server_id,
+        shutdown_password    => $localconfig::tomcat_shutdown_password,
+        tomcat_conf_template => 'rsmart-common/cle-server.xml.erb',
+        setenv_template      => 'localconfig/cle-setenv.sh.erb',
+    }
+
+    # Base rSmart Tomcat customizations
+    archive::download { 'rsmart-cle-base-overlay.tbz':
+        ensure        => present,
+        url           => 'http://dl.dropbox.com/u/24606888/rsmart-cle-base-overlay.tbz',
+        src_target    => "${localconfig::homedir}/sakaicle/",
+        checksum      => false,
+        timeout       => 0,
+        require       => Class['Tomcat6'],
+    }
+
+    tomcat6::overlay { 'rsmart-cle-base-overlay':
+        tomcat_home  => "${localconfig::homedir}/sakaicle/tomcat",
+        tarball_path => "${localconfig::homedir}/sakaicle/rsmart-cle-base-overlay.tbz",
+        creates      => "${localconfig::homedir}/sakaicle/tomcat/webapps/ROOT/rsmart.jsp",
+        user         => $oae::params::user,
+        require      => [ Class['Tomcat6'], Archive::Download['rsmart-cle-base-overlay.tbz'], ],
+    }
+
+    # CLE install
+    archive::download { 'rsmart-cle-prod-overlay.tbz':
+        ensure        => present,
+        url           => $localconfig::cle_tarball_url,
+        src_target    => "${localconfig::homedir}/sakaicle/",
+        checksum      => false,
+        timeout       => 0,
+        require       => Class['Tomcat6'],
+    }
+
+    tomcat6::overlay { 'rsmart-cle-prod-overlay':
+        tomcat_home  => "${localconfig::homedir}/sakaicle/tomcat",
+        tarball_path => "${localconfig::homedir}/sakaicle/rsmart-cle-prod-overlay.tbz",
+        creates      => "${localconfig::homedir}/sakaicle/tomcat/webapps/xsl-portal.war",
+        user         => $oae::params::user,
+        require      => [ Class['Tomcat6'], Archive::Download['rsmart-cle-prod-overlay.tbz'], ],
+    }
+
+    # CLE tomcat overlay and configuration
+    class { 'cle':
+        user            => $oae::params::user,
+        basedir         => "${localconfig::homedir}/sakaicle",
+        tomcat_home     => "${localconfig::homedir}/sakaicle/tomcat",
+        server_id       => $localconfig::cle_server_id,
+        db_url          => $localconfig::cle_db_url,
+        db_user         => $localconfig::cle_db_user,
+        db_password     => $localconfig::cle_db_password,
+        configuration_xml_template   => 'rsmart-common/cle-sakai-configuration.xml.erb',
+        sakai_properties_template    => 'localconfig/sakai.properties.erb',
+        local_properties_template    => 'localconfig/local.properties.erb',
+        instance_properties_template => 'localconfig/instance.properties.erb',
+        linktool_salt    => $localconfig::linktool_salt,
+        linktool_privkey => $localconfig::linktool_privkey,
+    }
+
+    ###########################################################################
+    #
+    # MySQL Database Server
+    #
+
+    $mysql_password = $localconfig::mysql_root_password
+
+    class { 'augeas': }
+    class { 'mysql::server': }
+
+    mysql::database{ $localconfig::cle_db:
+        ensure   => present
+    }
+
+    mysql::rights{ "mysql-grant-${localconfig::cle_db}-${localconfig::cle_db_user}":
+        ensure   => present,
+        database => $localconfig::cle_db,
+        user     => $localconfig::cle_db_user,
+        password => $localconfig::cle_db_password,
+    }
+    augeas { "my.cnf/mysqld-lower_case_table_names-1":
+        context => "${mysql::params::mycnfctx}/mysqld/",
+        load_path => "/usr/share/augeas/lenses/contrib/",
+        changes => [
+          "set lower_case_table_names 1",
+        ],
+        require => File["/etc/mysql/my.cnf"],
+        notify => Service["mysql"],
+    }
+
 }

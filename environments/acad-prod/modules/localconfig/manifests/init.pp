@@ -23,13 +23,12 @@ class localconfig {
     $app_server2 = '10.52.11.101'
     # prod-nfs
     $nfs_server  = '10.52.11.90'
+    # prod-cle
+    $cle_server  = '10.52.11.17'
     # prod-dbserv1
     $db_server   = '10.52.11.70'
     # solr master server
     $solr_master = '10.52.11.30'
-
-	# prod-cle
-    $cle_server  = '10.52.10.17'
 
     ###########################################################################
     # Database setup
@@ -46,15 +45,16 @@ class localconfig {
     $nfs_options = '_netdev,rw,rsize=8192,wsize=8192'
 
     $storedir    = "/files-academic/store"
+
     ###########################################################################
     # Git (Preview processor)
     $nakamura_zip = 'https://nodeload.github.com/rSmart/nakamura/zipball/acad-1.1.0-M1-20120130'
-    $solr_tarball = 'https://nodeload.github.com/rSmart/solr/tarball/acad-1.3.1'
+    $solr_tarball = 'https://nodeload.github.com/rSmart/solr/tarball/1.3.2-rsmart'
 
     ###########################################################################
     # Apache load balancer
     $http_name                   = 'academic.rsmart.com'
-    $http_name_untrusted         = 'content-academic.rsmart.com'
+    $http_name_untrusted         = "content-${http_name}"
     $apache_lb_members           = [ "${app_server1}:8080", "${app_server2}:8080" ]
     $apache_lb_members_untrusted = [ "${app_server1}:8082", "${app_server2}:8082" ]
     $apache_lb_params            = ["retry=20", "min=3", "flushpackets=auto", "max=250", "loadfactor=100", "timeout=60"]
@@ -79,6 +79,7 @@ class localconfig {
     # oae server protection service
     $serverprotectsec = 'ljgfh259w4tyfknjslkdg0134tjna'
     $sps_disabled = false
+    $qos_limit = '10'
 
     # ehcache
     $ehcache_tcp_port = '40001'
@@ -98,10 +99,34 @@ class localconfig {
     $reply_as_address = 'noreply@rsmart.com'
     $reply_as_name = 'rSmart'
 
+    $tomcat_user    = 'admin'
+    $tomcat_password = 't0msm@rt!'
+
+    class extra_users {
+        realize(Group['karagon'])
+        realize(User['karagon'])
+        realize(Ssh_authorized_key['karagon-laptop-pub'])
+        realize(Ssh_authorized_key['karagon-mbp-pub'])
+
+        realize(Group['ppilli'])
+        realize(User['ppilli'])
+        realize(Ssh_authorized_key['ppilli-home-pub'])
+
+        realize(Group['mflitsch'])
+        realize(User['mflitsch'])
+        realize(Ssh_authorized_key['mflitsch-home-pub'])
+    }
+
     ###########################################################################
     # HubSpot Configuration
     $hubspot_portalId' = '85099'
     $hubspot_apiKey' = '30510b72-5b73-4cdf-8cf9-99ae3c119252'
     $hubspot_url' = 'http://rsmart.app8.hubspot.com/?app=leaddirector&FormName=acad-registration'
 
+    ###########################################################################
+    # Dynamic Configuration
+    $dynamic_config_root = "${basedir}/dynamicconfig"
+    $dynamic_config_masterfile = 'config.json'
+    $dynamic_config_customdir = "${dynamic_config_root}/custom"
+    $dynamic_config_jcroverrides = ["com.rsmart.nakamura.com.rsmart.nakamura.uxloader:${dynamic_config_root}/jcroverrides", ]
 }

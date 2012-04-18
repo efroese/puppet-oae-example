@@ -334,7 +334,7 @@ node /.*app[1-2].academic.rsmart.local/ inherits oaeappnode { }
 # OAE Solr Nodes
 #
 
-node '.*solr1.academic.rsmart.local' inherits oaenode {
+node /.*solr1.academic.rsmart.local/ inherits oaenode {
 
     class { 'localconfig::extra_users': }
 
@@ -386,7 +386,7 @@ node /.*solr[2-3].academic.rsmart.local/ inherits solrnode {
 #
 # OAE Content Preview Processor Node
 #
-node '.*preview.academic.rsmart.local' inherits oaenode {
+node /.*preview.academic.rsmart.local/ inherits oaenode {
 
     class { 'localconfig::extra_users': }
 
@@ -406,7 +406,7 @@ node '.*preview.academic.rsmart.local' inherits oaenode {
 #
 # NFS Server
 #
-node '.*nfs.academic.rsmart.local' inherits oaenode {
+node /.*nfs.academic.rsmart.local/ inherits oaenode {
 
     class { 'localconfig::extra_users': }
 
@@ -438,7 +438,7 @@ node '.*nfs.academic.rsmart.local' inherits oaenode {
 #
 # Postgres Database Server
 #
-node '.*dbserv1.academic.rsmart.local' inherits oaenode {
+node /.*dbserv1.academic.rsmart.local/ inherits oaenode {
 
     class { 'localconfig::extra_users': }
 
@@ -493,7 +493,7 @@ node '.*dbserv1.academic.rsmart.local' inherits oaenode {
     }
 }
 
-node '.*cle.academic.rsmart.local' inherits oaenode {
+node /.*cle.academic.rsmart.local/ inherits oaenode {
 
     ###########################################################################
     #

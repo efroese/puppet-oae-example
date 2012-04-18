@@ -181,7 +181,9 @@ node oaeappnode inherits oaenode {
         config => {
             "remoteurl"  => $localconfig::solr_remoteurl,
             "socket-timeout" => 10000,
-            "connection.timeout" => 1000,
+            "connection.timeout" => 3000,
+            "max.total.connections" => 500,
+            "max.connections.per.host" => 500,
         }
     }
 

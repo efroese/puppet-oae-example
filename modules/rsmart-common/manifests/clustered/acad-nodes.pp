@@ -148,8 +148,6 @@ node oaeappnode inherits oaenode {
         }
     }
 
-    class { 'rsmart-common::logging': }
-
     ###########################################################################
     # Security
 

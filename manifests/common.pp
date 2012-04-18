@@ -104,9 +104,8 @@ class solr::common (
     }
 
    # /usr/local/solr/home0/conf/schema.xml
-   exec { 'copy-solr-schema':
-       command => "cp ${basedir}/solr-source/src/main/resources/schema.xml ${solr_confdir}",
-       creates => "${solr_confdir}/schema.xml",
+   file { "${solr_confdir}/schema.xml":
+       source => "${basedir}/solr-source/src/main/resources/schema.xml",
        require => [ Exec['mv-solr-source'], File[$solr_confdir], ],
    }
 

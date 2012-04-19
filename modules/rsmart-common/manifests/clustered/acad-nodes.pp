@@ -313,14 +313,18 @@ node oaeappnode inherits oaenode {
     }
 
     file { "${localconfig::dynamic_config_root}":
-            ensure => directory }
+        ensure => directory
+    }
 
     file { "${localconfig::dynamic_config_customdir}":
-            ensure => directory }
+        ensure => directory,
+        require => File[$localconfig::dynamic_config_root],
+    }
 
     file { "${localconfig::dynamic_config_customdir}/config_custom.json":
         mode => 0644,
-        source => 'puppet:///modules/localconfig/config_custom.json'
+        content => template("rsmart-common/config_custom.json.erb"),
+        require => File[$localconfig::dynamic_config_customdir],
     }
 
 }

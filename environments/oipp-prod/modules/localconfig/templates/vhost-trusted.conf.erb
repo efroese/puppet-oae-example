@@ -23,11 +23,6 @@ SSLCryptoDevice builtin
     SSLCertificateFile <%= certfile %>
     SSLCertificateKeyFile <%= certkeyfile %>
     SSLCACertificateFile <%= cacertfile %>
-    
-    # Force all clients to SSL port (trusted)
-    RewriteEngine on
-    RewriteCond %{HTTP_HOST} != <%= name %>
-    RewriteRule (.*) https://<%= name %>%{REQUEST_URI} [R,L]
 
     Include <%= wwwroot %>/<%= name%>/conf/*.conf
 

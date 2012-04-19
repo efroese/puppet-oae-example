@@ -48,7 +48,7 @@ class localconfig {
 
     ###########################################################################
     # Git (Preview processor)
-    $nakamura_zip = 'https://nodeload.github.com/rSmart/nakamura/zipball/acad-1.1.0-M1-20120130'
+    $nakamura_zip = 'https://nodeload.github.com/rSmart/nakamura/zipball/com.rsmart.academic.app-1.1.4-rsmart'
     $solr_tarball = 'https://nodeload.github.com/rSmart/solr/tarball/1.3.2-rsmart'
 
     ###########################################################################

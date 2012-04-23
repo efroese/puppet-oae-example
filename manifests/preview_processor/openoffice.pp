@@ -23,7 +23,7 @@ class oae::preview_processor::openoffice {
                     'openoffice.org-math-core',
                     'openoffice.org-writer-core' ]:
             ensure => installed,
-            notify => [ Service['soffice'], File['/usr/lib/openoffice'] ],
+            notify => File['/usr/lib/openoffice'],
         }
     }
     # Create Link /usr/lib/openoffice

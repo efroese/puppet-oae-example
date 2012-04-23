@@ -35,17 +35,4 @@ class oae::preview_processor::openoffice {
             default => Package['openoffice.org-core'],
         }
     }
-
-    # Run the OpenOffice service to convert docs
-    file { '/etc/init.d/soffice':
-        content => template('oae/soffice.sh.erb'),
-        owner  => root,
-        group  => root,
-        mode   => 755,
-    }
-    
-    service { 'soffice':
-        ensure => running,
-        enable => true,
-    }
 }

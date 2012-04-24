@@ -22,7 +22,7 @@ class oae::preview_processor::gems {
         require => Gem['bundler'],
     }
 
-    $docsplit_gem_path = "/usr/lib/ruby/gems/1.8/gems/docsplit-${docsplit_gem_version}"
+    $docsplit_gem_path = "/usr/lib/ruby/gems/1.8/gems/docsplit-0.6.0"
     exec { "patch-docsplit":
         command => "patch -p0 < ${oae::params::basedir}/patches/info_extractor.rb.patch info_extractor.rb",
         cwd     => "${docsplit_gem_path}/lib/docsplit/",

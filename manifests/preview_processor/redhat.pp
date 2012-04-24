@@ -7,7 +7,8 @@ class oae::preview_processor::redhat {
     Class['oae::params'] -> Class['oae::preview_processor::packages']
     
     $common_packages = ['cpp', 'gcc', 'gcc-c++', 'fontconfig-devel',
-                        'poppler-utils', 'rubygems', 'GraphicsMagick']
+                        'poppler-utils', 'rubygems', 'GraphicsMagick',
+                        'libxml2-devel', 'libxslt-devel']
 
     package { $common_packages: ensure => installed }
 

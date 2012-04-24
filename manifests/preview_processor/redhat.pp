@@ -12,8 +12,12 @@ class oae::preview_processor::redhat {
 
     package { $common_packages: ensure => installed }
 
-    $centos6_pkgs = ['cronie', 'libcurl-devel', 'ImageMagick', 'ImageMagick-devel', 'ruby-devel', 'libgcj']
+    $centos6_pkgs = ['cronie', 'libcurl-devel', 'ImageMagick', 'ImageMagick-devel', 'libgcj']
     package { $centos6_pkgs: ensure => installed }
+
+    if !defined(Package['ruby-devel']){
+        package { 'ruby-devel': ensure => installed }
+    }
 
     package { 'pdftk-1.44-1.el6.rf.x86_64':
          ensure   => present,

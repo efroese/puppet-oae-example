@@ -1,6 +1,9 @@
 # AppDynamics support
-JAVA_OPTS="$JAVA_OPTS -javaagent:/home/rsmart/appdynfull/current/javaagent.jar "
-JAVA_OPTS="$JAVA_OPTS -Dappdynamics.agent.applicationName=Academic -Dappdynamics.agent.nodeName=<%= hostname %> " 
-JAVA_OPTS="$JAVA_OPTS -Dappdynamics.agent.tier"
+JAVA_OPTS="$JAVA_OPTS -javaagent:/home/rsmart/appdynfull/current/javaagent.jar"
+JAVA_OPTS="$JAVA_OPTS -Dappdynamics.agent.applicationName=<%= scope.lookupvar('localconfig::appDynAppName') %>"
+JAVA_OPTS="$JAVA_OPTS -Dappdynamics.agent.nodeName=<%= hostname %>" 
+JAVA_OPTS="$JAVA_OPTS -Dappdynamics.agent.tierName=<%= scope.lookupvar('localconfig::appDynTier') %>"
+JAVA_OPTS="$JAVA_OPTS -Dappdynamics.controller.hostName=<%= scope.lookupvar('localconfig::appDynControllerHost') %>"
+JAVA_OPTS="$JAVA_OPTS -Dappdynamics.controller.port=<%= scope.lookupvar('localconfig::appDynControllerPort') %>"
 
 export JAVA_OPTS

@@ -149,4 +149,11 @@ class localconfig {
     # x-sakai-token server-to-server authn semantics
     $trusted_shared_secret = "3pWkFWkybjnxKLKqrXdQTqIhmDRWExBXsxBKiLexTGJdJ4bhUP"
 
+    ###########################################################################
+    # App Dynamics setup
+    $appDynAppName='OIPP'
+    $appDynTier='OAE'
+    $appDynControllerHost='oipp-appdyn'
+    $appDynControllerPort='8090'
+
 }

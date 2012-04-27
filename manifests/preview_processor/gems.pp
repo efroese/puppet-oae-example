@@ -4,6 +4,7 @@
 #
 class oae::preview_processor::gems {
 
+    Class['oae::preview_processor::init'] -> Class['oae::preview_processor::gems']
     Class['oae::preview_processor::packages'] -> Class['oae::preview_processor::gems']
 
     define gem($version) {

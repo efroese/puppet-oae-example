@@ -24,7 +24,7 @@ class localconfig {
     # prod-nfs
     $nfs_server  = '10.52.11.90'
     # prod-cle
-    $cle_server  = '10.52.11.17'
+    $cle_server  = '10.52.10.17'
     # prod-dbserv1
     $db_server   = '10.52.11.70'
     # solr master server

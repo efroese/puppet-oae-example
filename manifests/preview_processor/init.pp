@@ -77,7 +77,7 @@ class oae::preview_processor::init (
     $full_os = "${operatingsystem}${lsbmajdistrelease}"
 
     cron { 'run_preview_processor':
-        command => "${oae::params::basedir}/bin/run_preview_processor.sh",
+        command => "${oae::params::basedir}/bin/run_preview_processor.sh 2>&1 > /dev/null",
         user => $oae::params::user,
         ensure => present,
         minute => '*',

@@ -120,9 +120,9 @@ class localconfig {
 
     ###########################################################################
     # HubSpot Configuration
-    $hubspot_portalId' = '85099'
-    $hubspot_apiKey' = '30510b72-5b73-4cdf-8cf9-99ae3c119252'
-    $hubspot_url' = 'http://rsmart.app8.hubspot.com/?app=leaddirector&FormName=acad-registration'
+    $hubspot_portalId = '85099'
+    $hubspot_apiKey = '30510b72-5b73-4cdf-8cf9-99ae3c119252'
+    $hubspot_url = 'http://rsmart.app8.hubspot.com/?app=leaddirector&FormName=acad-registration'
 
     ###########################################################################
     # Dynamic Configuration

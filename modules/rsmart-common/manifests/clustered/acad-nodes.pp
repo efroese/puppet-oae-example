@@ -32,9 +32,9 @@ node /.*apache1.academic.rsmart.local/ inherits oaenode {
     # Serve the OAE app (trusted content) on 443
     apache::vhost-ssl { "${localconfig::http_name}:443":
         sslonly  => true,
-        cert     => "puppet:///modules/rsmart-common/academic.rsmart.com.crt",
-        certkey  => "puppet:///modules/rsmart-common/academic.rsmart.com.key",
-        certchain => "puppet:///modules/rsmart-common/academic.rsmart.com-intermediate.crt",
+        cert     => "puppet:///modules/rsmart-common/rsmart.com.crt",
+        certkey  => "puppet:///modules/rsmart-common/rsmart.com.key",
+        certchain => "puppet:///modules/rsmart-common/rsmart.com-intermediate.crt",
         template  => 'rsmart-common/vhost-trusted.conf.erb',
     }
 

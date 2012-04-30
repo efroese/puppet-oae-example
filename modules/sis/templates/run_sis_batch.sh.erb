@@ -23,6 +23,29 @@ NOW=`date +%Y%m%d-%H%M`
 
 OUTPUT=`mktemp`
 
+ARCHIVE_ROOT=${CSV_DIR}/archive
+ARCHIVE_DIR=$ARCHIVE_ROOT/$(date +%Y%m%d-%H%M)
+
+doArchive()
+{
+    SOURCES=$1;
+    if [ -z "$SOURCES" ]; then
+        return 0
+    fi
+
+    if [ ! -d "$ARCHIVE_DIR" ] ; then
+        mkdir -p "$ARCHIVE_DIR"
+    fi
+
+    if [[ ! -w "${ARCHIVE_DIR}" || ! -d "${ARCHIVE_DIR}" ]] ; then
+        echo "Cannot write to archive directory: $ARCHIVE_DIR"
+        return 1
+    fi
+    echo "archiving command: mv $SOURCES $ARCHIVE_DIR"
+    mv $SOURCES $ARCHIVE_DIR
+    gzip $ARCHIVE_DIR/*
+}
+
 for school in $CSV_SCHOOLS; do
 
     JAVA_OPTS="${GLOBAL_JAVA_OPTS} -Dlocal.config.file=<%= scope.lookupvar('sis::batch::home') %>/etc/schools/${school}/local.properties "
@@ -33,6 +56,7 @@ for school in $CSV_SCHOOLS; do
         if [[ -f ${CSV_FILE} ]]; then
             FILENAME_OPTS="${FILENAME_OPTS} -Dfilename@com.rsmart.customer.integration.processor.cle.Cle${file}Processor=${CSV_FILE}" 
             echo "processing file: ${CSV_FILE}" | tee -a ${OUTPUT}
+            ARCHIVE_NAMES="$ARCHIVE_NAMES ${CSV_FILE}"
         else
             echo "No file for ${CSV_FILE}" | tee -a ${OUTPUT}
         fi
@@ -43,7 +67,9 @@ for school in $CSV_SCHOOLS; do
 
     # Run the importer
     java ${JAVA_OPTS} ${FILENAME_OPTS} -jar ${SIS_JAR} 2>&1 | tee -a ${OUTPUT}
-
+	# archive the files so we don't reprocess next time
+    doArchive "${ARCHIVE_NAMES}"
+    ARCHIVE_NAMES=""
 done
 
 if [[ $EMAIL_RECIPIENT != "undefined" ]]; then

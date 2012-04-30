@@ -31,8 +31,11 @@
 # 
 #   class { 'solr::tomcat':
 #     solr_tarball => "http://source.sakaiproject.org/release/oae/solr/solr-example.tar.gz",
-#     solrconfig   => 'myconfig/solrconfig.xml.erb',
-#     schema       => 'myconfig/schema.xml.erb',
+#     solrconfig   => 'localconfig/solrconfig.xml.erb',
+#     schema       => 'localconfig/schema.xml.erb',
+#     tomcat_home  => '/usr/local/tomcat',
+#     tomcat_user  => 'tomcat',
+#     tomcat_group => 'tomcat',
 #   }
 #
 class solr::tomcat (
@@ -49,9 +52,12 @@ class solr::tomcat (
     $webapp_url            = 'http://dl.dropbox.com/u/24606888/puppet-oae-files/apache-solr-4.0-SNAPSHOT.war',
     $solr_context_template = 'solr/solr-context.xml.erb'){
 
+    # Make sure tomcat6 is executed BEFORE solr::tomcat
     Class['Tomcat6'] -> Class['solr::tomcat']
+    # Make sure solr::common is executed BEFORE solr::tomcat
     Class['solr::common'] -> Class['solr::tomcat']
 
+    # Do the heavy lifting
     class { 'solr::common':
        basedir           => $basedir,
        user              => $user,
@@ -62,11 +68,13 @@ class solr::tomcat (
        master_url        => $master_url,
     }
 
+    # Get thr solr war
     exec { 'download-war':
         command => "curl -o ${solr::common::basedir}/solr.war ${webapp_url}",
         creates => "${solr::common::basedir}/solr.war",
     }
 
+    # Write out the webapp context file to tell tomcat about solr.
     file { "${tomcat_home}/conf/Catalina/localhost/solr.xml":
         owner => $tomcat_user,
         group => $tomcat_group,

@@ -1,6 +1,6 @@
 # = Class: solr::common
 #
-# This class installs a standalone solr master or slave
+# This is where we do most of the heavy lifting.
 #
 # == Parameters:
 #
@@ -8,9 +8,9 @@
 # 
 # $group:: The group solr will own solr files
 #
-# $solr_tarball:: The url for the solr tarball.
+# $solr_tarball:: The url for the solr tarball containing the solr configuration files.
 #
-# $solr_home_tarball:: A URL to a tarball of the solr home skeleton.
+# $solr_home_tarball:: A URL to a tarball of the solr.home skeleton.
 #
 # $solrconfig::   A template to render the solrconfig.xml file.
 #
@@ -21,10 +21,7 @@
 #
 # == Sample Usage:
 # 
-#   class { 'solr::jetty':
-#     solr_tarball => "http://source.sakaiproject.org/release/oae/solr/solr-example.tar.gz",
-#     solrconfig   => 'localconfig/solrconfig.xml.erb',
-#   }
+#   You shouldn't use this class directly. Use solr::jetty or solr::tomcat
 #
 class solr::common (
     $basedir           = '/usr/local/solr',
@@ -51,32 +48,34 @@ class solr::common (
 
     # /usr/local/solr/home0
     archive { 'home0':
-        ensure   => present,
-        url      => $solr_home_tarball,
-        target   => $basedir,
-        checksum => false,
-        src_target => $basedir,
-        extension => 'tgz',
+        ensure         => present,
+        url            => $solr_home_tarball,
+        target         => $basedir,
+        checksum       => false,
+        src_target     => $basedir,
+        extension      => 'tgz',
         allow_insecure => true,
         timeout        => '0',
-        require    => File[$basedir],
+        require        => File[$basedir],
     }
 
     # /usr/local/solr/home0/conf
     file { $solr_confdir:
-        ensure => directory,
-        owner => $user,
-        group => $group,
-        mode  => 0755,
+        ensure  => directory,
+        owner   => $user,
+        group   => $group,
+        mode    => 0755,
         require => Archive['home0'],
     }
 
+    # Make sure that solr owns its solr.home directory
     exec { 'chown-solr-home':
         command => "chown -R ${user}:${group} ${basedir}/home0",
         unless  => "[ `stat --printf='%U'  ${basedir}/home0` == '${user}' ]",
         require =>  Archive['home0'],
     }
 
+    # Download the source tarball
     # /usr/local/solr/solr-source
     archive { 'solr-source':
         ensure         => present,
@@ -96,6 +95,7 @@ class solr::common (
         refreshonly => true,
     }
 
+    # Copy the configuration files.
     # /usr/local/solr/home0/conf/{stopwords,synonyms,protwords,...}.txt
     exec { 'copy-solr-resources':
         command => "cp ${basedir}/solr-source/src/main/resources/*.txt ${solr_confdir}",
@@ -103,18 +103,18 @@ class solr::common (
         require => [ Exec['mv-solr-source'], File[$solr_confdir], ],
     }
 
-   # /usr/local/solr/home0/conf/schema.xml
-   file { "${solr_confdir}/schema.xml":
-       source => "${basedir}/solr-source/src/main/resources/schema.xml",
-       require => [ Exec['mv-solr-source'], File[$solr_confdir], ],
-   }
+    # /usr/local/solr/home0/conf/schema.xml
+    file { "${solr_confdir}/schema.xml":
+        source => "${basedir}/solr-source/src/main/resources/schema.xml",
+        require => [ Exec['mv-solr-source'], File[$solr_confdir], ],
+    }
 
-   # /usr/local/solr/home0/conf/solrconfig.xml
-   file { "${solr_confdir}/solrconfig.xml":
-       owner   => $user,
-       group   => $group,
-       mode    => "0644",
-       content => template($solrconfig),
-       require => File[$solr_confdir],
-   }
+    # /usr/local/solr/home0/conf/solrconfig.xml
+    file { "${solr_confdir}/solrconfig.xml":
+        owner   => $user,
+        group   => $group,
+        mode    => "0644",
+        content => template($solrconfig),
+        require => File[$solr_confdir],
+    }
 }

@@ -1,4 +1,3 @@
 modules/localconfig
 *.iml
 .environment
-log/

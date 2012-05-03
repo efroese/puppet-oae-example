@@ -75,4 +75,8 @@ class people {
     realize(User['skamali'])
     realize(Ssh_authorized_key['skamali-pub'])
 
+    realize(Group['lbassett'])
+    realize(User['lbassett'])
+    realize(Ssh_authorized_key['lbassett-pub'])
+
 }

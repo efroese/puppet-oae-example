@@ -283,4 +283,21 @@ class people::users {
         require => User['skamali'],
     }
 
+    @user { 'lbassett': 
+        ensure     => present,
+        uid        => '513',
+        gid        => 'lbassett',
+        home       => '/home/lbassett',
+        managehome => true,
+        groups     => ['lbassett', 'wheel',],
+    }
+
+    @ssh_authorized_key { 'lbassett-pub':
+        ensure => present,
+        key  => 'AAAAB3NzaC1yc2EAAAADAQABAAABAQDRnMgRupoKqZL+jhIki1N/G6t1gIlH/T2ib+9xh8AtxDDv2kyaIK9dtYdVwO2mqEbl0fOqZAhkYkebtUNYcBdMRxXzc1iPsHZHUc9brL65tu4Yn9kj1P7QrAZyv6Bh45w2or4X232pPUytK0lzSAa6Yc0/mtxqSivE8/ARRqIgS1E/gIT727z1R9oz4xVwiRt56OCYc5jTq37xVUzNl4nrahhJ/Tj/xdxdEdgLkFukYaAjzhsd2Xhg3ONChNNfFJwF+lzJbWYRI92yALDkaFzHxmGYDyJdjF/s6aNdWFw0SxGouqVNCj8/8liNaqkKDLB+tk7lHf6mLS74E3SKT5fR',
+        type => 'ssh-dss',
+        user => 'lbassett',
+        require => User['lbassett'],
+    }
+
 }

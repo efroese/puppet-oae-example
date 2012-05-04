@@ -22,12 +22,19 @@ class people {
     realize(User['rsmartian'])
 	realize(Ssh_authorized_key['rsmartian-deploy-pub'])
 
+    file { "/home/rsmartian/.inputrc":
+        owner => rsmartian,
+        group => rsmartian,
+        mode  => 0644,
+        content => template('people/rsmartian-inputrc.erb'),
+        require => User['rsmartian']
+    }
     file { "/home/rsmartian/.bash_profile":
         owner => rsmartian,
         group => rsmartian,
         mode  => 0644,
         content => template('people/rsmartian-bash_profile.sh.erb'),
-        require => User['rsmartian']
+        require => File['/home/rsmartian/.inputrc']
     }
     file { "/home/rsmartian/.gitconfig":
         owner => rsmartian,

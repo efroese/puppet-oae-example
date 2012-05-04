@@ -29,6 +29,13 @@ class people {
         content => template('people/rsmartian-bash_profile.sh.erb'),
         require => User['rsmartian']
     }
+    file { "/home/rsmartian/.gitconfig":
+        owner => rsmartian,
+        group => rsmartian,
+        mode  => 0644,
+        content => template('people/gitconfig.erb'),
+        require => User['rsmartian']
+    }
 
     realize(Group['hyperic'])
     realize(User['hyperic'])
@@ -53,6 +60,13 @@ class people {
         mode  => 0644,
         content => template('people/lspeelmon-bash_profile.sh.erb'),
         require => File['/home/lspeelmon/.inputrc']
+    }
+    file { "/home/lspeelmon/.gitconfig":
+        owner => lspeelmon,
+        group => lspeelmon,
+        mode  => 0644,
+        content => template('people/gitconfig.erb'),
+        require => User['lspeelmon']
     }
 
     realize(Group['dgillman'])

@@ -1,0 +1,25 @@
+[color]
+    diff = auto
+    status = auto
+    branch = auto
+    interactive = auto
+    ui = auto
+[gc]
+    auto = 1
+[alias]
+    st = status
+    ci = commit
+    co = checkout
+    cp = cherry-pick -x -s
+    # Better log formatting
+    changes = log --pretty=format:'%h %cr %cn %Cgreen%s%Creset' --name-status
+    short = log --pretty=format:'%h %cr %cn %Cgreen%s%Creset'
+    filelog = log -u  # show changes to a file
+    #    changelog = log --pretty=oneline
+    changelog = log --pretty=format:'* %s %h' --no-merges
+[core]
+    autocrlf = input
+[diff]
+    renameLimit = 10000
+[branch]
+  autosetuprebase = always

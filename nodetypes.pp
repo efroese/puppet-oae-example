@@ -16,6 +16,9 @@ node basenode {
 
     package { 'git' : ensure => installed }
     package { 'bash-completion' : ensure => installed }
+    package { 'screen' : ensure => installed }
+    package { 'tree' : ensure => installed }
+    package { 'wget' : ensure => installed }
 
     # The Oracle JDK is installed on the academic base image
     # package { 'java-1.6.0-openjdk': ensure => installed }

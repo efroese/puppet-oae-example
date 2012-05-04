@@ -40,6 +40,20 @@ class people {
     realize(Group['lspeelmon'])
     realize(User['lspeelmon'])
     realize(Ssh_authorized_key['lspeelmon-pub'])
+    file { "/home/lspeelmon/.inputrc":
+        owner => lspeelmon,
+        group => lspeelmon,
+        mode  => 0644,
+        content => template('people/lspeelmon-inputrc.erb'),
+        require => User['lspeelmon']
+    }
+    file { "/home/lspeelmon/.bash_profile":
+        owner => lspeelmon,
+        group => lspeelmon,
+        mode  => 0644,
+        content => template('people/lspeelmon-bash_profile.sh.erb'),
+        require => File['/home/lspeelmon/.inputrc']
+    }
 
     realize(Group['dgillman'])
     realize(User['dgillman'])

@@ -20,31 +20,49 @@ parse_git_branch ()
 {
     if git rev-parse --git-dir >/dev/null 2>&1
     then
-        gitver=$(git branch 2>/dev/null| sed -n '/^\*/s/^\* //p')
+        git_status="$(git status 2> /dev/null)"
+        branch_pattern="^# On branch ([^${IFS}]*)"
+        remote_pattern="# Your branch is (.*) of"
+        diverge_pattern="# Your branch and (.*) have diverged"
+        # add an else if or two here if you want to get more specific
+        if [[ ${git_status} =~ ${remote_pattern} ]]; then
+          if [[ ${BASH_REMATCH[1]} == "ahead" ]]; then
+            remote="↑"
+          elif [ ${BASH_REMATCH[1]} == "behind" ]]; then
+            remote="↓"
+          fi
+        fi
+        if [[ ${git_status} =~ ${diverge_pattern} ]]; then
+          remote="↕"
+        fi
+        if [[ ${git_status} =~ ${branch_pattern} ]]; then
+          branch=${BASH_REMATCH[1]}
+          echo "${branch}${remote}"
+        fi
     else
         return 0
     fi
-    echo -e $gitver
 }
 branch_color ()
 {
     if git rev-parse --git-dir >/dev/null 2>&1
     then
+        git_status="$(git status 2> /dev/null)"
         color=""
-        if git diff --quiet 2>/dev/null >&2 
-        then
-              color="${c_green}"
+        if [[ ${git_status} =~ "working directory clean" ]]; then
+            color="${c_green}"
         else
-              color=${c_red}
+            color=${c_red}
         fi
-        else
-            return 0
+    else
+        return 0
     fi
     echo -ne $color
 }
 export PS1='[\[$(branch_color)\]$(parse_git_branch)\[${c_sgr0}\]] \u@\h \w\[${c_sgr0}\]$ '
 # export PS1='\w$ '
 
+export CLICOLOR=1
 export GREP_OPTIONS='--color=auto'
 export GREP_COLOR='1;33'
 

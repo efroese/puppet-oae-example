@@ -90,8 +90,8 @@ class localconfig {
 
     # outgoing email
     $smtp_server      = '10.51.9.10'
-    $reply_as_address = 'noreply@rsmart.com'
-    $reply_as_name    = 'rSmart Academic'
+    $reply_as_address = 'support@cole.uconline.edu'
+    $reply_as_name = 'UC Online Support'
     
     # Registration
     $redirect_url = "https://oipp-test.academic.rsmart.com/"

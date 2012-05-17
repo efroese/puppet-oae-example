@@ -140,6 +140,7 @@ node 'oipp-prod-apache1.academic.rsmart.local' inherits oaenode {
         virtusertable_template    => 'localconfig/virtusertable.erb',
         local_host_names_template => 'localconfig/local-host-names.erb'
     }
+
     ###########################################################################
     # SIS integration
     class { 'oipp::sis':
@@ -170,24 +171,9 @@ node oaeappnode inherits oaenode {
     }
 
     class { 'rsmart-common::logging': }
-    
-    ###########################################################################
-    # Storage
-
-    class { 'nfs::client': }
-
-    file  { $localconfig::nfs_mountpoint: ensure => directory }
-    mount { $localconfig::nfs_mountpoint:
-        ensure => 'mounted',
-        fstype => 'nfs4',
-        device => "${localconfig::nfs_server}:${localconfig::nfs_share}",
-        options => $localconfig::nfs_options,
-        atboot => true,
-        require => File[$localconfig::nfs_mountpoint],
-    }
-
     class { 'rsmart-common::oae::app::cle': }
     class { 'rsmart-common::oae::app::email': }
+    class { 'rsmart-common::oae::nfs': }
     class { 'rsmart-common::oae::app::postgres': }
     class { 'rsmart-common::oae::app::security': }
     class { 'rsmart-common::oae::app::solr::remote': }

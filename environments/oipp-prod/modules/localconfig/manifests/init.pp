@@ -38,9 +38,9 @@ class localconfig {
 
     ###########################################################################
     # Content body storage
-    $nfs_share   = '/export/files-academic'
-    $nfs_mountpoint = '/files-academic'
-    $nfs_options = '_netdev,rw,rsize=8192,wsize=8192'
+    $oae_nfs_share   = '/export/files-academic'
+    $oae_nfs_mountpoint = '/files-academic'
+    $oae_nfs_options = '_netdev,rw,rsize=8192,wsize=8192'
 
     $storedir    = "/files-academic/store"
     ###########################################################################

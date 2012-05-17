@@ -53,24 +53,10 @@ node oaeappnode inherits oaenode {
     class { 'rsmart-common::logging': }
     class { 'rsmart-common::oae::cle': }
     class { 'rsmart-common::oae::email': }
+    class { 'rsmart-common::oae::nfs': }
     class { 'rsmart-common::oae::postgres': }
     class { 'rsmart-common::oae::security': }
     class { 'rsmart-common::oae::solr::remote': }
-
-    ###########################################################################
-    # Storage
-
-    class { 'nfs::client': }
-
-    file  { $localconfig::nfs_mountpoint: ensure => directory }
-    mount { $localconfig::nfs_mountpoint:
-        ensure => 'mounted',
-        fstype => 'nfs4',
-        device => "${localconfig::nfs_server}:${localconfig::nfs_share}",
-        options => $localconfig::nfs_options,
-        atboot => true,
-        require => File[$localconfig::nfs_mountpoint],
-    }
 
     ###########################################################################
     # Clustering

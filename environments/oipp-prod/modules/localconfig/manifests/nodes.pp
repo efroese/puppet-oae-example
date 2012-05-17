@@ -11,16 +11,9 @@
 #
 node 'oipp-prod-apache1.academic.rsmart.local' inherits oaenode {
 
-    class { 'apache::ssl': }
+    class { 'rsmart-common::oae::apache': }
+    class { 'rsmart-common::oae::apache::http': vhost_80_template => 'localconfig/vhost-80.conf.erb' }
 
-    # Headers is not in the default set of enabled modules
-    apache::module { 'headers': }
-    apache::module { 'deflate': }
-
-    # http://cole.uconline.edu to redirects to https://cole.uconline.edu
-    apache::vhost { "${localconfig::http_name}:80":
-        template => 'localconfig/vhost-80.conf.erb',
-    }
     # http://uconline.edu to redirects to https://cole.uconline.edu
     apache::vhost { "uconline.edu:80":
         template => 'localconfig/vhost-80.conf.erb',
@@ -103,16 +96,6 @@ node 'oipp-prod-apache1.academic.rsmart.local' inherits oaenode {
         members    => $localconfig::apache_lb_members_untrusted,
         params     => $localconfig::apache_lb_params,
         standbyurl => $localconfig::apache_lb_standbyurl,
-    }
-
-    ###########################################################################
-    # Apache global config
-
-    file { "/etc/httpd/conf.d/traceenable.conf":
-        owner => root,
-        group => root,
-        mode  => 644,
-        content => 'TraceEnable Off',
     }
 
     ###########################################################################

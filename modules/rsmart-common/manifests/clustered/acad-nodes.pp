@@ -10,45 +10,11 @@
 node /.*apache1.academic.rsmart.local/ inherits oaenode {
 
     class { 'localconfig::extra_users': }
-
-    class { 'apache':
-        httpd_conf_template => 'rsmart-common/httpd.conf.erb'
-    }
-
-    class { 'apache::ssl': }
-
-    # Headers is not in the default set of enabled modules
-    apache::module { 'headers': }
-    apache::module { 'deflate': }
-
-    # http://staging.academic.rsmart.com to redirects to 443
-    apache::vhost { "${localconfig::http_name}:80":
-        template => 'rsmart-common/vhost-80.conf.erb',
-    }
-
-    ###########################################################################
-    # https://staging.academic.rsmart.com:443
-
-    # Serve the OAE app (trusted content) on 443
-    apache::vhost-ssl { "${localconfig::http_name}:443":
-        sslonly  => true,
-        cert     => "puppet:///modules/rsmart-common/academic.rsmart.com.crt",
-        certkey  => "puppet:///modules/rsmart-common/academic.rsmart.com.key",
-        certchain => "puppet:///modules/rsmart-common/academic.rsmart.com-intermediate.crt",
-        template  => 'rsmart-common/vhost-trusted.conf.erb',
-    }
-
-    # Balancer pool for trusted content
-    apache::balancer { "apache-balancer-oae-app":
-        vhost      => "${localconfig::http_name}:443",
-        location   => "/",
-        locations_noproxy => ['/server-status', '/balancer-manager'],
-        proto      => "http",
-        members    => $localconfig::apache_lb_members,
-        params     => $localconfig::apache_lb_params,
-        standbyurl => $localconfig::apache_lb_standbyurl,
-        template   => 'rsmart-common/balancer-trusted.erb',
-    }
+    
+    class { 'rsmart-common::oae::apache': }
+    class { 'rsmart-common::oae::apache::http': }
+    class { 'rsmart-common::oae::apache::trusted': }
+    class { 'rsmart-common::oae::apache::untrusted': }
 
     # Balancer pool for CLE traffic
     apache::balancer { "apache-balancer-cle":
@@ -58,38 +24,6 @@ node /.*apache1.academic.rsmart.local/ inherits oaenode {
         params     => [ "timeout=300", "loadfactor=100" ],
         standbyurl => $localconfig::apache_lb_standbyurl,
         template   => 'rsmart-common/balancer-cle.conf.erb',
-    }
-
-    ###########################################################################
-    # https://*academic.rsmart.com:443
-
-    # Serve untrusted content from another hostname on port 443
-    apache::vhost-ssl { "${localconfig::http_name_untrusted}:443":
-        sslonly  => true,
-        cert     => "puppet:///modules/rsmart-common/academic.rsmart.com.crt",
-        certkey  => "puppet:///modules/rsmart-common/academic.rsmart.com.key",
-        certchain => "puppet:///modules/rsmart-common/academic.rsmart.com-intermediate.crt",
-        template  => 'rsmart-common/vhost-untrusted.conf.erb',
-    }
-
-    # Balancer pool for untrusted content
-    apache::balancer { "apache-balancer-oae-app-untrusted":
-        vhost      => "${localconfig::http_name_untrusted}:443",
-        location   => "/",
-        proto      => "http",
-        members    => $localconfig::apache_lb_members_untrusted,
-        params     => ["retry=20", "min=3", "flushpackets=auto"],
-        standbyurl => $localconfig::apache_lb_standbyurl,
-    }
-
-    ###########################################################################
-    # Apache global config
-
-    file { "/etc/httpd/conf.d/traceenable.conf":
-        owner => root,
-        group => root,
-        mode  => 644,
-        content => 'TraceEnable Off',
     }
 
     include people::kaleidoscope::internal

@@ -9,47 +9,10 @@ node /qa.academic.rsmart.local/ inherits oaenode {
     # System
     class { 'rsmart-common::mysql': stage => init }
 
-    ###########################################################################
-    # Apache
-    class { 'apache::ssl': }
-
-    # Headers is not in the default set of enabled modules
-    apache::module { 'headers': }
-    apache::module { 'deflate': }
-
-    # http://cole.uconline.edu to redirects to 443
-    apache::vhost { "${localconfig::http_name}:80":
-        template => 'rsmart-common/vhost-80.conf.erb',
-    }
-
-    ###########################################################################
-    # https://cole.uconline.edu:443
-
-    # Serve the OAE app (trusted content) on 443
-    apache::vhost-ssl { "${localconfig::http_name}:443":
-        sslonly  => true,
-        cert     => "puppet:///modules/rsmart-common/academic.rsmart.com.crt",
-        certkey  => "puppet:///modules/rsmart-common/academic.rsmart.com.key",
-        certchain => "puppet:///modules/rsmart-common/academic.rsmart.com-intermediate.crt",
-        template  => 'rsmart-common/vhost-trusted.conf.erb',
-    }
-
-    # Balancer pool for trusted content
-    apache::balancer { "apache-balancer-oae-app":
-        vhost      => "${localconfig::http_name}:443",
-        location   => "/",
-        locations_noproxy => $localconfig::mock_cle_content ? {
-            # Don't proxy to the access and lti tools.
-            # This is just a workaround, not a comprehensive list of CLE urls
-            true  => ['/server-status', '/balancer-manager', '/access', '/imsblti'],
-            false => ['/server-status', '/balancer-manager'],
-        },
-        proto      => "http",
-        members    => $localconfig::apache_lb_members,
-        params     => $localconfig::apache_lb_params,
-        standbyurl => $localconfig::apache_lb_standbyurl,
-        template   => 'rsmart-common/balancer-trusted.erb',
-    }
+    class { 'rsmart-common::oae::apache': }
+    class { 'rsmart-common::oae::apache::http': }
+    class { 'rsmart-common::oae::apache::trusted': }
+    class { 'rsmart-common::oae::apache::untrusted': }
 
     # Mock out CLE content
     if $localconfig::mock_cle_content {
@@ -78,34 +41,7 @@ node /qa.academic.rsmart.local/ inherits oaenode {
     }
 
     ###########################################################################
-    # https://oipp-test-content.academic.rsmart.com:443
-    apache::vhost-ssl { "${localconfig::http_name_untrusted}:443":
-        sslonly  => true,
-        cert     => "puppet:///modules/rsmart-common/academic.rsmart.com.crt",
-        certkey  => "puppet:///modules/rsmart-common/academic.rsmart.com.key",
-        certchain => "puppet:///modules/rsmart-common/academic.rsmart.com-intermediate.crt",
-        template  => 'rsmart-common/vhost-untrusted.conf.erb',
-    }
-
-    # Balancer pool for untrusted content
-    apache::balancer { "apache-balancer-oae-app-untrusted":
-        vhost      => "${localconfig::http_name_untrusted}:443",
-        location   => "/",
-        proto      => "http",
-        members    => $localconfig::apache_lb_members_untrusted,
-        params     => $localconfig::apache_lb_params,
-        standbyurl => $localconfig::apache_lb_standbyurl,
-    }
-
-    ###########################################################################
-    # Apache global config
-
-    file { "/etc/httpd/conf.d/traceenable.conf":
-        owner => root,
-        group => root,
-        mode  => 644,
-        content => 'TraceEnable Off',
-    }
+    # OAE
 
     class { 'oae::app::server':
         jarsource      => $localconfig::jarsource,
@@ -117,7 +53,7 @@ node /qa.academic.rsmart.local/ inherits oaenode {
     }
 
     class { 'rsmart-common::logging': 
-	locked		=> false,
+	    locked => false,
     }
 
     oae::app::server::sling_config {
@@ -129,7 +65,7 @@ node /qa.academic.rsmart.local/ inherits oaenode {
             'password'    => $localconfig::db_password,
             'long-string-size' => 16384,
         },
-	locked		=> false,
+	    locked => false,
     }
 
     # Separates trusted vs untrusted content.
@@ -143,7 +79,7 @@ node /qa.academic.rsmart.local/ inherits oaenode {
             ],
             'trusted.secret' => $localconfig::serverprotectsec,
         },
-	locked		=> false,
+	    locked => false,
     }
 
     # Email integration
@@ -153,7 +89,7 @@ node /qa.academic.rsmart.local/ inherits oaenode {
             'sakai.email.replyAsAddress' => $localconfig::reply_as_address,
             'sakai.email.replyAsName'    => $localconfig::reply_as_name,
         },
-	locked		=> false,
+	    locked => false,
     }
 
     oae::app::server::sling_config {
@@ -163,7 +99,7 @@ node /qa.academic.rsmart.local/ inherits oaenode {
              'sakai.cle.basiclti.key'    => $localconfig::basiclti_key,
              'sakai.cle.basiclti.secret' => $localconfig::basiclti_secret,
         },
-	locked		=> false,
+	    locked => false,
     }
 
     ###########################################################################

@@ -37,7 +37,7 @@
   <!-- Used to specify an alternate directory to hold all index data
        other than the default ./data under the Solr home.
        If replication is in use, this should match the replication configuration. -->
-  <dataDir>${solr.data.dir:}</dataDir>
+  <dataDir><%= scope.lookupvar('solr::params::data') %>/CORENAME</dataDir>
 
 
   <!--  The DirectoryFactory to use for indexes.
@@ -64,7 +64,7 @@
     <ramBufferSizeMB>32</ramBufferSizeMB>
     <!-- <maxMergeDocs>2147483647</maxMergeDocs> -->
     <maxFieldLength>10000</maxFieldLength>
-    <writeLockTimeout>1000</writeLockTimeout>
+    <writeLockTimeout>2000</writeLockTimeout>
     <commitLockTimeout>10000</commitLockTimeout>
 
     <!--

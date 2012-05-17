@@ -96,8 +96,8 @@ class localconfig {
     $tomcat_password = 'pulp134@rain'
 
     # outgoing email
-    $reply_as_address = 'noreply@rsmart.com'
-    $reply_as_name = 'rSmart'
+    $reply_as_address = 'support@cole.uconline.edu'
+    $reply_as_name = 'UC Online Support'
 
     ###########################################################################
     # SIS Integration

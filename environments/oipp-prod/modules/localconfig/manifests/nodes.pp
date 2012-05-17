@@ -186,63 +186,11 @@ node oaeappnode inherits oaenode {
         require => File[$localconfig::nfs_mountpoint],
     }
 
-    class { 'postgres::repos': stage => init }
-    class { 'postgres::client': }
-
-    # Connect OAE to the DB
-    oae::app::server::sling_config {
-        "org.sakaiproject.nakamura.lite.storage.jdbc.JDBCStorageClientPool":
-        config => {
-            'jdbc-driver'      => $localconfig::db_driver,
-            'jdbc-url'         => $localconfig::db_url,
-            'username'         => $localconfig::db_user,
-            'password'         => $localconfig::db_password,
-            'long-string-size' => 16384,
-            'store-base-dir'   => $localconfig::storedir,
-        }
-    }
-
-    ###########################################################################
-    # Security
-
-    # Separates trusted vs untrusted content.
-    oae::app::server::sling_config {
-        "org.sakaiproject.nakamura.http.usercontent.ServerProtectionServiceImpl":
-        config => {
-            'disable.protection.for.dev.mode' => $localconfig::sps_disabled,
-            'trusted.hosts'  => [
-                "localhost:8080\\ \\=\\ http://localhost:8081",
-                "${localconfig::http_name}\\ \\=\\ https://${localconfig::http_name_untrusted}",
-            ],
-            'trusted.secret' => $localconfig::serverprotectsec,
-        }
-    }
-
-    # QoS filter rate-limits the app server so it won't fall over
-    oae::app::server::sling_config {
-        "org.sakaiproject.nakamura.http.qos.QoSFilter":
-        config => { 'qos.default.limit' => 10, }
-    }
-
-    ###########################################################################
-    # Search
-
-    # Specify the client type
-    oae::app::server::sling_config {
-        "org.sakaiproject.nakamura.solr.SolrServerServiceImpl":
-        config => { "solr-impl" => "remote", }
-    }
-    # Configure the client with the master/[slave(s)] info
-    oae::app::server::sling_config {
-        "org.sakaiproject.nakamura.solr.RemoteSolrClient":
-        config => {
-            "remoteurl"  => $localconfig::solr_remoteurl,
-            "socket-timeout" => 10000,
-            "connection.timeout" => 3000,
-            "max.total.connections" => 500,
-            "max.connections.per.host" => 500,
-        }
-    }
+    class { 'rsmart-common::oae::app::cle': }
+    class { 'rsmart-common::oae::app::email': }
+    class { 'rsmart-common::oae::app::postgres': }
+    class { 'rsmart-common::oae::app::security': }
+    class { 'rsmart-common::oae::app::solr::remote': }
 
     ###########################################################################
     # Clustering
@@ -276,17 +224,6 @@ node oaeappnode inherits oaenode {
         }
     }
 
-    ###########################################################################
-    # CLE integration
-    oae::app::server::sling_config {
-        "org.sakaiproject.nakamura.basiclti.CLEVirtualToolDataProvider":
-        config => {
-            'sakai.cle.basiclti.secret' => $localconfig::basiclti_secret,
-            'sakai.cle.server.url'      => "https://${localconfig::http_name}",
-            'sakai.cle.basiclti.key'    => $localconfig::basiclti_key,
-            'sakai.cle.basiclti.tool.list' => $localconfig::basiclti_tool_list,
-        }
-    }
     oae::app::server::sling_config {
         "org.sakaiproject.nakamura.auth.trusted.TrustedTokenServiceImpl":
         config => {
@@ -294,16 +231,6 @@ node oaeappnode inherits oaenode {
             'sakai.auth.trusted.server.safe-hostsaddress' =>
               '10.51.9.20;localhost;127.0.0.1;0:0:0:0:0:0:0:1%0',
             'sakai.auth.trusted.server.enabled' => true,
-        }
-    }
-
-    ###########################################################################
-    # Email integration
-    oae::app::server::sling_config {
-        'org.sakaiproject.nakamura.email.outgoing.LiteOutgoingEmailMessageListener':
-        config => {
-            'sakai.email.replyAsAddress' => $localconfig::reply_as_address,
-            'sakai.email.replyAsName'    => $localconfig::reply_as_name,
         }
     }
 

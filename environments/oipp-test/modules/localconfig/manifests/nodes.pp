@@ -120,39 +120,9 @@ node 'oipp-test.academic.rsmart.local' inherits oaenode {
     }
 
     class { 'rsmart-common::logging': }
-
-    oae::app::server::sling_config {
-        "org.sakaiproject.nakamura.lite.storage.jdbc.JDBCStorageClientPool":
-        config => {
-            'jdbc-url'    => $localconfig::db_url,
-            'jdbc-driver' => $localconfig::db_driver,
-            'username'    => $localconfig::db_user,
-            'password'    => $localconfig::db_password,
-            'long-string-size' => 16384,
-        }
-    }
-
-    # Separates trusted vs untrusted content.
-    oae::app::server::sling_config {
-        "org.sakaiproject.nakamura.http.usercontent.ServerProtectionServiceImpl":
-        config => {
-            'disable.protection.for.dev.mode' => $localconfig::sps_disabled,
-            'trusted.hosts'  => [
-                "localhost:8080\\ \\=\\ http://localhost:8082",
-                "${localconfig::http_name}\\ \\=\\ https://${localconfig::http_name_untrusted}",
-            ],
-            'trusted.secret' => $localconfig::serverprotectsec,
-        }
-    }
-
-    # Email integration
-    oae::app::server::sling_config {
-        'org.sakaiproject.nakamura.email.outgoing.LiteOutgoingEmailMessageListener':
-        config => {
-            'sakai.email.replyAsAddress' => $localconfig::reply_as_address,
-            'sakai.email.replyAsName'    => $localconfig::reply_as_name,
-        }
-    }
+    class { 'rsmart-common::oae::app::email': }
+    class { 'rsmart-common::oae::app::postgres': }
+    class { 'rsmart-common::oae::app::security': }
 
     oae::app::server::sling_config {
         "org.sakaiproject.nakamura.proxy.ProxyClientServiceImpl":

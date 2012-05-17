@@ -56,51 +56,11 @@ node 'nightly.academic.rsmart.local' inherits oaenode {
         locked => false,
     }
 
-    oae::app::server::sling_config {
-        "org.sakaiproject.nakamura.lite.storage.jdbc.JDBCStorageClientPool":
-        config => {
-            'jdbc-url'    => $localconfig::db_url,
-            'jdbc-driver' => $localconfig::db_driver,
-            'username'    => $localconfig::db_user,
-            'password'    => $localconfig::db_password,
-            'long-string-size' => 16384,
-        },
-	locked => false
-    }
-
-    # Separates trusted vs untrusted content.
-    oae::app::server::sling_config {
-        "org.sakaiproject.nakamura.http.usercontent.ServerProtectionServiceImpl":
-        config => {
-            'disable.protection.for.dev.mode' => $localconfig::sps_disabled,
-            'trusted.hosts'  => [
-                "localhost:8080\\ \\=\\ http://localhost:8082",
-                "${localconfig::http_name}\\ \\=\\ https://${localconfig::http_name_untrusted}",
-            ],
-            'trusted.secret' => $localconfig::serverprotectsec,
-        },
-	locked => false
-    }
-
-    # Email integration
-    oae::app::server::sling_config {
-        'org.sakaiproject.nakamura.email.outgoing.LiteOutgoingEmailMessageListener':
-        config => {
-            'sakai.email.replyAsAddress' => $localconfig::reply_as_address,
-            'sakai.email.replyAsName'    => $localconfig::reply_as_name,
-        },
-	locked => false
-    }
-
-    oae::app::server::sling_config {
-        "org.sakaiproject.nakamura.basiclti.CLEVirtualToolDataProvider":
-        config => {
-             'sakai.cle.server.url'      => "https://${localconfig::http_name}",
-             'sakai.cle.basiclti.key'    => $localconfig::basiclti_key,
-             'sakai.cle.basiclti.secret' => $localconfig::basiclti_secret,
-        },
-	locked => false
-    }
+    class { 'rsmart-common::oae::app::cle': locked => false }
+    class { 'rsmart-common::oae::app::email': locked => false }
+    class { 'rsmart-common::oae::app::postgres': locked => false }
+    class { 'rsmart-common::oae::app::security': locked => false }
+    class { 'rsmart-common::oae::app::solr::remote': locked => false }
 
     ###########################################################################
     # Configuration Override

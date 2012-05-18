@@ -57,39 +57,11 @@ node 'nightly.academic.rsmart.local' inherits oaenode {
     }
 
     class { 'rsmart-common::oae::app::cle': locked => false }
+    class { 'rsmart-common::oae::app::dynamicconfig': locked => false }
     class { 'rsmart-common::oae::app::email': locked => false }
     class { 'rsmart-common::oae::app::postgres': locked => false }
     class { 'rsmart-common::oae::app::security': locked => false }
     class { 'rsmart-common::oae::app::solr::remote': locked => false }
-
-    ###########################################################################
-    # Configuration Override
-    oae::app::server::sling_config {
-        "org.sakaiproject.nakamura.dynamicconfig.file.FileBackedDynamicConfigurationServiceImpl":
-        config => {
-            'config.master.dir' => $localconfig::dynamic_config_root,
-            'config.master.filename' => $localconfig::dynamic_config_masterfile,
-            'config.custom.dir' => $localconfig::dynamic_config_customdir,
-        }
-    }
-
-    oae::app::server::sling_config {
-        "org.sakaiproject.nakamura.dynamicconfig.override.ConfigurationOverrideServiceImpl":
-        config => {
-            'override.dirs' => $localconfig::dynamic_config_jcroverrides,
-        }
-    }
-
-    file { "${localconfig::dynamic_config_root}":
-            ensure => directory }
-
-    file { "${localconfig::dynamic_config_customdir}":
-            ensure => directory }
-
-    file { "${localconfig::dynamic_config_customdir}/config_custom.json":
-        mode => 0644,
-        source => 'puppet:///modules/localconfig/config_custom.json'
-    }
 
     ###########################################################################
     # Preview processor

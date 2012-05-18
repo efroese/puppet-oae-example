@@ -52,6 +52,7 @@ node oaeappnode inherits oaenode {
 
     class { 'rsmart-common::logging': }
     class { 'rsmart-common::oae::cle': }
+    class { 'rsmart-common::oae::app::dynamicconfig': }
     class { 'rsmart-common::oae::email': }
     class { 'rsmart-common::oae::nfs': }
     class { 'rsmart-common::oae::postgres': }
@@ -138,40 +139,6 @@ node oaeappnode inherits oaenode {
             'campaignmap.refresh.interval' => '86400000',
         }
     }
-
-    ###########################################################################
-    # Configuration Override
-    oae::app::server::sling_config {
-        "org.sakaiproject.nakamura.dynamicconfig.file.FileBackedDynamicConfigurationServiceImpl":
-        config => {
-            'config.master.dir' => $localconfig::dynamic_config_root,
-            'config.master.filename' => $localconfig::dynamic_config_masterfile,
-            'config.custom.dir' => $localconfig::dynamic_config_customdir,
-}
-    }
-
-    oae::app::server::sling_config {
-        "org.sakaiproject.nakamura.dynamicconfig.override.ConfigurationOverrideServiceImpl":
-        config => {
-            'override.dirs' => $localconfig::dynamic_config_jcroverrides,
-        }
-    }
-
-    file { "${localconfig::dynamic_config_root}":
-        ensure => directory
-    }
-
-    file { "${localconfig::dynamic_config_customdir}":
-        ensure => directory,
-        require => File[$localconfig::dynamic_config_root],
-    }
-
-    file { "${localconfig::dynamic_config_customdir}/config_custom.json":
-        mode => 0644,
-        content => template("rsmart-common/config_custom.json.erb"),
-        require => File[$localconfig::dynamic_config_customdir],
-    }
-
 }
 
 node /.*app[1-2].academic.rsmart.local/ inherits oaeappnode { }
@@ -295,6 +262,8 @@ node /.*dbserv1.academic.rsmart.local/ inherits oaenode {
         postgresql_conf_template => 'rsmart-common/postgresql.conf.erb',
     }
 
+    class { 'rsmart-common::postgres::large': }
+
     postgres::database { $localconfig::db:
         ensure => present,
         require  => Postgres::Role[$localconfig::user],
@@ -317,26 +286,6 @@ node /.*dbserv1.academic.rsmart.local/ inherits oaenode {
     postgres::backup::simple { $localconfig::db:
         # Overwrite the last backup
         date_format => '',
-    }
-
-    # Allowing a maximum 24GB of shared memory:
-    exec { 'set-shmmax':
-        command => '/sbin/sysctl -w kernel.shmmax=25769803776',
-        unless  => '/sbin/sysctl kernel.shmmax | grep 25769803776',
-    }
-    exec { 'set-shmall':
-        command => '/sbin/sysctl -w kernel.shmall=4194304',
-        unless  => '/sbin/sysctl kernel.shmall | grep 4194304',
-    }
-
-    # Make sure the kernel config changes persist across a reboot:
-    exec { 'persist-shmmax':
-        command => 'echo kernel.shmmax=25769803776 | tee -a /etc/sysctl.conf',
-        unless  => 'grep 25769803776 /etc/sysctl.conf',
-    }
-    exec { 'persist-shmall':
-        command => 'echo kernel.shmall=4194304 | tee -a /etc/sysctl.conf',
-        unless  => 'grep 4194304 /etc/sysctl.conf',
     }
 }
 

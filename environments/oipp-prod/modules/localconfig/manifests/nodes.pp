@@ -383,6 +383,7 @@ node 'oipp-prod-nfs.academic.rsmart.local' inherits oaenode {
 node 'oipp-prod-dbserv1.academic.rsmart.local' inherits oaenode {
 
     class { 'postgres::repos': stage => init }
+    class { 'rsmart-common::postgres::large': stage => init }
 
     class { 'postgres':
         postgresql_conf_template => 'localconfig/postgresql.conf.erb',
@@ -411,25 +412,5 @@ node 'oipp-prod-dbserv1.academic.rsmart.local' inherits oaenode {
     postgres::backup::simple { $localconfig::db:
         # Overwrite the last backup
         date_format => '',
-    }
-
-    # Allowing a maximum 24GB of shared memory:
-    exec { 'set-shmmax':
-        command => '/sbin/sysctl -w kernel.shmmax=25769803776',
-        unless  => '/sbin/sysctl kernel.shmmax | grep 25769803776',
-    }
-    exec { 'set-shmall':
-        command => '/sbin/sysctl -w kernel.shmall=4194304',
-        unless  => '/sbin/sysctl kernel.shmall | grep 4194304',
-    }
-
-    # Make sure the kernel config changes persist across a reboot:
-    exec { 'persist-shmmax':
-        command => 'echo kernel.shmmax=25769803776 | tee -a /etc/sysctl.conf',
-        unless  => 'grep 25769803776 /etc/sysctl.conf',
-    }
-    exec { 'persist-shmall':
-        command => 'echo kernel.shmall=4194304 | tee -a /etc/sysctl.conf',
-        unless  => 'grep 4194304 /etc/sysctl.conf',
     }
 }

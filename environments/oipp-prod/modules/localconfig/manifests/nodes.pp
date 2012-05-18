@@ -11,8 +11,7 @@
 #
 node 'oipp-prod-apache1.academic.rsmart.local' inherits oaenode {
 
-    class { 'rsmart-common::oae::apache': }
-    class { 'rsmart-common::oae::apache::http': vhost_80_template => 'localconfig/vhost-80.conf.erb' }
+    class { 'rsmart-common::oae::apache': vhost_80_template => 'localconfig/vhost-80.conf.erb' }
 
     # http://uconline.edu to redirects to https://cole.uconline.edu
     apache::vhost { "uconline.edu:80":

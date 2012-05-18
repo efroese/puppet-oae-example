@@ -12,7 +12,6 @@ node /.*apache1.academic.rsmart.local/ inherits oaenode {
     class { 'localconfig::extra_users': }
     
     class { 'rsmart-common::oae::apache': }
-    class { 'rsmart-common::oae::apache::http': }
     class { 'rsmart-common::oae::apache::trusted':
         cert => $localconfig::oae_cert,
         certkey => $localconfig::oae_key,

@@ -1,12 +1,12 @@
 #
 # Apache global config
 #
-class rsmart-common::oae::apache (
+class rsmart-common::oae::httpd(
     $httpd_conf_template = 'rsmart-common/httpd.conf.erb',
     $vhost_80_template   = 'rsmart-common/vhost-80.conf.erb'
     ) {
 
-    Class['Localconfig'] -> Class['Rsmart-common::Oae::Apache']
+    Class['Localconfig'] -> Class['Rsmart-common::Oae::Httpd']
 
     class { 'apache':
         httpd_conf_template => $httpd_conf_template

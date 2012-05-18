@@ -9,7 +9,7 @@ node /qa.academic.rsmart.local/ inherits oaenode {
     # System
     class { 'rsmart-common::mysql': stage => init }
 
-    class { 'rsmart-common::oae::apache': }
+    class { 'rsmart-common::oae::httpd': }
     class { 'rsmart-common::oae::apache::trusted': }
     class { 'rsmart-common::oae::apache::untrusted': }
 

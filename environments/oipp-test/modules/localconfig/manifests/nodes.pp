@@ -11,7 +11,7 @@ node 'oipp-test.academic.rsmart.local' inherits oaenode {
 
     ###########################################################################
     # Apache
-    class { 'rsmart-common::oae::apache': }
+    class { 'rsmart-common::oae::httpd': }
     class { 'rsmart-common::oae::apache::trusted': }
     class { 'rsmart-common::oae::apache::untrusted': }
 

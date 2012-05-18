@@ -1,10 +1,5 @@
 ###########################################################################
 #
-# Nodes
-#
-
-###########################################################################
-#
 # Apache load balancer
 #
 node /.*apache1.academic.rsmart.local/ inherits oaenode {
@@ -14,12 +9,12 @@ node /.*apache1.academic.rsmart.local/ inherits oaenode {
     class { 'rsmart-common::oae::apache': }
     class { 'rsmart-common::oae::apache::trusted':
         cert => $localconfig::oae_cert,
-        certkey => $localconfig::oae_key,
+        certkey => $localconfig::oae_certkey,
         certchain => $localconfig::oae_certchain,
     }
     class { 'rsmart-common::oae::apache::untrusted':
         cert => $localconfig::oae_cert,
-        certkey => $localconfig::oae_key,
+        certkey => $localconfig::oae_certkey,
         certchain => $localconfig::oae_certchain,
     }
 

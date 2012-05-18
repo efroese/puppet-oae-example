@@ -4,7 +4,7 @@
 class rsmart-common::oae::apache::untrusted (
     $cert,
     $certkey,
-    $certchain"
+    $certchain
     ){
 
     Class['Localconfig'] -> Class['Rsmart-common::Oae::Apache::Untrusted']

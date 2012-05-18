@@ -12,10 +12,10 @@ class rsmart-common::oae::app::postgres ($locked = true) {
     oae::app::server::sling_config {
         "org.sakaiproject.nakamura.lite.storage.jdbc.JDBCStorageClientPool":
         config => {
-            'jdbc-driver'      => $localconfig::db_driver,
-            'jdbc-url'         => $localconfig::db_url,
-            'username'         => $localconfig::db_user,
-            'password'         => $localconfig::db_password,
+            'jdbc-driver'      => $localconfig::oae_db_driver,
+            'jdbc-url'         => $localconfig::oae_db_url,
+            'username'         => $localconfig::oae_db_user,
+            'password'         => $localconfig::oae_db_password,
             'long-string-size' => 16384,
             'store-base-dir'   => $localconfig::storedir,
         },

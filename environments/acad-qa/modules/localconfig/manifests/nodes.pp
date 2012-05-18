@@ -75,19 +75,9 @@ node /qa.academic.rsmart.local/ inherits oaenode {
         hba_conf_template => 'rsmart-common/standalone-pg_hba.conf.erb',
     }
 
-    postgres::database { $localconfig::db:
-        ensure => present,
-        owner  => $localconfig::db_user,
-        create_options => "ENCODING = 'UTF8' TABLESPACE = pg_default LC_COLLATE = 'en_US.UTF-8' LC_CTYPE = 'en_US.UTF-8' CONNECTION LIMIT = -1",
-        require => Postgres::Role[$localconfig::db_user]
-    }
+    class { 'rsmart-common::postgres::oaedb': }
 
-    postgres::role { $localconfig::db_user:
-        ensure   => present,
-        password => $localconfig::db_password,
-    }
-
-    postgres::backup::simple { $localconfig::db:
+    postgres::backup::simple { $localconfig::oae_db:
         date_format => ''
     }
 

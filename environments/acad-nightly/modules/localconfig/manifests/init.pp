@@ -27,11 +27,11 @@ class localconfig {
 
     ###########################################################################
     # Database setup
-    $db          = 'nak'
-    $db_url      = "jdbc:postgresql://${db_server}/${db}?charSet\\=UTF-8"
-    $db_driver   = 'org.postgresql.Driver'
-    $db_user     = 'nakamura'
-    $db_password = 'ironchef'
+    $oae_db          = 'nak'
+    $oae_db_url      = "jdbc:postgresql://${db_server}/${db}?charSet\\=UTF-8"
+    $oae_db_driver   = 'org.postgresql.Driver'
+    $oae_db_user     = 'nakamura'
+    $oae_db_password = 'ironchef'
 
     $mysql_root_password = 'khjRE7AftLfB'
     $cle_db          = 'cle'

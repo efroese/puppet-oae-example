@@ -255,35 +255,15 @@ node /.*nfs.academic.rsmart.local/ inherits oaenode {
 node /.*dbserv1.academic.rsmart.local/ inherits oaenode {
 
     class { 'localconfig::extra_users': }
-
     class { 'postgres::repos': stage => init }
-
     class { 'postgres':
         postgresql_conf_template => 'rsmart-common/postgresql.conf.erb',
     }
 
     class { 'rsmart-common::postgres::large': }
+    class { 'rsmart-common::postgres::oaedb': }
 
-    postgres::database { $localconfig::db:
-        ensure => present,
-        require  => Postgres::Role[$localconfig::user],
-    }
-
-    postgres::role { $localconfig::db_user:
-        ensure   => present,
-        password => $localconfig::db_password,
-        require  => Postgres::Database[$localconfig::db],
-    }
-
-    postgres::clientauth { "host-${localconfig::db}-${localconfig::db_user}-all-md5":
-       type => 'host',
-       db   => $localconfig::db,
-       user => $localconfig::db_user,
-       address => "all",
-       method  => 'md5',
-    }
-
-    postgres::backup::simple { $localconfig::db:
+    postgres::backup::simple { $localconfig::oae_db:
         # Overwrite the last backup
         date_format => '',
     }

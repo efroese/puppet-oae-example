@@ -103,9 +103,6 @@ class localconfig {
     $reply_as_address = 'noreply@rsmart.com'
     $reply_as_name = 'rSmart'
 
-    $tomcat_user    = 'admin'
-    $tomcat_password = 't0msm@rt!'
-
     class extra_users {
         realize(Group['karagon'])
         realize(User['karagon'])

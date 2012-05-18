@@ -65,7 +65,7 @@ class localconfig {
     $locations_noproxy = ['/server-status', '/balancer-manager', '/Shibboleth.sso', '/access', '/imsblti']
 
     $oae_cert = "puppet:///modules/localconfig/uconline.edu.crt"
-    $oae_key = "puppet:///modules/localconfig/uconline.edu.key"
+    $oae_certkey = "puppet:///modules/localconfig/uconline.edu.key"
     $oae_certchain = "puppet:///modules/localconfig/uconline.edu-intermediate.crt"
 
     ###########################################################################

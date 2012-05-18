@@ -13,8 +13,16 @@ node /.*apache1.academic.rsmart.local/ inherits oaenode {
     
     class { 'rsmart-common::oae::apache': }
     class { 'rsmart-common::oae::apache::http': }
-    class { 'rsmart-common::oae::apache::trusted': }
-    class { 'rsmart-common::oae::apache::untrusted': }
+    class { 'rsmart-common::oae::apache::trusted':
+        cert => $localconfig::oae_cert,
+        certkey => $localconfig::oae_key,
+        certchain => $localconfig::oae_certchain,
+    }
+    class { 'rsmart-common::oae::apache::untrusted':
+        cert => $localconfig::oae_cert,
+        certkey => $localconfig::oae_key,
+        certchain => $localconfig::oae_certchain,
+    }
 
     # Balancer pool for CLE traffic
     apache::balancer { "apache-balancer-cle":

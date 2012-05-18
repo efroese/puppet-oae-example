@@ -1,7 +1,11 @@
 #
 # Apache virtualhost that serves trusted OAE content via a proxy balancer
 #
-class rsmart-common::oae::apache::trusted {
+class rsmart-common::oae::apache::trusted (
+    $cert,
+    $certkey,
+    $certchain
+    ) {
 
     Class['Localconfig'] -> Class['Rsmart-common::Oae::Apache::Trusted']
 
@@ -11,10 +15,15 @@ class rsmart-common::oae::apache::trusted {
     # Serve the OAE app (trusted content) on 443
     apache::vhost-ssl { "${localconfig::http_name}:443":
         sslonly  => true,
-        cert     => "puppet:///modules/rsmart-common/academic.rsmart.com.crt",
-        certkey  => "puppet:///modules/rsmart-common/academic.rsmart.com.key",
-        certchain => "puppet:///modules/rsmart-common/academic.rsmart.com-intermediate.crt",
+        cert     => $cert,
+        certkey  => $certkey,
+        certchain => $certchain,
         template  => 'rsmart-common/vhost-trusted.conf.erb',
+    }
+
+    $locations_noproxy = $localconfig::locations_noproxy ? {
+        undef => ['/server-status', '/balancer-manager', '/access', '/imsblti'],
+        default => $localconfig::locations_noproxy
     }
 
     # Balancer pool for trusted content
@@ -24,7 +33,7 @@ class rsmart-common::oae::apache::trusted {
         locations_noproxy => $localconfig::mock_cle_content ? {
             # Don't proxy to the access and lti tools.
             # This is just a workaround, not a comprehensive list of CLE urls
-            true  => ['/server-status', '/balancer-manager', '/access', '/imsblti'],
+            true  => $locations_noproxy,
             default => ['/server-status', '/balancer-manager'],
         },
         proto      => "http",

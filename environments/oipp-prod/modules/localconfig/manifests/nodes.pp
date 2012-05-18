@@ -23,33 +23,17 @@ node 'oipp-prod-apache1.academic.rsmart.local' inherits oaenode {
         template => 'localconfig/vhost-80.conf.erb',
     }
 
-    ###########################################################################
     # https://cole.uconline.edu
-
-    # Serve the OAE app (trusted content) on 443
-    apache::vhost-ssl { "${localconfig::http_name}:443":
-        sslonly   => true,
-        cert     => "puppet:///modules/localconfig/uconline.edu.crt",
-        certkey  => "puppet:///modules/localconfig/uconline.edu.key",
-        certchain => "puppet:///modules/localconfig/uconline.edu-intermediate.crt",
-        template  => 'localconfig/vhost-trusted.conf.erb',
+    class { 'rsmart-common::oae::apache::trusted':
+        cert      => $localconfig::cert,
+        certkey   => $localconfig::certkey,
+        certchain => $localconfig::certchain,
     }
-
-    # Balancer pool for trusted content
-    apache::balancer { "apache-balancer-oae-app":
-        vhost      => "${localconfig::http_name}:443",
-        location   => "/",
-        locations_noproxy => $localconfig::mock_cle_content ? {
-            # Don't proxy to the access and lti tools.
-            # This is just a workaround, not a comprehensive list of CLE urls
-            true  => ['/server-status', '/balancer-manager', '/Shibboleth.sso', '/access', '/imsblti'],
-            false => ['/server-status', '/balancer-manager', '/Shibboleth.sso'],
-        },
-        proto      => "http",
-        members    => $localconfig::apache_lb_members,
-        params     => $localconfig::apache_lb_params,
-        standbyurl => $localconfig::apache_lb_standbyurl,
-        template   => 'rsmart-common/balancer-trusted.erb',
+    # https://content-cole.uconline.edu
+    class { 'rsmart-common::oae::apache::untrusted':
+        cert      => $localconfig::cert,
+        certkey   => $localconfig::certkey,
+        certchain => $localconfig::certchain,
     }
 
     # Mock out CLE content
@@ -76,26 +60,6 @@ node 'oipp-prod-apache1.academic.rsmart.local' inherits oaenode {
             standbyurl => $localconfig::apache_lb_standbyurl,
             template   => 'rsmart-common/balancer-cle.conf.erb',
         }
-    }
-
-    ###########################################################################
-    # Serve untrusted content from another hostname
-    apache::vhost-ssl { "${localconfig::http_name_untrusted}:443":
-        sslonly   => true,
-        cert     => "puppet:///modules/localconfig/uconline.edu.crt",
-        certkey  => "puppet:///modules/localconfig/uconline.edu.key",
-        certchain => "puppet:///modules/localconfig/uconline.edu-intermediate.crt",
-        template  => 'rsmart-common/vhost-untrusted.conf.erb',
-    }
-
-    # Balancer pool for untrusted content
-    apache::balancer { "apache-balancer-oae-app-untrusted":
-        vhost      => "${localconfig::http_name_untrusted}:443",
-        location   => "/",
-        proto      => "http",
-        members    => $localconfig::apache_lb_members_untrusted,
-        params     => $localconfig::apache_lb_params,
-        standbyurl => $localconfig::apache_lb_standbyurl,
     }
 
     ###########################################################################

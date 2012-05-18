@@ -1,7 +1,11 @@
 #
 # Apache virtualhost that serves untrusted OAE content via a proxy balancer
 #
-class rsmart-common::oae::apache::untrusted {    
+class rsmart-common::oae::apache::untrusted (
+    $cert,
+    $certkey,
+    $certchain"
+    ){
 
     Class['Localconfig'] -> Class['Rsmart-common::Oae::Apache::Untrusted']
 
@@ -11,9 +15,9 @@ class rsmart-common::oae::apache::untrusted {
     # Serve untrusted content from another hostname on port 443
     apache::vhost-ssl { "${localconfig::http_name_untrusted}:443":
         sslonly  => true,
-        cert     => "puppet:///modules/rsmart-common/academic.rsmart.com.crt",
-        certkey  => "puppet:///modules/rsmart-common/academic.rsmart.com.key",
-        certchain => "puppet:///modules/rsmart-common/academic.rsmart.com-intermediate.crt",
+        cert     => $cert,
+        certkey  => $certkey,
+        certchain => $certchain,
         template  => 'rsmart-common/vhost-untrusted.conf.erb',
     }
 

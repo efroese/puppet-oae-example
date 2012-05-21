@@ -32,17 +32,17 @@ class localconfig {
 
     ###########################################################################
     # Database setup
-    $db          = 'nak'
-    $db_url      = "jdbc:postgresql://${db_server}/${db}?charSet\\=UTF-8"
-    $db_driver   = 'org.postgresql.Driver'
-    $db_user     = 'nakamura'
-    $db_password = 'ironchef'
+    $oae_db          = 'nak'
+    $oae_db_url      = "jdbc:postgresql://${db_server}/${db}?charSet\\=UTF-8"
+    $oae_db_driver   = 'org.postgresql.Driver'
+    $oae_db_user     = 'nakamura'
+    $oae_db_password = 'ironchef'
 
     ###########################################################################
     # Content body storage
-    $nfs_share   = '/export/files-academic'
-    $nfs_mountpoint = '/files-academic'
-    $nfs_options = '_netdev,rw,rsize=8192,wsize=8192'
+    $oae_nfs_share   = '/export/files-academic'
+    $oae_nfs_mountpoint = '/files-academic'
+    $oae_nfs_options = '_netdev,rw,rsize=8192,wsize=8192'
 
     $storedir    = "/files-academic/store"
 
@@ -54,7 +54,7 @@ class localconfig {
     ###########################################################################
     # Apache load balancer
     $http_name                   = 'academic.rsmart.com'
-    $http_name_untrusted         = "content-${http_name}"
+    $http_name_untrusted         = "content.academic.rsmart.com"
     $apache_lb_members           = [ "${app_server1}:8080", "${app_server2}:8080" ]
     $apache_lb_members_untrusted = [ "${app_server1}:8082", "${app_server2}:8082" ]
     $apache_lb_params            = ["retry=20", "min=3", "flushpackets=auto", "max=250", "loadfactor=100", "timeout=60"]
@@ -62,6 +62,10 @@ class localconfig {
     $apache_cle_lb_members = [ "${cle_server}:8009 route=cle1", "${cle_server}:8010 route=cle2" ]
     $apache_cle_location_match = "^/(xsl-portal.*|access.*|courier.*|dav.*|direct.*|imsblti.*|library.*|messageforums-tool.*|osp-common-tool.*|polls-tool.*|portal.*|profile-tool.*|profile2-tool.*|sakai.*|samigo-app.*|scheduler-tool.*|rsmart-customizer-tool.*|oauth-tool.*|emailtemplateservice-tool.*|sitestats-tool.*|rsmart-support-tool.*|mailsender-tool.*|tool.css|portool_base.css)"
     $cle_dav_server0 = '10.52.10.19'
+
+    $oae_cert = 'puppet:///modules/rsmart-common/rsmart.com.crt'
+    $oae_certkey = 'puppet:///modules/rsmart-common/rsmart.com.key'
+    $oae_certchain = 'puppet:///modules/rsmart-common/rsmart.com-intermediate.crt'
 
     ###########################################################################
     # App servers
@@ -99,9 +103,6 @@ class localconfig {
     $reply_as_address = 'noreply@rsmart.com'
     $reply_as_name = 'rSmart'
 
-    $tomcat_user    = 'admin'
-    $tomcat_password = 't0msm@rt!'
-
     class extra_users {
         realize(Group['karagon'])
         realize(User['karagon'])
@@ -119,9 +120,9 @@ class localconfig {
 
     ###########################################################################
     # HubSpot Configuration
-    $hubspot_portalId' = '85099'
-    $hubspot_apiKey' = '30510b72-5b73-4cdf-8cf9-99ae3c119252'
-    $hubspot_url' = 'http://rsmart.app8.hubspot.com/?app=leaddirector&FormName=acad-registration'
+    $hubspot_portalId = '85099'
+    $hubspot_apiKey = '30510b72-5b73-4cdf-8cf9-99ae3c119252'
+    $hubspot_url = 'http://rsmart.app8.hubspot.com/?app=leaddirector&FormName=acad-registration'
 
     ###########################################################################
     # Dynamic Configuration

@@ -24,15 +24,15 @@ node 'oipp-prod-apache1.academic.rsmart.local' inherits oaenode {
 
     # https://cole.uconline.edu
     class { 'rsmart-common::oae::apache::trusted':
-        cert      => $localconfig::cert,
-        certkey   => $localconfig::certkey,
-        certchain => $localconfig::certchain,
+        cert      => $localconfig::oae_cert,
+        certkey   => $localconfig::oae_certkey,
+        certchain => $localconfig::oae_certchain,
     }
     # https://content-cole.uconline.edu
     class { 'rsmart-common::oae::apache::untrusted':
-        cert      => $localconfig::cert,
-        certkey   => $localconfig::certkey,
-        certchain => $localconfig::certchain,
+        cert      => $localconfig::oae_cert,
+        certkey   => $localconfig::oae_certkey,
+        certchain => $localconfig::oae_certchain,
     }
 
     # Mock out CLE content

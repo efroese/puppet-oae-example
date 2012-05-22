@@ -53,13 +53,13 @@ node oaeappnode inherits oaenode {
     }
 
     class { 'rsmart-common::logging': }
-    class { 'rsmart-common::oae::cle': }
+    class { 'rsmart-common::oae::app::cle': }
     class { 'rsmart-common::oae::app::dynamicconfig': }
-    class { 'rsmart-common::oae::email': }
-    class { 'rsmart-common::oae::nfs': }
-    class { 'rsmart-common::oae::postgres': }
-    class { 'rsmart-common::oae::security': }
-    class { 'rsmart-common::oae::solr::remote': }
+    class { 'rsmart-common::oae::app::email': }
+    class { 'rsmart-common::oae::app::nfs': }
+    class { 'rsmart-common::oae::app::postgres': }
+    class { 'rsmart-common::oae::app::security': }
+    class { 'rsmart-common::oae::app::solr::remote': }
 
     ###########################################################################
     # Clustering

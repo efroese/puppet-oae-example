@@ -7,7 +7,6 @@ class rsmart-common::postgres::oaedb {
 
     postgres::database { $localconfig::oae_db:
         ensure => present,
-        require  => Postgres::Role[$localconfig::oae_db_user],
     }
 
     postgres::role { $localconfig::oae_db_user:

@@ -3,9 +3,15 @@
 #
 class rsmart-common::oae::app::nfs {
 
+    Class['Oae::params'] -> Class['Rsmart-common::Oae::App::Nfs']
+
     class { 'nfs::client': }
 
-    file  { $localconfig::oae_nfs_mountpoint: ensure => directory }
+    file  { $localconfig::oae_nfs_mountpoint:
+        ensure => directory,
+        owner => $oae::params::user,
+        group => $oae::params::group,
+    }
 
     mount { $localconfig::oae_nfs_mountpoint:
         ensure => 'mounted',

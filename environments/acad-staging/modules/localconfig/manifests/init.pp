@@ -62,6 +62,7 @@ class localconfig {
     $apache_cle_lb_members = [ "${cle_server}:8009 route=cle1", "${cle_server}:8010 route=cle2" ]
     $apache_cle_location_match = "^/(xsl-portal.*|access.*|courier.*|dav.*|direct.*|imsblti.*|library.*|messageforums-tool.*|osp-common-tool.*|polls-tool.*|portal.*|profile-tool.*|profile2-tool.*|sakai.*|samigo-app.*|scheduler-tool.*|rsmart-customizer-tool.*|oauth-tool.*|emailtemplateservice-tool.*|sitestats-tool.*|rsmart-support-tool.*|mailsender-tool.*|tool.css|portool_base.css)"
     $cle_dav_server0 = '10.53.10.19'
+	$disable_cle_axis            = false
 
     $oae_cert = 'puppet:///modules/rsmart-common/academic.rsmart.com.crt'
     $oae_certkey = 'puppet:///modules/rsmart-common/academic.rsmart.com.key'

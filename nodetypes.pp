@@ -1,6 +1,5 @@
 ###########################################################################
 # Node Type Definitions
-
 #
 node basenode {
 
@@ -20,24 +19,27 @@ node basenode {
     package { 'tree' : ensure => installed }
     package { 'wget' : ensure => installed }
 
-    # The Oracle JDK is installed on the academic base image
-    # package { 'java-1.6.0-openjdk': ensure => installed }
-
     class { 'ntp':
         time_zone =>  '/usr/share/zoneinfo/America/Phoenix',
     }
+
+    class { 'puppet': puppet_conf => 'rsmart-common/puppet.conf.erb' }
+
+    @@host { $fqdn:
+        ip => $ipaddress,
+        host_aliases => [ $hostname ],
+    }
+
+    # The localconfig module is found in $environment/modules
+    class { 'localconfig': stage => init }
+    class { 'localconfig::hosts': stage => init }
+
+    class { 'people': }
+    class { 'sudo': }
 }
 
 # This should probably be called an academicnode
 node oaenode inherits basenode {
-
-    include sudo
-
-    # The localconfig module is found in $environment/modules
-    class { 'localconfig': }
-    class { 'localconfig::hosts': }
-
-    class { 'people': }
 
     # OAE module configuration
     class { 'oae::params':

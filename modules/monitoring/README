@@ -1,0 +1,24 @@
+The files in this module define the common icinga objects as well as some classes to help monitoring target servers.
+
+# Icinga check commands
+manifests/commands/commands.pp
+manifests/commands/*.pp
+
+# Icinga objects
+manifests/contacts.pp
+manifests/contactgroups.pp
+manifests/hostsgroups.pp
+manifests/timeperiods.pp
+
+Icinga hosts and services are defined in the following places:
+monitoring::target - Generic OS monitoring
+monitoring::postgres - postgres nrpe check
+monitoring::mysql - mysql nrpe check
+monitoring::oae - OAE health checks
+monitoring::cle - CLE health checks
+
+# Target servers
+manifests/target.pp
+
+# Service-specific targets
+manifests/target/*.pp

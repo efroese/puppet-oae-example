@@ -185,6 +185,11 @@ node /oae-app[0-1].localdomain/ inherits oaenode {
 
 node solrnode inherits oaenode {
 
+    nagios::service::http { "nagios-service-http-solr-${hostname}":
+        port         => '8080',
+        check_domain => $hostname,
+    }
+
     class { 'tomcat6':
         parentdir => "${localconfig::basedir}",
         tomcat_user  => $localconfig::user,

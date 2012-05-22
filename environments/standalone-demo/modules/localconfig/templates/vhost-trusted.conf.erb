@@ -48,6 +48,7 @@ SSLCryptoDevice builtin
         <% scope.lookupvar('localconfig::oae_admin_hosts').each do |admin_host| -%>
         allow from <%= admin_host %>
         <% end -%>
+        allow from <%= network_eth0 %>/<%= netmask_eth0 %>
     </Location>
    
     ErrorDocument 503 http://sorryserver.localdomain/downtime.html

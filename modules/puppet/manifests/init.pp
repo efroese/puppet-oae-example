@@ -8,7 +8,7 @@ class puppet($puppet_conf){
     package { [ 'mysql-devel', 'ruby-mysql' ]: ensure => installed }
 
     if !defined(Package['ruby-devel']) {
-        package { 'mysql-devel': ensure => installed }
+        package { 'ruby-devel': ensure => installed }
     }
 
     file { '/etc/puppet/puppet.conf':

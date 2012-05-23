@@ -9,10 +9,13 @@ class oae::preview_processor::amazon {
     $common_packages = [ 'cronie', 'cpp', 'gcc', 'gcc-c++',
         'fontconfig-devel', 'libcurl-devel',
         'GraphicsMagick', 'ImageMagick', 'ImageMagick-devel',
-        'poppler-utils', 'rubygems',
-        'ruby-devel', 'libgcj', ]
+        'poppler-utils', 'rubygems', 'libgcj', ]
 
     package { $common_packages: ensure => installed }
+
+    if !defined(Package['ruby-devel']) {
+        package { 'ruby-devel': ensure => installed }
+    }
 
     exec { 'yum-install-tk-centos6-repo':
         command => "yum -y -t --enablerepo=centos6-base install tk",

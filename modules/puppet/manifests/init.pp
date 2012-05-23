@@ -5,7 +5,11 @@ class puppet($puppet_conf){
         provider => 'gem',
     }
 
-    package { [ 'mysql-devel', 'ruby-devel', 'ruby-mysql' ]: ensure => installed }
+    package { [ 'mysql-devel', 'ruby-mysql' ]: ensure => installed }
+
+    if !defined(Package['ruby-devel']) {
+        package { 'mysql-devel': ensure => installed }
+    }
 
     file { '/etc/puppet/puppet.conf':
         owner => root,

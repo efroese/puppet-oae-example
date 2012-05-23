@@ -30,8 +30,6 @@ class postgres (
         $hba_conf_template = ''
     ){
 
-    Class['Postgres::params'] -> Class['Postgres']
-
     if !defined(Class['Postgres::Base']) {
         class { 'postgres::base': }
     }

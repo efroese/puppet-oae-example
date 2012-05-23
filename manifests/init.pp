@@ -29,14 +29,14 @@ class postgres (
         $postgresql_conf_template='postgres/postgresql.conf.erb',
         $hba_conf_template = ''
     ){
-    
-    Class['postgres::params'] -> Class['postgres']
 
-    class { 'postgres::params': }
+    Class['Postgres::params'] -> Class['Postgres']
 
-	package { [ 'postgresql91', 'postgresql91-server' ]:
-	    ensure => installed
-	}
+    if !defined(Class['Postgres::Base']) {
+        class { 'postgres::base': }
+    }
+
+	package { 'postgresql91-server': ensure => installed }
 
 	$service_name = 'postgresql-9.1'
 

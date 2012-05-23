@@ -12,8 +12,16 @@ node 'oipp-test.academic.rsmart.local' inherits oaenode {
     ###########################################################################
     # Apache
     class { 'rsmart-common::oae::httpd': }
-    class { 'rsmart-common::oae::apache::trusted': }
-    class { 'rsmart-common::oae::apache::untrusted': }
+    class { 'rsmart-common::oae::apache::trusted':
+        cert => $localconfig::oae_cert,
+        certkey => $localconfig::oae_certkey,
+        certchain => $localconfig::oae_certchain,
+    }
+    class { 'rsmart-common::oae::apache::untrusted':
+        cert => $localconfig::oae_cert,
+        certkey => $localconfig::oae_certkey,
+        certchain => $localconfig::oae_certchain,
+    }
 
     # Mock out CLE content
     if $localconfig::mock_cle_content {

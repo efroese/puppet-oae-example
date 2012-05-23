@@ -59,9 +59,9 @@ class localconfig {
     $apache_cle_location_match   = "^/(xsl-portal.*|access.*|courier.*|dav.*|direct.*|imsblti.*|library.*|messageforums-tool.*|osp-common-tool.*|polls-tool.*|portal.*|profile-tool.*|profile2-tool.*|sakai.*|samigo-app.*|scheduler-tool.*|rsmart-customizer-tool.*|oauth-tool.*|emailtemplateservice-tool.*|sitestats-tool.*|rsmart-support-tool.*|mailsender-tool.*|tool.css|portool_base.css|scormcloud-tool.*)"
     $disable_cle_axis            = false
 
-    $oae_cert = 'puppet:///modules/rsmart-common/rsmart.com.crt'
-    $oae_certkey = 'puppet:///modules/rsmart-common/rsmart.com.key'
-    $oae_certchain = 'puppet:///modules/rsmart-common/rsmart.com-intermediate.crt'
+    $oae_cert = 'puppet:///modules/rsmart-common/academic.rsmart.com.crt'
+    $oae_certkey = 'puppet:///modules/rsmart-common/academic.rsmart.com.key'
+    $oae_certchain = 'puppet:///modules/rsmart-common/academic.rsmart.com-intermediate.crt'
 
     ###########################################################################
     # OAE App servers

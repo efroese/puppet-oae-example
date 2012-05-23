@@ -1,13 +1,9 @@
-class postgres::base {
+class postgres::client {
 
-    Class['Postgres::Repos'] -> Class['Postgres::Base']
+    Class['Postgres::Base'] -> Class['Postgres::Client']
 
     if !defined(Class['Postgres::Base']) {
         class { 'postgres::base': }
-    }
-
-    if !defined(Class['Postgres::Params']) {
-        class { 'postgres::params': }
     }
 
 }

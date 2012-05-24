@@ -17,7 +17,7 @@ class wget {
 ################################################################################
 define wget::fetch($source,$destination,$timeout="0") {
 
-	# using "unless" with /usr/bin/test instead of "creates" to re-attempt download
+	# using "unless" with test instead of "creates" to re-attempt download
 	# on empty files.
 	# wget creates an empty file when a download fails, and then it wouldn't try
 	# again to download the file
@@ -30,7 +30,7 @@ define wget::fetch($source,$destination,$timeout="0") {
 	exec { "wget-$name":
 		command => "/usr/bin/wget --output-document=$destination $source",
 		timeout => $timeout,
-		unless => "/usr/bin/test -s $destination",
+		unless => "test -s $destination",
 		environment => $environment,
 	}
 }
@@ -58,7 +58,7 @@ define wget::authfetch($source,$destination,$user,$password="",$timeout="0") {
 	exec { "wget-$name":
 		command => "/usr/bin/wget --user=$user --output-document=$destination $source",
 		timeout => $timeout,
-		unless => "/usr/bin/test -s $destination",
+		unless => "test -s $destination",
 		environment => $environment,
 	}
 }

@@ -6,7 +6,7 @@
 	url = http://github.com/efroese/puppet-apache.git
 [submodule "modules/common"]
 	path = modules/common
-	url = https://github.com/camptocamp/puppet-common.git
+	url = http://github.com/camptocamp/puppet-common.git
 [submodule "modules/pacemaker"]
 	path = modules/pacemaker
 	url = http://github.com/efroese/puppet-pacemaker.git
@@ -43,21 +43,3 @@
 [submodule "modules/selinux"]
 	path = modules/selinux
 	url = http://github.com/camptocamp/puppet-selinux.git
-[submodule "modules/nagios"]
-	path = modules/nagios
-	url = https://github.com/efroese/puppet-nagios.git
-[submodule "modules/nrpe"]
-	path = modules/nrpe
-	url = https://github.com/jaredcurtis/puppet-nrpe.git
-[submodule "modules/munin"]
-	path = modules/munin
-	url = http://github.com/efroese/puppet-munin.git
-[submodule "modules/concat"]
-	path = modules/concat
-	url = https://github.com/duritong/puppet-concat.git
-[submodule "modules/icinga"]
-	path = modules/icinga
-	url = http://github.com/efroese/puppet-icinga.git
-[submodule "modules/stdlib"]
-	path = modules/stdlib
-	url = http://github.com/puppetlabs/puppetlabs-stdlib.git

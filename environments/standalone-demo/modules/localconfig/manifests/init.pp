@@ -44,7 +44,7 @@ class localconfig {
 
     ###########################################################################
     # App servers
-    $jarsource     = '/root/org.sakaiproject.nakamura.app-1.3-SNAPSHOT.jar'
+    $downloadurl   = 'http://192.168.1.200/jars/org.sakaiproject.nakamura.app-1.1-postgres.jar'
     $java          = '/usr/java/jdk1.6.0_30/bin/java'
     $javamemorymax = '1024m'
     $javamemorymin = '1024m'

@@ -4,18 +4,6 @@
 #
 # 
 node 'oae-standalone.localdomain' inherits oaenode {
-
-    class { 'nagios::target': }
-    class { 'nagios::service::ntp': }
-
-    nagios::service::ping { "nagios-service-ping-${hostname}": }
-    nagios::service::http { "nagios-service-http-${localconfig::http_name}":
-        check_domain => $localconfig::http_name,
-        ssl_mode => 'force',
-    }
-    nagios::service::nrpe::load { "nagios-service-nrpe-load-${hostname}": }
-    nagios::service::nrpe::disk { "nagios-service-nrpe-load-${hostname}": }
-    nagios::service::nrpe::swap { "nagios-service-nrpe-load-${hostname}": }
     
     class { 'apache::ssl': }
 
@@ -77,7 +65,6 @@ node 'oae-standalone.localdomain' inherits oaenode {
 
     class { 'oae::app::server':
         java           => $localconfig::java,
-	jarsource      => $localconfig::jarsource,
         javamemorymin  => $localconfig::javamemorymin,
         javamemorymax  => $localconfig::javamemorymax,
         javapermsize   => $localconfig::javapermsize,

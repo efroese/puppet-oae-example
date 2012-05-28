@@ -28,10 +28,11 @@ define wget::fetch($source,$destination,$timeout="0") {
 		$environment = []
 	}
 	exec { "wget-$name":
-		command => "/usr/bin/wget --output-document=$destination $source",
+		command => "wget --output-document=$destination $source",
 		timeout => $timeout,
 		unless => "test -s $destination",
 		environment => $environment,
+		path => "/usr/bin:/usr/sbin:/bin",
 	}
 }
 
@@ -56,10 +57,11 @@ define wget::authfetch($source,$destination,$user,$password="",$timeout="0") {
 		content => "password=$password",
 	} ->
 	exec { "wget-$name":
-		command => "/usr/bin/wget --user=$user --output-document=$destination $source",
+		command => "wget --user=$user --output-document=$destination $source",
 		timeout => $timeout,
 		unless => "test -s $destination",
 		environment => $environment,
+		path => "/usr/bin:/usr/sbin:/bin",
 	}
 }
 

@@ -4,46 +4,53 @@
 #
 # == Parameters:
 #
-# $downloadurl::   The URL to the the app war
+# $bin_source::      The path to the war on the local machine.
 #
-# $bin_source::     The path to the war on the local machine.
+# $bin_target_dir::  The directory you want the dashboard war deployed to
 #
-# $jav::           The path to java
+# $deploy::          true/false -> should puppet deploy the war
 #
-# $javamemorymin:: The min java heap size
+# $config_template:: The path to the dashboard.cfg.properties template
 #
-# $javamemorymax:: The max java heap size
+# $basedir::         The path to the dashboard basedir
 #
-# $javapermsize::  The max java perm gen space
+# $config_dir::      The path to the dashboard config directory
 #
-# $sparseconfig_properties_template:: The template to use to render sparseconfig.properties (optional)
+# $config_file::     The path to the dashboard.cfg.properties file
 #
-# $setenv_template::  The template to use to render the setenv.sh file. (optional)
+# $db_user::         DB user for dashboard
+#
+# $db_pass::         DB password for dashboard
+#
+# $db_name::         Name of the dashboard database
+#
+# $user::            Username dashboard is installed under
+#
+# $group::           Group name dashboard is installed under
+#
+# $bin_filename::    The filename for the dashboard war
+#
+# $lti_key::         The LTI key dashboard should be configured with
 #
 # == Actions:
-#   Install a Sakai OAE app jar and start it up
+#   Install a Dashboard app war and start it up
 #
 # == Sample Usage:
 #
 #   class { 'dashboard::app::server':
-#     javamemorymax => 512,
-#     javapermsize  => 256,
-#   }
-#
-#   class { 'dashboard::app::server':
-#     bin_source     => '/home/sakaidashboard/jars/org.sakaiproject.nakamura.app-1.1-custom.jar',
-#     javamemorymax => 512,
-#     javapermsize  => 256,
-#   }
+#     bin_source      => $localconfig::bin_source,
+#	  bin_target_dir  => "${localconfig::basedir}/tomcat/webapps",
+#	  deploy          => "true",
+#	  config_file     => $localconfig::dashboard_config,
+#	  basedir         => $localconfig::basedir,
+#	  user            => $localconfig::user,
+#	  group           => $localconfig::group,
+#    }
 #
 class dashboard::app::server($downloadurl = '',
                         $bin_source      = '',
 						$bin_target_dir  = '',
                         $deploy          = 'false',
-                        $java            = '/usr/bin/java',
-                        $javamemorymax,
-                        $javamemorymin,
-                        $javapermsize,
                         $config_template = 'dashboard/dashboard.cfg.properties.erb',
                         $basedir         = '/app/dashboard',
 						$config_dir      = '/app/dashboard/config',
@@ -53,7 +60,6 @@ class dashboard::app::server($downloadurl = '',
                         $db_name         = 'dashboard',
                         $user            = 'rsmart',
                         $group           = 'rsmart',
-                        $basedir         = '/app/dashboard',
                         $bin_filename    = 'dashboard.war',
                         $lti_key         = 'SUPER_SECRET') {
 

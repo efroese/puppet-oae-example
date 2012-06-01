@@ -127,12 +127,8 @@ node 'dashboard-qa.rsmart.local' inherits dashboardnode {
     class { 'dashboard::app::server':
         bin_source      => $localconfig::bin_source,
 		bin_target_dir  => "${localconfig::basedir}/tomcat/webapps",
-		deploy          => "true",
+		deploy          => "false",
 		config_file     => $localconfig::dashboard_config,
-        java            => $localconfig::java,
-        javamemorymin   => $localconfig::javamemorymin,
-        javamemorymax   => $localconfig::javamemorymax,
-        javapermsize    => $localconfig::javapermsize,
 		basedir			=> $localconfig::basedir,
 		user 			=> $localconfig::user,
 		group 			=> $localconfig::group,

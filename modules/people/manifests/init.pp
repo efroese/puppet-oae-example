@@ -50,6 +50,7 @@ class people {
     realize(Group['efroese'])
     realize(User['efroese'])
     realize(Ssh_authorized_key['efroese-home-pub'])
+    realize(Ssh_authorized_key['efroese-laptop-dsa-pub'])
 
     realize(Group['lspeelmon'])
     realize(User['lspeelmon'])

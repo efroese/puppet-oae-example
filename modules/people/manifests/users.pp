@@ -132,6 +132,14 @@ class people::users {
         require => User['efroese'],
     }
 
+    @ssh_authorized_key { 'efroese-laptop-dsa-pub':
+        ensure => present,
+        key  => 'AAAAB3NzaC1kc3MAAACBAOYRnWXg0FBcll7FfnQhbQmk23turZOwPABdpHmGl3PqhA0BLFHE8b2UK+zAJFWdL8bwSHIpwEhUTdrHzZ8Fs23WfXxCoW6WuRgmXDQq4Wmr53jbP1GkGNL1JdiYhMK8QwUMsoryXWb/jUd04YSXu7rW/fXsJ/rPPVD7K0mramVbAAAAFQDGARwf6qZgIJ2wPqia4cibepoPYQAAAIEA0hDj//qborbs2FktQR1u2MQOEEwmH9M757hMwOpDwZV3hWoU5LiEGlqdWe/XR3haX5hRhHlt4+zBMYkv1LY4q70UqUey6KIonJe97KxXnoDzoyC64BS+3IUop5ZbhhrSc8ucfpLGgoGUT+TshyWJcBUo9Bcr8WW276GLDbyBRpUAAACBAM6/B1XdTm4LXBhqK5Wi+UmyMCLoKfaaQJqIvDJiXKlH+zNjdPHKZ3+brJWxhb4NxRlPQxqtSaRkaTQo+oSLPHk/Jv8OVHEBd0KqvOhsqNYVk1356snrQynJmVAcX1+phoxWlfwfjx5vO8BbL35XQZSJC8Pyc/jZYo2/BYFIZwsT',
+        type => 'ssh-dss',
+        user => 'efroese',
+        require => User['efroese'],
+    }
+
     @user { 'kcampos':
         ensure     => present,
         uid        => '505',

@@ -1,0 +1,123 @@
+#!/bin/bash
+# This is the startup/shutdown script for SakaiOAE
+# Global, editable VARS
+#
+# chkconfig: 2345 99 01
+# description: Sakai OAE app server.
+#
+SAKAIOAE_JAVA_OPTS=" -Dcom.sun.management.jmxremote -Djava.awt.headless=true -Dfile.encoding=UTF-8 "
+# Set the ClusterTrackingService host to the internal ip
+SAKAIOAE_CLUSTER_JAVA_OPTS="-Dorg.sakaiproject.nakamura.cluster.secure.host=<%= ipaddress %>"
+SAKAIOAE_USER="<%= scope.lookupvar('oae::params::user')  %>"
+SAKAIOAE_HOME="<%= scope.lookupvar('oae::params::basedir') %>"
+SAKAIOAE_JAR="<%= scope.lookupvar('oae::params::basedir') %>/sakaioae.jar"
+JAVA_BIN="<%= java %>"
+
+INIT_PID="/var/run/${SAKAIOAE_USER}.pid"
+PROG="SakaiOAE"
+
+# LOAD up JAVA_OPTS
+if [ -e $SAKAIOAE_HOME/bin/setenv.sh ]; then
+    . $SAKAIOAE_HOME/bin/setenv.sh
+fi
+
+help() {
+	echo "$0 INVALID SYNTAX ::  Use:"
+	echo "$0 {stop | start | debug | restart | status}"
+}
+
+start() {
+	echo -n "Starting ${PROG}: "
+	su --login --command "cd ${SAKAIOAE_HOME} && ${JAVA_BIN} ${JAVA_OPTS} ${SAKAIOAE_JAVA_OPTS} ${SAKAIOAE_CLUSTER_JAVA_OPTS} -jar ${SAKAIOAE_JAR} > /dev/null 2>&1 &" ${SAKAIOAE_USER}
+	ps -u ${SAKAIOAE_USER} --no-headers -o pid,cmd | grep ${SAKAIOAE_JAR} | awk '{ print $1 }' > ${INIT_PID};
+	echo "done.";
+}
+
+debug() {
+    echo -n "Starting ${PROG} with JVM remote debugging port 8500: "
+    SAKAIOAE_JAVA_DEBUG_OPTS="-Xdebug -Xrunjdwp:transport=dt_socket,address=8500,server=y,suspend=n"
+    su --login --command "cd ${SAKAIOAE_HOME} && ${JAVA_BIN} ${JAVA_OPTS} ${SAKAIOAE_JAVA_OPTS} ${SAKAIOAE_JAVA_DEBUG_OPTS} ${SAKAIOAE_CLUSTER_JAVA_OPTS} -jar ${SAKAIOAE_JAR} > /dev/null 2>&1 &" ${SAKAIOAE_USER}
+    ps -u ${SAKAIOAE_USER} --no-headers -o pid,cmd | grep ${SAKAIOAE_JAR} | awk '{ print $1 }' > ${INIT_PID};
+    echo "done.";
+}
+
+function killoae() {
+  MAX_TRIES=3
+  TRIES=1
+  PID=${1}
+
+  echo "killing ${PROG} with pid=${PID}"
+
+  while [[ $TRIES < $MAX_TRIES ]]; do
+    if [[ -d /proc/${1} ]]; then
+      su --login --command "kill ${PID}" ${SAKAIOAE_USER}
+      sleep 5
+    fi
+    TRIES=$[TRIES+1]
+  done
+
+  if [[ -d /proc/${PID} ]]; then
+    kill -9 ${PID}
+  fi
+}
+
+stop() {
+  echo "Stopping ${PROG}: "
+
+  # Use the pid file if it exists.
+  if [[ -f ${INIT_PID} ]]; then
+	for PID in `cat ${INIT_PID}`; do
+    	killoae ${PID}
+	done
+    rm -f ${INIT_PID}
+  else
+    # The OAE procs for the oae user
+    PIDS=`ps -u ${SAKAIOAE_USER} --no-headers -o pid,cmd | grep ${SAKAIOAE_JAR} | awk '{ print $1 }'`
+    for PID in ${PIDS}; do
+      if [[ $? -eq 0 ]]; then
+        killoae ${PID}
+      fi
+    done
+  fi
+  echo 'done'
+}
+
+restart() {
+stop
+start
+}
+
+status() {
+if [ -f ${INIT_PID} ]; then
+  echo "It seems that the ${PROG} app is still running.  If you have issued a stop command already, please wait." ;
+  exit 0;
+else
+  echo "${PROG} is not running" ;
+  exit 2;
+fi
+}
+
+if [ "${1}" = "start" ]; then
+start ;
+fi
+if [ "${1}" = "debug" ]; then
+debug ;
+fi
+if [ "${1}" = "stop" ]; then
+stop ;
+fi
+if [ "${1}" = "restart" ]; then
+restart ;
+fi
+if [ "${1}" = "status" ]; then
+status ;
+fi
+if [ "${1}" = "help" ]; then
+help ;
+fi
+if [ "${1}" = "" ]; then
+help ;
+exit 1;
+fi
+
+exit 0;

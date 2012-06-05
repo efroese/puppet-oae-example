@@ -1,0 +1,233 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--  developed for CSU by ieb
+Contains hard coded IP addresses and port numbers that may need changing. -->
+<ehcache xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xsi:noNamespaceSchemaLocation="ehcache.xsd">
+
+    <diskStore path="${cache-store}"/>
+
+	<!-- the group address and muticast port may need changing, I am assuming
+		all the cluster hosts are on the same subnet and no forwarding is required.
+		The group address and port have been changed from the default just incase
+		there are any other ehcache instances on the same subnet. The hostName must
+		be customsed -->
+	<cacheManagerPeerProviderFactory
+		class="net.sf.ehcache.distribution.RMICacheManagerPeerProviderFactory"
+		<% if has_variable?("rmiurls") %>
+		    properties="peerDiscovery=manual,   
+                                rmiUrls=<%= rmiurls %>"
+        <% else %>
+		    properties="peerDiscovery=automatic,
+                        multicastGroupAddress=<%= mcast_address %>,
+                        multicastGroupPort=<%= mcast_port %>, timeToLive=1"
+		    propertySeparator=","
+		<% end %>
+	/>
+
+	<cacheManagerPeerListenerFactory
+		class="net.sf.ehcache.distribution.RMICacheManagerPeerListenerFactory"
+		properties="hostName=<%= tcp_address %>,
+		            <% if remote_object_port != "" -%>
+		            remoteObjectPort=<%= remote_object_port %>,
+		            <% end -%>
+                    port=<%= tcp_port %>,
+                    socketTimeoutMillis=120000"
+		propertySeparator="," />
+	<!-- Mandatory Default Cache configuration. These settings will be applied
+		to caches created programmtically using CacheManager.add(String cacheName).
+		The defaultCache has an implicit name "default" which is a reserved cache
+		name. -->
+	<defaultCache maxElementsInMemory="10000" eternal="false"
+		timeToIdleSeconds="600" timeToLiveSeconds="600" overflowToDisk="false"
+		diskPersistent="false" memoryStoreEvictionPolicy="LRU" />
+
+    <!--  small objects, cluster invalidated -->
+	<cache name="accessControlCache" maxElementsInMemory="100000"
+		eternal="false" overflowToDisk="false"
+		timeToIdleSeconds="300" timeToLiveSeconds="600"
+		memoryStoreEvictionPolicy="LFU"  >
+		<cacheEventListenerFactory class="net.sf.ehcache.distribution.RMICacheReplicatorFactory"
+         properties="replicateAsynchronously=true,
+         replicatePuts=false,
+         replicatePutsViaCopy=false,
+         replicateUpdates=false,
+         replicateUpdatesViaCopy=true,
+         replicateRemovals=true,
+         asynchronousReplicationIntervalMillis=500"
+         propertySeparator="," />
+	</cache>
+
+    <!--  small objects, cluster invalidated -->
+	<cache name="authorizableCache" maxElementsInMemory="100000"
+		eternal="false" overflowToDisk="false"
+		timeToIdleSeconds="300" timeToLiveSeconds="600"
+		memoryStoreEvictionPolicy="LFU"  >
+		<cacheEventListenerFactory class="net.sf.ehcache.distribution.RMICacheReplicatorFactory"
+         properties="replicateAsynchronously=true,
+         replicatePuts=false,
+         replicatePutsViaCopy=false,
+         replicateUpdates=false,
+         replicateUpdatesViaCopy=true,
+         replicateRemovals=true,
+         asynchronousReplicationIntervalMillis=500"
+         propertySeparator="," />
+	</cache>
+
+    <!--  larger objects, cluster invalidated -->
+	<cache name="contentCache" maxElementsInMemory="50000"
+		eternal="false" overflowToDisk="false"
+		timeToIdleSeconds="300" timeToLiveSeconds="600"
+		memoryStoreEvictionPolicy="LFU"  >
+		<cacheEventListenerFactory class="net.sf.ehcache.distribution.RMICacheReplicatorFactory"
+         properties="replicateAsynchronously=true,
+         replicatePuts=false,
+         replicatePutsViaCopy=false,
+         replicateUpdates=false,
+         replicateUpdatesViaCopy=false,
+         replicateRemovals=true,
+         asynchronousReplicationIntervalMillis=500"
+         propertySeparator="," />
+	</cache>
+
+    <!--  The deleted files need to be shared. -->
+	<cache name="deletedPathQueue" maxElementsInMemory="10000"
+		eternal="false" overflowToDisk="false"
+		timeToIdleSeconds="300" timeToLiveSeconds="600"
+		memoryStoreEvictionPolicy="LFU"  >
+		<cacheEventListenerFactory class="net.sf.ehcache.distribution.RMICacheReplicatorFactory"
+         properties="replicateAsynchronously=true,
+         replicatePuts=true,
+         replicatePutsViaCopy=true,
+         replicateUpdates=true,
+         replicateUpdatesViaCopy=true,
+         replicateRemovals=true,
+         asynchronousReplicationIntervalMillis=500"
+         propertySeparator="," />
+        <bootstrapCacheLoaderFactory
+          class="net.sf.ehcache.distribution.RMIBootstrapCacheLoaderFactory"
+          properties="bootstrapAsynchronously=true, maximumChunkSizeBytes=5000000"
+          propertySeparator="," />
+	</cache>
+
+    <!--  support for 10K locks over the cluster, replicated. -->
+	<cache name="lockmanager.lockmap" maxElementsInMemory="10000"
+		eternal="false" overflowToDisk="false"
+		timeToIdleSeconds="300" timeToLiveSeconds="600"
+		memoryStoreEvictionPolicy="LFU"  >
+		<cacheEventListenerFactory class="net.sf.ehcache.distribution.RMICacheReplicatorFactory"
+         properties="replicateAsynchronously=true,
+         replicatePuts=true,
+         replicatePutsViaCopy=true,
+         replicateUpdates=true,
+         replicateUpdatesViaCopy=true,
+         replicateRemovals=true,
+         asynchronousReplicationIntervalMillis=500"
+         propertySeparator="," />
+        <bootstrapCacheLoaderFactory
+          class="net.sf.ehcache.distribution.RMIBootstrapCacheLoaderFactory"
+          properties="bootstrapAsynchronously=true, maximumChunkSizeBytes=5000000"
+          propertySeparator="," />
+	</cache>
+
+    <!--  the Token store must be saved to disk localy, normally will only need 5x number of servers.
+    Fully replicated, synchronously -->
+	<cache name="org.sakaiproject.nakamura.auth.trusted.TokenStore"
+		maxElementsInMemory="10000" maxElementsOnDisk="100000" eternal="true"
+		overflowToDisk="true" diskSpoolBufferSizeMB="20" memoryStoreEvictionPolicy="LFU"
+		diskPersistent="true"  >
+		<cacheEventListenerFactory class="net.sf.ehcache.distribution.RMICacheReplicatorFactory"
+         properties="replicateAsynchronously=false,
+         replicatePuts=true,
+         replicatePutsViaCopy=true,
+         replicateUpdates=true,
+         replicateUpdatesViaCopy=true,
+         replicateRemovals=true"
+         propertySeparator="," />
+        <bootstrapCacheLoaderFactory
+          class="net.sf.ehcache.distribution.RMIBootstrapCacheLoaderFactory"
+          properties="bootstrapAsynchronously=false, maximumChunkSizeBytes=5000000"
+          propertySeparator="," />
+
+	</cache>
+
+    <!--  not sure why this is required, looks like a programming error to me, no invalidation or replication required. -->
+	<cache name="org.sakaiproject.nakamura.batch.WidgetServiceImpl_configs"
+		eternal="false" overflowToDisk="false" maxElementsInMemory="10000"
+		timeToIdleSeconds="300" timeToLiveSeconds="600"
+		memoryStoreEvictionPolicy="LFU"  >
+	</cache>
+
+    <!--  not sure why this is required, looks like a programming error to me, no invalidation or replication required. -->
+	<cache name="org.sakaiproject.nakamura.batch.WidgetServiceImpl_files"
+		eternal="false" overflowToDisk="false" maxElementsInMemory="10000"
+		timeToIdleSeconds="300" timeToLiveSeconds="600"
+		memoryStoreEvictionPolicy="LFU"  >
+	</cache>
+
+	<!--  these need to be replicated async, I am a bit worried about these since it looks like all users. -->
+	<cache name="presence.location" maxElementsInMemory="100000"
+		eternal="false" overflowToDisk="false"
+		timeToIdleSeconds="300" timeToLiveSeconds="600"
+		memoryStoreEvictionPolicy="LRU"  >
+		<cacheEventListenerFactory class="net.sf.ehcache.distribution.RMICacheReplicatorFactory"
+         properties="replicateAsynchronously=true,
+         replicatePuts=true,
+         replicatePutsViaCopy=true,
+         replicateUpdates=true,
+         replicateUpdatesViaCopy=true,
+         replicateRemovals=true,
+         asynchronousReplicationIntervalMillis=500"
+         propertySeparator="," />
+        <bootstrapCacheLoaderFactory
+          class="net.sf.ehcache.distribution.RMIBootstrapCacheLoaderFactory"
+          properties="bootstrapAsynchronously=true, maximumChunkSizeBytes=5000000"
+          propertySeparator="," />
+	</cache>
+	<!--  these need to be replicated async, I am a bit worried about these since it looks like all users. -->
+	<cache name="presence.status" maxElementsInMemory="100000"
+		eternal="false" overflowToDisk="false"
+		timeToIdleSeconds="300" timeToLiveSeconds="600"
+		memoryStoreEvictionPolicy="LRU"  >
+		<cacheEventListenerFactory class="net.sf.ehcache.distribution.RMICacheReplicatorFactory"
+         properties="replicateAsynchronously=true,
+         replicatePuts=true,
+         replicatePutsViaCopy=true,
+         replicateUpdates=true,
+         replicateUpdatesViaCopy=true,
+         replicateRemovals=true,
+         asynchronousReplicationIntervalMillis=500"
+         propertySeparator="," />
+        <bootstrapCacheLoaderFactory
+          class="net.sf.ehcache.distribution.RMIBootstrapCacheLoaderFactory"
+          properties="bootstrapAsynchronously=true, maximumChunkSizeBytes=5000000"
+          propertySeparator="," />
+	</cache>
+
+	<!--  these need to be replicated async, there wont be 10K of these -->
+	<cache name="server-tracking-cache" maxElementsInMemory="10000"
+		eternal="false" overflowToDisk="false"
+		timeToIdleSeconds="300" timeToLiveSeconds="600"
+		memoryStoreEvictionPolicy="LRU"  >
+		<cacheEventListenerFactory class="net.sf.ehcache.distribution.RMICacheReplicatorFactory"
+         properties="replicateAsynchronously=true,
+         replicatePuts=true,
+         replicatePutsViaCopy=true,
+         replicateUpdates=true,
+         replicateUpdatesViaCopy=true,
+         replicateRemovals=true,
+         asynchronousReplicationIntervalMillis=500"
+         propertySeparator="," />
+        <bootstrapCacheLoaderFactory
+          class="net.sf.ehcache.distribution.RMIBootstrapCacheLoaderFactory"
+          properties="bootstrapAsynchronously=false, maximumChunkSizeBytes=5000000"
+          propertySeparator="," />
+	</cache>
+
+    <!--  these are pages and page fragments, 10000 in memory -->
+	<cache name="org.sakaiproject.nakamura.http.cache.CacheControlFilter-cache"  maxElementsInMemory="10000"
+		eternal="false" overflowToDisk="false"
+		timeToIdleSeconds="300" timeToLiveSeconds="600"
+		memoryStoreEvictionPolicy="LFU"  >
+		</cache>
+
+</ehcache>

@@ -48,7 +48,7 @@ class people::oipp-sis::external {
         user => 'ucd_sis',
         require => User['ucd_sis'],
     }
-    ssh_authorized_key { 'adam@dhcp-169-229-212-58.lips.berkeley.edu':
+    ssh_authorized_key { 'adam@dhcp-169-229-212-58.lips.berkeley.edu1':
         ensure => present,
         key  => 'AAAAB3NzaC1yc2EAAAABIwAAAgEAvUF2WeggJNwsiC2js7MSXxo73ClbGZr0abYsKgHdDZ0xEo9e3Slma/hO8InAMVaYg4sqbm8BUYdEf/2GMLURwvcShq2Hyg+C+o6pKNtoOBFosDQ/bXKf/n5yonR4+gUedGtp9iKzwUED1QtkkDLjqsR8SI56TZgv5olZAE6WYX3CNDCyXGfZdjf/vSdmz7BQTBTgfze0aofpCJaSSyLmipRco6/zUatY/L+jYz2AXZEWN5er55P3JdD8jUUeBtGFugqb48NMClfvfu0oGKsUMhQCyLlPfRjartfWJtId8kZQ1IyHZQ6F7nlt4FycaiY3cFRnElBgbNxq81Xxwali3iMxTN4PMSfDXML497Vn1Ts8QVhVXgasIEchyPgEmn2zjUl87gX9ZOo2Fj1Dxr/GvWePV/rRV8uZT446QLcDx4WspsCTdIq+XxB+2yqMQKRGzXVcGSsDOpx+Ki+j2eCpeBzAqQpK7qDEUK0fkJTBSsi3qd1tPm0Y3dE6iFUyEcRoI3LZ+8BUrzutIpKJWW58cOy1jnToB3h3ZcJ7Q73iCbKO3BJgX5i2/6valRvFi1Ulof2qkXbFXnWQt/VgZ+3lhqrynkEWsanumavXsyDeVgcY0uYVa09QLRfJbK5IdkJYwmyKJtoI3FXUUH/bz1zeN4+YEeAVjBic0hFqAlTx/oE=',
         type => 'ssh-rsa',
@@ -73,7 +73,7 @@ class people::oipp-sis::external {
         user => 'ucb_sis',
         require => User['ucb_sis'],
     }
-    ssh_authorized_key { 'adam@dhcp-169-229-212-58.lips.berkeley.edu':
+    ssh_authorized_key { 'adam@dhcp-169-229-212-58.lips.berkeley.edu2':
         ensure => present,
         key  => 'AAAAB3NzaC1yc2EAAAABIwAAAgEAvUF2WeggJNwsiC2js7MSXxo73ClbGZr0abYsKgHdDZ0xEo9e3Slma/hO8InAMVaYg4sqbm8BUYdEf/2GMLURwvcShq2Hyg+C+o6pKNtoOBFosDQ/bXKf/n5yonR4+gUedGtp9iKzwUED1QtkkDLjqsR8SI56TZgv5olZAE6WYX3CNDCyXGfZdjf/vSdmz7BQTBTgfze0aofpCJaSSyLmipRco6/zUatY/L+jYz2AXZEWN5er55P3JdD8jUUeBtGFugqb48NMClfvfu0oGKsUMhQCyLlPfRjartfWJtId8kZQ1IyHZQ6F7nlt4FycaiY3cFRnElBgbNxq81Xxwali3iMxTN4PMSfDXML497Vn1Ts8QVhVXgasIEchyPgEmn2zjUl87gX9ZOo2Fj1Dxr/GvWePV/rRV8uZT446QLcDx4WspsCTdIq+XxB+2yqMQKRGzXVcGSsDOpx+Ki+j2eCpeBzAqQpK7qDEUK0fkJTBSsi3qd1tPm0Y3dE6iFUyEcRoI3LZ+8BUrzutIpKJWW58cOy1jnToB3h3ZcJ7Q73iCbKO3BJgX5i2/6valRvFi1Ulof2qkXbFXnWQt/VgZ+3lhqrynkEWsanumavXsyDeVgcY0uYVa09QLRfJbK5IdkJYwmyKJtoI3FXUUH/bz1zeN4+YEeAVjBic0hFqAlTx/oE=',
         type => 'ssh-rsa',
@@ -105,7 +105,7 @@ class people::oipp-sis::external {
         user => 'ucm_sis',
         require => User['ucm_sis'],
     }
-    ssh_authorized_key { 'adam@dhcp-169-229-212-58.lips.berkeley.edu':
+    ssh_authorized_key { 'adam@dhcp-169-229-212-58.lips.berkeley.edu3':
         ensure => present,
         key  => 'AAAAB3NzaC1yc2EAAAABIwAAAgEAvUF2WeggJNwsiC2js7MSXxo73ClbGZr0abYsKgHdDZ0xEo9e3Slma/hO8InAMVaYg4sqbm8BUYdEf/2GMLURwvcShq2Hyg+C+o6pKNtoOBFosDQ/bXKf/n5yonR4+gUedGtp9iKzwUED1QtkkDLjqsR8SI56TZgv5olZAE6WYX3CNDCyXGfZdjf/vSdmz7BQTBTgfze0aofpCJaSSyLmipRco6/zUatY/L+jYz2AXZEWN5er55P3JdD8jUUeBtGFugqb48NMClfvfu0oGKsUMhQCyLlPfRjartfWJtId8kZQ1IyHZQ6F7nlt4FycaiY3cFRnElBgbNxq81Xxwali3iMxTN4PMSfDXML497Vn1Ts8QVhVXgasIEchyPgEmn2zjUl87gX9ZOo2Fj1Dxr/GvWePV/rRV8uZT446QLcDx4WspsCTdIq+XxB+2yqMQKRGzXVcGSsDOpx+Ki+j2eCpeBzAqQpK7qDEUK0fkJTBSsi3qd1tPm0Y3dE6iFUyEcRoI3LZ+8BUrzutIpKJWW58cOy1jnToB3h3ZcJ7Q73iCbKO3BJgX5i2/6valRvFi1Ulof2qkXbFXnWQt/VgZ+3lhqrynkEWsanumavXsyDeVgcY0uYVa09QLRfJbK5IdkJYwmyKJtoI3FXUUH/bz1zeN4+YEeAVjBic0hFqAlTx/oE=',
         type => 'ssh-rsa',
@@ -137,7 +137,7 @@ class people::oipp-sis::external {
         user => 'ucla_sis',
         require => User['ucla_sis'],
     }
-    ssh_authorized_key { 'adam@dhcp-169-229-212-58.lips.berkeley.edu':
+    ssh_authorized_key { 'adam@dhcp-169-229-212-58.lips.berkeley.edu4':
         ensure => present,
         key  => 'AAAAB3NzaC1yc2EAAAABIwAAAgEAvUF2WeggJNwsiC2js7MSXxo73ClbGZr0abYsKgHdDZ0xEo9e3Slma/hO8InAMVaYg4sqbm8BUYdEf/2GMLURwvcShq2Hyg+C+o6pKNtoOBFosDQ/bXKf/n5yonR4+gUedGtp9iKzwUED1QtkkDLjqsR8SI56TZgv5olZAE6WYX3CNDCyXGfZdjf/vSdmz7BQTBTgfze0aofpCJaSSyLmipRco6/zUatY/L+jYz2AXZEWN5er55P3JdD8jUUeBtGFugqb48NMClfvfu0oGKsUMhQCyLlPfRjartfWJtId8kZQ1IyHZQ6F7nlt4FycaiY3cFRnElBgbNxq81Xxwali3iMxTN4PMSfDXML497Vn1Ts8QVhVXgasIEchyPgEmn2zjUl87gX9ZOo2Fj1Dxr/GvWePV/rRV8uZT446QLcDx4WspsCTdIq+XxB+2yqMQKRGzXVcGSsDOpx+Ki+j2eCpeBzAqQpK7qDEUK0fkJTBSsi3qd1tPm0Y3dE6iFUyEcRoI3LZ+8BUrzutIpKJWW58cOy1jnToB3h3ZcJ7Q73iCbKO3BJgX5i2/6valRvFi1Ulof2qkXbFXnWQt/VgZ+3lhqrynkEWsanumavXsyDeVgcY0uYVa09QLRfJbK5IdkJYwmyKJtoI3FXUUH/bz1zeN4+YEeAVjBic0hFqAlTx/oE=',
         type => 'ssh-rsa',
@@ -170,7 +170,7 @@ class people::oipp-sis::external {
         user => 'ucsc_sis',
         require => User['ucsc_sis'],
     }
-    ssh_authorized_key { 'adam@dhcp-169-229-212-58.lips.berkeley.edu':
+    ssh_authorized_key { 'adam@dhcp-169-229-212-58.lips.berkeley.edu5':
         ensure => present,
         key  => 'AAAAB3NzaC1yc2EAAAABIwAAAgEAvUF2WeggJNwsiC2js7MSXxo73ClbGZr0abYsKgHdDZ0xEo9e3Slma/hO8InAMVaYg4sqbm8BUYdEf/2GMLURwvcShq2Hyg+C+o6pKNtoOBFosDQ/bXKf/n5yonR4+gUedGtp9iKzwUED1QtkkDLjqsR8SI56TZgv5olZAE6WYX3CNDCyXGfZdjf/vSdmz7BQTBTgfze0aofpCJaSSyLmipRco6/zUatY/L+jYz2AXZEWN5er55P3JdD8jUUeBtGFugqb48NMClfvfu0oGKsUMhQCyLlPfRjartfWJtId8kZQ1IyHZQ6F7nlt4FycaiY3cFRnElBgbNxq81Xxwali3iMxTN4PMSfDXML497Vn1Ts8QVhVXgasIEchyPgEmn2zjUl87gX9ZOo2Fj1Dxr/GvWePV/rRV8uZT446QLcDx4WspsCTdIq+XxB+2yqMQKRGzXVcGSsDOpx+Ki+j2eCpeBzAqQpK7qDEUK0fkJTBSsi3qd1tPm0Y3dE6iFUyEcRoI3LZ+8BUrzutIpKJWW58cOy1jnToB3h3ZcJ7Q73iCbKO3BJgX5i2/6valRvFi1Ulof2qkXbFXnWQt/VgZ+3lhqrynkEWsanumavXsyDeVgcY0uYVa09QLRfJbK5IdkJYwmyKJtoI3FXUUH/bz1zeN4+YEeAVjBic0hFqAlTx/oE=',
         type => 'ssh-rsa',
@@ -203,7 +203,7 @@ class people::oipp-sis::external {
         user => 'uci_sis',
         require => User['uci_sis'],
     }
-    ssh_authorized_key { 'adam@dhcp-169-229-212-58.lips.berkeley.edu':
+    ssh_authorized_key { 'adam@dhcp-169-229-212-58.lips.berkeley.edu6':
         ensure => present,
         key  => 'AAAAB3NzaC1yc2EAAAABIwAAAgEAvUF2WeggJNwsiC2js7MSXxo73ClbGZr0abYsKgHdDZ0xEo9e3Slma/hO8InAMVaYg4sqbm8BUYdEf/2GMLURwvcShq2Hyg+C+o6pKNtoOBFosDQ/bXKf/n5yonR4+gUedGtp9iKzwUED1QtkkDLjqsR8SI56TZgv5olZAE6WYX3CNDCyXGfZdjf/vSdmz7BQTBTgfze0aofpCJaSSyLmipRco6/zUatY/L+jYz2AXZEWN5er55P3JdD8jUUeBtGFugqb48NMClfvfu0oGKsUMhQCyLlPfRjartfWJtId8kZQ1IyHZQ6F7nlt4FycaiY3cFRnElBgbNxq81Xxwali3iMxTN4PMSfDXML497Vn1Ts8QVhVXgasIEchyPgEmn2zjUl87gX9ZOo2Fj1Dxr/GvWePV/rRV8uZT446QLcDx4WspsCTdIq+XxB+2yqMQKRGzXVcGSsDOpx+Ki+j2eCpeBzAqQpK7qDEUK0fkJTBSsi3qd1tPm0Y3dE6iFUyEcRoI3LZ+8BUrzutIpKJWW58cOy1jnToB3h3ZcJ7Q73iCbKO3BJgX5i2/6valRvFi1Ulof2qkXbFXnWQt/VgZ+3lhqrynkEWsanumavXsyDeVgcY0uYVa09QLRfJbK5IdkJYwmyKJtoI3FXUUH/bz1zeN4+YEeAVjBic0hFqAlTx/oE=',
         type => 'ssh-rsa',
@@ -236,7 +236,7 @@ class people::oipp-sis::external {
         user => 'ucr_sis',
         require => User['ucr_sis'],
     }
-    ssh_authorized_key { 'adam@dhcp-169-229-212-58.lips.berkeley.edu':
+    ssh_authorized_key { 'adam@dhcp-169-229-212-58.lips.berkeley.edu7':
         ensure => present,
         key  => 'AAAAB3NzaC1yc2EAAAABIwAAAgEAvUF2WeggJNwsiC2js7MSXxo73ClbGZr0abYsKgHdDZ0xEo9e3Slma/hO8InAMVaYg4sqbm8BUYdEf/2GMLURwvcShq2Hyg+C+o6pKNtoOBFosDQ/bXKf/n5yonR4+gUedGtp9iKzwUED1QtkkDLjqsR8SI56TZgv5olZAE6WYX3CNDCyXGfZdjf/vSdmz7BQTBTgfze0aofpCJaSSyLmipRco6/zUatY/L+jYz2AXZEWN5er55P3JdD8jUUeBtGFugqb48NMClfvfu0oGKsUMhQCyLlPfRjartfWJtId8kZQ1IyHZQ6F7nlt4FycaiY3cFRnElBgbNxq81Xxwali3iMxTN4PMSfDXML497Vn1Ts8QVhVXgasIEchyPgEmn2zjUl87gX9ZOo2Fj1Dxr/GvWePV/rRV8uZT446QLcDx4WspsCTdIq+XxB+2yqMQKRGzXVcGSsDOpx+Ki+j2eCpeBzAqQpK7qDEUK0fkJTBSsi3qd1tPm0Y3dE6iFUyEcRoI3LZ+8BUrzutIpKJWW58cOy1jnToB3h3ZcJ7Q73iCbKO3BJgX5i2/6valRvFi1Ulof2qkXbFXnWQt/VgZ+3lhqrynkEWsanumavXsyDeVgcY0uYVa09QLRfJbK5IdkJYwmyKJtoI3FXUUH/bz1zeN4+YEeAVjBic0hFqAlTx/oE=',
         type => 'ssh-rsa',
@@ -269,7 +269,7 @@ class people::oipp-sis::external {
         user => 'ucoe_sis',
         require => User['ucoe_sis'],
     }
-    ssh_authorized_key { 'adam@dhcp-169-229-212-58.lips.berkeley.edu':
+    ssh_authorized_key { 'adam@dhcp-169-229-212-58.lips.berkeley.edu8':
         ensure => present,
         key  => 'AAAAB3NzaC1yc2EAAAABIwAAAgEAvUF2WeggJNwsiC2js7MSXxo73ClbGZr0abYsKgHdDZ0xEo9e3Slma/hO8InAMVaYg4sqbm8BUYdEf/2GMLURwvcShq2Hyg+C+o6pKNtoOBFosDQ/bXKf/n5yonR4+gUedGtp9iKzwUED1QtkkDLjqsR8SI56TZgv5olZAE6WYX3CNDCyXGfZdjf/vSdmz7BQTBTgfze0aofpCJaSSyLmipRco6/zUatY/L+jYz2AXZEWN5er55P3JdD8jUUeBtGFugqb48NMClfvfu0oGKsUMhQCyLlPfRjartfWJtId8kZQ1IyHZQ6F7nlt4FycaiY3cFRnElBgbNxq81Xxwali3iMxTN4PMSfDXML497Vn1Ts8QVhVXgasIEchyPgEmn2zjUl87gX9ZOo2Fj1Dxr/GvWePV/rRV8uZT446QLcDx4WspsCTdIq+XxB+2yqMQKRGzXVcGSsDOpx+Ki+j2eCpeBzAqQpK7qDEUK0fkJTBSsi3qd1tPm0Y3dE6iFUyEcRoI3LZ+8BUrzutIpKJWW58cOy1jnToB3h3ZcJ7Q73iCbKO3BJgX5i2/6valRvFi1Ulof2qkXbFXnWQt/VgZ+3lhqrynkEWsanumavXsyDeVgcY0uYVa09QLRfJbK5IdkJYwmyKJtoI3FXUUH/bz1zeN4+YEeAVjBic0hFqAlTx/oE=',
         type => 'ssh-rsa',

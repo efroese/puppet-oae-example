@@ -77,6 +77,6 @@ class people {
 
     realize(Group['ppilli'])
     realize(User['ppilli'])
-    realize(Ssh_authorized_key['ppilli-pub'])
+    realize(Ssh_authorized_key['ppilli-home-pub'])
 
 }

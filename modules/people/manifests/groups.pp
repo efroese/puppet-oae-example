@@ -23,7 +23,6 @@ class people::groups {
     @group { 'ppilli':    gid => '510' }
     @group { 'jbush':     gid => '511' }
     @group { 'skamali':   gid => '512' }
-    @group { 'ppilli':    gid => '513' }
 
     # Services/Applications/Robots/Aliens
     @group { 'hyperic':   gid => '701' }

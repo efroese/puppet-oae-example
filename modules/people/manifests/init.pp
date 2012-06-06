@@ -20,7 +20,7 @@ class people {
 
     realize(Group['rsmartian'])
     realize(User['rsmartian'])
-	realize(Ssh_authorized_key['rsmartian-deploy-pub'])
+	  realize(Ssh_authorized_key['rsmartian-deploy-pub'])
 
     file { "/home/rsmartian/.bash_profile":
         owner => rsmartian,

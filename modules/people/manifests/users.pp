@@ -283,4 +283,20 @@ class people::users {
         require => User['skamali'],
     }
 
+    @user { 'ppilli':
+        ensure     => present,
+        uid        => '513',
+        gid        => 'ppilli',
+        home       => '/home/ppilli',
+        managehome => true,
+        groups     => ['ppilli', ],
+    }
+    @ssh_authorized_key { 'ppilli-pub':
+        ensure => present,
+        key  => 'AAAAB3NzaC1yc2EAAAABJQAAAIEAnKpU9vs3tpZetpHWjXbPafiG1UOEh2MiNU0BU2ih3R15Wwr8hsbFEGTQH0AvdtCcnZWqyXBpgW9ze/hraNj5+9JVJS9oTSch2Qw5etTXb0qduNvFEM7Pu90rEBFMJrtsD+d/1utIYjFX+q6V5kA9rdFsOoGEvpwH6FDh3zs4x5U=',
+        type => 'ssh-rsa',
+        user => 'ppilli',
+        require => User['ppilli'],
+    }
+
 }

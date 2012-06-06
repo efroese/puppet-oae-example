@@ -66,13 +66,17 @@ class people {
     realize(User['jbush'])
     realize(Ssh_authorized_key['jbush-pub'])
 	
-	realize(Group['karagon'])
-	realize(User['karagon'])
-	realize(Ssh_authorized_key['karagon-laptop-pub'])
-	realize(Ssh_authorized_key['karagon-mbp-pub'])
+	  realize(Group['karagon'])
+	  realize(User['karagon'])
+	  realize(Ssh_authorized_key['karagon-laptop-pub'])
+	  realize(Ssh_authorized_key['karagon-mbp-pub'])
 
     realize(Group['skamali'])
     realize(User['skamali'])
     realize(Ssh_authorized_key['skamali-pub'])
+
+    realize(Group['ppilli'])
+    realize(User['ppilli'])
+    realize(Ssh_authorized_key['ppilli-pub'])
 
 }

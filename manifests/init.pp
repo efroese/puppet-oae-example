@@ -33,6 +33,7 @@ define wget::fetch($source,$destination,$timeout="0") {
 		unless => "test -s $destination",
 		environment => $environment,
 		path => "/usr/bin:/usr/sbin:/bin",
+		require => Package[wget],
 	}
 }
 
@@ -62,6 +63,7 @@ define wget::authfetch($source,$destination,$user,$password="",$timeout="0") {
 		unless => "test -s $destination",
 		environment => $environment,
 		path => "/usr/bin:/usr/sbin:/bin",
+		require => Package[wget],
 	}
 }
 

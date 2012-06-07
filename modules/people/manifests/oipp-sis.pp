@@ -225,9 +225,8 @@ class people::oipp-sis::external {
     }
     ssh_authorized_key { 'uci_sis-pub':
         ensure => present,
-        # TODO supply a vaid key
-        key  => 'TODO',
-        type => 'ssh-dss',
+        key  => 'AAAAB3NzaC1yc2EAAAABJQAAAIBKFElQsm7hCTS60q66Yac0TO3pCQeccpky0ZiYkpJhuaENJGT3Hvq9rVcHAcI+67/4AT2tVoN78ozUFVbENtuAZEtkS+jZzUThNz3mF/hRWTMZkSFphZeWsP44DuGbKLJRD+D5i35qOPU0wUg+kYn0nZPhmKRzRuSQlhBA/JpY0Q==',
+        type => 'ssh-rsa',
         user => 'uci_sis',
         require => User['uci_sis'],
     }

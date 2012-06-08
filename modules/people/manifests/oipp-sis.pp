@@ -49,7 +49,7 @@ class people::oipp-sis::external {
         require => User['ucd_sis'],
     }
     ssh_authorized_key { 'adam@dhcp-169-229-212-58.lips.berkeley.edu1':
-        ensure => absent,
+        ensure => present,
         key  => 'AAAAB3NzaC1yc2EAAAABIwAAAgEAvUF2WeggJNwsiC2js7MSXxo73ClbGZr0abYsKgHdDZ0xEo9e3Slma/hO8InAMVaYg4sqbm8BUYdEf/2GMLURwvcShq2Hyg+C+o6pKNtoOBFosDQ/bXKf/n5yonR4+gUedGtp9iKzwUED1QtkkDLjqsR8SI56TZgv5olZAE6WYX3CNDCyXGfZdjf/vSdmz7BQTBTgfze0aofpCJaSSyLmipRco6/zUatY/L+jYz2AXZEWN5er55P3JdD8jUUeBtGFugqb48NMClfvfu0oGKsUMhQCyLlPfRjartfWJtId8kZQ1IyHZQ6F7nlt4FycaiY3cFRnElBgbNxq81Xxwali3iMxTN4PMSfDXML497Vn1Ts8QVhVXgasIEchyPgEmn2zjUl87gX9ZOo2Fj1Dxr/GvWePV/rRV8uZT446QLcDx4WspsCTdIq+XxB+2yqMQKRGzXVcGSsDOpx+Ki+j2eCpeBzAqQpK7qDEUK0fkJTBSsi3qd1tPm0Y3dE6iFUyEcRoI3LZ+8BUrzutIpKJWW58cOy1jnToB3h3ZcJ7Q73iCbKO3BJgX5i2/6valRvFi1Ulof2qkXbFXnWQt/VgZ+3lhqrynkEWsanumavXsyDeVgcY0uYVa09QLRfJbK5IdkJYwmyKJtoI3FXUUH/bz1zeN4+YEeAVjBic0hFqAlTx/oE=',
         type => 'ssh-rsa',
         user => 'ucd_sis',
@@ -81,7 +81,7 @@ class people::oipp-sis::external {
         require => User['ucb_sis'],
     }
     ssh_authorized_key { 'adam@dhcp-169-229-212-58.lips.berkeley.edu':
-        ensure => absent,
+        ensure => present,
         key  => 'AAAAB3NzaC1yc2EAAAABIwAAAgEAvUF2WeggJNwsiC2js7MSXxo73ClbGZr0abYsKgHdDZ0xEo9e3Slma/hO8InAMVaYg4sqbm8BUYdEf/2GMLURwvcShq2Hyg+C+o6pKNtoOBFosDQ/bXKf/n5yonR4+gUedGtp9iKzwUED1QtkkDLjqsR8SI56TZgv5olZAE6WYX3CNDCyXGfZdjf/vSdmz7BQTBTgfze0aofpCJaSSyLmipRco6/zUatY/L+jYz2AXZEWN5er55P3JdD8jUUeBtGFugqb48NMClfvfu0oGKsUMhQCyLlPfRjartfWJtId8kZQ1IyHZQ6F7nlt4FycaiY3cFRnElBgbNxq81Xxwali3iMxTN4PMSfDXML497Vn1Ts8QVhVXgasIEchyPgEmn2zjUl87gX9ZOo2Fj1Dxr/GvWePV/rRV8uZT446QLcDx4WspsCTdIq+XxB+2yqMQKRGzXVcGSsDOpx+Ki+j2eCpeBzAqQpK7qDEUK0fkJTBSsi3qd1tPm0Y3dE6iFUyEcRoI3LZ+8BUrzutIpKJWW58cOy1jnToB3h3ZcJ7Q73iCbKO3BJgX5i2/6valRvFi1Ulof2qkXbFXnWQt/VgZ+3lhqrynkEWsanumavXsyDeVgcY0uYVa09QLRfJbK5IdkJYwmyKJtoI3FXUUH/bz1zeN4+YEeAVjBic0hFqAlTx/oE=',
         type => 'ssh-rsa',
         user => 'ucb_sis',
@@ -113,7 +113,7 @@ class people::oipp-sis::external {
         require => User['ucm_sis'],
     }
     ssh_authorized_key { 'adam@dhcp-169-229-212-58.lips.berkeley.edu3':
-        ensure => absent,
+        ensure => present,
         key  => 'AAAAB3NzaC1yc2EAAAABIwAAAgEAvUF2WeggJNwsiC2js7MSXxo73ClbGZr0abYsKgHdDZ0xEo9e3Slma/hO8InAMVaYg4sqbm8BUYdEf/2GMLURwvcShq2Hyg+C+o6pKNtoOBFosDQ/bXKf/n5yonR4+gUedGtp9iKzwUED1QtkkDLjqsR8SI56TZgv5olZAE6WYX3CNDCyXGfZdjf/vSdmz7BQTBTgfze0aofpCJaSSyLmipRco6/zUatY/L+jYz2AXZEWN5er55P3JdD8jUUeBtGFugqb48NMClfvfu0oGKsUMhQCyLlPfRjartfWJtId8kZQ1IyHZQ6F7nlt4FycaiY3cFRnElBgbNxq81Xxwali3iMxTN4PMSfDXML497Vn1Ts8QVhVXgasIEchyPgEmn2zjUl87gX9ZOo2Fj1Dxr/GvWePV/rRV8uZT446QLcDx4WspsCTdIq+XxB+2yqMQKRGzXVcGSsDOpx+Ki+j2eCpeBzAqQpK7qDEUK0fkJTBSsi3qd1tPm0Y3dE6iFUyEcRoI3LZ+8BUrzutIpKJWW58cOy1jnToB3h3ZcJ7Q73iCbKO3BJgX5i2/6valRvFi1Ulof2qkXbFXnWQt/VgZ+3lhqrynkEWsanumavXsyDeVgcY0uYVa09QLRfJbK5IdkJYwmyKJtoI3FXUUH/bz1zeN4+YEeAVjBic0hFqAlTx/oE=',
         type => 'ssh-rsa',
         user => 'ucm_sis',
@@ -152,7 +152,7 @@ class people::oipp-sis::external {
         require => User['ucla_sis'],
     }
     ssh_authorized_key { 'adam@dhcp-169-229-212-58.lips.berkeley.edu4':
-        ensure => absent,
+        ensure => present,
         key  => 'AAAAB3NzaC1yc2EAAAABIwAAAgEAvUF2WeggJNwsiC2js7MSXxo73ClbGZr0abYsKgHdDZ0xEo9e3Slma/hO8InAMVaYg4sqbm8BUYdEf/2GMLURwvcShq2Hyg+C+o6pKNtoOBFosDQ/bXKf/n5yonR4+gUedGtp9iKzwUED1QtkkDLjqsR8SI56TZgv5olZAE6WYX3CNDCyXGfZdjf/vSdmz7BQTBTgfze0aofpCJaSSyLmipRco6/zUatY/L+jYz2AXZEWN5er55P3JdD8jUUeBtGFugqb48NMClfvfu0oGKsUMhQCyLlPfRjartfWJtId8kZQ1IyHZQ6F7nlt4FycaiY3cFRnElBgbNxq81Xxwali3iMxTN4PMSfDXML497Vn1Ts8QVhVXgasIEchyPgEmn2zjUl87gX9ZOo2Fj1Dxr/GvWePV/rRV8uZT446QLcDx4WspsCTdIq+XxB+2yqMQKRGzXVcGSsDOpx+Ki+j2eCpeBzAqQpK7qDEUK0fkJTBSsi3qd1tPm0Y3dE6iFUyEcRoI3LZ+8BUrzutIpKJWW58cOy1jnToB3h3ZcJ7Q73iCbKO3BJgX5i2/6valRvFi1Ulof2qkXbFXnWQt/VgZ+3lhqrynkEWsanumavXsyDeVgcY0uYVa09QLRfJbK5IdkJYwmyKJtoI3FXUUH/bz1zeN4+YEeAVjBic0hFqAlTx/oE=',
         type => 'ssh-rsa',
         user => 'ucla_sis',
@@ -192,7 +192,7 @@ class people::oipp-sis::external {
         require => User['ucsc_sis'],
     }
     ssh_authorized_key { 'adam@dhcp-169-229-212-58.lips.berkeley.edu5':
-        ensure => absent,
+        ensure => present,
         key  => 'AAAAB3NzaC1yc2EAAAABIwAAAgEAvUF2WeggJNwsiC2js7MSXxo73ClbGZr0abYsKgHdDZ0xEo9e3Slma/hO8InAMVaYg4sqbm8BUYdEf/2GMLURwvcShq2Hyg+C+o6pKNtoOBFosDQ/bXKf/n5yonR4+gUedGtp9iKzwUED1QtkkDLjqsR8SI56TZgv5olZAE6WYX3CNDCyXGfZdjf/vSdmz7BQTBTgfze0aofpCJaSSyLmipRco6/zUatY/L+jYz2AXZEWN5er55P3JdD8jUUeBtGFugqb48NMClfvfu0oGKsUMhQCyLlPfRjartfWJtId8kZQ1IyHZQ6F7nlt4FycaiY3cFRnElBgbNxq81Xxwali3iMxTN4PMSfDXML497Vn1Ts8QVhVXgasIEchyPgEmn2zjUl87gX9ZOo2Fj1Dxr/GvWePV/rRV8uZT446QLcDx4WspsCTdIq+XxB+2yqMQKRGzXVcGSsDOpx+Ki+j2eCpeBzAqQpK7qDEUK0fkJTBSsi3qd1tPm0Y3dE6iFUyEcRoI3LZ+8BUrzutIpKJWW58cOy1jnToB3h3ZcJ7Q73iCbKO3BJgX5i2/6valRvFi1Ulof2qkXbFXnWQt/VgZ+3lhqrynkEWsanumavXsyDeVgcY0uYVa09QLRfJbK5IdkJYwmyKJtoI3FXUUH/bz1zeN4+YEeAVjBic0hFqAlTx/oE=',
         type => 'ssh-rsa',
         user => 'ucsc_sis',
@@ -231,7 +231,7 @@ class people::oipp-sis::external {
         require => User['uci_sis'],
     }
     ssh_authorized_key { 'adam@dhcp-169-229-212-58.lips.berkeley.edu6':
-        ensure => absent,
+        ensure => present,
         key  => 'AAAAB3NzaC1yc2EAAAABIwAAAgEAvUF2WeggJNwsiC2js7MSXxo73ClbGZr0abYsKgHdDZ0xEo9e3Slma/hO8InAMVaYg4sqbm8BUYdEf/2GMLURwvcShq2Hyg+C+o6pKNtoOBFosDQ/bXKf/n5yonR4+gUedGtp9iKzwUED1QtkkDLjqsR8SI56TZgv5olZAE6WYX3CNDCyXGfZdjf/vSdmz7BQTBTgfze0aofpCJaSSyLmipRco6/zUatY/L+jYz2AXZEWN5er55P3JdD8jUUeBtGFugqb48NMClfvfu0oGKsUMhQCyLlPfRjartfWJtId8kZQ1IyHZQ6F7nlt4FycaiY3cFRnElBgbNxq81Xxwali3iMxTN4PMSfDXML497Vn1Ts8QVhVXgasIEchyPgEmn2zjUl87gX9ZOo2Fj1Dxr/GvWePV/rRV8uZT446QLcDx4WspsCTdIq+XxB+2yqMQKRGzXVcGSsDOpx+Ki+j2eCpeBzAqQpK7qDEUK0fkJTBSsi3qd1tPm0Y3dE6iFUyEcRoI3LZ+8BUrzutIpKJWW58cOy1jnToB3h3ZcJ7Q73iCbKO3BJgX5i2/6valRvFi1Ulof2qkXbFXnWQt/VgZ+3lhqrynkEWsanumavXsyDeVgcY0uYVa09QLRfJbK5IdkJYwmyKJtoI3FXUUH/bz1zeN4+YEeAVjBic0hFqAlTx/oE=',
         type => 'ssh-rsa',
         user => 'uci_sis',
@@ -271,7 +271,7 @@ class people::oipp-sis::external {
         require => User['ucr_sis'],
     }
     ssh_authorized_key { 'adam@dhcp-169-229-212-58.lips.berkeley.edu7':
-        ensure => absent,
+        ensure => present,
         key  => 'AAAAB3NzaC1yc2EAAAABIwAAAgEAvUF2WeggJNwsiC2js7MSXxo73ClbGZr0abYsKgHdDZ0xEo9e3Slma/hO8InAMVaYg4sqbm8BUYdEf/2GMLURwvcShq2Hyg+C+o6pKNtoOBFosDQ/bXKf/n5yonR4+gUedGtp9iKzwUED1QtkkDLjqsR8SI56TZgv5olZAE6WYX3CNDCyXGfZdjf/vSdmz7BQTBTgfze0aofpCJaSSyLmipRco6/zUatY/L+jYz2AXZEWN5er55P3JdD8jUUeBtGFugqb48NMClfvfu0oGKsUMhQCyLlPfRjartfWJtId8kZQ1IyHZQ6F7nlt4FycaiY3cFRnElBgbNxq81Xxwali3iMxTN4PMSfDXML497Vn1Ts8QVhVXgasIEchyPgEmn2zjUl87gX9ZOo2Fj1Dxr/GvWePV/rRV8uZT446QLcDx4WspsCTdIq+XxB+2yqMQKRGzXVcGSsDOpx+Ki+j2eCpeBzAqQpK7qDEUK0fkJTBSsi3qd1tPm0Y3dE6iFUyEcRoI3LZ+8BUrzutIpKJWW58cOy1jnToB3h3ZcJ7Q73iCbKO3BJgX5i2/6valRvFi1Ulof2qkXbFXnWQt/VgZ+3lhqrynkEWsanumavXsyDeVgcY0uYVa09QLRfJbK5IdkJYwmyKJtoI3FXUUH/bz1zeN4+YEeAVjBic0hFqAlTx/oE=',
         type => 'ssh-rsa',
         user => 'ucr_sis',
@@ -310,7 +310,7 @@ class people::oipp-sis::external {
         require => User['ucoe_sis'],
     }
     ssh_authorized_key { 'adam@dhcp-169-229-212-58.lips.berkeley.edu8':
-        ensure => absent,
+        ensure => present,
         key  => 'AAAAB3NzaC1yc2EAAAABIwAAAgEAvUF2WeggJNwsiC2js7MSXxo73ClbGZr0abYsKgHdDZ0xEo9e3Slma/hO8InAMVaYg4sqbm8BUYdEf/2GMLURwvcShq2Hyg+C+o6pKNtoOBFosDQ/bXKf/n5yonR4+gUedGtp9iKzwUED1QtkkDLjqsR8SI56TZgv5olZAE6WYX3CNDCyXGfZdjf/vSdmz7BQTBTgfze0aofpCJaSSyLmipRco6/zUatY/L+jYz2AXZEWN5er55P3JdD8jUUeBtGFugqb48NMClfvfu0oGKsUMhQCyLlPfRjartfWJtId8kZQ1IyHZQ6F7nlt4FycaiY3cFRnElBgbNxq81Xxwali3iMxTN4PMSfDXML497Vn1Ts8QVhVXgasIEchyPgEmn2zjUl87gX9ZOo2Fj1Dxr/GvWePV/rRV8uZT446QLcDx4WspsCTdIq+XxB+2yqMQKRGzXVcGSsDOpx+Ki+j2eCpeBzAqQpK7qDEUK0fkJTBSsi3qd1tPm0Y3dE6iFUyEcRoI3LZ+8BUrzutIpKJWW58cOy1jnToB3h3ZcJ7Q73iCbKO3BJgX5i2/6valRvFi1Ulof2qkXbFXnWQt/VgZ+3lhqrynkEWsanumavXsyDeVgcY0uYVa09QLRfJbK5IdkJYwmyKJtoI3FXUUH/bz1zeN4+YEeAVjBic0hFqAlTx/oE=',
         type => 'ssh-rsa',
         user => 'ucoe_sis',

@@ -1,0 +1,1 @@
+<% peers.each do |peer| -%><% if peer != tcp_address -%><% replicated_caches.each do |cachename| -%>//<%= peer %>:<%= tcp_port %>/<%= cachename %>|<% end -%><% end -%><% end -%>

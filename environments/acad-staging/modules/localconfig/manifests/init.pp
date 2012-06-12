@@ -32,17 +32,17 @@ class localconfig {
 
     ###########################################################################
     # Database setup
-    $db          = 'nak'
-    $db_url      = "jdbc:postgresql://${db_server}/${db}?charSet\\=UTF-8"
-    $db_driver   = 'org.postgresql.Driver'
-    $db_user     = 'nakamura'
-    $db_password = 'ironchef'
+    $oae_db          = 'nak'
+    $oae_db_url      = "jdbc:postgresql://${db_server}/${oae_db}?charSet\\=UTF-8"
+    $oae_db_driver   = 'org.postgresql.Driver'
+    $oae_db_user     = 'nakamura'
+    $oae_db_password = 'ironchef'
 
     ###########################################################################
     # Content body storage
-    $nfs_share   = '/export/files-academic'
-    $nfs_mountpoint = '/files-academic'
-    $nfs_options = '_netdev,rw,rsize=8192,wsize=8192'
+    $oae_nfs_share   = '/export/files-academic'
+    $oae_nfs_mountpoint = '/files-academic'
+    $oae_nfs_options = '_netdev,rw,rsize=8192,wsize=8192'
 
     $storedir    = "/files-academic/store"
 
@@ -54,7 +54,7 @@ class localconfig {
     ###########################################################################
     # Apache load balancer
     $http_name                   = 'staging.academic.rsmart.com'
-    $http_name_untrusted         = "content-${http_name}"
+    $http_name_untrusted         = "content-staging.academic.rsmart.com"
     $apache_lb_members           = [ "${app_server1}:8080", "${app_server2}:8080" ]
     $apache_lb_members_untrusted = [ "${app_server1}:8082", "${app_server2}:8082" ]
     $apache_lb_params            = ["retry=20", "min=3", "flushpackets=auto", "max=250", "loadfactor=100", "timeout=60"]
@@ -63,6 +63,10 @@ class localconfig {
     $apache_cle_location_match = "^/(xsl-portal.*|access.*|courier.*|dav.*|direct.*|imsblti.*|library.*|messageforums-tool.*|osp-common-tool.*|polls-tool.*|portal.*|profile-tool.*|profile2-tool.*|sakai.*|samigo-app.*|scheduler-tool.*|rsmart-customizer-tool.*|oauth-tool.*|emailtemplateservice-tool.*|sitestats-tool.*|rsmart-support-tool.*|mailsender-tool.*|tool.css|portool_base.css)"
     $cle_dav_server0 = '10.53.10.19'
 	$disable_cle_axis            = false
+
+    $oae_cert = 'puppet:///modules/rsmart-common/academic.rsmart.com.crt'
+    $oae_certkey = 'puppet:///modules/rsmart-common/academic.rsmart.com.key'
+    $oae_certchain = 'puppet:///modules/rsmart-common/academic.rsmart.com-intermediate.crt'
 
     ###########################################################################
     # App servers

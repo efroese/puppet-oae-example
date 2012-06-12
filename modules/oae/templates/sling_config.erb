@@ -1,0 +1,19 @@
+service.pid="<%= pid %>"
+<% config.keys.sort.each do |key| -%>
+<% value = config[key] -%>
+<% if value.is_a? String -%>
+<%= key %>=<%= "\"#{value}\"" %>
+<% end -%>
+<% if value.is_a? Integer -%>
+<%= key %>=<%= "I\"#{value}\"" %>
+<% end -%>
+<% if value.is_a? Float -%>
+<%= key %>=<%= "F\"#{value}\"" %>
+<% end -%>
+<% if value.is_a? TrueClass or value.is_a? FalseClass -%>
+<%= key %>=<%= "B\"#{value}\"" %>
+<% end -%>
+<% if value.is_a? Array -%>
+<%= key %>=[<%= value.map { |v| '"' + "#{v}"+ '"' }.join(",") %>]
+<% end -%>
+<% end -%>

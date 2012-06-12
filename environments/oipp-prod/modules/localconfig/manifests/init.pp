@@ -30,17 +30,17 @@ class localconfig {
 
     ###########################################################################
     # Database setup
-    $db          = 'nak'
-    $db_url      = "jdbc:postgresql://${db_server}/${db}?charSet\\=UTF-8"
-    $db_driver   = 'org.postgresql.Driver'
-    $db_user     = 'nakamura'
-    $db_password = 'ironchef'
+    $oae_db          = 'nak'
+    $oae_db_url      = "jdbc:postgresql://${db_server}/${oae_db}?charSet\\=UTF-8"
+    $oae_db_driver   = 'org.postgresql.Driver'
+    $oae_db_user     = 'nakamura'
+    $oae_db_password = 'ironchef'
 
     ###########################################################################
     # Content body storage
-    $nfs_share   = '/export/files-academic'
-    $nfs_mountpoint = '/files-academic'
-    $nfs_options = '_netdev,rw,rsize=8192,wsize=8192'
+    $oae_nfs_share   = '/export/files-academic'
+    $oae_nfs_mountpoint = '/files-academic'
+    $oae_nfs_options = '_netdev,rw,rsize=8192,wsize=8192'
 
     $storedir    = "/files-academic/store"
     ###########################################################################
@@ -62,6 +62,11 @@ class localconfig {
     $apache_cle_lb_members = [ "${cle_server1}:8009 route=OIPP-CLE1", "${cle_server2}:8009 route=OIPP-CLE2" ]
     $apache_cle_location_match = "^/(xsl-portal.*|access.*|courier.*|dav.*|direct.*|imsblti.*|library.*|messageforums-tool.*|osp-common-tool.*|polls-tool.*|portal.*|profile-tool.*|profile2-tool.*|sakai.*|samigo-app.*|scheduler-tool.*|rsmart-customizer-tool.*|oauth-tool.*|emailtemplateservice-tool.*|sitestats-tool.*|rsmart-support-tool.*|mailsender-tool.*|tool.css|portool_base.css|scormcloud-tool.*|rsmart-scorm-helper.*)" 
     $cle_dav_server0 = '10.52.10.19'
+    $locations_noproxy = ['/server-status', '/balancer-manager', '/Shibboleth.sso', '/access', '/imsblti']
+
+    $oae_cert = "puppet:///modules/localconfig/uconline.edu.crt"
+    $oae_certkey = "puppet:///modules/localconfig/uconline.edu.key"
+    $oae_certchain = "puppet:///modules/localconfig/uconline.edu-intermediate.crt"
 
     ###########################################################################
     # App servers

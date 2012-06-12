@@ -1,0 +1,26 @@
+This is a puppet module to help you set up Sakai OAE servers.
+
+This is not a fully featured puppet setup.
+For an example check out http://github.com/efroese/puppet-oae-example
+
+### Requires
+- http://github.com/efroese/puppet-archive
+
+Currently we can create a few different kinds of OAE servers.
+
+### OAE Application nodes
+
+example:
+
+    node oae-app0 inherits oaenode {
+        class { 'oae::app::server': }
+    }
+
+### OAE Preview processor nodes
+
+example:
+
+    node oae-preview inherits oaenode {
+        class { 'oae::preview_processor::init': }
+    }
+

@@ -2,7 +2,16 @@
 
 # filled out via puppet templating
 ############################ \ this is not a typo / set min and max to javamemorymax
-export JAVA_OPTS="-server -Xms<%= javamemorymax %> -Xmx<%= javamemorymax %> -XX:PermSize=<%= javapermsize %> -XX:MaxPermSize=<%= javapermsize %> -XX:NewRatio=3 -XX:+UseParNewGC -XX:+UseConcMarkSweepGC -XX:+CMSParallelRemarkEnabled -XX:MaxTenuringThreshold=0 -XX:-DisableExplicitGC -XX:CMSInitiatingOccupancyFraction=70 -XX:+UseCMSInitiatingOccupancyOnly -XX:+UseCompressedOops -XX:+UseStringCache -XX:+UseCompressedStrings -XX:+OptimizeStringConcat -Djava.awt.headless=true -verbose:gc -XX:+PrintGCDetails -XX:+PrintGCTimeStamps -XX:+PrintGCDateStamps -XX:+PrintTenuringDistribution -XX:+PrintCommandLineFlags"
+export JAVA_OPTS="-server -Xms<%= javamemorymax %> -Xmx<%= javamemorymax %> \
+-XX:PermSize=<%= javapermsize %> -XX:MaxPermSize=<%= javapermsize %> \
+-XX:CMSInitiatingOccupancyFraction=70 \
+-XX:NewRatio=3 -XX:-UseAdaptiveSizePolicy \
+-XX:+UseParNewGC -XX:+UseConcMarkSweepGC -XX:+CMSParallelRemarkEnabled \
+-XX:MaxTenuringThreshold=0 -XX:-DisableExplicitGC \
+-XX:+UseCMSInitiatingOccupancyOnly -XX:+UseCompressedOops -XX:+UseStringCache \
+-XX:+UseCompressedStrings -XX:+OptimizeStringConcat -Djava.awt.headless=true -verbose:gc \
+-XX:+PrintGCDetails -XX:+PrintGCTimeStamps -XX:+PrintGCDateStamps -XX:+PrintTenuringDistribution \
+-XX:+PrintCommandLineFlags"
 
 # Load up the AppDynamics options if present
 test -f appdynamics.setenv.sh && source appdynamics.setenv.sh

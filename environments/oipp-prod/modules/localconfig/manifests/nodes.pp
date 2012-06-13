@@ -11,16 +11,8 @@
 #
 node 'oipp-prod-apache1.academic.rsmart.local' inherits oaenode {
 
-    class { 'apache::ssl': }
+    class { 'rsmart-common::oae::httpd': vhost_80_template => 'localconfig/vhost-80.conf.erb' }
 
-    # Headers is not in the default set of enabled modules
-    apache::module { 'headers': }
-    apache::module { 'deflate': }
-
-    # http://cole.uconline.edu to redirects to https://cole.uconline.edu
-    apache::vhost { "${localconfig::http_name}:80":
-        template => 'localconfig/vhost-80.conf.erb',
-    }
     # http://uconline.edu to redirects to https://cole.uconline.edu
     apache::vhost { "uconline.edu:80":
         template => 'localconfig/vhost-80.conf.erb',
@@ -30,33 +22,17 @@ node 'oipp-prod-apache1.academic.rsmart.local' inherits oaenode {
         template => 'localconfig/vhost-80.conf.erb',
     }
 
-    ###########################################################################
     # https://cole.uconline.edu
-
-    # Serve the OAE app (trusted content) on 443
-    apache::vhost-ssl { "${localconfig::http_name}:443":
-        sslonly   => true,
-        cert     => "puppet:///modules/localconfig/uconline.edu.crt",
-        certkey  => "puppet:///modules/localconfig/uconline.edu.key",
-        certchain => "puppet:///modules/localconfig/uconline.edu-intermediate.crt",
-        template  => 'localconfig/vhost-trusted.conf.erb',
+    class { 'rsmart-common::oae::apache::trusted':
+        cert      => $localconfig::oae_cert,
+        certkey   => $localconfig::oae_certkey,
+        certchain => $localconfig::oae_certchain,
     }
-
-    # Balancer pool for trusted content
-    apache::balancer { "apache-balancer-oae-app":
-        vhost      => "${localconfig::http_name}:443",
-        location   => "/",
-        locations_noproxy => $localconfig::mock_cle_content ? {
-            # Don't proxy to the access and lti tools.
-            # This is just a workaround, not a comprehensive list of CLE urls
-            true  => ['/server-status', '/balancer-manager', '/Shibboleth.sso', '/access', '/imsblti'],
-            false => ['/server-status', '/balancer-manager', '/Shibboleth.sso'],
-        },
-        proto      => "http",
-        members    => $localconfig::apache_lb_members,
-        params     => $localconfig::apache_lb_params,
-        standbyurl => $localconfig::apache_lb_standbyurl,
-        template   => 'rsmart-common/balancer-trusted.erb',
+    # https://content-cole.uconline.edu
+    class { 'rsmart-common::oae::apache::untrusted':
+        cert      => $localconfig::oae_cert,
+        certkey   => $localconfig::oae_certkey,
+        certchain => $localconfig::oae_certchain,
     }
 
     # Mock out CLE content
@@ -83,36 +59,6 @@ node 'oipp-prod-apache1.academic.rsmart.local' inherits oaenode {
             standbyurl => $localconfig::apache_lb_standbyurl,
             template   => 'rsmart-common/balancer-cle.conf.erb',
         }
-    }
-
-    ###########################################################################
-    # Serve untrusted content from another hostname
-    apache::vhost-ssl { "${localconfig::http_name_untrusted}:443":
-        sslonly   => true,
-        cert     => "puppet:///modules/localconfig/uconline.edu.crt",
-        certkey  => "puppet:///modules/localconfig/uconline.edu.key",
-        certchain => "puppet:///modules/localconfig/uconline.edu-intermediate.crt",
-        template  => 'rsmart-common/vhost-untrusted.conf.erb',
-    }
-
-    # Balancer pool for untrusted content
-    apache::balancer { "apache-balancer-oae-app-untrusted":
-        vhost      => "${localconfig::http_name_untrusted}:443",
-        location   => "/",
-        proto      => "http",
-        members    => $localconfig::apache_lb_members_untrusted,
-        params     => $localconfig::apache_lb_params,
-        standbyurl => $localconfig::apache_lb_standbyurl,
-    }
-
-    ###########################################################################
-    # Apache global config
-
-    file { "/etc/httpd/conf.d/traceenable.conf":
-        owner => root,
-        group => root,
-        mode  => 644,
-        content => 'TraceEnable Off',
     }
 
     ###########################################################################
@@ -157,6 +103,7 @@ node 'oipp-prod-apache1.academic.rsmart.local' inherits oaenode {
         virtusertable_template    => 'localconfig/virtusertable.erb',
         local_host_names_template => 'localconfig/local-host-names.erb'
     }
+
     ###########################################################################
     # SIS integration
     class { 'oipp::sis':
@@ -187,79 +134,12 @@ node oaeappnode inherits oaenode {
     }
 
     class { 'rsmart-common::logging': }
-    
-    ###########################################################################
-    # Storage
-
-    class { 'nfs::client': }
-
-    file  { $localconfig::nfs_mountpoint: ensure => directory }
-    mount { $localconfig::nfs_mountpoint:
-        ensure => 'mounted',
-        fstype => 'nfs4',
-        device => "${localconfig::nfs_server}:${localconfig::nfs_share}",
-        options => $localconfig::nfs_options,
-        atboot => true,
-        require => File[$localconfig::nfs_mountpoint],
-    }
-
-    class { 'postgres::repos': stage => init }
-    class { 'postgres::client': }
-
-    # Connect OAE to the DB
-    oae::app::server::sling_config {
-        "org.sakaiproject.nakamura.lite.storage.jdbc.JDBCStorageClientPool":
-        config => {
-            'jdbc-driver'      => $localconfig::db_driver,
-            'jdbc-url'         => $localconfig::db_url,
-            'username'         => $localconfig::db_user,
-            'password'         => $localconfig::db_password,
-            'long-string-size' => 16384,
-            'store-base-dir'   => $localconfig::storedir,
-        }
-    }
-
-    ###########################################################################
-    # Security
-
-    # Separates trusted vs untrusted content.
-    oae::app::server::sling_config {
-        "org.sakaiproject.nakamura.http.usercontent.ServerProtectionServiceImpl":
-        config => {
-            'disable.protection.for.dev.mode' => $localconfig::sps_disabled,
-            'trusted.hosts'  => [
-                "localhost:8080\\ \\=\\ http://localhost:8081",
-                "${localconfig::http_name}\\ \\=\\ https://${localconfig::http_name_untrusted}",
-            ],
-            'trusted.secret' => $localconfig::serverprotectsec,
-        }
-    }
-
-    # QoS filter rate-limits the app server so it won't fall over
-    oae::app::server::sling_config {
-        "org.sakaiproject.nakamura.http.qos.QoSFilter":
-        config => { 'qos.default.limit' => 10, }
-    }
-
-    ###########################################################################
-    # Search
-
-    # Specify the client type
-    oae::app::server::sling_config {
-        "org.sakaiproject.nakamura.solr.SolrServerServiceImpl":
-        config => { "solr-impl" => "remote", }
-    }
-    # Configure the client with the master/[slave(s)] info
-    oae::app::server::sling_config {
-        "org.sakaiproject.nakamura.solr.RemoteSolrClient":
-        config => {
-            "remoteurl"  => $localconfig::solr_remoteurl,
-            "socket-timeout" => 10000,
-            "connection.timeout" => 3000,
-            "max.total.connections" => 500,
-            "max.connections.per.host" => 500,
-        }
-    }
+    class { 'rsmart-common::oae::app::cle': }
+    class { 'rsmart-common::oae::app::email': }
+    class { 'rsmart-common::oae::nfs': }
+    class { 'rsmart-common::oae::app::postgres': }
+    class { 'rsmart-common::oae::app::security': }
+    class { 'rsmart-common::oae::app::solr::remote': }
 
     ###########################################################################
     # Clustering
@@ -293,17 +173,6 @@ node oaeappnode inherits oaenode {
         }
     }
 
-    ###########################################################################
-    # CLE integration
-    oae::app::server::sling_config {
-        "org.sakaiproject.nakamura.basiclti.CLEVirtualToolDataProvider":
-        config => {
-            'sakai.cle.basiclti.secret' => $localconfig::basiclti_secret,
-            'sakai.cle.server.url'      => "https://${localconfig::http_name}",
-            'sakai.cle.basiclti.key'    => $localconfig::basiclti_key,
-            'sakai.cle.basiclti.tool.list' => $localconfig::basiclti_tool_list,
-        }
-    }
     oae::app::server::sling_config {
         "org.sakaiproject.nakamura.auth.trusted.TrustedTokenServiceImpl":
         config => {
@@ -311,16 +180,6 @@ node oaeappnode inherits oaenode {
             'sakai.auth.trusted.server.safe-hostsaddress' =>
               '10.51.9.20;localhost;127.0.0.1;0:0:0:0:0:0:0:1%0',
             'sakai.auth.trusted.server.enabled' => true,
-        }
-    }
-
-    ###########################################################################
-    # Email integration
-    oae::app::server::sling_config {
-        'org.sakaiproject.nakamura.email.outgoing.LiteOutgoingEmailMessageListener':
-        config => {
-            'sakai.email.replyAsAddress' => $localconfig::reply_as_address,
-            'sakai.email.replyAsName'    => $localconfig::reply_as_name,
         }
     }
 
@@ -487,53 +346,16 @@ node 'oipp-prod-nfs.academic.rsmart.local' inherits oaenode {
 node 'oipp-prod-dbserv1.academic.rsmart.local' inherits oaenode {
 
     class { 'postgres::repos': stage => init }
+    class { 'rsmart-common::postgres::large': stage => init }
 
     class { 'postgres':
         postgresql_conf_template => 'localconfig/postgresql.conf.erb',
     }
 
-    postgres::database { $localconfig::db:
-        ensure => present,
-        owner  => $localconfig::db_user,
-        create_options => "ENCODING = 'UTF8' TABLESPACE = pg_default LC_COLLATE = 'en_US.UTF-8' LC_CTYPE = 'en_US.UTF-8' CONNECTION LIMIT = -1",
-        require  => Postgres::Role[$localconfig::db_user],
-    }
+    class { 'rsmart-common::postgres::oaedb': }
 
-    postgres::role { $localconfig::db_user:
-        ensure   => present,
-        password => $localconfig::db_password,
-    }
-
-    postgres::clientauth { "host-${localconfig::db}-${localconfig::db_user}-all-md5":
-       type => 'host',
-       db   => $localconfig::db,
-       user => $localconfig::db_user,
-       address => "all",
-       method  => 'md5',
-    }
-
-    postgres::backup::simple { $localconfig::db:
+    postgres::backup::simple { $localconfig::oae_db:
         # Overwrite the last backup
         date_format => '',
-    }
-
-    # Allowing a maximum 24GB of shared memory:
-    exec { 'set-shmmax':
-        command => '/sbin/sysctl -w kernel.shmmax=25769803776',
-        unless  => '/sbin/sysctl kernel.shmmax | grep 25769803776',
-    }
-    exec { 'set-shmall':
-        command => '/sbin/sysctl -w kernel.shmall=4194304',
-        unless  => '/sbin/sysctl kernel.shmall | grep 4194304',
-    }
-
-    # Make sure the kernel config changes persist across a reboot:
-    exec { 'persist-shmmax':
-        command => 'echo kernel.shmmax=25769803776 | tee -a /etc/sysctl.conf',
-        unless  => 'grep 25769803776 /etc/sysctl.conf',
-    }
-    exec { 'persist-shmall':
-        command => 'echo kernel.shmall=4194304 | tee -a /etc/sysctl.conf',
-        unless  => 'grep 4194304 /etc/sysctl.conf',
     }
 }

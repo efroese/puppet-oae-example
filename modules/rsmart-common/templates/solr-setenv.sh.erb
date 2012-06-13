@@ -6,7 +6,10 @@ export JAVA_OPTS="-server -Xms6656m -Xmx6656m -XX:PermSize=256m -XX:MaxPermSize=
 -XX:+UseCMSInitiatingOccupancyOnly -XX:+UseCompressedOops -XX:+UseStringCache \
 -XX:+UseCompressedStrings -XX:+OptimizeStringConcat -Djava.awt.headless=true \
 -verbose:gc -XX:+PrintGCDetails -XX:+PrintGCTimeStamps -XX:+PrintGCDateStamps \
--XX:+PrintTenuringDistribution -XX:+PrintCommandLineFlags"
+-XX:+PrintTenuringDistribution -XX:+PrintCommandLineFlags \
+-Dcom.sun.management.jmxremote.port=3000 \
+-Dcom.sun.management.jmxremote.ssl=false \
+-Dcom.sun.management.jmxremote.authenticate=false"
 
 # http://randomlyrr.blogspot.it/2012/03/java-tuning-in-nutshell-part-1.html
 

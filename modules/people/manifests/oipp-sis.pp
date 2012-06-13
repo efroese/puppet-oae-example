@@ -19,17 +19,20 @@ class people::oipp-sis::internal {
     #add the priv key to the root user on source machine
 
     file {"/root/.ssh/id_rsa":
-	owner => root,
-	group => root,
-	mode => 500,
-	source => 'puppet:///modules/oipp/id_rsa.rsmart',
+	    owner => root,
+	    group => root,
+	    mode => 500,
+	    source => 'puppet:///modules/oipp/id_rsa.rsmart',
     }
 
 }
 
 class people::oipp-sis::external {
 
-    include rssh
+    class { 'rssh': }
+
+    ###########################################################################
+    # UCD
 
     group { 'ucd_sis' : gid => '801' }
     user { 'ucd_sis':
@@ -41,13 +44,18 @@ class people::oipp-sis::external {
         groups     => ['ucd_sis','rsshusers',],
         shell      => '/usr/bin/rssh'
     }
-    ssh_authorized_key { 'ucd_sis-pub':
+
+    #########################
+    # ACAD-1015
+    # These are keys for Adam Hochman & Kirk Alexander who are the lead functional & technical people on the client side. 
+    ssh_authorized_key { 'ucd_sis-pub-to-ucd':
         ensure => present,
         key  => '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',
         type => 'ssh-dss',
-        user => 'ucd_sis',
+        user  => 'ucd_sis',
         require => User['ucd_sis'],
     }
+
     ssh_authorized_key { 'adam@dhcp-169-229-212-58.lips.berkeley.edu1':
         ensure => present,
         key  => 'AAAAB3NzaC1yc2EAAAABIwAAAgEAvUF2WeggJNwsiC2js7MSXxo73ClbGZr0abYsKgHdDZ0xEo9e3Slma/hO8InAMVaYg4sqbm8BUYdEf/2GMLURwvcShq2Hyg+C+o6pKNtoOBFosDQ/bXKf/n5yonR4+gUedGtp9iKzwUED1QtkkDLjqsR8SI56TZgv5olZAE6WYX3CNDCyXGfZdjf/vSdmz7BQTBTgfze0aofpCJaSSyLmipRco6/zUatY/L+jYz2AXZEWN5er55P3JdD8jUUeBtGFugqb48NMClfvfu0oGKsUMhQCyLlPfRjartfWJtId8kZQ1IyHZQ6F7nlt4FycaiY3cFRnElBgbNxq81Xxwali3iMxTN4PMSfDXML497Vn1Ts8QVhVXgasIEchyPgEmn2zjUl87gX9ZOo2Fj1Dxr/GvWePV/rRV8uZT446QLcDx4WspsCTdIq+XxB+2yqMQKRGzXVcGSsDOpx+Ki+j2eCpeBzAqQpK7qDEUK0fkJTBSsi3qd1tPm0Y3dE6iFUyEcRoI3LZ+8BUrzutIpKJWW58cOy1jnToB3h3ZcJ7Q73iCbKO3BJgX5i2/6valRvFi1Ulof2qkXbFXnWQt/VgZ+3lhqrynkEWsanumavXsyDeVgcY0uYVa09QLRfJbK5IdkJYwmyKJtoI3FXUUH/bz1zeN4+YEeAVjBic0hFqAlTx/oE=',
@@ -62,6 +70,17 @@ class people::oipp-sis::external {
         user => 'ucd_sis',
         require => User['ucd_sis'],
     }
+
+    ssh_authorized_key { 'adam@dhcp-169-229-212-58.lips.berkeley.edu-pub-ucd':
+        ensure => present,
+        key  => 'AAAAB3NzaC1yc2EAAAABIwAAAgEAvUF2WeggJNwsiC2js7MSXxo73ClbGZr0abYsKgHdDZ0xEo9e3Slma/hO8InAMVaYg4sqbm8BUYdEf/2GMLURwvcShq2Hyg+C+o6pKNtoOBFosDQ/bXKf/n5yonR4+gUedGtp9iKzwUED1QtkkDLjqsR8SI56TZgv5olZAE6WYX3CNDCyXGfZdjf/vSdmz7BQTBTgfze0aofpCJaSSyLmipRco6/zUatY/L+jYz2AXZEWN5er55P3JdD8jUUeBtGFugqb48NMClfvfu0oGKsUMhQCyLlPfRjartfWJtId8kZQ1IyHZQ6F7nlt4FycaiY3cFRnElBgbNxq81Xxwali3iMxTN4PMSfDXML497Vn1Ts8QVhVXgasIEchyPgEmn2zjUl87gX9ZOo2Fj1Dxr/GvWePV/rRV8uZT446QLcDx4WspsCTdIq+XxB+2yqMQKRGzXVcGSsDOpx+Ki+j2eCpeBzAqQpK7qDEUK0fkJTBSsi3qd1tPm0Y3dE6iFUyEcRoI3LZ+8BUrzutIpKJWW58cOy1jnToB3h3ZcJ7Q73iCbKO3BJgX5i2/6valRvFi1Ulof2qkXbFXnWQt/VgZ+3lhqrynkEWsanumavXsyDeVgcY0uYVa09QLRfJbK5IdkJYwmyKJtoI3FXUUH/bz1zeN4+YEeAVjBic0hFqAlTx/oE=',
+        type => 'ssh-rsa',
+        user  => 'ucd_sis',
+        require => User['ucd_sis'],
+    }
+
+    ###########################################################################
+    # UCB
 
     group { 'ucb_sis' : gid => '802' }
     user { 'ucb_sis':
@@ -95,6 +114,26 @@ class people::oipp-sis::external {
         require => User['ucb_sis'],
     }
 
+    #########################
+    # ACAD-1015
+    # These are keys for Adam Hochman & Kirk Alexander who are the lead functional & technical people on the client side. 
+    ssh_authorized_key { 'ucd_sis-pub-to-ucb':
+        ensure => present,
+        key  => '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',
+        type => 'ssh-dss',
+        user  => 'ucb_sis',
+        require => User['ucb_sis'],
+    }
+    ssh_authorized_key { 'adam@dhcp-169-229-212-58.lips.berkeley.edu-pub-ucb':
+        ensure => present,
+        key  => 'AAAAB3NzaC1yc2EAAAABIwAAAgEAvUF2WeggJNwsiC2js7MSXxo73ClbGZr0abYsKgHdDZ0xEo9e3Slma/hO8InAMVaYg4sqbm8BUYdEf/2GMLURwvcShq2Hyg+C+o6pKNtoOBFosDQ/bXKf/n5yonR4+gUedGtp9iKzwUED1QtkkDLjqsR8SI56TZgv5olZAE6WYX3CNDCyXGfZdjf/vSdmz7BQTBTgfze0aofpCJaSSyLmipRco6/zUatY/L+jYz2AXZEWN5er55P3JdD8jUUeBtGFugqb48NMClfvfu0oGKsUMhQCyLlPfRjartfWJtId8kZQ1IyHZQ6F7nlt4FycaiY3cFRnElBgbNxq81Xxwali3iMxTN4PMSfDXML497Vn1Ts8QVhVXgasIEchyPgEmn2zjUl87gX9ZOo2Fj1Dxr/GvWePV/rRV8uZT446QLcDx4WspsCTdIq+XxB+2yqMQKRGzXVcGSsDOpx+Ki+j2eCpeBzAqQpK7qDEUK0fkJTBSsi3qd1tPm0Y3dE6iFUyEcRoI3LZ+8BUrzutIpKJWW58cOy1jnToB3h3ZcJ7Q73iCbKO3BJgX5i2/6valRvFi1Ulof2qkXbFXnWQt/VgZ+3lhqrynkEWsanumavXsyDeVgcY0uYVa09QLRfJbK5IdkJYwmyKJtoI3FXUUH/bz1zeN4+YEeAVjBic0hFqAlTx/oE=',
+        type => 'ssh-rsa',
+        user  => 'ucb_sis',
+        require => User['ucb_sis'],
+    }
+
+    ###########################################################################
+    # UCM
     group { 'ucm_sis' : gid => '803' }
     user { 'ucm_sis':
         ensure     => present,
@@ -134,6 +173,8 @@ class people::oipp-sis::external {
         require => User['ucm_sis'],
     }
 
+    ###########################################################################
+    # UCLA
     group { 'ucla_sis': gid => '804' }
     user { 'ucla_sis':
         ensure     => present,
@@ -191,6 +232,7 @@ class people::oipp-sis::external {
         user => 'ucsc_sis',
         require => User['ucsc_sis'],
     }
+
     ssh_authorized_key { 'adam@dhcp-169-229-212-58.lips.berkeley.edu5':
         ensure => present,
         key  => 'AAAAB3NzaC1yc2EAAAABIwAAAgEAvUF2WeggJNwsiC2js7MSXxo73ClbGZr0abYsKgHdDZ0xEo9e3Slma/hO8InAMVaYg4sqbm8BUYdEf/2GMLURwvcShq2Hyg+C+o6pKNtoOBFosDQ/bXKf/n5yonR4+gUedGtp9iKzwUED1QtkkDLjqsR8SI56TZgv5olZAE6WYX3CNDCyXGfZdjf/vSdmz7BQTBTgfze0aofpCJaSSyLmipRco6/zUatY/L+jYz2AXZEWN5er55P3JdD8jUUeBtGFugqb48NMClfvfu0oGKsUMhQCyLlPfRjartfWJtId8kZQ1IyHZQ6F7nlt4FycaiY3cFRnElBgbNxq81Xxwali3iMxTN4PMSfDXML497Vn1Ts8QVhVXgasIEchyPgEmn2zjUl87gX9ZOo2Fj1Dxr/GvWePV/rRV8uZT446QLcDx4WspsCTdIq+XxB+2yqMQKRGzXVcGSsDOpx+Ki+j2eCpeBzAqQpK7qDEUK0fkJTBSsi3qd1tPm0Y3dE6iFUyEcRoI3LZ+8BUrzutIpKJWW58cOy1jnToB3h3ZcJ7Q73iCbKO3BJgX5i2/6valRvFi1Ulof2qkXbFXnWQt/VgZ+3lhqrynkEWsanumavXsyDeVgcY0uYVa09QLRfJbK5IdkJYwmyKJtoI3FXUUH/bz1zeN4+YEeAVjBic0hFqAlTx/oE=',

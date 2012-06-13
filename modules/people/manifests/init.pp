@@ -22,11 +22,25 @@ class people {
     realize(User['rsmartian'])
 	  realize(Ssh_authorized_key['rsmartian-deploy-pub'])
 
+    file { "/home/rsmartian/.inputrc":
+        owner => rsmartian,
+        group => rsmartian,
+        mode  => 0644,
+        content => template('people/rsmartian-inputrc.erb'),
+        require => User['rsmartian']
+    }
     file { "/home/rsmartian/.bash_profile":
         owner => rsmartian,
         group => rsmartian,
         mode  => 0644,
         content => template('people/rsmartian-bash_profile.sh.erb'),
+        require => File['/home/rsmartian/.inputrc']
+    }
+    file { "/home/rsmartian/.gitconfig":
+        owner => rsmartian,
+        group => rsmartian,
+        mode  => 0644,
+        content => template('people/gitconfig.erb'),
         require => User['rsmartian']
     }
 
@@ -36,10 +50,32 @@ class people {
     realize(Group['efroese'])
     realize(User['efroese'])
     realize(Ssh_authorized_key['efroese-home-pub'])
+    realize(Ssh_authorized_key['efroese-laptop-dsa-pub'])
 
     realize(Group['lspeelmon'])
     realize(User['lspeelmon'])
     realize(Ssh_authorized_key['lspeelmon-pub'])
+    file { "/home/lspeelmon/.inputrc":
+        owner => lspeelmon,
+        group => lspeelmon,
+        mode  => 0644,
+        content => template('people/lspeelmon-inputrc.erb'),
+        require => User['lspeelmon']
+    }
+    file { "/home/lspeelmon/.bash_profile":
+        owner => lspeelmon,
+        group => lspeelmon,
+        mode  => 0644,
+        content => template('people/lspeelmon-bash_profile.sh.erb'),
+        require => File['/home/lspeelmon/.inputrc']
+    }
+    file { "/home/lspeelmon/.gitconfig":
+        owner => lspeelmon,
+        group => lspeelmon,
+        mode  => 0644,
+        content => template('people/gitconfig.erb'),
+        require => User['lspeelmon']
+    }
 
     realize(Group['dgillman'])
     realize(User['dgillman'])
@@ -78,5 +114,9 @@ class people {
     realize(Group['ppilli'])
     realize(User['ppilli'])
     realize(Ssh_authorized_key['ppilli-home-pub'])
+
+    realize(Group['lbassett'])
+    realize(User['lbassett'])
+    realize(Ssh_authorized_key['lbassett-pub'])
 
 }

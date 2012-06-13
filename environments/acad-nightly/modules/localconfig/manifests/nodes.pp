@@ -9,45 +9,9 @@ node 'nightly.academic.rsmart.local' inherits oaenode {
     class { 'people::devops': }
     class { 'rsmart-common::mysql': stage => init }
 
-    ###########################################################################
-    # Apache
-    class { 'apache::ssl': }
-
-    # Headers is not in the default set of enabled modules
-    apache::module { 'headers': }
-    apache::module { 'deflate': }
-
-    # http://cole.uconline.edu to redirects to 443
-    apache::vhost { "${localconfig::http_name}:80":
-        template => 'rsmart-common/vhost-80.conf.erb',
-    }
-
-    # https://nightly.academic.rsmart.com:443
-    # Serve the OAE app (trusted content) on 443
-    apache::vhost-ssl { "${localconfig::http_name}:443":
-        sslonly  => true,
-        cert     => "puppet:///modules/rsmart-common/academic.rsmart.com.crt",
-        certkey  => "puppet:///modules/rsmart-common/academic.rsmart.com.key",
-        certchain => "puppet:///modules/rsmart-common/academic.rsmart.com-intermediate.crt",
-        template  => 'rsmart-common/vhost-trusted.conf.erb',
-    }
-
-    # Balancer pool for trusted content
-    apache::balancer { "apache-balancer-oae-app":
-        vhost      => "${localconfig::http_name}:443",
-        location   => "/",
-        locations_noproxy => $localconfig::mock_cle_content ? {
-            # Don't proxy to the access and lti tools.
-            # This is just a workaround, not a comprehensive list of CLE urls
-            true  => ['/server-status', '/balancer-manager', '/access', '/imsblti'],
-            false => ['/server-status', '/balancer-manager'],
-        },
-        proto      => "http",
-        members    => $localconfig::apache_lb_members,
-        params     => $localconfig::apache_lb_params,
-        standbyurl => $localconfig::apache_lb_standbyurl,
-        template   => 'rsmart-common/balancer-trusted.erb',
-    }
+    class { 'rsmart-common::oae::httpd': }
+    class { 'rsmart-common::oae::apache::trusted': }
+    class { 'rsmart-common::oae::apache::untrusted': }
 
     # Mock out CLE content
     if $localconfig::mock_cle_content {
@@ -75,34 +39,6 @@ node 'nightly.academic.rsmart.local' inherits oaenode {
         }
     }
 
-    # https://nightly-content.academic.rsmart.com:443
-    apache::vhost-ssl { "${localconfig::http_name_untrusted}:443":
-        sslonly  => true,
-        cert     => "puppet:///modules/rsmart-common/academic.rsmart.com.crt",
-        certkey  => "puppet:///modules/rsmart-common/academic.rsmart.com.key",
-        certchain => "puppet:///modules/rsmart-common/academic.rsmart.com-intermediate.crt",
-        template  => 'rsmart-common/vhost-untrusted.conf.erb',
-    }
-
-    # Balancer pool for untrusted content
-    apache::balancer { "apache-balancer-oae-app-untrusted":
-        vhost      => "${localconfig::http_name_untrusted}:443",
-        location   => "/",
-        proto      => "http",
-        members    => $localconfig::apache_lb_members_untrusted,
-        params     => $localconfig::apache_lb_params,
-        standbyurl => $localconfig::apache_lb_standbyurl,
-    }
-
-    # Apache global config
-
-    file { "/etc/httpd/conf.d/traceenable.conf":
-        owner => root,
-        group => root,
-        mode  => 644,
-        content => 'TraceEnable Off',
-    }
-    
     ###########################################################################
     # OAE App Servers
 
@@ -119,80 +55,12 @@ node 'nightly.academic.rsmart.local' inherits oaenode {
         locked => false,
     }
 
-    oae::app::server::sling_config {
-        "org.sakaiproject.nakamura.lite.storage.jdbc.JDBCStorageClientPool":
-        config => {
-            'jdbc-url'    => $localconfig::db_url,
-            'jdbc-driver' => $localconfig::db_driver,
-            'username'    => $localconfig::db_user,
-            'password'    => $localconfig::db_password,
-            'long-string-size' => 16384,
-        },
-	locked => false
-    }
-
-    # Separates trusted vs untrusted content.
-    oae::app::server::sling_config {
-        "org.sakaiproject.nakamura.http.usercontent.ServerProtectionServiceImpl":
-        config => {
-            'disable.protection.for.dev.mode' => $localconfig::sps_disabled,
-            'trusted.hosts'  => [
-                "localhost:8080\\ \\=\\ http://localhost:8082",
-                "${localconfig::http_name}\\ \\=\\ https://${localconfig::http_name_untrusted}",
-            ],
-            'trusted.secret' => $localconfig::serverprotectsec,
-        },
-	locked => false
-    }
-
-    # Email integration
-    oae::app::server::sling_config {
-        'org.sakaiproject.nakamura.email.outgoing.LiteOutgoingEmailMessageListener':
-        config => {
-            'sakai.email.replyAsAddress' => $localconfig::reply_as_address,
-            'sakai.email.replyAsName'    => $localconfig::reply_as_name,
-        },
-	locked => false
-    }
-
-    oae::app::server::sling_config {
-        "org.sakaiproject.nakamura.basiclti.CLEVirtualToolDataProvider":
-        config => {
-             'sakai.cle.server.url'      => "https://${localconfig::http_name}",
-             'sakai.cle.basiclti.key'    => $localconfig::basiclti_key,
-             'sakai.cle.basiclti.secret' => $localconfig::basiclti_secret,
-        },
-	locked => false
-    }
-
-    ###########################################################################
-    # Configuration Override
-    oae::app::server::sling_config {
-        "org.sakaiproject.nakamura.dynamicconfig.file.FileBackedDynamicConfigurationServiceImpl":
-        config => {
-            'config.master.dir' => $localconfig::dynamic_config_root,
-            'config.master.filename' => $localconfig::dynamic_config_masterfile,
-            'config.custom.dir' => $localconfig::dynamic_config_customdir,
-        }
-    }
-
-    oae::app::server::sling_config {
-        "org.sakaiproject.nakamura.dynamicconfig.override.ConfigurationOverrideServiceImpl":
-        config => {
-            'override.dirs' => $localconfig::dynamic_config_jcroverrides,
-        }
-    }
-
-    file { "${localconfig::dynamic_config_root}":
-            ensure => directory }
-
-    file { "${localconfig::dynamic_config_customdir}":
-            ensure => directory }
-
-    file { "${localconfig::dynamic_config_customdir}/config_custom.json":
-        mode => 0644,
-        source => 'puppet:///modules/localconfig/config_custom.json'
-    }
+    class { 'rsmart-common::oae::app::cle': locked => false }
+    class { 'rsmart-common::oae::app::dynamicconfig': locked => false }
+    class { 'rsmart-common::oae::app::email': locked => false }
+    class { 'rsmart-common::oae::app::postgres': locked => false }
+    class { 'rsmart-common::oae::app::security': locked => false }
+    class { 'rsmart-common::oae::app::solr::remote': locked => false }
 
     ###########################################################################
     # Preview processor
@@ -211,19 +79,9 @@ node 'nightly.academic.rsmart.local' inherits oaenode {
         hba_conf_template => 'rsmart-common/standalone-pg_hba.conf.erb',
     }
 
-    postgres::database { $localconfig::db:
-        ensure => present,
-        owner  => $localconfig::db_user,
-        create_options => "ENCODING = 'UTF8' TABLESPACE = pg_default LC_COLLATE = 'en_US.UTF-8' LC_CTYPE = 'en_US.UTF-8' CONNECTION LIMIT = -1",
-        require => Postgres::Role[$localconfig::db_user]
-    }
+    class { 'rsmart-common::postgres::oaedb': }
 
-    postgres::role { $localconfig::db_user:
-        ensure   => present,
-        password => $localconfig::db_password,
-    }
-
-    postgres::backup::simple { $localconfig::db:
+    postgres::backup::simple { $localconfig::oae_db:
         date_format => ''
     }
 

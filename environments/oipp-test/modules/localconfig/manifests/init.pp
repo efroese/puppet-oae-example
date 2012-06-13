@@ -26,11 +26,11 @@ class localconfig {
 
     ###########################################################################
     # Database setup
-    $db          = 'nak'
-    $db_url      = "jdbc:postgresql://${db_server}/${db}?charSet\\=UTF-8"
-    $db_driver   = 'org.postgresql.Driver'
-    $db_user     = 'nakamura'
-    $db_password = 'ironchef'
+    $oae_db          = 'nak'
+    $oae_db_url      = "jdbc:postgresql://${db_server}/${oae_db}?charSet\\=UTF-8"
+    $oae_db_driver   = 'org.postgresql.Driver'
+    $oae_db_user     = 'nakamura'
+    $oae_db_password = 'ironchef'
 
     $mysql_root_password = 'khjRE7AftLfB'
     $cle_db              = 'cle'
@@ -56,8 +56,12 @@ class localconfig {
 
     $mock_cle_content            = false
     $apache_cle_lb_members       = [ "${cle_server}:8009 route=OIPP-CLE1", "${cle_server}:8010 route=OIPP-CLE2" ]
-    $apache_cle_location_match   = "^/(xsl-portal.*|access.*|courier.*|dav.*|direct.*|imsblti.*|library.*|messageforums-tool.*|osp-common-tool.*|polls-tool.*|portal.*|profile-tool.*|profile2-tool.*|sakai.*|samigo-app.*|scheduler-tool.*|rsmart-customizer-tool.*|oauth-tool.*|emailtemplateservice-tool.*|sitestats-tool.*|rsmart-support-tool.*|mailsender-tool.*|tool.css|portool_base.css)"
+    $apache_cle_location_match   = "^/(xsl-portal.*|access.*|courier.*|dav.*|direct.*|imsblti.*|library.*|messageforums-tool.*|osp-common-tool.*|polls-tool.*|portal.*|profile-tool.*|profile2-tool.*|sakai.*|samigo-app.*|scheduler-tool.*|rsmart-customizer-tool.*|oauth-tool.*|emailtemplateservice-tool.*|sitestats-tool.*|rsmart-support-tool.*|mailsender-tool.*|tool.css|portool_base.css|scormcloud-tool.*|rsmart-scorm-helper.*)"
     $disable_cle_axis            = false
+
+    $oae_cert = 'puppet:///modules/rsmart-common/academic.rsmart.com.crt'
+    $oae_certkey = 'puppet:///modules/rsmart-common/academic.rsmart.com.key'
+    $oae_certchain = 'puppet:///modules/rsmart-common/academic.rsmart.com-intermediate.crt'
 
     ###########################################################################
     # OAE App servers

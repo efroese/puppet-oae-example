@@ -1,13 +1,5 @@
 oae.server.url=https://<%= scope.lookupvar('localconfig::http_name') %>/
 oae.admin.user=admin
 oae.admin.password=<%= scope.lookupvar('localconfig::admin_password') %>
-staging.dir=/files-cle/files/sis
+staging.dir=/files-cle/files/sis/test
 dateFormat@com.rsmart.customer.integration.processor.cle.CleCourseProcessor=yyyy-MM-dd
-extraPropertyNames@com.rsmart.customer.integration.processor.cle.CleUserProcessor=["eppn"]
-columns@com.rsmart.customer.integration.processor.cle.CleUserProcessor=8
-termMap@com.rsmart.customer.integration.processor.cle.CleCourseProcessor= \
-{ \
-  "Win Qtr 12": "Winter Quarter 2012", \
-  "Spr Sem 12": "Spring Semester 2012", \
-  "Spr Qtr 12": "Spring Quarter 2012" \
-}

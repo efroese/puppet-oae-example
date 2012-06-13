@@ -77,12 +77,18 @@ templateMap@com.rsmart.customer.integration.processor.cle.CleCourseProcessor=  \
 # maps term column (typically a term eid) to a term title for tagging in OAE, expects a json string
 # used in conjunction with tagTerm property.  If value can't be found for a term eid, and tagTerm is on,
 # we fall back to term eid
-termMap@com.rsmart.customer.integration.processor.cle.CleCourseProcessor=  \
-  {                                                                            \
-    "W11": "Winter 2022",                     \
-    "Sp11": "Spring Semester 2011",                   \
-    "Su11": "Summer Session 2011"               \
-  }
+termMap@com.rsmart.customer.integration.processor.cle.CleCourseProcessor= \
+{ \
+  "Win Qtr 12": "Winter Quarter 2012", \
+  "Spr Sem 12": "Spring Semester 2012", \
+  "Spr Qtr 12": "Spring Quarter 2012", \
+  "Sum Ses 12": "Summer Session 2012", \
+  "Fall Qtr 12": "Fall Quarter 2012", \
+  "Fall Sem 12": "Fall Semester 2012", \
+  "Win Qtr 12": "Winter Quarter 2012", \
+  "Spr Sem 13": "Spring Semester 2013" \
+}
+
 
 
 # standard Basic SIS properties for membership
@@ -133,7 +139,7 @@ roleMap@com.rsmart.customer.integration.processor.cle.CleMembershipProcessor=   
 
 # standard Basic SIS properties for User
 filename@com.rsmart.customer.integration.processor.cle.CleUserProcessor=\${staging.dir}/users.csv
-columns@com.rsmart.customer.integration.processor.cle.CleUserProcessor=8
+columns@com.rsmart.customer.integration.processor.cle.CleUserProcessor=9
 headerRowPresent@com.rsmart.customer.integration.processor.cle.CleUserProcessor=true
 updateAllowed@com.rsmart.customer.integration.processor.cle.CleUserProcessor=true
 generatePassword@com.rsmart.customer.integration.processor.cle.CleUserProcessor=false
@@ -144,7 +150,7 @@ disabled@com.rsmart.customer.integration.processor.cle.CleUserProcessor=false
 
 # List of extra column property names, length of this list needs to be consistent with the number of
 # extra columns defined in the columns property.  Eg.  two items here, columns=9, 3 items columns=10, etc.
-extraPropertyNames@com.rsmart.customer.integration.processor.cle.CleUserProcessor=["eppn"]
+extraPropertyNames@com.rsmart.customer.integration.processor.cle.CleUserProcessor=["eppn","gradeUID"]
 
 # standard Basic SIS properties for sections
 filename@com.rsmart.customer.integration.processor.cle.CleSectionProcessor=\${staging.dir}/sections.csv

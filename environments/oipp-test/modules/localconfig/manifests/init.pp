@@ -140,12 +140,12 @@ class localconfig {
         'rsmart@oipp-cle1:/files-cle/files/sis/'        => $cle_csv_files,
         'rsmart@oipp-prod-app1:/files-academic/sis/'    => $oae_csv_files,
         'rsmart@oipp-cle1:/files-cle/files/sis/test'    => $cle_csv_files,
-        'rsmart@oipp-test:~/sistest'                    => $oae_csv_files,
+        'rsmart@oipp-test:/files-academic/sis'          => $oae_csv_files,
     }
 
     $sis_test_batch_transfers = {
         'rsmart@oipp-cle1:/files-cle/files/sis/test'    => $cle_csv_files,
-        'rsmart@oipp-test:~/sistest'                    => $oae_csv_files,
+        'rsmart@oipp-test:/files-academic/sis'          => $oae_csv_files,
     }
 
     $basic_sis_batch_school_properties = {
@@ -165,6 +165,22 @@ class localconfig {
             'upload_dir'          => '/home/ucla_sis',
             'test_upload_dir'     => '/home/ucla_sis/test',
         },
+        # 'UCSC' => {
+        #     'upload_dir'          => '/home/ucsc_sis',
+        #     'test_upload_dir'     => '/home/ucsc_sis/test',
+        # },
+        'UCI' => {
+            'upload_dir'          => '/home/uci_sis',
+            'test_upload_dir'     => '/home/uci_sis/test',
+        },
+        # 'UCR' => {
+        #     'upload_dir'          => '/home/ucr_sis',
+        #     'test_upload_dir'     => '/home/ucr_sis/test',
+        # },
+        # 'UCOE' => {
+        #     'upload_dir'          => '/home/ucoe_sis',
+        #     'test_upload_dir'     => '/home/ucoe_sis/test',
+        # },
     }
 
     # TODO is this actually the secret?

@@ -7,7 +7,7 @@ staging.dir=sample
 
 # standard Basic SIS properties for course
 filename@com.rsmart.customer.integration.processor.cle.CleCourseProcessor=\${staging.dir}/courses.csv
-columns@com.rsmart.customer.integration.processor.cle.CleCourseProcessor=9
+columns@com.rsmart.customer.integration.processor.cle.CleCourseProcessor=12
 headerRowPresent@com.rsmart.customer.integration.processor.cle.CleCourseProcessor=true
 dateFormat@com.rsmart.customer.integration.processor.cle.CleCourseProcessor=d-MMM-yy
 extendedReporting@com.rsmart.customer.integration.processor.cle.CleCourseProcessor=true
@@ -17,7 +17,8 @@ updateAllowed@com.rsmart.customer.integration.processor.cle.CleCourseProcessor=t
 
 # List of extra column property names, length of this list needs to be consistent with the number of
 # extra columns defined in the columns property.  Eg.  two items here, columns=11, 3 items columns=12, etc.
-extraPropertyNames@com.rsmart.customer.integration.processor.cle.CleCourseProcessor=
+# note: columns 10 & 11 are reserved for site contact & email
+extraPropertyNames@com.rsmart.customer.integration.processor.cle.CleCourseProcessor=["provision-sections"]
 
 defaultPublicVisibility@com.rsmart.customer.integration.processor.cle.CleCourseProcessor=true
 defaultJoinability@com.rsmart.customer.integration.processor.cle.CleCourseProcessor=false
@@ -42,7 +43,7 @@ courseTitleFormat@com.rsmart.customer.integration.processor.cle.CleCourseProcess
 
 # which extra property to look at to determine where or not to provision section groups in OAE for this course, column data must be (true,false)
 # if empty no column is available for this config
-provisionSectionsColumnName@com.rsmart.customer.integration.processor.cle.CleCourseProcessor=
+provisionSectionsColumnName@com.rsmart.customer.integration.processor.cle.CleCourseProcessor=provision-sections
 
 # this value can be optionally prepended to every groupid created in order to help deal with name collisions
 # in a shared environment.  Leave blank if you do not need this feature.

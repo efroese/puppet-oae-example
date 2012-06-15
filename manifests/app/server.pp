@@ -100,7 +100,6 @@ class oae::app::server( $downloadurl = '',
         },
         cwd     => "${oae::params::basedir}/jars/",
         creates => $jar_dest,
-        require => File["${oae::params::basedir}/jars/"],
     }
 
     file { $app_jar:

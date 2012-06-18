@@ -48,7 +48,7 @@ class localconfig {
 	
 	$dashboard_config = "${basedir}/config/dashboard.cfg.properties"
 	
-	$tomcat_shutdown_password = 'downa56f3111'
+	$tomcat_shutdown_password = 'cCWJkXC77uiF'
 	$server_id	   = 'jvm1'
 
     $admin_password = 'admin'

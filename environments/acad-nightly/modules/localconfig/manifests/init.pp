@@ -54,6 +54,10 @@ class localconfig {
     $apache_lb_members           = [ "${app_server}:8080", ]
     $apache_lb_members_untrusted = [ "${app_server}:8082", ]
     $apache_lb_params            = ["retry=20", "min=3", "flushpackets=auto", "max=250", "loadfactor=100", "timeout=60"]
+    $oae_cert = 'puppet:///modules/rsmart-common/academic.rsmart.com.crt'
+    $oae_certkey = 'puppet:///modules/rsmart-common/academic.rsmart.com.key'
+    $oae_certchain = 'puppet:///modules/rsmart-common/academic.rsmart.com-intermediate.crt'
+	
 
     $mock_cle_content            = false
     $apache_cle_lb_members       = [ "${cle_server}:8009 route=cle1", ]

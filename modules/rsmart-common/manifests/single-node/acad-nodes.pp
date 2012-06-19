@@ -6,9 +6,8 @@ node /.*.academic.rsmart.local/ inherits oaenode {
 
     ###########################################################################
     # System
-	class { 'localconfig::extra_users': }
     class { 'people::devops': }
-	class { 'rsmart-common::mysql': stage => init }
+	class { 'rsmart-common::mysql': stage => init } #?
 	
     class { 'rsmart-common::oae::httpd': }
     
@@ -61,6 +60,7 @@ node /.*.academic.rsmart.local/ inherits oaenode {
         javamemorymax  => $localconfig::javamemorymax,
         javapermsize   => $localconfig::javapermsize,
         setenv_template => 'rsmart-common/setenv.sh.erb',
+        store_dir       => $localconfig::storedir,
     }
 
     class { 'rsmart-common::logging':

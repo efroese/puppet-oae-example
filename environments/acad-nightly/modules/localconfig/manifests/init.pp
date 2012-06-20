@@ -1,6 +1,6 @@
 #
-# OIPP production cluster
-# https://oipp-test.academic.rsmart.com
+# Nightly single node server
+# https://nightly.academic.rsmart.com
 #
 # Use this class to configure a specific OAE cluster.
 # In your nodes file refer to these variables as $localconfig::variable_name.
@@ -38,10 +38,6 @@ class localconfig {
     $cle_db_user     = 'sakai_cle'
     $cle_db_password = 'ironchef'
     $cle_db_url      = "jdbc:mysql://localhost:3306/${cle_db}?useUnicode=true&characterEncoding=UTF-8&useServerPrepStmts=false&cachePrepStmts=true&prepStmtCacheSize=4096&prepStmtCacheLimit=4096"
-
-    ###########################################################################
-    # Content body storage
-    $storedir    = "/files-academic"
 
     ###########################################################################
     # Git (Preview processor)

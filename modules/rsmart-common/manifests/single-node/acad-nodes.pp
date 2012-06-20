@@ -60,7 +60,6 @@ node /.*.academic.rsmart.local/ inherits oaenode {
         javamemorymax  => $localconfig::javamemorymax,
         javapermsize   => $localconfig::javapermsize,
         setenv_template => 'rsmart-common/setenv.sh.erb',
-        store_dir       => $localconfig::storedir,
     }
 
     class { 'rsmart-common::logging':
@@ -86,7 +85,6 @@ node /.*.academic.rsmart.local/ inherits oaenode {
     #
     # Postgres Database Server
     #
-    class { 'postgres::repos': stage => init }
     class { 'postgres':
         hba_conf_template => 'rsmart-common/standalone-pg_hba.conf.erb',
     }

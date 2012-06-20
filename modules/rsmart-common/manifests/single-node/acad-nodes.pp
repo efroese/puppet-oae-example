@@ -71,7 +71,6 @@ node /.*.academic.rsmart.local/ inherits oaenode {
     class { 'rsmart-common::oae::app::email': locked => false }
     class { 'rsmart-common::oae::app::postgres': locked => false }
     class { 'rsmart-common::oae::app::security': locked => false }
-    class { 'rsmart-common::oae::app::solr::remote': locked => false }
 
     ###########################################################################
     # Preview processor

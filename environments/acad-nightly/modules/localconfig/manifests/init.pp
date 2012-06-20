@@ -1,6 +1,6 @@
 #
-# OIPP production cluster
-# https://oipp-test.academic.rsmart.com
+# Nightly single node server
+# https://nightly.academic.rsmart.com
 #
 # Use this class to configure a specific OAE cluster.
 # In your nodes file refer to these variables as $localconfig::variable_name.
@@ -40,10 +40,6 @@ class localconfig {
     $cle_db_url      = "jdbc:mysql://localhost:3306/${cle_db}?useUnicode=true&characterEncoding=UTF-8&useServerPrepStmts=false&cachePrepStmts=true&prepStmtCacheSize=4096&prepStmtCacheLimit=4096"
 
     ###########################################################################
-    # Content body storage
-    $storedir    = "/files-academic"
-
-    ###########################################################################
     # Git (Preview processor)
     $nakamura_zip = 'https://nodeload.github.com/rSmart/nakamura/zipball/develop'
 
@@ -54,6 +50,10 @@ class localconfig {
     $apache_lb_members           = [ "${app_server}:8080", ]
     $apache_lb_members_untrusted = [ "${app_server}:8082", ]
     $apache_lb_params            = ["retry=20", "min=3", "flushpackets=auto", "max=250", "loadfactor=100", "timeout=60"]
+    $oae_cert = 'puppet:///modules/rsmart-common/academic.rsmart.com.crt'
+    $oae_certkey = 'puppet:///modules/rsmart-common/academic.rsmart.com.key'
+    $oae_certchain = 'puppet:///modules/rsmart-common/academic.rsmart.com-intermediate.crt'
+	
 
     $mock_cle_content            = false
     $apache_cle_lb_members       = [ "${cle_server}:8009 route=cle1", ]

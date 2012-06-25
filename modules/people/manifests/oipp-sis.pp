@@ -65,7 +65,7 @@ class people::oipp-sis::external {
     }
     ssh_authorized_key { 'ucb-sis1':
         ensure => present,
-        key  => 'ssh-rsa AAAAB3NzaC1yc2EAAAABIwAAAQEA2csHLkNxmwiljOm8cHxOedcp9mL9WFG5GDjhgdlFopN6kGsBMCRLtNKe8V3eXo8iAf/+y95e5YiTX+dy53Uh2EYcQr3ISaZH9NaOQs92cCvsibpWnwPdwMG73uUMjmmLa/zq0QgIbJMY2N1sJ5yyKoPmtbSp9gXDGuffaYWuWT+vRDyp2eWLWJKmDeyW4arGrkSNBwo+5F9z46sAMHz0P+VDZ7VubkPLCKDD88i4mk7KE+e4GoMmfmV4qZFn98mfmSEucl9nTYoO8duWHPdMXVDNW48Aia2JaNwOxjFYwKVQuT6ZTSHfCni4y0MNK8xRkirh2WDhGbPs2PeDloZe3w==',
+        key  => 'AAAAB3NzaC1yc2EAAAABIwAAAQEA2csHLkNxmwiljOm8cHxOedcp9mL9WFG5GDjhgdlFopN6kGsBMCRLtNKe8V3eXo8iAf/+y95e5YiTX+dy53Uh2EYcQr3ISaZH9NaOQs92cCvsibpWnwPdwMG73uUMjmmLa/zq0QgIbJMY2N1sJ5yyKoPmtbSp9gXDGuffaYWuWT+vRDyp2eWLWJKmDeyW4arGrkSNBwo+5F9z46sAMHz0P+VDZ7VubkPLCKDD88i4mk7KE+e4GoMmfmV4qZFn98mfmSEucl9nTYoO8duWHPdMXVDNW48Aia2JaNwOxjFYwKVQuT6ZTSHfCni4y0MNK8xRkirh2WDhGbPs2PeDloZe3w==',
         type => 'ssh-rsa',
         user => 'ucd_sis',
         require => User['ucd_sis'],

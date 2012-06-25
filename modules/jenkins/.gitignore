@@ -1,0 +1,8 @@
+.project
+.vagrant
+pkg/*
+tmp/*
+README.pdf
+/test_reports
+.rvmrc
+Gemfile.lock

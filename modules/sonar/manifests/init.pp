@@ -129,7 +129,7 @@ class sonar (
   } ->
 
   sonar::plugin { 'sonar-ldap-plugin' :
-    ensure     => empty($ldap) ? {true => absent, false => present},
+    ensure     => present,
     artifactid => 'sonar-ldap-plugin',
     version    => '1.0',
     notify     => Service[$service],

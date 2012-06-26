@@ -1,6 +1,6 @@
 #
-# OIPP production cluster
-# https://oipp-test.academic.rsmart.com
+# QA single node server
+# https://qa.academic.rsmart.com
 #
 # Use this class to configure a specific OAE cluster.
 # In your nodes file refer to these variables as $localconfig::variable_name.
@@ -16,7 +16,8 @@ class localconfig {
     $group    = 'rsmart'
     $uid      = 500
     $gid      = 500
-    $basedir  = '/home/rsmart/sakaioae'
+    $homedir  = '/home/rsmart'
+    $basedir  = "${homedir}/sakaioae"
 
     ###########################################################################
     # Nodes
@@ -32,14 +33,11 @@ class localconfig {
     $oae_db_user     = 'nakamura'
     $oae_db_password = 'ironchef'
 
-    # TODO - Get the real values for the CLE database
+    $mysql_root_password = 'khjRE7AftLfB'
     $cle_db          = 'cle'
     $cle_db_user     = 'sakai_cle'
     $cle_db_password = 'ironchef'
-
-    ###########################################################################
-    # Content body storage
-    $storedir    = "/files-academic"
+    $cle_db_url      = "jdbc:mysql://localhost:3306/${cle_db}?useUnicode=true&characterEncoding=UTF-8&useServerPrepStmts=false&cachePrepStmts=true&prepStmtCacheSize=4096&prepStmtCacheLimit=4096"
 
     ###########################################################################
     # Git (Preview processor)
@@ -52,6 +50,9 @@ class localconfig {
     $apache_lb_members           = [ "${app_server}:8080", ]
     $apache_lb_members_untrusted = [ "${app_server}:8082", ]
     $apache_lb_params            = ["retry=20", "min=3", "flushpackets=auto", "max=250", "loadfactor=100", "timeout=60"]
+    $oae_cert = 'puppet:///modules/rsmart-common/academic.rsmart.com.crt'
+    $oae_certkey = 'puppet:///modules/rsmart-common/academic.rsmart.com.key'
+    $oae_certchain = 'puppet:///modules/rsmart-common/academic.rsmart.com-intermediate.crt'
 
     $mock_cle_content            = false
     $apache_cle_lb_members       = [ "${cle_server}:8009 route=cle1", ]
@@ -59,7 +60,7 @@ class localconfig {
     $disable_cle_axis            = false
 
     ###########################################################################
-    # App servers
+    # OAE App servers
     $jarsource     = '/home/rsmart/deploy/current'
     $java          = '/usr/java/jdk1.6.0_30/bin/java'
     $javamemorymax = '1024m'
@@ -98,4 +99,11 @@ class localconfig {
     $cle_mail_support    = 'bogus@mailinator.com'
     $cle_mail_request    = 'bogus@mailinator.com'
     $samigo_stmp_server  = $cle_smtp_server
+    
+    ###########################################################################
+    # Dynamic Configuration
+    $dynamic_config_root = "${basedir}/dynamicconfig"
+    $dynamic_config_masterfile = 'config.json'
+    $dynamic_config_customdir = "${dynamic_config_root}/custom"
+    $dynamic_config_jcroverrides = ["com.rsmart.nakamura.com.rsmart.nakamura.uxloader:${dynamic_config_root}/jcroverrides", ]
 }

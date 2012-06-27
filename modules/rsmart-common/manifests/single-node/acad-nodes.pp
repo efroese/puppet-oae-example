@@ -211,7 +211,7 @@ node /.*.academic.rsmart.local/ inherits oaenode {
         require => File["/etc/mysql/my.cnf"],
         notify => Service["mysql"],
         changes => [
-            $rsmart-common::mysql::cle_changes,
+            inline_template("<%= scope.lookupvar('rsmart-common::mysql::cle_changes') %>"),
         ],
     }
     

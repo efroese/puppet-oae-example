@@ -9,7 +9,7 @@ export JAVA_OPTS="-server -Xms<%= javamemorymax %> -Xmx<%= javamemorymax %> \
 -XX:+UseParNewGC -XX:+UseConcMarkSweepGC -XX:+CMSParallelRemarkEnabled \
 -XX:MaxTenuringThreshold=0 -XX:-DisableExplicitGC \
 -XX:+UseCMSInitiatingOccupancyOnly -XX:+UseCompressedOops -XX:+UseStringCache \
--XX:+UseCompressedStrings -XX:+OptimizeStringConcat -Djava.awt.headless=true -verbose:gc \
+-XX:+UseCompressedStrings -Djava.awt.headless=true -verbose:gc \
 -XX:+PrintGCDetails -XX:+PrintGCTimeStamps -XX:+PrintGCDateStamps -XX:+PrintTenuringDistribution \
 -XX:+PrintCommandLineFlags"
 

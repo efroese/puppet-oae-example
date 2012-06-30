@@ -1,7 +1,4 @@
 {
-    /**
-     * rSmart default customizations
-     */
     "URL": {
         "GATEWAY_URL": "/",
         "GROUP_DEFAULT_ICON_URL": "/dev/images/group_avatar_icon_64x64_nob.png",
@@ -10,12 +7,9 @@
         "I18N_BUNDLE_ROOT": "/dev/bundle/",
         "INBOX_URL": "/me#l=messages/inbox",
         "INVITATIONS_URL": "/me#l=messages/invitations",
-        "LOGOUT_URL": "/logout",
         "MY_DASHBOARD_URL": "/me#l=dashboard",
-        "PROFILE_EDIT_URL": "/me#l=profile/basic",
         "SEARCH_ACTIVITY_ALL_URL": "/var/search/activity/all.json",
-    //rSmart custom -- added final path
-        "TINY_MCE_CONTENT_CSS": "/dev/css/FSS/fss-base.css,/dev/css/sakai/main.css,/dev/css/sakai/sakai.corev1.css,/dev/css/sakai/sakai.base.css,/dev/css/sakai/sakai.editor.css,/dev/css/sakai/sakai.content_profile.css,/dev/skins/rsmart/skin.css",
+        "SEARCH_URL": "/search",
         "USER_DEFAULT_ICON_URL": "/dev/images/default_User_icon_50x50.png",
         "USER_DEFAULT_ICON_URL_LARGE": "/dev/images/default_User_icon_100x100.png",
         "INFINITE_LOADING_ICON": "/dev/images/Infinite_Scrolling_Loader_v01.gif",
@@ -36,15 +30,13 @@
         "LOGIN_SERVICE": "/system/sling/formlogin",
         "LOGOUT_SERVICE": "/system/sling/logout?resource=/index",
         "ME_SERVICE": "/system/me",
-        "MESSAGE_BOX_SERVICE": "/var/message/box.json",
         "MESSAGE_BOXCATEGORY_SERVICE": "/var/message/boxcategory.json",
         "MESSAGE_BOXCATEGORY_ALL_SERVICE": "/var/message/boxcategory-all.json",
         "POOLED_CONTENT_MANAGER": "/var/search/pool/me/manager.json",
         "POOLED_CONTENT_MANAGER_ALL": "/var/search/pool/me/manager-all.json",
         "POOLED_CONTENT_VIEWER": "/var/search/pool/me/viewer.json",
         "POOLED_CONTENT_VIEWER_ALL": "/var/search/pool/me/viewer-all.json",
-        "POOLED_CONTENT_SPECIFIC_USER": "/var/search/pool/manager-viewer.json",
-        "POOLED_CONTENT_ACTIVITY_FEED": "/var/search/pool/activityfeed.json",
+        "POOLED_CONTENT_SPECIFIC_USER": "/var/search/pool/auth-all.json",
         "PRESENCE_SERVICE": "/var/presence.json",
         "SAKAI2_TOOLS_SERVICE": "/var/proxy/s23/site.json?siteid=__SITEID__",
         "WORLD_CREATION_SERVICE": "/system/world/create",
@@ -68,10 +60,10 @@
         "SEARCH_USERS_ALL": "/var/search/users-all.json",
         "SEARCH_USERS_GROUPS": "/var/search/usersgroups.json",
         "SEARCH_USERS_GROUPS_ALL": "/var/search/usersgroups-all.json",
-    //rSmart custom
+        <%# rSmart custom %>
         "SEARCH_USERS_GROUPS_KNOWN": "/var/search/usersgroups-known.json",
         "USER_CHANGEPASS_SERVICE": "/system/userManager/user/__USERID__.changePassword.html",
-    //rSmart custom
+        <%# rSmart custom %>
         "USER_EMAIL_EXISTENCE_SERVICE": "/system/userManager/user.emailexists.html?email=__EMAIL__",
         "USER_EXISTENCE_SERVICE": "/system/userManager/user.exists.html?userid=__USERID__"
     },
@@ -118,7 +110,7 @@
                             "label": "__MSG__PROFILE_BASIC_EMAIL_LABEL__",
                             "errorMessage": "__MSG__PROFILE_BASIC_EMAIL_ERROR__",
                             "required": true,
-                    //rSmart custom - display = false
+                            <%# rSmart custom - display = false %>
                             "display": false,
                             "validation": "email"
                         },
@@ -127,8 +119,8 @@
                             "required": false,
                             "display": false
                         },
-                //rSmart custom -- removed role
-                    /*
+                    <%#
+                        rSmart custom -- removed role
                         "role": {
                             "label": "__MSG__PROFILE_BASIC_ROLE_LABEL__",
                             "required": false,
@@ -146,23 +138,19 @@
                                 "other": "__MSG__PROFILE_BASIC_ROLE_OTHER_LABEL__"
                             }
                         },
-                    */
-                //rSmart custom -- removed department
-                    /*
+                        rSmart custom -- removed department
                         "department": {
                             "label": "__MSG__PROFILE_BASIC_DEPARTMENT_LABEL__",
                             "required": false,
                             "display": true
                         },
-                    */
-                //rSmart custom -- removed college
-                    /*
+                        rSmart custom -- removed college
                         "college": {
                             "label": "__MSG__PROFILE_BASIC_COLLEGE_LABEL__",
                             "required": false,
                             "display": true
                         },
-                    */
+                    %>
                         "tags": {
                             "label": "__MSG__TAGS_AND_CATEGORIES__",
                             "required": false,
@@ -179,7 +167,7 @@
                     "access": "everybody",
                     "modifyacl": true,
                     "permission": "anonymous",
-            //rSmart custom -- reordered to 2
+                    <%# rSmart custom -- reordered to 2 %>
                     "order": 2,
                     "elements": {
                         "aboutme": {
@@ -200,17 +188,16 @@
                             "display": true,
                             "type": "textarea"
                         },
-                //rSmart custom -- removed hobbies
-                    /*
+                    <%# rSmart custom -- removed hobbies
                         "hobbies": {
                             "label": "__MSG__PROFILE_ABOUTME_HOBBIES_LABEL__",
                             "required": false,
                             "display": true
                         }
-                    */
+                    %>
                     }
                 },
-        //rSmart custom -- added online
+                <%# rSmart custom -- added online %>
                 "online": {
                     "label": "__MSG__PROFILE_ONLINE_LABEL__",
                     "required": false,
@@ -238,7 +225,7 @@
                         }
                     }
                 },
-        //rSmart custom -- added contact
+                <%# rSmart custom -- added contact %>
                 "contact": {
                     "label": "__MSG__PROFILE_CONTACT_LABEL__",
                     "required": false,
@@ -327,7 +314,7 @@
                     "permission": "anonymous",
                     "multiple": true,
                     "multipleLabel": "__MSG__PROFILE_PUBLICATION_LABEL__",
-            //rSmart custom -- reordered to 5
+                    <%# rSmart custom -- reordered to 5 %>
                     "order": 5,
                     "elements": {
                         "maintitle": {
@@ -397,8 +384,6 @@
         "userFirstNameDisplay": "firstName",
         "userNameDisplay": "firstName lastName",
         "userNameDefaultDisplay": "firstName lastName",
-        "userShortDescription": "${role} in ${department} at ${college}",
-        "groupShortDescription": "asdf",
         "defaultAutoTagging": true,
         "defaultSendTagMsg": true
     },
@@ -418,7 +403,7 @@
                 "title": "VISIT_THE_SUPPORT_FORUM",
                 "url": "http://sakaiproject.org/"
             }],
-    //rSmart custom -- replaced getInTouch array
+            <%# rSmart custom -- replaced getInTouch array %>
             "getInTouch": [{
                 "title": "SEND_US_YOUR_FEEDBACK",
                 "url": "javascript:;",
@@ -428,8 +413,8 @@
     },
 
     "Footer": {
-//rSmart custom - removed first two URLs for leftLinks
-//rSmart custom - removed ideainformer link
+        <%# rSmart custom - removed first two URLs for leftLinks
+            rSmart custom - removed ideainformer link %>
         "leftLinks": [{
             "title": "__MSG__ACKNOWLEDGEMENTS__",
             "href": "/acknowledgements"
@@ -441,14 +426,14 @@
             "title": "__MSG__EXPLORE__",
             "href": "/"
         },
-//rSmart custom -- added agreement link
+        <%# rSmart custom -- added agreement link %>
         {
                 "title": "__MSG__USER_AGREEMENT__",
                 "href": "http://www.rsmart.com/agreement",
                 "newWindow": true
         }]
     },
-//rSmart custom -- revised Directory
+    <%# rSmart custom -- revised Directory %>
     "Directory": {
         "01":{"title":"Agriculture","children":{
             "01.09":{"title":"Animal Sciences"},
@@ -985,13 +970,10 @@
         }}
     },
 
-    /**
-     * Institutional customizations
-     */
 
-    /**
-     * Authentication settings
-     */
+    <%# Institutional customizations %>
+
+    <%# Authentication settings %>
     "Authentication": {
         "allowInternalAccountCreation": true,
         "internal": true,
@@ -1006,16 +988,14 @@
         "hideLoginOn": ["/dev", "/dev/index.html", "/dev/create_new_account.html"]
     },
 
-    /*
-     * Configure default user dashboard navigation and widgets.
-     *
-     * corresponds to ACAD-456
-     */
+    <%# Configure default user dashboard navigation and widgets.
+        corresponds to ACAD-456 %>
+
     "defaultprivstructure": {
         "structure0": {
             "dashboard": {
                 "_ref": "${refid}0",
-                "_title": "My Dashboard",
+                "_title": "__MSG__MY_DASHBOARD__",
                 "_order": 0,
                 "_canEdit": true,
                 "_reorderOnly": true,
@@ -1023,11 +1003,11 @@
                 "main": {
                     "_ref": "${refid}0",
                     "_order": 0,
-                    "_title": "Dashboard"
+                    "_title": "__MSG__MY_DASHBOARD__"
                 }
             },
             "messages": {
-                "_title": "My Messages",
+                "_title": "__MSG__MY_MESSAGES__",
                 "_ref": "${refid}1",
                 "_order": 1,
                 "_canEdit": true,
@@ -1037,93 +1017,179 @@
                 "inbox": {
                     "_ref": "${refid}1",
                     "_order": 0,
-                    "_title": "Inbox",
+                    "_title": "__MSG__INBOX__",
                     "_nonEditable": true
                 },
                 "invitations": {
                     "_ref": "${refid}2",
                     "_order": 1,
-                    "_title": "Invitations",
+                    "_title": "__MSG__INVITATIONS__",
                     "_nonEditable": true
                 },
                 "sent": {
                     "_ref": "${refid}3",
                     "_order": 2,
-                    "_title": "Sent",
+                    "_title": "__MSG__SENT__",
                     "_nonEditable": true
                 },
                 "trash": {
                     "_ref": "${refid}4",
                     "_order": 3,
-                    "_title": "Trash",
+                    "_title": "__MSG__TRASH__",
                     "_nonEditable": true
                 }
             }
         },
-    //rSmart custom - set carousel widget to 'widget_carousel'
         "${refid}0": {
-            "page": "<div class='fl-force-right'><button type='button' class='s3d-button s3d-margin-top-5 s3d-header-button s3d-header-smaller-button dashboard_change_layout' data-tuid='${refid}5'>__MSG__EDIT_LAYOUT__</button><button type='button' class='s3d-button s3d-margin-top-5 s3d-header-button s3d-header-smaller-button dashboard_global_add_widget' data-tuid='${refid}5'>__MSG__ADD_WIDGET__</button></div><div class='s3d-contentpage-title'>__MSG__MY_DASHBOARD__</div><div id='widget_carousel' class='widget_inline'\></div><br/><div id='widget_dashboard_${refid}5' class='widget_inline'></div>"
+            "id2506067": {
+                "htmlblock": {
+                    "content": "<div class='fl-force-right'><button type='button' class='s3d-button s3d-margin-top-5 s3d-header-button s3d-header-smaller-button dashboard_change_layout' data-tuid='${refid}5'>__MSG__EDIT_LAYOUT__</button><button type='button' class='s3d-button s3d-margin-top-5 s3d-header-button s3d-header-smaller-button dashboard_global_add_widget' data-tuid='${refid}5'>__MSG__ADD_WIDGET__</button></div><div class='s3d-contentpage-title'>__MSG__MY_DASHBOARD__</div>"
+                }
+            },
+            "${refid}5": {
+                "dashboard": {
+                    "layout": "threecolumn",
+                    "columns": {
+                        "column1": [
+                            {
+                                "uid": "${refid}10",
+                                "visible": "block",
+                                "name": "recentchangedcontent"
+                            }
+                        ],
+                        "column2": [
+                            {
+                                "uid": "${refid}11",
+                                "visible": "block",
+                                "name": "recentmemberships"
+                            }
+                        ],
+                        "column3": [
+                            {
+                                "uid": "${refid}12",
+                                "visible": "block",
+                                "name": "recentcontactsnew"
+                            }
+                        ]
+                    }
+                }
+            },
+            "rows": [
+                {
+                    "id": "id8965114",
+                    "columns": [
+                        {
+                            "width": 1,
+                            "elements": [
+                                {
+                                    "id": "id2506067",
+                                    "type": "htmlblock"
+                                },
+                                {
+                                    "id": "id8321271",
+                                    "type": "carousel"
+                                },
+                                {
+                                    "id": "${refid}5",
+                                    "type": "dashboard"
+                                }
+                            ]
+                        }
+                    ]
+                }
+            ]
         },
         "${refid}1": {
-            "page": "<div id='widget_inbox_${refid}6' class='widget_inline'/>"
+            "${refid}6": {
+                "box": "inbox",
+                "category": "message",
+                "title": "__MSG__INBOX__"
+            },
+            "rows": [
+                {
+                    "id": "id7088118",
+                    "columns": [
+                        {
+                            "width": 1,
+                            "elements": [
+                                {
+                                    "id": "${refid}6",
+                                    "type": "inbox"
+                                }
+                            ]
+                        }
+                    ]
+                }
+            ]
         },
         "${refid}2": {
-            "page": "<div id='widget_inbox_${refid}7' class='widget_inline'/>"
+            "${refid}7": {
+                "box": "inbox",
+                "category": "invitation",
+                "title": "__MSG__INVITATIONS__"
+            },
+            "rows": [
+                {
+                    "id": "id6156677",
+                    "columns": [
+                        {
+                            "width": 1,
+                            "elements": [
+                                {
+                                    "id": "${refid}7",
+                                    "type": "inbox"
+                                }
+                            ]
+                        }
+                    ]
+                }
+            ]
         },
         "${refid}3": {
-            "page": "<div id='widget_inbox_${refid}8' class='widget_inline'/>"
+            "${refid}8": {
+                "box": "outbox",
+                "category": "*",
+                "title": "__MSG__SENT__"
+            },
+            "rows": [
+                {
+                    "id": "id5268914",
+                    "columns": [
+                        {
+                            "width": 1,
+                            "elements": [
+                                {
+                                    "id": "${refid}8",
+                                    "type": "inbox"
+                                }
+                            ]
+                        }
+                    ]
+                }
+            ]
         },
         "${refid}4": {
-            "page": "<div id='widget_inbox_${refid}9' class='widget_inline'/>"
-        },
-        "${refid}5": {
-            "dashboard": {
-                "layout": "threecolumn",
-            /**
-             * Customize the widgets shown by default on a user's dashboard
-             * Note that this will only work for new users. Existing users will have
-             * to have their /~userid/private/privspace deleted to take changes
-             *
-             * For now, this is just a copy of the config in config.js
-             */
-                "columns": {
-                    "column1": [{
-                        "uid": "${refid}10",
-                        "visible": "block",
-                        "name": "recentchangedcontent"
-                    }],
-                    "column2": [{
-                       "uid": "${refid}11",
-                       "visible": "block",
-                       "name": "recentmemberships"
-                   }],
-                    "column3": [{
-                         "uid": "${refid}12",
-                         "visible": "block",
-                         "name": "recentcontactsnew"
-                     }]
+            "${refid}9": {
+                "box": "trash",
+                "category": "*",
+                "title": "__MSG__TRASH__"
+            },
+            "rows": [
+                {
+                    "id": "id1281420",
+                    "columns": [
+                        {
+                            "width": 1,
+                            "elements": [
+                                {
+                                    "id": "${refid}9",
+                                    "type": "inbox"
+                                }
+                            ]
+                        }
+                    ]
                 }
-            }
-        },
-        "${refid}6": {
-            "box": "inbox",
-            "category": "message",
-            "title": "INBOX"
-        },
-        "${refid}7": {
-            "box": "inbox",
-            "category": "invitation",
-            "title": "INVITATIONS"
-        },
-        "${refid}8": {
-            "box": "outbox",
-            "category": "*",
-            "title": "SENT"
-        },
-        "${refid}9": {
-            "box": "trash",
-            "category": "*",
-            "title": "TRASH"
+            ]
         }
     },
 
@@ -1158,7 +1224,6 @@
                 "_altTitle": "__MSG__MY_MEMBERSHIPS_OTHER__",
                 "_reorderOnly": true,
                 "_nonEditable": true,
-        //rSmart custom - restrict membership view to 'contacts'
                 "_view": "contacts",
                 "main": {
                     "_ref": "${refid}1",
@@ -1173,7 +1238,6 @@
                 "_altTitle": "__MSG__MY_CONTACTS_OTHER__",
                 "_reorderOnly": true,
                 "_nonEditable": true,
-        //rSmart custom - restrict membership view to 'contacts'
                 "_view": "contacts",
                 "main": {
                     "_ref": "${refid}2",
@@ -1183,18 +1247,63 @@
             }
         },
         "${refid}0": {
-            "page": "<div id='widget_mylibrary' class='widget_inline'></div>"
+            "rows": [
+                {
+                    "id": "id89874",
+                    "columns": [
+                        {
+                            "width": 1,
+                            "elements": [
+                                {
+                                    "id": "id5739346",
+                                    "type": "mylibrary"
+                                }
+                            ]
+                        }
+                    ]
+                }
+            ]
         },
         "${refid}1": {
-            "page": "<div id='widget_joinrequestbuttons' class='widget_inline'></div> <div id='widget_tooltip' class='widget_inline'></div> <div id='widget_mymemberships' class='widget_inline'></div>"
+            "rows": [
+                {
+                    "id": "id7664610",
+                    "columns": [
+                        {
+                            "width": 1,
+                            "elements": [
+                                {
+                                    "id": "id4347509",
+                                    "type": "mymemberships"
+                                }
+                            ]
+                        }
+                    ]
+                }
+            ]
         },
         "${refid}2": {
-            "page": "<div id='widget_contacts' class='widget_inline'></div>"
+            "rows": [
+                {
+                    "id": "id293415",
+                    "columns": [
+                        {
+                            "width": 1,
+                            "elements": [
+                                {
+                                    "id": "id6775571",
+                                    "type": "contacts"
+                                }
+                            ]
+                        }
+                    ]
+                }
+            ]
         }
     },
 
-	// this is a test - this should overwrite the exiting config_custom.json
-    // Custom CSS Files to load in
+	<%# this is a test - this should overwrite the exiting config_custom.json
+        Custom CSS Files to load in %>
     "skinCSS": ["/dev/skins/default/skin.css", "/dev/skins/rsmart/skin.css"],
     "displayTimezone": true,
     "displayLanguage": true,
@@ -1203,23 +1312,15 @@
         "tinymceLanguagePacks": ["ar","ch","en","gl","id","lb","nb","ru","sv","uk","az","cn","eo","gu","is","lt","nl",
             "sc","ta","ur","be","cs","es","he","it","lv","nn","se","te","vi","bg","cy","et","hi","ja","mk","no","si",
             "th","zh-cn","bn","da","eu","hr","ka","ml","pl","sk","tn","zh-tw","br","de","fa","hu","kl","mn","ps","sl",
-            "tr","zh","bs","dv","fi","hy","km","ms","pt","sq","tt","zu","ca","el","fr","ia","ko","my","ro","sr","tw"],
-    //rSmart custom -- added all after autoresize
-        "plugins": "safari,advhr,inlinepopups,preview,noneditable,nonbreaking,xhtmlxtras,template,table,autoresize,advlink,autolink,contextmenu,directionality,fullscreen,lists,paste,searchreplace,style",
-        "buttons": {
-    //rSmart custom -- changed all lines of buttons
-            "line_one": "bold,italic,underline,strikethrough,sub,sup,|,justifyleft,justifycenter,justifyright,justifyfull,|,formatselect,fontselect,fontsizeselect,|,forecolor,backcolor",
-            "line_two": "undo,redo,|,cut,copy,paste,pastetext,pasteword,removeformat,|,bullist,numlist,outdent,indent,|,blockquote,advhr,charmap,|,link,unlink,anchor,|,search,replace,|,visualaid,fullscreen,styleprops,cleanup,code",
-            "line_three": "tablecontrols,|,ltr,rtl"
-        }
+            "tr","zh","bs","dv","fi","hy","km","ms","pt","sq","tt","zu","ca","el","fr","ia","ko","my","ro","sr","tw"]
     },
 
-    /**
+    <%#
      * Customize the widgets that can be placed in sakaidocs
      *
      * Order matters here, so you can re-arrange however you'd like these
      * widgets to show up
-     */
+     %>
     "enabledWidgets": [
         "embedcontent",
         "discussion",
@@ -1238,11 +1339,11 @@
         "sakai2gradebook"
     ],
 
-    /**
+    <%#
      * Customize the widgets available to be embedded on the dashboard
      *
      * For now, this is just a copy of the config in config.js
-     */
+     %>
     "enabledDashboardWidgets": [
         "recentmemberships",
         "mycontent",
@@ -1353,7 +1454,7 @@
         "anonymous": true,
         "label": "SIGN_UP"
     },
-//rSmart custom -- added help link
+    <%# rSmart custom -- added help link %>
     {
         "url": "javascript:;",
         "id": "help_tab",
@@ -1361,24 +1462,22 @@
         "label": "HELP",
         "rightLink": true
     }, {
-            "url": "javascript:;",
-            "id": "help_tab",
-            "anonymous": false,
-            "label": "HELP",
-            "rightLink": true
+        "url": "javascript:;",
+        "id": "help_tab",
+        "anonymous": false,
+        "label": "HELP",
+        "rightLink": true
     }],
 
-    "emailLocation": 'accountpreferences',
+    "emailLocation": "accountpreferences",
 
     "emailVerifyEnabled": false,
 
-    /**
-     * Kaltura Settings
-     */
+    <%# Kaltura Settings %>
     "kaltura": {
-        enabled: false, // Enable/disable Kaltura player
-        serverURL:  "http://www.kaltura.com", //INSERT_KALTURA_INSTALLATION_URL_HERE
-        partnerId:  100, //INSERT_YOUR_PARTNER_ID_HERE
-        playerId: 100 //INSERT_YOUR_PLAYER_ID_HERE
+        "enabled": false, <%# Enable/disable Kaltura player %>
+        "serverURL":  "http://www.kaltura.com", <%# INSERT_KALTURA_INSTALLATION_URL_HERE %>
+        "partnerId":  100, <%# INSERT_YOUR_PARTNER_ID_HERE %>
+        "playerId": 100 <%# INSERT_YOUR_PLAYER_ID_HERE %>
     }
 }

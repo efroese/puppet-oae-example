@@ -465,7 +465,7 @@
         }
     },
 
-    "SakaiDomain": "window.location.protocol + \"//\" + window.location.host,",
+    "SakaiDomain": window.location.protocol + "//" + window.location.host,,
 
     "Permissions": {
         <%#
@@ -1847,7 +1847,7 @@
     "defaultSakaiDocContent": {
         "rows": [
             {
-                "id": "'id' + Math.round(Math.random() * 100000000)",
+                "id": 'id' + Math.round(Math.random() * 100000000),
                 "columns": [
                     {
                         "width": 1,
@@ -2102,7 +2102,8 @@
         "enabled": false, <%# Enable/disable Kaltura player %>
         "serverURL":  "http://www.kaltura.com", <%# INSERT_KALTURA_INSTALLATION_URL_HERE %>
         "partnerId":  100, <%# INSERT_YOUR_PARTNER_ID_HERE %>
-        "playerId": 100 <%# INSERT_YOUR_PLAYER_ID_HERE %>
+        "playerId": 101 <%# INSERT_YOUR_PLAYER_ID_HERE %>
     }
 
 }
+

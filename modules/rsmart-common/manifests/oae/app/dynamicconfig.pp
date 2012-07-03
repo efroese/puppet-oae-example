@@ -1,7 +1,9 @@
 #
 # OAE Dynamic config 
 #
-class rsmart-common::oae::app::dynamicconfig($locked = true){
+class rsmart-common::oae::app::dynamicconfig(
+    $locked = true,
+    $config_js = 'rsmart-common/config.js.erb'){
 
     Class['Localconfig'] -> Class['Rsmart-common::Oae::App::Dynamicconfig']
 
@@ -32,9 +34,9 @@ class rsmart-common::oae::app::dynamicconfig($locked = true){
         require => File[$localconfig::dynamic_config_root],
     }
 
-    file { "${localconfig::dynamic_config_customdir}/config_custom.json":
+    file { "${localconfig::dynamic_config_customdir}/config.js":
         mode => 0644,
-        content => template("rsmart-common/config_custom.json.erb"),
+        content => template($config_js),
         require => File[$localconfig::dynamic_config_customdir],
     }
 

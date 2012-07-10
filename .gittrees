@@ -1,0 +1,44 @@
+[subtree "modules/augeas"]
+	url = http://github.com/camptocamp/puppet-augeas.git
+	path = modules/augeas
+	branch = master
+[subtree "modules/apache"]
+	url = http://github.com/efroese/puppet-apache.git
+	path = modules/apache
+	branch = master
+[subtree "modules/common"]
+	url = http://github.com/camptocamp/puppet-common.git
+	path = modules/common
+	branch = master
+[subtree "modules/pacemaker"]
+	url = http://github.com/efroese/puppet-pacemaker.git
+	path = modules/pacemaker
+	branch = master
+[subtree "modules/oae"]
+	url = http://github.com/efroese/puppet-oae.git
+	path = modules/oae
+	branch = master
+[subtree "modules/tomcat6"]
+	url = http://github.com/efroese/puppet-tomcat6.git
+	path = modules/tomcat6
+	branch = master
+[subtree "modules/postgres"]
+	url = http://github.com/efroese/puppet-postgres.git
+	path = modules/postgres
+	branch = master
+[subtree "modules/nfs"]
+	url = http://github.com/efroese/puppet-nfs.git
+	path = modules/nfs
+	branch = master
+[subtree "modules/archive"]
+	url = http://github.com/efroese/puppet-archive.git
+	path = modules/archive
+	branch = master
+[subtree "modules/solr"]
+	url = http://github.com/efroese/puppet-solr.git
+	path = modules/solr
+	branch = master
+[subtree "modules/selinux"]
+	url = http://github.com/camptocamp/puppet-selinux.git
+	path = modules/selinux
+	branch = master

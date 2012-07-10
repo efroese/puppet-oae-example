@@ -111,6 +111,7 @@ node /oae-lb[1-2].localdomain/ inherits oaenode {
 node /oae-app[0-1].localdomain/ inherits oaenode {
 
     class { 'oae::app::server':
+        downloadurl    => 'http://source.sakaiproject.org/maven2/org/sakaiproject/nakamura/org.sakaiproject.nakamura.app/1.3.0/org.sakaiproject.nakamura.app-1.3.0.jar',
         javamemorymax  => $localconfig::javamemorymax,
         javamemorymin  => $localconfig::javamemorymin,
         javapermsize   => $localconfig::javapermsize,
@@ -202,7 +203,7 @@ node 'oae-solr0.localdomain' inherits solrnode {
         tomcat_user  => $localconfig::user,
         tomcat_group => $localconfig::group,
         tomcat_home  => "${localconfig::basedir}/tomcat",
-        solr_tarball => 'http://nodeload.github.com/sakaiproject/solr/tarball/org.sakaiproject.nakamura.solr-1.3-20120215'
+        solr_tarball => 'http://nodeload.github.com/sakaiproject/solr/tarball/org.sakaiproject.nakamura.solr-1.4.2',
         require      => Class['Tomcat6'],
     }
 

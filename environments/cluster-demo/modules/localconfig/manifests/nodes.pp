@@ -282,6 +282,7 @@ node 'oae-db0.localdomain' inherits oaenode {
 
     postgres::database { $localconfig::db:
         ensure => present,
+        require => Class['Postgres'],
     }
 
     postgres::role { $localconfig::db_user:

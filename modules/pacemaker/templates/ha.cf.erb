@@ -1,0 +1,24 @@
+# file managed by puppet
+# Logging
+debug        0
+use_logd     false
+logfacility  daemon
+
+# Misc Options
+traditional_compression  off
+compression              bz2
+coredumps                true
+
+# Communications
+udpport      <%= scope.lookupvar('pacemaker::heartbeat::port') %>
+bcast        <%= scope.lookupvar('pacemaker::heartbeat::interface') %>
+autojoin     any
+
+# Thresholds (in seconds)
+keepalive    <%= scope.lookupvar('pacemaker::heartbeat::keepalive') %>
+warntime     <%= scope.lookupvar('pacemaker::heartbeat::warntime') %>
+deadtime     <%= scope.lookupvar('pacemaker::heartbeat::deadtime') %>
+initdead     <%= scope.lookupvar('pacemaker::heartbeat::initdead') %>
+
+# use heartbeat v2/pacemaker
+crm yes

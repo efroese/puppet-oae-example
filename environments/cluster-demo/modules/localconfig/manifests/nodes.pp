@@ -197,55 +197,13 @@ node solrnode inherits oaenode {
 node 'oae-solr0.localdomain' inherits solrnode {
 
     class { 'solr::tomcat':
-        tomcat_home  => "${localconfig::basedir}/tomcat",
-        solrconfig_xml => 'localconfig/master-solrconfig.xml.erb',
-        user  => $localconfig::user,
-        group => $localconfig::group,
+        user         => $localconfig::user,
+        group        => $localconfig::group,
         tomcat_user  => $localconfig::user,
         tomcat_group => $localconfig::group,
+        tomcat_home  => "${localconfig::basedir}/tomcat",
+        solr_tarball => 'http://nodeload.github.com/sakaiproject/solr/tarball/org.sakaiproject.nakamura.solr-1.3-20120215'
         require      => Class['Tomcat6'],
-    }
-
-    # Download the source tarball
-    # /usr/local/solr/solr-source
-    archive { 'solr-source':
-        ensure         => present,
-        url            => 'http://nodeload.github.com/sakaiproject/solr/tarball/org.sakaiproject.nakamura.solr-1.3-20120215',
-        checksum       => false,
-        target         => $localconfig::basedir,
-        src_target     => $localconfig::basedir,
-        allow_insecure => true,
-        timeout        => '0',
-        notify         => Exec['mv-solr-source'],
-    }
-
-    # The expanded folder name will be ${organization}-${repository}-${revision}
-    exec { 'mv-solr-source':
-        command => "mv ${localconfig::basedir}/`tar tf ${localconfig::basedir}/solr-source.tar.gz 2>/dev/null | head -1` ${localconfig::basedir}/solr-source",
-        refreshonly => true,
-    }
-
-    solr::core::sharedfile {
-        'schema.xml':
-            source => "file://${localconfig::basedir}/solr-source/src/main/resources/schema.xml";
-        'protwords.txt':
-            source => "${localconfig::basedir}/solr-source/src/main/resources/protwords.txt";
-        'stopwords.txt':
-            source => "${localconfig::basedir}/solr-source/src/main/resources/stopwords.txt";
-        'synonyms.txt':
-            source => "${localconfig::basedir}/solr-source/src/main/resources/synonyms.txt";
-    }
-
-    solr::core { [ 'core0', 'core1', ]:
-        #ensure => unload,
-        #delete_indexes => true,
-        require => [
-            Class['Solr::Tomcat'],
-            Solr::Core::Sharedfile['schema.xml'],
-            Solr::Core::Sharedfile['protwords.txt'],
-            Solr::Core::Sharedfile['stopwords.txt'],
-            Solr::Core::Sharedfile['synonyms.txt'],
-        ]
     }
 
 }
@@ -254,7 +212,6 @@ node /oae-solr[1-3].localdomain/ inherits solrnode {
 
     class { 'solr::tomcat':
         master_url   => "${localconfig::solr_remoteurl}/replication",
-        solrconfig_xml => 'localconfig/slave-solrconfig.xml.erb',
         tomcat_home  => "${localconfig::basedir}/tomcat",
         tomcat_user  => $localconfig::user,
         tomcat_group => $localconfig::group, 

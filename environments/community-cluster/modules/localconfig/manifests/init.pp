@@ -37,7 +37,7 @@ class localconfig {
     $http_name              = 'oae-appservers-365563856.us-west-1.elb.amazonaws.com'
     $http_name_untrusted    = 'oae-appservers-untrusted-414965918.us-west-1.elb.amazonaws.com'
 
-    $javamemorymax = '512'
+    $javamemorymax = '6144'
     $javamemorymin = '256'
     $javapermsize  = '256'
 

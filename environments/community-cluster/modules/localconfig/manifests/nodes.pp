@@ -183,7 +183,7 @@ node 'oae-db0.localdomain' inherits oaenode {
        type => 'host',
        db   => $localconfig::db,
        user => $localconfig::db_user,
-       address => $localconfig::app_server0,
+       address => dnsLookup($localconfig::app_server0),
        method  => 'md5',
     }
 
@@ -191,7 +191,7 @@ node 'oae-db0.localdomain' inherits oaenode {
        type => 'host',
        db   => $localconfig::db,
        user => $localconfig::db_user,
-       address => $localconfig::app_server1,
+       address => dnsLookup($localconfig::app_server1),
        method  => 'md5',
     }
 

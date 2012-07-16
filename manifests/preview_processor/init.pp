@@ -64,7 +64,7 @@ class oae::preview_processor::init (
     $log_dir = '/var/log/sakaioae/preview'
     exec { 'mv preview logs':
         command => "mv ${oae::params::basedir}/nakamura/scripts/logs ${log_dir}",
-        unless  => "test -L ${oae::params::basedir}/nakamura/scripts/logs",
+        onlyif  => "test -d ${oae::params::basedir}/nakamura/scripts/logs",
         require => Exec['mv nakamura'],
     }
 
@@ -73,13 +73,13 @@ class oae::preview_processor::init (
         owner   => root,
         group   => $oae::params::group,
         mode    => 0775,
-        require => [ Exec['mv nakamura'], Exec['mv preview logs'], ],
+        require => Exec['mv preview logs'],
     }
 
     file { "${oae::params::basedir}/nakamura/scripts/logs":
         ensure  => link,
         target  => '/var/log/sakaioae/preview',
-        require => File['/var/log/sakaioae/preview'],
+        require => File[$log_dir],
     }
 
     # OAE password file

@@ -179,6 +179,12 @@ node 'oae-db0.localdomain' inherits oaenode {
         require  => Postgres::Database[$localconfig::db],
     }
 
+    postgres::role { 'nakrole':
+        ensure   => present,
+        password => $localconfig::db_password,
+        require  => Postgres::Database[$localconfig::db],
+    }
+
     $app_server0_ip = dnsLookup($localconfig::app_server0)
     postgres::clientauth { "host-${localconfig::db}-${localconfig::db_user}-${localconfig::app_server0}-md5":
        type => 'host',

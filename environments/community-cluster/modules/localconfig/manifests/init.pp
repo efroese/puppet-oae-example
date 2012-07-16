@@ -16,7 +16,7 @@ class localconfig {
     # Database setup
     $db          = 'nakamura'
     $db_server   = 'OAE-Postgres-566174176.us-west-1.elb.amazonaws.com'
-    $db_url      = "jdbc:postgresql://${db_server}/${db}?charSet\\=UTF-8"
+    $db_url      = "jdbc:postgresql://${db_server}/${db}?charSet\\=UTF-8&tcpKeepAlive=true"
     $db_driver   = 'org.postgresql.Driver'
     $db_user     = 'nakamura'
     $db_password = 'ironchef'

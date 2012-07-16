@@ -114,7 +114,7 @@ node 'oae-app1.localdomain' inherits oaeappservernode {
 
     class { 'oae::app::ehcache':
         peers       => [ $localconfig::app_server0_ip, ],
-        tcp_address => $ipadress,
+        tcp_address => $ipaddress,
         remote_object_port => $localconfig::ehcache_remote_object_port,
     }
 }

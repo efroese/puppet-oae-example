@@ -6,12 +6,12 @@ class oae::preview_processor::amazon {
 
     Class['oae::params'] -> Class['oae::preview_processor::packages']
     
-    $common_packages = [ 'cronie', 'cpp', 'gcc', 'gcc-c++',
+    $packages = [ 'cronie', 'cpp', 'gcc', 'gcc-c++',
         'fontconfig-devel', 'libcurl-devel',
         'GraphicsMagick', 'ImageMagick', 'ImageMagick-devel',
-        'poppler-utils', 'rubygems', ]
+        'poppler-utils', 'rubygems', 'libxml2-devel', 'libxslt-devel' ]
 
-    package { $common_packages: ensure => installed }
+    package { $packages: ensure => installed }
 
     if !defined(Package['ruby-devel']) {
         package { 'ruby-devel': ensure => installed }

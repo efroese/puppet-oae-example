@@ -99,21 +99,22 @@ node oaeappservernode inherits oaenode {
             'bind-address' => $ipaddress,
         }
     }
+}
 
-node oae-app0.localdomain/ inherits oaeappservernode {
+node 'oae-app0.localdomain' inherits oaeappservernode {
 
     class { 'oae::app::ehcache':
         peers       => [ $localconfig::app_server1_ip, ],
-        tcp_address => $ipaddress
+        tcp_address => $ipaddress,
         remote_object_port => $localconfig::ehcache_remote_object_port,
     }
 }
 
-node oae-app1.localdomain/ inherits oaeappservernode {
+node 'oae-app1.localdomain' inherits oaeappservernode {
 
     class { 'oae::app::ehcache':
         peers       => [ $localconfig::app_server0_ip, ],
-        tcp_address => $ipadress
+        tcp_address => $ipadress,
         remote_object_port => $localconfig::ehcache_remote_object_port,
     }
 }

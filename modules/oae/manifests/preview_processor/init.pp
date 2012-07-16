@@ -104,7 +104,7 @@ class oae::preview_processor::init (
         group  => root,
         mode   => 755,
     }
-
+    
     cron { 'run_preview_processor':
         command => "${oae::params::basedir}/bin/run_preview_processor.sh 2>&1 > /dev/null",
         user => $oae::params::user,

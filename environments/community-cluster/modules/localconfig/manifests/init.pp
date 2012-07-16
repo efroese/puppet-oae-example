@@ -23,7 +23,8 @@ class localconfig {
 
     ###########################################################################
     # HA apache load balancer
-    $http_name       = 'OAE-AppServers-365563856.us-west-1.elb.amazonaws.com'
+    $http_name              = 'OAE-AppServers-365563856.us-west-1.elb.amazonaws.com'
+    $http_name_untrusted    = 'OAE-AppServers-Untrusted-414965918.us-west-1.elb.amazonaws.com'
 
     ###########################################################################
     # App servers
@@ -32,22 +33,19 @@ class localconfig {
     $javapermsize  = '256'
 
     # oae server protection service
-    $serverprotectsec = 'shhh-its@secret'
+    $serverprotectsec = 'pi34ht5p395hc24nw4tbc42twh'
 
-    $app_server0 = '192.168.1.50'
-    $app_server1 = '192.168.1.51'
+    $app_server0 = 'ec2-50-18-147-148.us-west-1.compute.amazonaws.com'
+    $app_server1 = 'ec2-204-236-168-81.us-west-1.compute.amazonaws.com'
 
     # ehcache
     $mcast_address = '230.0.0.2'
     $mcast_port = '8450'
 
     # solr
-    $solr_master = '192.168.1.70'
-    $solr_slave0 = '192.168.1.71'
-    $solr_slave1 = '192.168.1.72'
-    $solr_slave2 = '192.168.1.73'
+    $solr_master = 'OAE-SOLR-426995740.us-west-1.elb.amazonaws.com'
     $solr_remoteurl = "http://${solr_master}:8080/solr"
-    $solr_queryurls = "http://${solr_slave0}:8080/solr|http://${solr_slave1}:8983/solr|http://${solr_slave2}:8983/solr"
+    $solr_queryurls = "http://${solr_master}:8080/solr"
 
     # ActiveMQ
     $activemq_brokers = [ app_server0, app_server1 ]

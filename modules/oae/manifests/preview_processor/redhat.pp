@@ -12,17 +12,15 @@ class oae::preview_processor::redhat {
 
     package { $common_packages: ensure => installed }
 
-    $centos6_pkgs = ['cronie', 'libcurl-devel', 'ImageMagick', 'ImageMagick-devel', 'libgcj']
+    $centos6_pkgs = ['cronie', 'libcurl-devel', 'ImageMagick', 'ImageMagick-devel', ]
     package { $centos6_pkgs: ensure => installed }
 
     if !defined(Package['ruby-devel']){
         package { 'ruby-devel': ensure => installed }
     }
 
-    package { 'pdftk-1.44-1.el6.rf.x86_64':
-         ensure   => present,
-         source   => "http://dl.dropbox.com/u/24606888/puppet-oae-files/pdftk-1.44-1.el6.rf.x86_64.rpm",
-         provider => 'rpm',
-         require  => Package['libgcj']
+    exec { 'install pdftk-1.44-1.el6.rf.x86_64':
+         command => "rpm -i --nodeps http://dl.dropbox.com/u/24606888/puppet-oae-files/pdftk-1.44-1.el6.rf.x86_64.rpm",
+         unless  => "rpm -q pdftk-1.44-1.el6.rf.x86_64."
     }
 }

@@ -40,11 +40,6 @@ node /oae-app[0-1].localdomain/ inherits oaenode {
         javamemorymin  => $localconfig::javamemorymin,
         javapermsize   => $localconfig::javapermsize,
     }
-
-    class { 'oae::app::ehcache':
-        mcast_address => $localconfig::mcast_address,
-        mcast_port    => $localconfig::mcast_port,
-    }
     
     oae::app::server::sling_config {
         "org.sakaiproject.nakamura.lite.storage.jdbc.JDBCStorageClientPool":
@@ -56,6 +51,7 @@ node /oae-app[0-1].localdomain/ inherits oaenode {
         }
     }
 
+    ## Server protection service
     # Separates trusted vs untusted content.
     oae::app::server::sling_config {
         "org.sakaiproject.nakamura.http.usercontent.ServerProtectionServiceImpl":
@@ -69,24 +65,26 @@ node /oae-app[0-1].localdomain/ inherits oaenode {
         }
     }
 
-    # Solr Client
-    oae::app::server::sling_config {
-        "org.sakaiproject.nakamura.solr.MultiMasterRemoteSolrClient":
-        config => {
-            "remoteurl"  => $localconfig::solr_remoteurl,
-            "query-urls" => $localconfig::solr_queryurls,
-        }
-    }
-
+    ## Solr
     # Specify the client type
     oae::app::server::sling_config {
         "org.sakaiproject.nakamura.solr.SolrServerServiceImpl":
-        config => {
-            "solr-impl" => "multiremote",
-        }
+        config => { "solr-impl" => "remote", },
     }
 
-    # Clustering
+    # Configure the client with the master/slave(s)] info
+    oae::app::server::sling_config {
+        "org.sakaiproject.nakamura.solr.RemoteSolrClient":
+        config => {
+            "remoteurl"  => $localconfig::solr_remoteurl,
+            "socket.timeout" => 10000,
+            "connection.timeout" => 3000,
+            "max.total.connections" => 500,
+            "max.connections.per.host" => 500,
+        },
+    }
+
+    ## Clustering
     oae::app::server::sling_config {
         "org.sakaiproject.nakamura.cluster.ClusterTrackingServiceImpl":
         config => {
@@ -101,6 +99,14 @@ node /oae-app[0-1].localdomain/ inherits oaenode {
             'bind-address' => $ipaddress,
         }
     }
+
+    # TODO - Make this dynamic using exported resources
+    class { 'oae::app::ehcache':
+        peers       => [ $localconfig::app_server1, $localconfig::app_server2, ],
+        tcp_address => $ipaddress,
+        remote_object_port => $localconfig::ehcache_remote_object_port,
+    }
+    
 }
 
 ###########################################################################

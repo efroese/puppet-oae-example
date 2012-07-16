@@ -64,7 +64,7 @@ class oae::preview_processor::init (
     $log_dir = '/var/log/sakaioae/preview'
     exec { 'mv preview logs':
         command => "mv ${oae::params::basedir}/nakamura/scripts/logs ${log_dir}",
-        onlyif  => "test -d ${oae::params::basedir}/nakamura/scripts/logs",
+        onlyif  => "[[ -e ${oae::params::basedir}/nakamura/scripts/logs && ! -L ${oae::params::basedir}/nakamura/scripts/logs ]]",
         require => Exec['mv nakamura'],
     }
 

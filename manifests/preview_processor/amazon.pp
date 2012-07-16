@@ -9,7 +9,7 @@ class oae::preview_processor::amazon {
     $common_packages = [ 'cronie', 'cpp', 'gcc', 'gcc-c++',
         'fontconfig-devel', 'libcurl-devel',
         'GraphicsMagick', 'ImageMagick', 'ImageMagick-devel',
-        'poppler-utils', 'rubygems', 'libgcj', ]
+        'poppler-utils', 'rubygems', ]
 
     package { $common_packages: ensure => installed }
 
@@ -22,10 +22,8 @@ class oae::preview_processor::amazon {
         unless  => 'rpm -q tk',
     }
 
-    package { 'pdftk-1.44-1.el6.rf.x86_64':
-         ensure   => present,
-         source   => "http://dl.dropbox.com/u/24606888/puppet-oae-files/pdftk-1.44-1.el6.rf.x86_64.rpm",
-         provider => 'rpm',
-         require  => Package['libgcj']
+    exec { 'install pdftk-1.44-1.el6.rf.x86_64':
+         command => "rpm -i --nodeps http://dl.dropbox.com/u/24606888/puppet-oae-files/pdftk-1.44-1.el6.rf.x86_64.rpm",
+         unless  => "rpm -q pdftk-1.44-1.el6.rf.x86_64."
     }
 }

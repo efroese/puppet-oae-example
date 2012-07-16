@@ -23,4 +23,13 @@ class oae::params(  $user='sakaioae',
         group  => $group,
         mode   => 750,
     }
+
+    $logs = '/var/log/sakaioae'
+
+    file { $logs:
+        ensure => directory,
+        owner  => root,
+        group  => $group,
+        mode   => 775,
+    }
 }

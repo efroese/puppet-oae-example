@@ -21,7 +21,6 @@ class oae::app::setup($store_dir=undef){
 
     package { 'curl': ensure => installed }
 
-    $log_dir  = "/var/log/sakaioae"
     $jar_dir  = "${oae::params::basedir}/jars"
 
     $sling_dir  = "${oae::params::basedir}/sling"
@@ -29,7 +28,7 @@ class oae::app::setup($store_dir=undef){
     $bin_dir    = "${oae::params::basedir}/bin"
     $save_dir    = "${oae::params::basedir}/save"
 
-    file { [ $jar_dir, $sling_dir, $config_dir, $log_dir, $bin_dir, $save_dir]:
+    file { [ $jar_dir, $sling_dir, $config_dir, $bin_dir, $save_dir]:
         ensure => directory,
         owner  => $oae::params::user,
         group  => $oae::params::user,
@@ -40,12 +39,12 @@ class oae::app::setup($store_dir=undef){
         ensure  => link,
         owner   => $oae::params::user,
         group   => $oae::params::user,
-        target  => $log_dir,
+        target  => $oae::params::logs,
     }
 
     cron { 'zip-oae-logs':
         user => $oae::params::user,
-        command => "(cd $log_dir && for log in `ls *.log.* | grep -v gz`; do gzip \$log; done)",
+        command => "(cd ${oae::params::logs} && for log in `ls *.log.* | grep -v gz`; do gzip \$log; done)",
         hour    => '1',
         minute  => '0',
     }
@@ -70,7 +69,7 @@ class oae::app::setup($store_dir=undef){
 
     file { '/etc/profile.d/sakaioae.sh':
         mode => 0755,
-        content => "export OAE_HOME=${oae::params::basedir}\nexport OAE_LOG_DIR=${log_dir}",
+        content => "export OAE_HOME=${oae::params::basedir}\nexport OAE_LOG_DIR=${oae::params::logs}",
     }
 
     # Create a directory that is siblings of the sling directory.

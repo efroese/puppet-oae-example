@@ -32,7 +32,7 @@
 #
 # OAE app nodes
 #
-node /oae-app[0-1].localdomain/ inherits oaenode {
+node oaeappservernode inherits oaenode {
 
     class { 'oae::app::server':
         downloadurl    => 'http://source.sakaiproject.org/maven2/org/sakaiproject/nakamura/org.sakaiproject.nakamura.app/1.3.0/org.sakaiproject.nakamura.app-1.3.0.jar',
@@ -100,13 +100,22 @@ node /oae-app[0-1].localdomain/ inherits oaenode {
         }
     }
 
-    # TODO - Make this dynamic using exported resources
+node oae-app0.localdomain/ inherits oaeappservernode {
+
     class { 'oae::app::ehcache':
-        peers       => [ $localconfig::app_server0_ip, $localconfig::app_server1_ip, ],
-        tcp_address => $ipaddress,
+        peers       => [ $localconfig::app_server1_ip, ],
+        tcp_address => $ipaddress
         remote_object_port => $localconfig::ehcache_remote_object_port,
     }
-    
+}
+
+node oae-app1.localdomain/ inherits oaeappservernode {
+
+    class { 'oae::app::ehcache':
+        peers       => [ $localconfig::app_server0_ip, ],
+        tcp_address => $ipadress
+        remote_object_port => $localconfig::ehcache_remote_object_port,
+    }
 }
 
 ###########################################################################

@@ -102,7 +102,7 @@ node /oae-app[0-1].localdomain/ inherits oaenode {
 
     # TODO - Make this dynamic using exported resources
     class { 'oae::app::ehcache':
-        peers       => [ $localconfig::app_server1, $localconfig::app_server2, ],
+        peers       => [ $localconfig::app_server0_ip, $localconfig::app_server1_ip, ],
         tcp_address => $ipaddress,
         remote_object_port => $localconfig::ehcache_remote_object_port,
     }
@@ -185,21 +185,19 @@ node 'oae-db0.localdomain' inherits oaenode {
         require  => Postgres::Database[$localconfig::db],
     }
 
-    $app_server0_ip = dnsLookup($localconfig::app_server0)
     postgres::clientauth { "host-${localconfig::db}-${localconfig::db_user}-${localconfig::app_server0}-md5":
        type => 'host',
        db   => $localconfig::db,
        user => $localconfig::db_user,
-       address => "${app_server0_ip}/32",
+       address => "${localconfig::app_server0_ip}/32",
        method  => 'md5',
     }
 
-    $app_server1_ip = dnsLookup($localconfig::app_server1)
     postgres::clientauth { "host-${localconfig::db}-${localconfig::db_user}-${localconfig::app_server1}-md5":
        type => 'host',
        db   => $localconfig::db,
        user => $localconfig::db_user,
-       address => "${app_server1_ip}/32",
+       address => "${localconfig::app_server1_ip}/32",
        method  => 'md5',
     }
 

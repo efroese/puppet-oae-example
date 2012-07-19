@@ -256,6 +256,16 @@ node 'oae-nfs.localdomain' inherits oaenode {
             [ $localconfig::app_server1_ip, 'rw' ],
         ],
     }
+
+    file { '/export': ensure => directory }
+    file { '/export/sakaioae/': ensure => directory, require => File['/export'] }
+    file { '/export/sakaioae/files': ensure => directory, require => File['/export/sakaioae'] }
+    file { '/export/sakaioae/files/bodies':
+        ensure => directory,
+        owner  => $oae::params::user,
+        group  => $oae::params::group,
+        require => File['/export/sakaioae'],
+    }
 }
 
 ###########################################################################

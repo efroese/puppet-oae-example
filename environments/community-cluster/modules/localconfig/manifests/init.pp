@@ -3,7 +3,7 @@
 # In your nodes file refer to these variables as $localconfig::variable_name.
 #
 class localconfig {
-    
+
     ###########################################################################
     # OS
     $user    = 'sakaioae'
@@ -33,10 +33,9 @@ class localconfig {
     $app_server1_ip = dnsLookup($app_server1)
 
     # ELBs for trusted and untrusted content
-
-    $http_name              = 'oae-appservers-365563856.us-west-1.elb.amazonaws.com'
+    $http_name              = 'oae-performance.sakaiproject.org'
     $http_name_untrusted    = 'oae-appservers-untrusted-414965918.us-west-1.elb.amazonaws.com'
-    
+
     $apache_lb_members = 'oae-appservers-365563856.us-west-1.elb.amazonaws.com'
     $apache_lb_members_untrusted = 'oae-appservers-untrusted-414965918.us-west-1.elb.amazonaws.com'
     $apache_lb_standbyurl = "https://${http_name}/maintenance.html"

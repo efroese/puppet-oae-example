@@ -33,7 +33,7 @@
 ###########################################################################
 # Apache Load Balancer
 #
-node oae-apache1.localdomain inherits oaenode {
+node 'oae-apache1.localdomain' inherits oaenode {
 
     $sslcert_country      = "US"
     $sslcert_state        = "MI"

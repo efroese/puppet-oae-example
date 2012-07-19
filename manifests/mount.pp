@@ -10,7 +10,7 @@ define nfs::mount($ensure=present,
     ensure          => $ensure,
     share           => $share,
     options         => $server_options,
-    guest           => $ipaddress,
+    guests          => [ $ipaddress, ],
     tag             => $server,
   }
 

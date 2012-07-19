@@ -155,6 +155,19 @@ node oaeappservernode inherits oaenode {
             'bind-address' => $ipaddress,
         }
     }
+
+    class { 'nfs::client': }
+    nfs::mount { "${oae::params::basedir}/store":
+        ensure      => present,
+        share       => '/export/sakaioae/files',
+        mountpoint  => "${oae::params::basedir}/store",
+        server      => $nfs_server_ip,
+    }
+
+    file { "${oae::params::basedir}/sling/store":
+        ensure => link,
+        target => "${oae::params::basedir}/store",
+    }
 }
 
 node 'oae-app0.localdomain' inherits oaeappservernode {
@@ -222,6 +235,25 @@ node 'oae-solr0.localdomain' inherits solrnode {
 node 'oae-preview.localdomain' inherits oaenode {
     class { 'oae::preview_processor::init':
         upload_url   => "https://${localconfig::http_name}/",
+    }
+}
+
+###########################################################################
+#
+# NFS Server
+#
+node 'oae-nfs.localdomain' inherits oaenode {
+
+    class { 'nfs::server': }
+
+    nfs::export { 'export-sakai-files-app0-app1-rw':
+        ensure  => present,
+        share   => '/export/sakaioae/files',
+        options => 'rw',
+        guests   => [
+            [ $localconfig::app_server0_ip, 'rw' ],
+            [ $localconfig::app_server1_ip, 'rw' ],
+        ],
     }
 }
 

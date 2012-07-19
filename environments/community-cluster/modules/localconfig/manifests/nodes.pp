@@ -161,7 +161,7 @@ node oaeappservernode inherits oaenode {
         ensure      => present,
         share       => '/export/sakaioae/files',
         mountpoint  => "${oae::params::basedir}/store",
-        server      => $nfs_server_ip,
+        server      => $localconfig::nfs_server_ip,
     }
 
     file { "${oae::params::basedir}/sling/store":

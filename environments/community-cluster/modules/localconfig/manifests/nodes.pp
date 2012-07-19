@@ -157,16 +157,17 @@ node oaeappservernode inherits oaenode {
     }
 
     class { 'nfs::client': }
-    nfs::mount { "${oae::params::basedir}/store":
+    nfs::mount { '/mnt/sakaioae-files':
         ensure      => present,
         share       => '/export/sakaioae/files',
-        mountpoint  => "${oae::params::basedir}/store",
+        mountpoint  => "/mnt/sakaioae-files",
         server      => $localconfig::nfs_server_ip,
     }
 
-    file { "${oae::params::basedir}/sling/store":
+    file { "${oae::params::basedir}/store":
         ensure => link,
-        target => "${oae::params::basedir}/store",
+        target => "/mnt/sakaioae-files/bodies",
+        require => Nfs::Mount['/mnt/sakaioae-files'],
     }
 }
 

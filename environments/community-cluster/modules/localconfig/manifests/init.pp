@@ -34,7 +34,7 @@ class localconfig {
 
     # ELBs for trusted and untrusted content
     $http_name              = 'oae-performance.sakaiproject.org'
-    $http_name_untrusted    = 'oae-appservers-untrusted-414965918.us-west-1.elb.amazonaws.com'
+    $http_name_untrusted    = 'content-oae-performance.sakaiproject.org'
 
     $apache_lb_members = ['oae-appservers-365563856.us-west-1.elb.amazonaws.com:8080']
     $apache_lb_members_untrusted = ['oae-appservers-untrusted-414965918.us-west-1.elb.amazonaws.com:8082']

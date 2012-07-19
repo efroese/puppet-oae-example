@@ -25,7 +25,7 @@ class localconfig {
     # App servers
     #$app_server0 = 'ec2-50-18-147-148.us-west-1.compute.amazonaws.com'
     #$app_server1 = 'ec2-204-236-168-81.us-west-1.compute.amazonaws.com'
-    $app_server0 = 'ip-10-176-227-221.us-west-1.compute.internal'
+    $app_server0 = 'ip-10-168-9-8.us-west-1.compute.internal'
     $app_server1 = 'ip-10-168-249-50.us-west-1.compute.internal'
 
     # These will eventually change.

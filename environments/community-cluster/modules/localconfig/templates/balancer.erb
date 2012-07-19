@@ -1,0 +1,25 @@
+# file managed by puppet
+
+<Proxy <%= balancer %>*>
+    Order deny,allow
+    Allow from all
+</Proxy>
+
+ProxyPreserveHost On
+ProxyPass <%= location %> <%= balancer %>/ stickysession=ROUTEID nofailover=Off
+
+<Proxy <%= balancer %>>
+
+    # Sticky sessions based on the BalancerMember route attribute
+    Header add Set-Cookie "ROUTEID=.%{BALANCER_WORKER_ROUTE}e; path=/" env=BALANCER_ROUTE_CHANGED
+
+<% members.each_with_index do |member, index| -%>
+    BalancerMember <%= proto %>://<%= member %><% params.each do |param| -%> <%= param %><% end -%> route=<%= index %>
+<% end %>
+
+<% if standbyurl != "" -%>
+    # this is our hot standby:
+    BalancerMember <%= standbyurl %> status=+H
+<% end -%>
+
+</Proxy>

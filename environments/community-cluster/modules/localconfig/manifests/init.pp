@@ -55,5 +55,5 @@ class localconfig {
     $ehcache_remote_object_port = '40002'
 
     # NFS
-    $nfs_server_ip = '184.169.169.86'
+    $nfs_server_ip = '10.171.118.239'
 }

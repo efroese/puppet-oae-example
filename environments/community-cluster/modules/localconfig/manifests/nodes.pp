@@ -55,11 +55,6 @@ node 'oae-apache1.localdomain' inherits oaenode {
         sslonly  => true,
     }
 
-    # Serve untrusted content on 443
-    apache::vhost-ssl { "${localconfig::http_name_untrusted}:443":
-        sslonly  => true,
-    }
-
     # Server pool for trusted content
     apache::balancer { "apache-balancer-oae-app":
         vhost      => "${localconfig::http_name}:443",
@@ -70,16 +65,6 @@ node 'oae-apache1.localdomain' inherits oaenode {
         params     => ["retry=20", "min=3", "flushpackets=auto"],
         standbyurl => $localconfig::apache_lb_standbyurl,
         template   => 'localconfig/balancer.erb',
-    }
-
-    # Server pool for untrusted content
-    apache::balancer { "apache-balancer-oae-app-untrusted":
-        vhost      => "${localconfig::http_name_untrusted}:443",
-        location   => "/",
-        proto      => "http",
-        members    => $localconfig::apache_lb_members_untrusted,
-        params     => ["retry=20", "min=3", "flushpackets=auto"],
-        standbyurl => $localconfig::apache_lb_standbyurl,
     }
 }
 

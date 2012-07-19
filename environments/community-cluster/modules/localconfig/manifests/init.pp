@@ -36,8 +36,8 @@ class localconfig {
     $http_name              = 'oae-performance.sakaiproject.org'
     $http_name_untrusted    = 'oae-appservers-untrusted-414965918.us-west-1.elb.amazonaws.com'
 
-    $apache_lb_members = 'oae-appservers-365563856.us-west-1.elb.amazonaws.com'
-    $apache_lb_members_untrusted = 'oae-appservers-untrusted-414965918.us-west-1.elb.amazonaws.com'
+    $apache_lb_members = ['oae-appservers-365563856.us-west-1.elb.amazonaws.com:8080']
+    $apache_lb_members_untrusted = ['oae-appservers-untrusted-414965918.us-west-1.elb.amazonaws.com:8082']
     $apache_lb_standbyurl = ""
 
     $javamemorymax = '6144'

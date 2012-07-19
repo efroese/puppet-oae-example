@@ -63,7 +63,4 @@ class localconfig {
     # ActiveMQ
     $activemq_brokers = [ app_server0, app_server1 ]
     $activemq_reconnect_delay = '5000'
-
-    # NFS
-    $nfs_server_ip = '184.169.169.86'
 }

@@ -6,6 +6,8 @@
 #
 # The example cluster consists of the following:
 #
+# Web Tier
+# Apache 10.168.199.125
 #
 # App tier - 2 OAE application nodes
 # Appservers (ELB in front):
@@ -27,6 +29,60 @@
 # Postgres (ELB in front):
 # DNS(ELB) -> OAE-Postgres-566174176.us-west-1.elb.amazonaws.com
 # SSH Port 2022
+
+###########################################################################
+# Apache Load Balancer
+#
+node oae-apache1.localdomain inherits oaenode {
+
+    $sslcert_country      = "US"
+    $sslcert_state        = "MI"
+    $sslcert_locality     = "Ann Arbor"
+    $sslcert_organisation = "The Sakai Foundation"
+
+    class { 'apache::ssl': }
+
+    # Headers is not in the default set of enabled modules
+    apache::module { 'headers': }
+    apache::module { 'deflate': }
+
+    apache::vhost { "${localconfig::http_name}:80":
+        template => 'localconfig/vhost-80.conf.erb',
+    }
+
+    # Serve trusted content on 443
+    apache::vhost-ssl { "${localconfig::http_name}:443":
+        sslonly  => true,
+    }
+
+    # Serve untrusted content on 443
+    apache::vhost-ssl { "${localconfig::http_name_untrusted}:443":
+        sslonly  => true,
+    }
+
+    # Server pool for trusted content
+    apache::balancer { "apache-balancer-oae-app":
+        vhost      => "${localconfig::http_name}:443",
+        location   => "/",
+        locations_noproxy => ['/server-status', '/balancer-manager'],
+        proto      => "http",
+        members    => $localconfig::apache_lb_members,
+        params     => ["retry=20", "min=3", "flushpackets=auto"],
+        standbyurl => $localconfig::apache_lb_standbyurl,
+        template   => 'localconfig/balancer.erb',
+    }
+
+    # Server pool for untrusted content
+    apache::balancer { "apache-balancer-oae-app-untrusted":
+        vhost      => "${localconfig::http_name_untrusted}:443",
+        location   => "/",
+        proto      => "http",
+        members    => $localconfig::apache_lb_members_untrusted,
+        params     => ["retry=20", "min=3", "flushpackets=auto"],
+        standbyurl => $localconfig::apache_lb_standbyurl,
+    }
+}
+
 
 ###########################################################################
 #

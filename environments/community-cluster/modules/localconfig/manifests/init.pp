@@ -36,6 +36,10 @@ class localconfig {
 
     $http_name              = 'oae-appservers-365563856.us-west-1.elb.amazonaws.com'
     $http_name_untrusted    = 'oae-appservers-untrusted-414965918.us-west-1.elb.amazonaws.com'
+    
+    $apache_lb_members = 'oae-appservers-365563856.us-west-1.elb.amazonaws.com'
+    $apache_lb_members_untrusted = 'oae-appservers-untrusted-414965918.us-west-1.elb.amazonaws.com'
+    $apache_lb_standbyurl = "https://${http_name}/maintenance.html"
 
     $javamemorymax = '6144'
     $javamemorymin = '256'

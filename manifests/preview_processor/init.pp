@@ -58,28 +58,19 @@ class oae::preview_processor::init (
         timeout => 0,
     }
 
-    # /usr/local/sakaioae/nakamura/scripts/logs -> '/var/log/sakaioae/preview'
-    # If /usr/local/sakaioae/nakamura/scripts/logs is not a symlink, move it to
-    # /var/log/sakaioae/preview and then let puppet fix up the perms
     $log_dir = '/var/log/sakaioae/preview'
-    exec { 'mv preview logs':
-        command => "mv ${oae::params::basedir}/nakamura/scripts/logs ${log_dir}",
-        onlyif  => "[[ -e ${oae::params::basedir}/nakamura/scripts/logs && ! -L ${oae::params::basedir}/nakamura/scripts/logs ]]",
-        provider => 'shell',
-        require => Exec['mv nakamura'],
-    }
 
     file { $log_dir:
         ensure  => directory,
         owner   => root,
         group   => $oae::params::group,
         mode    => 0775,
-        require => Exec['mv preview logs'],
+        require => Exec['mv nakamura'],
     }
 
     file { "${oae::params::basedir}/nakamura/scripts/logs":
         ensure  => link,
-        target  => '/var/log/sakaioae/preview',
+        target  => $log_dir,
         require => File[$log_dir],
     }
 

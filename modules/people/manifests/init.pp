@@ -10,29 +10,29 @@ class people {
 
         realize(Group['branden'])
         realize(User['branden'])
-        realize(Ssh_authorized_key['branden'])
+        realize(Ssh_authorized_key['branden-public'])
 
         realize(Group['aberg'])
         realize(User['aberg'])
-        realize(Ssh_authorized_key['aberg'])
+        realize(Ssh_authorized_key['aberg-public'])
 
         realize(Group['denbuzze'])
         realize(User['denbuzze'])
-        realize(Ssh_authorized_key['denbuzze'])
+        realize(Ssh_authorized_key['denbuzze-public'])
         
         realize(Group['zach'])
         realize(User['zach'])
-        realize(Ssh_authorized_key['zach'])
+        realize(Ssh_authorized_key['zach-public'])
         
         realize(Group['ctweney'])
         realize(User['ctweney'])
-        realize(Ssh_authorized_key['ctweney'])
+        realize(Ssh_authorized_key['ctweney-public'])
         
         realize(Group['chall'])
         realize(User['chall'])
-        realize(Ssh_authorized_key['chall'])
+        realize(Ssh_authorized_key['chall-public'])
         
         realize(Group['raydavis'])
         realize(User['raydavis'])
-        realize(Ssh_authorized_key['raydavis'])
+        realize(Ssh_authorized_key['raydavis-public'])
 }

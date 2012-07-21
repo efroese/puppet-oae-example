@@ -10,7 +10,7 @@ class people::users {
 		managehome => true,
 	}
 
-    @group { 'branden': guid => 900 }
+    @group { 'branden': gid => 900 }
     @user { 'branden':
         uid        => 900,
         groups     => [ 'branden', 'wheel' ],
@@ -23,7 +23,7 @@ class people::users {
         require => User['branden'],
     }
     
-    @group { 'denbuzze': guid => 901 }
+    @group { 'denbuzze': gid => 901 }
     @user { 'denbuzze':
         uid        => 901,
         groups     => [ 'denbuzze', 'wheel' ],
@@ -36,7 +36,7 @@ class people::users {
         require => User['denbuzze'],
     }
     
-    @group { 'raydavis': guid => 902 }
+    @group { 'raydavis': gid => 902 }
     @user { 'raydavis':
         uid        => 902,
         groups     => [ 'raydavis', 'wheel' ],
@@ -49,7 +49,7 @@ class people::users {
         require => User['raydavis'],
     }
     
-    @group { 'stuart': guid => 903 }
+    @group { 'stuart': gid => 903 }
     @user { 'stuart':
         uid        => 903,
         groups     => [ 'stuart', 'wheel' ],
@@ -62,7 +62,7 @@ class people::users {
         require => User['stuart'],
     }
 
-    @group { 'aberg': guid => 904 }
+    @group { 'aberg': gid => 904 }
     @user { 'aberg':
         uid        => 904,
         groups     => [ 'aberg', 'wheel' ],
@@ -75,7 +75,7 @@ class people::users {
         require => User['aberg'],
     }
 
-    @group { 'chall': guid => 905 }
+    @group { 'chall': gid => 905 }
     @user { 'chall':
         uid        => 905,
         groups     => [ 'chall', 'wheel' ],
@@ -88,7 +88,7 @@ class people::users {
         require => User['chall'],
     }
     
-    @group { 'ctweney': guid => 906 }
+    @group { 'ctweney': gid => 906 }
     @user { 'ctweney':
         uid        => 906,
         groups     => [ 'ctweney', 'wheel' ],
@@ -101,7 +101,7 @@ class people::users {
         require => User['ctweney'],
     }
     
-    @group { 'zach': guid => 907 }
+    @group { 'zach': gid => 907 }
     @user { 'zach':
         uid        => 907,
         groups     => [ 'zach', 'wheel' ],

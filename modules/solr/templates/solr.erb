@@ -4,9 +4,9 @@
 # description: Solr cluster node.
 
 # Global, editable VARS
-SOLR_JAVA_OPTS=" -Dsolr.solr.home=<%= solr_app %> -Djetty.port=8983 "
+SOLR_JAVA_OPTS=" -Dsolr.solr.home=<%= scope.lookupvar('solr::common::solr_home') %> -Djetty.port=8983 "
 SOLR_USER="<%= scope.lookupvar('solr::common::user') %>"
-SOLR_HOME=<%= solr_app %>
+SOLR_HOME="<%= scope.lookupvar('solr::common::solr_home') %>"
 JAVA_BIN="/usr/bin/java"
 
 INIT_PID="/var/run/solr.pid"

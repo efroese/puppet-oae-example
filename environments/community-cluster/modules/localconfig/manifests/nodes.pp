@@ -30,9 +30,19 @@
 # DNS(ELB) -> OAE-Postgres-566174176.us-west-1.elb.amazonaws.com
 # SSH Port 2022
 
+# If you use csshx to connect to all of the nodes here's the current command.
+
+# export OAE_ACCOUNT=efroese
+# csshx $OAE_ACCOUNT@oae-performance.sakaiproject.org \
+#   $OAE_ACCOUNT@ec2-50-18-147-148.us-west-1.compute.amazonaws.com \
+#   $OAE_ACCOUNT@ec2-204-236-168-81.us-west-1.compute.amazonaws.com \
+#   $OAE_ACCOUNT@OAE-Preview-2008250595.us-west-1.elb.amazonaws.com:2022 \
+#   $OAE_ACCOUNT@OAE-SOLR-426995740.us-west-1.elb.amazonaws.com:2022 \
+#   $OAE_ACCOUNT@OAE-Postgres-566174176.us-west-1.elb.amazonaws.com:2022
+#
+#
 ###########################################################################
 # Apache Load Balancer
-#
 node 'oae-apache1.localdomain' inherits oaenode {
 
     $sslcert_country      = "US"
@@ -83,11 +93,8 @@ node 'oae-apache1.localdomain' inherits oaenode {
     }
 }
 
-
 ###########################################################################
-#
 # OAE app nodes
-#
 node oaeappservernode inherits oaenode {
 
     class { 'oae::app::server':
@@ -190,10 +197,7 @@ node 'oae-app1.localdomain' inherits oaeappservernode {
 }
 
 ###########################################################################
-#
 # OAE Solr Nodes
-#
-
 node solrnode inherits oaenode {
 
     class { 'tomcat6':
@@ -222,17 +226,19 @@ node 'oae-solr0.localdomain' inherits solrnode {
 # node /oae-solr[1-3].localdomain/ inherits solrnode {
 # 
 #     class { 'solr::tomcat':
+#         user         => $localconfig::user,
+#         group        => $localconfig::group,
 #         master_url   => "${localconfig::solr_remoteurl}/replication",
-#         tomcat_home  => "${localconfig::basedir}/tomcat",
 #         tomcat_user  => $localconfig::user,
-#         tomcat_group => $localconfig::group, 
+#         tomcat_group => $localconfig::group,
+#         tomcat_home  => "${localconfig::basedir}/tomcat",
+#         solr_tarball => 'http://nodeload.github.com/sakaiproject/solr/tarball/org.sakaiproject.nakamura.solr-1.4.2',
+#         require      => Class['Tomcat6'],
 #     }
 # }
 
 ###########################################################################
-#
 # OAE Content Preview Processor Node
-#
 node 'oae-preview.localdomain' inherits oaenode {
     class { 'oae::preview_processor::init':
         upload_url   => "https://${localconfig::http_name}/",
@@ -240,9 +246,7 @@ node 'oae-preview.localdomain' inherits oaenode {
 }
 
 ###########################################################################
-#
 # NFS Server
-#
 node 'oae-nfs.localdomain' inherits oaenode {
 
     class { 'nfs::server': }
@@ -269,9 +273,7 @@ node 'oae-nfs.localdomain' inherits oaenode {
 }
 
 ###########################################################################
-#
 # Postgres Database Server
-#
 node 'oae-db0.localdomain' inherits oaenode {
 
     class { 'postgres::repos': stage => init }

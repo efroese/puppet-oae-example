@@ -40,9 +40,9 @@ class localconfig {
     $apache_lb_members_untrusted = ['oae-appservers-untrusted-414965918.us-west-1.elb.amazonaws.com:8082']
     $apache_lb_standbyurl = ""
 
-    $javamemorymax = '6144'
-    $javamemorymin = '256'
-    $javapermsize  = '256'
+    $javamemorymax = '4096'
+    $javamemorymin = '4096'
+    $javapermsize  = '512'
 
     # oae server protection service
     $serverprotectsec = 'pi34ht5p395hc24nw4tbc42twh'

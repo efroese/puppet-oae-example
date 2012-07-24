@@ -129,4 +129,19 @@ class people::users {
         user    => 'zach',
         key     => 'AAAAB3NzaC1yc2EAAAABIwAAAQEA0q5OsCWMLy4hSzC24f/l+iTNiHy7yzXlBretthTfrARNLcrrSxS/qh7m+/VfZJWastSLp46aGr88gq/T52cbM/3v7a0US0MXBETu31+ugUdUylp1n8PREJVUtSqnLMHUyEPFGjiUpzBUVlQHTib3RO/CBTKfhCxuInwuJ6wXAEBr3UEL5kqMOErojnJy4QVTRE0MA1HruRkOGn5MysKpvekviimVI5AOhM/ZGpbv+3yD6DRldwG9RLN5Y2WQJ+YiXtSacfPNq374GJ3Yc+7lBpPWuN+RI7UmDMzarDkVkIRjbgnoOQe0LnIrAo75AFN+VbWhCNbTJwYeT9qgs8Kkww==',
     }
+    
+    @group { 'arwhyte': gid => 799 }
+    @user { 'arwhyte':
+        ensure     => present,
+        uid        => 799,
+        groups     => [ 'wheel' ],
+        home       => '/home/arwhyte',
+        managehome => true,
+    }
+    @ssh_authorized_key { 'arwhyte-public':
+        ensure  => present,
+        type    => 'ssh-rsa',
+        user    => 'arwhyte',
+        key     => 'AAAAB3NzaC1yc2EAAAABIwAAAQEAwhfPEbV9UApTFSODW+5a4k4/mbd+9Sv7fpi2lkUlBMXdToV5GfxPogB92dhRGCOl/B4+9IpMFymaojzMYKlMBVMv0yLAvR+Ldi8Bwtgu21japSyIVBdhuBzU5lMFRiJL2cwHhmMwab3814BClMQL21PAibZOfqZOfYPO0QgOnGwtzPsD8RVzaIml5uiAI8tHldtxByx+vdB4XZzm5jjCPvmGi7aB4Q8Jf+GxJ4LxcBrB373lKru1vWGOd4TMhPcmj00gsrOQKOscle7EBI85b+6Ztggpy/2GmHh3xbqfCq4DZ/mVao5dVU9yH41oO8NthRGslTpXiTzocoXYeXcmNw==',
+    }
 }

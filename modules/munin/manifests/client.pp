@@ -1,4 +1,4 @@
-class munin::client($allowed_ip_regex = "127\\.0\\.0\\.1") {
+class munin::client($allowed_ip_regex = "127.0.0.1") {
   include munin::repos
   
   package { 'munin-node': ensure => installed }
@@ -18,6 +18,13 @@ class munin::client($allowed_ip_regex = "127\\.0\\.0\\.1") {
     mode    => '0644',
     content => template('munin/munin-node.conf.erb'),
     require => User['munin'],
+  }
+  
+  firewall { "4949 tcp open input":
+    chain => "INPUT",
+    proto => "tcp",
+    dport => "4949",
+    action => "accept",
   }
   
   service { 'munin-node':

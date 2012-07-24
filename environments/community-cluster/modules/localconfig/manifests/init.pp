@@ -28,6 +28,9 @@ class localconfig {
     $app_server0 = 'ip-10-168-9-8.us-west-1.compute.internal'
     $app_server1 = 'ip-10-168-249-50.us-west-1.compute.internal'
 
+    $app_server0_external = 'ec2-50-18-147-148.us-west-1.compute.amazonaws.com'
+    $app_server1_external = 'ec2-204-236-168-81.us-west-1.compute.amazonaws.com'
+
     # These will eventually change.
     $app_server0_ip = dnsLookup($app_server0)
     $app_server1_ip = dnsLookup($app_server1)

@@ -188,8 +188,8 @@ node 'oae-app0.localdomain' inherits oaeappservernode {
     
     class { 'munin::server':
       nodes => [
-        { 'name' => 'app0.oae-performance.sakaiproject.org', 'address' => $localconfig::app_server0 },
-        { 'name' => 'app1.oae-performance.sakaiproject.org', 'address' => $localconfig::app_server1 }
+        { 'name' => 'app0.oae-performance.sakaiproject.org', 'address' => $localconfig::app_server0_external },
+        { 'name' => 'app1.oae-performance.sakaiproject.org', 'address' => $localconfig::app_server1_external }
       ]
     }
 
@@ -204,7 +204,7 @@ node 'oae-app1.localdomain' inherits oaeappservernode {
     }
     
     class { 'munin::client':
-      allowed_ip_regex => $localconfig::app_server0
+      allowed_ip_regex => $localconfig::app_server0_external
     }
 }
 
@@ -234,7 +234,7 @@ node 'oae-solr0.localdomain' inherits solrnode {
     }
     
     class { 'munin::client':
-      allowed_ip_regex => $localconfig::app_server0
+      allowed_ip_regex => $localconfig::app_server0_external
     }
 }
 

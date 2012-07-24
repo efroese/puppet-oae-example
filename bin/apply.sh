@@ -15,6 +15,22 @@
 # For more info pass the --debug or --verbose flags.
 #
 
+if [[ $UID -ne 0 ]]; then
+cat << END
+***********************************************************
+* READ THIS!
+*
+* You didn't use sudo or aren't running as root.
+* Puppet needs to run as root.
+* Control + C soon and re-run with sudo.
+*
+* You're probably going to see some cryptic message about
+* undefined method manages_homedir?
+*
+***********************************************************
+END
+fi
+
 ENV_FILE=`pwd`/.environment
 ENV_ARG=""
 

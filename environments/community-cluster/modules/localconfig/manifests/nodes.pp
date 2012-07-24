@@ -185,6 +185,14 @@ node 'oae-app0.localdomain' inherits oaeappservernode {
         tcp_address => $ipaddress,
         remote_object_port => $localconfig::ehcache_remote_object_port,
     }
+    
+    class { 'munin::server':
+      nodes => [
+        { 'name' => 'app0.oae-performance.sakaiproject.org', 'address' => $localconfig::app_server0 },
+        { 'name' => 'app1.oae-performance.sakaiproject.org', 'address' => $localconfig::app_server1 }
+      ]
+    }
+
 }
 
 node 'oae-app1.localdomain' inherits oaeappservernode {
@@ -193,6 +201,10 @@ node 'oae-app1.localdomain' inherits oaeappservernode {
         peers       => [ $localconfig::app_server0_ip, ],
         tcp_address => $ipaddress,
         remote_object_port => $localconfig::ehcache_remote_object_port,
+    }
+    
+    class { 'munin::client':
+      allowed_ip_regex => $localconfig::app_server0
     }
 }
 
@@ -220,7 +232,10 @@ node 'oae-solr0.localdomain' inherits solrnode {
         solr_tarball => 'http://nodeload.github.com/sakaiproject/solr/tarball/org.sakaiproject.nakamura.solr-1.4.2',
         require      => Class['Tomcat6'],
     }
-
+    
+    class { 'munin::client':
+      allowed_ip_regex => $localconfig::app_server0
+    }
 }
 
 # node /oae-solr[1-3].localdomain/ inherits solrnode {
@@ -313,4 +328,6 @@ node 'oae-db0.localdomain' inherits oaenode {
     }
 
     postgres::backup::simple { $localconfig::db: }
+    
+
 }

@@ -1,5 +1,9 @@
 export JAVA_OPTS=" -server -Xms<%= javamemorymin %>m -Xmx<%= javamemorymax %>m -XX:PermSize=<%= javapermsize %>m "
 
+<% if javagclog -%>
+JAVA_OPTS = "$JAVA_OPTS -verbosegc -XX:+PrintGCDetails -Xloggc:<%= javagclog %> "
+<% end -%>
+
 <% if sparseconfig_properties_template -%>
 JAVA_OPTS="$JAVA_OPTS -Dsparseconfig=<%= scope.lookupvar('oae::params::basedir') %>/bin/sparseconfig.properties"
 <% end -%>

@@ -18,11 +18,11 @@
 #     ]
 #   }
 #
-class munin::server($nodes) {
+class munin::server($allowed_ip_regex = '127.0.0.1', $nodes) {
 
   include munin::repos
 
-  class { 'munin::client': allowed_ip_regex => '127.0.0.1' }  
+  class { 'munin::client': allowed_ip_regex => $allowed_ip_regex }  
   package { 'munin': ensure => installed }
 
   firewall { "4949 tcp open output":

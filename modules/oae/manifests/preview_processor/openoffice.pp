@@ -5,7 +5,7 @@
 class oae::preview_processor::openoffice {
 
     if $operatingsystem =~ /Amazon|Linux/ {
-        $pkg_string = 'libreoffice-core.x86_64 libreoffice-javafilter.x86_64 libreoffice-headless.x86_64 libreoffice-base.x86_64 libreoffice-calc.x86_64 libreoffice-draw.x86_64 libreoffice-math.x86_64 libreoffice-writer.x86_64'
+        $pkg_string = 'libreoffice-core.x86_64 libreoffice-javafilter.x86_64 libreoffice-headless.x86_64 libreoffice-calc.x86_64 libreoffice-draw.x86_64 libreoffice-math.x86_64 libreoffice-writer.x86_64'
         exec { 'install-ooo-centos':
             command => "yum -y --enablerepo=centos6-base install ${pkg_string}",
             unless  => "rpm -q ${pkg_string}",
@@ -17,7 +17,6 @@ class oae::preview_processor::openoffice {
                     'libreoffice-brand',
                     'libreoffice-javafilter',
                     'libreoffice-headless',
-                    'libreoffice-base-core',
                     'libreoffice-calc-core',
                     'libreoffice-draw-core',
                     'libreoffice-math-core',

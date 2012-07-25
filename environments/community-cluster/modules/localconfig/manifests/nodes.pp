@@ -91,6 +91,10 @@ node 'oae-apache1.localdomain' inherits oaenode {
         params     => ["retry=20", "min=3", "flushpackets=auto"],
         standbyurl => $localconfig::apache_lb_standbyurl,
     }
+    
+    class { 'munin::client':
+      allowed_ip_regex => '.*'
+    }
 }
 
 ###########################################################################
@@ -190,7 +194,11 @@ node 'oae-app0.localdomain' inherits oaeappservernode {
       allowed_ip_regex => '.*',
       nodes => [
         { 'name' => 'app0.oae-performance.sakaiproject.org', 'address' => $localconfig::app_server0_external },
-        { 'name' => 'app1.oae-performance.sakaiproject.org', 'address' => $localconfig::app_server1_external }
+        { 'name' => 'app1.oae-performance.sakaiproject.org', 'address' => $localconfig::app_server1_external },
+        { 'name' => 'solr.oae-performance.sakaiproject.org', 'address' => $localconfig::solr_master },
+        { 'name' => 'postgres.oae-performance.sakaiproject.org', 'address' => $localconfig::db_server },
+        { 'name' => 'preview.oae-performance.sakaiproject.org', 'address' => $localconfig::preview_processor_url },
+        { 'name' => 'apache.oae-performance.sakaiproject.org', 'address' => $localconfig::http_name }
       ]
     }
 
@@ -258,6 +266,10 @@ node 'oae-solr0.localdomain' inherits solrnode {
 node 'oae-preview.localdomain' inherits oaenode {
     class { 'oae::preview_processor::init':
         upload_url   => "https://${localconfig::http_name}/",
+    }
+    
+    class { 'munin::client':
+      allowed_ip_regex => '.*'
     }
 }
 
@@ -330,5 +342,7 @@ node 'oae-db0.localdomain' inherits oaenode {
 
     postgres::backup::simple { $localconfig::db: }
     
-
+    class { 'munin::client':
+      allowed_ip_regex => '.*'
+    }
 }

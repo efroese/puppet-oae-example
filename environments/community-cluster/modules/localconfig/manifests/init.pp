@@ -59,4 +59,8 @@ class localconfig {
 
     # NFS
     $nfs_server_ip = '10.171.118.239'
+    
+    # Preview Processor
+    $preview_processor_url = 'OAE-Preview-2008250595.us-west-1.elb.amazonaws.com'
+    
 }

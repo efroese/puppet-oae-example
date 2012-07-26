@@ -106,6 +106,7 @@ node oaeappservernode inherits oaenode {
         javamemorymax  => $localconfig::javamemorymax,
         javamemorymin  => $localconfig::javamemorymin,
         javapermsize   => $localconfig::javapermsize,
+        javagclog      => 'gc.log'
     }
     
     oae::app::server::sling_config {

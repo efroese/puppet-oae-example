@@ -30,7 +30,7 @@ class solr::jetty(
     $solr_home_tarball = "http://dl.dropbox.com/u/24606888/puppet-oae-files/home0.tgz",
     $solrconfig        = 'solr/solrconfig.xml.erb',
     $master_url        = 'set the master url',
-    $javagclog         = undef ) {
+    $javagclog) {
 
     # Make sure solr::common is executed BEFORE solr::jetty
     Class['solr::common'] -> Class['solr::jetty']

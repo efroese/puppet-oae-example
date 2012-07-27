@@ -42,7 +42,7 @@ class solr::tomcat (
     $basedir           = '/usr/local/solr',
     $user              = 'root',
     $group             = 'root',
-    $solr_tarball      = "http://nodeload.github.com/sakaiproject/solr/tarball/master",
+    $solr_tarball      = "https://nodeload.github.com/sakaiproject/nakamura/tarball/1.4.0-release-a",
     $solr_home_tarball = "http://dl.dropbox.com/u/24606888/puppet-oae-files/home0.tgz",
     $solrconfig        = 'solr/solrconfig.xml.erb',
     $master_url        = 'set the master url',
@@ -50,8 +50,7 @@ class solr::tomcat (
     $tomcat_user,
     $tomcat_group,
     $webapp_url            = 'http://dl.dropbox.com/u/24606888/puppet-oae-files/apache-solr-4.0-SNAPSHOT.war',
-    $solr_context_template = 'solr/solr-context.xml.erb',
-    $javagclog){
+    $solr_context_template = 'solr/solr-context.xml.erb'){
 
     # Make sure tomcat6 is executed BEFORE solr::tomcat
     Class['Tomcat6'] -> Class['solr::tomcat']

@@ -126,7 +126,7 @@ node oaeappservernode inherits oaenode {
         config => {
             'disable.protection.for.dev.mode' => false,
             'trusted.hosts'  => [
-                "localhost\\ \\=\\ https://localhost:8082",
+                "localhost:8080\\ \\=\\ http://localhost:8082",
                 "${localconfig::http_name}\\ \\=\\ https://${localconfig::http_name_untrusted}",
                 "${localconfig::apache_lb_members[0]}\\ \\=\\ http://${localconfig::apache_lb_members_untrusted[0]}"
             ],
@@ -262,6 +262,21 @@ node 'oae-solr0.localdomain' inherits solrnode {
     class { 'munin::client':
       allowed_ip_regex => '.*'
     }
+    
+    file { "/home/${localconfig::user}/.oae":
+      ensure  => directory,
+      owner   => $localconfig::user,
+      group   => $localconfig::group,
+      mode    => 644
+    }
+    
+    file { "/home/${localconfig::user}/.oae/data":
+      ensure  => directory,
+      owner   => $localconfig::user,
+      group   => $localconfig::group,
+      mode    => 644,
+      require => File["/home/${localconfig::user}/.oae"],
+    }
 }
 
 # node /oae-solr[1-3].localdomain/ inherits solrnode {
@@ -345,22 +360,22 @@ node 'oae-db0.localdomain' inherits oaenode {
         require  => Postgres::Database[$localconfig::db],
     }
 
-    postgres::clientauth { "host-${localconfig::db}-${localconfig::db_user}-${localconfig::app_server0}-md5":
+    postgres::clientauth { "all-md5":
        type => 'host',
        db   => $localconfig::db,
        user => $localconfig::db_user,
-       address => "${localconfig::app_server0_ip}/32",
+       address => "0.0.0.0/0",
        method  => 'md5',
     }
 
-    postgres::clientauth { "host-${localconfig::db}-${localconfig::db_user}-${localconfig::app_server1}-md5":
+    postgres::clientauth { "all-ident":
        type => 'host',
        db   => $localconfig::db,
        user => $localconfig::db_user,
-       address => "${localconfig::app_server1_ip}/32",
-       method  => 'md5',
+       address => "0.0.0.0/32",
+       method  => 'ident',
     }
-
+ 
     postgres::backup::simple { $localconfig::db: }
     
     class { 'munin::client':
@@ -373,7 +388,7 @@ node 'oae-db0.localdomain' inherits oaenode {
       ensure  => present,
       owner   => $localconfig::user,
       group   => $localconfig::group,
-      mode    => 644,
+      mode    => 600,
       content => template('postgres/pgpass.erb')
     }
     

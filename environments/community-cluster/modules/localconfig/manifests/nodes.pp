@@ -128,6 +128,7 @@ node oaeappservernode inherits oaenode {
             'trusted.hosts'  => [
                 "localhost\\ \\=\\ https://localhost:8082",
                 "${localconfig::http_name}\\ \\=\\ https://${localconfig::http_name_untrusted}",
+                "${localconfig::apache_lb_members[0]}\\ \\=\\ ${localconfig::apache_lb_members_untrusted[0]}"
             ],
             'trusted.secret' => $localconfig::serverprotectsec,
         }
@@ -305,6 +306,10 @@ node 'oae-nfs.localdomain' inherits oaenode {
 # Postgres Database Server
 node 'oae-db0.localdomain' inherits oaenode {
 
+    $db           = $localconfig::db
+    $db_user      = $localconfig::db_user
+    $db_password  = $localconfig::db_password
+
     class { 'postgres::repos': stage => init }
     class { 'postgres': }
 
@@ -345,5 +350,47 @@ node 'oae-db0.localdomain' inherits oaenode {
     
     class { 'munin::client':
       allowed_ip_regex => '.*'
+    }
+    
+    
+    # Add DB user automation scripts and environment
+    file { "/home/${localconfig::user}/.pgpass":
+      ensure  => present,
+      owner   => $localconfig::user,
+      group   => $localconfig::group,
+      mode    => 644,
+      content => template('postgres/pgpass.erb')
+    }
+    
+    file { "/home/${localconfig::user}/.oae":
+      ensure  => directory,
+      owner   => $localconfig::user,
+      group   => $localconfig::group,
+      mode    => 644
+    }
+    
+    file { "/home/${localconfig::user}/.oae/scripts":
+      ensure  => directory,
+      owner   => $localconfig::user,
+      group   => $localconfig::group,
+      mode    => 644,
+      require => File["/home/${localconfig::user}/.oae"],
+    }
+    
+    file { "/home/${localconfig::user}/.oae/data":
+      ensure  => directory,
+      owner   => $localconfig::user,
+      group   => $localconfig::group,
+      mode    => 644,
+      require => File["/home/${localconfig::user}/.oae"],
+    }
+    
+    file { "/home/${localconfig::user}/.oae/scripts/drop_all_tables.sql":
+      ensure  => present,
+      owner   => $localconfig::user,
+      group   => $localconfig::group,
+      mode    => 644,
+      content => template("oae/drop_all_tables.sql.erb"),
+      require => File["/home/${localconfig::user}/.oae/scripts"],
     }
 }

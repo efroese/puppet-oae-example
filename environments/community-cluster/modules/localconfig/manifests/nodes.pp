@@ -217,6 +217,21 @@ node 'oae-app1.localdomain' inherits oaeappservernode {
     class { 'munin::client':
       allowed_ip_regex => '.*'
     }
+    
+    file { "/home/${localconfig::user}/.oae":
+      ensure  => directory,
+      owner   => $localconfig::user,
+      group   => $localconfig::group,
+      mode    => 644
+    }
+    
+    file { "/home/${localconfig::user}/.oae/data":
+      ensure  => directory,
+      owner   => $localconfig::user,
+      group   => $localconfig::group,
+      mode    => 644,
+      require => File["/home/${localconfig::user}/.oae"],
+    }
 }
 
 ###########################################################################

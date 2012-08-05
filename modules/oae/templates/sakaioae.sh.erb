@@ -13,7 +13,8 @@ SAKAIOAE_HOME="<%= scope.lookupvar('oae::params::basedir') %>"
 SAKAIOAE_JAR="<%= scope.lookupvar('oae::params::basedir') %>/sakaioae.jar"
 JAVA_BIN="<%= java %>"
 
-# JAVA_BIN="-agentpath:/usr/local/yourkit/<%= yjp_filename %>/bin/linux-x86-64/libyjpagent.so=onexit=snapshot,dir=/tmp"
+# YourKit profiling
+# JAVA_BIN="$JAVA_BIN -agentpath:<%= scope.lookupvar('yourkit::root_dir') %>/<%= scope.lookupvar('yourkit::base_dir') %>/bin/linux-x86-64/libyjpagent.so=onexit=snapshot,dir=/home/<%= scope.lookupvar('oae::params::user') %>/Snapshots,monitors,sampling"
 
 INIT_PID="/var/run/${SAKAIOAE_USER}.pid"
 PROG="SakaiOAE"

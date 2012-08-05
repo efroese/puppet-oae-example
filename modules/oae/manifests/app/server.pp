@@ -54,9 +54,11 @@ class oae::app::server( $downloadurl = '',
     class { 'oae::app::setup':
         store_dir => $store_dir,
     }
-
-    # YourKit java profiling
-    $yjp_filename = "yjp-11.0.8-linux"
+    
+    class { 'yourkit':
+      user  => $oae::params::user,
+      group => $oae::params::user,
+    }
     
     file { "${oae::params::basedir}/sling/nakamura.properties":
         ensure  => present,
@@ -120,6 +122,7 @@ class oae::app::server( $downloadurl = '',
         mode    => '0755',
         content => template('oae/sakaioae.sh.erb'),
         notify  => Service['sakaioae'],
+        require => Class['Yourkit'],
     }
 
     service { 'sakaioae':
@@ -200,22 +203,11 @@ class oae::app::server( $downloadurl = '',
         command => "chown -R ${oae::params::user}:${oae::params::group} ${oae::params::basedir}/sling/config/org/apache",
     }
 
-    archive { "yourkit":
-      url             => "http://www.yourkit.com/download/${yjp_filename}.tar.bz2",
-      target          => "/usr/local",
-      extension       => "tar.bz2",
-      checksum        => false,
-      allow_insecure  => true,
-      creates         => "/usr/local/yourkit",
-      timeout         => 0,
-    }
-    
-    file { "/usr/local/yourkit":
+    # Set up the java profiler snapshot directory
+    file { "/home/${oae::params::user}/Snapshots":
       ensure    => directory,
       owner     => $oae::params::user,
       group     => $oae::params::user,
-      mode      => "0644",
-      require  => Archive["yourkit"],
+      mode      => '0755',
     }
-
 }

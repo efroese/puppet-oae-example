@@ -1,2 +1,6 @@
 # file managed by puppet
-# default empty
+<% if javagclog -%>
+JAVA_OPTS="$JAVA_OPTS -verbosegc -XX:+PrintGCDetails -Xloggc:<%= javagclog %> "
+<% end -%>
+
+export JAVA_OPTS

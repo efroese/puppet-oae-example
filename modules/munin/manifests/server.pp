@@ -25,13 +25,6 @@ class munin::server($allowed_ip_regex = '127.0.0.1', $nodes) {
   class { 'munin::client': allowed_ip_regex => $allowed_ip_regex }  
   package { 'munin': ensure => installed }
 
-  firewall { "4949 tcp open output":
-    chain => "OUTPUT",
-    proto => "tcp",
-    dport => "4949",
-    action => "accept",
-  }
-
   file { '/etc/munin/munin.conf':
     ensure  => file,
     mode    => '0644',

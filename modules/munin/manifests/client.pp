@@ -19,14 +19,7 @@ class munin::client($allowed_ip_regex = "127.0.0.1") {
     content => template('munin/munin-node.conf.erb'),
     require => User['munin'],
   }
-  
-  firewall { "4949 tcp open input":
-    chain => "INPUT",
-    proto => "tcp",
-    dport => "4949",
-    action => "accept",
-  }
-  
+
   service { 'munin-node':
     ensure  => running,
     require => [ User['munin'], File['/etc/munin/munin-node.conf'] ]

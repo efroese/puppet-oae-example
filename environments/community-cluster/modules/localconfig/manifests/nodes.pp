@@ -168,7 +168,14 @@ node oaeappservernode inherits oaenode {
             'bind-address' => $ipaddress,
         }
     }
-
+    
+    # Fix the max-calls limit on SlingMainServlet to avoid artificial boundaries
+    oae::app::server::sling_config { 'org.apache.sling.engine.impl.SlingMainServlet':
+      config => {
+        'sling.max.calls' => 20000
+      }
+    }
+    
     class { 'nfs::client': }
     nfs::mount { '/mnt/sakaioae-files':
         ensure      => present,

@@ -30,4 +30,6 @@ class people {
         
         realize(User['arwhyte'])
         realize(Ssh_authorized_key['arwhyte-public'])
+        
+        realize(Ssh_authorized_key['ec2-user-public'])
 }

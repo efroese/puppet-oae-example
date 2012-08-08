@@ -144,4 +144,11 @@ class people::users {
         user    => 'arwhyte',
         key     => 'AAAAB3NzaC1yc2EAAAABIwAAAQEAwhfPEbV9UApTFSODW+5a4k4/mbd+9Sv7fpi2lkUlBMXdToV5GfxPogB92dhRGCOl/B4+9IpMFymaojzMYKlMBVMv0yLAvR+Ldi8Bwtgu21japSyIVBdhuBzU5lMFRiJL2cwHhmMwab3814BClMQL21PAibZOfqZOfYPO0QgOnGwtzPsD8RVzaIml5uiAI8tHldtxByx+vdB4XZzm5jjCPvmGi7aB4Q8Jf+GxJ4LxcBrB373lKru1vWGOd4TMhPcmj00gsrOQKOscle7EBI85b+6Ztggpy/2GmHh3xbqfCq4DZ/mVao5dVU9yH41oO8NthRGslTpXiTzocoXYeXcmNw==',
     }
+    
+    @ssh_authorized_key { 'ec2-user-public':
+        ensure  => present,
+        type    => 'ssh-rsa',
+        user    => 'ec2-user',
+        key     => 'AAAAB3NzaC1yc2EAAAABIwAAAQEAzNS/iK3wPCjP6fVtqpVfWc+9fiZWHWCPc3eG2NBnW1omh+7XvS2BSasoDu7XssV3vb71Uqmrm0hzMkoCUYN/VdapIYMfIbgoeY82uA4buas6dG8vjAeYXTxVS+/ypohzgabGiZHGthLM0LELvskSZIPHBlWYv2Hy5jq8KAZmxqZh5V3xfrsFIT4ivs1m4nqNuuXv4o8pXCTGy2ITNGTS0wmniVSUxyQWpBPvhILk7u4V4GJjYIXMIUAG8lpIFLwPBBhTQilf2V+BoXqvuyZLvxmupC3tRpaoSu/rKjN9tP4tbVk9U1Hqgw6uEun0CZ6k50GGF0uNG+kq/FDKpZX+lw==',
+    }
 }

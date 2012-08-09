@@ -101,12 +101,20 @@ node 'oae-apache1.localdomain' inherits oaenode {
 # OAE app nodes
 node oaeappservernode inherits oaenode {
 
+    $yjp_parent = '/usr/local/yourkit'
+    $yjp_filename = 'yjp-11.0.8'
+    $yjp_remote_name = 'yjp-11.0.8-linux'
+    $yjp_agent_module = "${yjp_parent}/${yjp_filename}/bin/linux-x86-64/libyjpagent.so"
+    $yjp_snapshots_dir = "/home/${oae::params::user}/Snapshots"
+    
     class { 'oae::app::server':
         downloadurl    => 'http://source.sakaiproject.org/maven2/org/sakaiproject/nakamura/org.sakaiproject.nakamura.app/1.4.0/org.sakaiproject.nakamura.app-1.4.0.jar',
         javamemorymax  => $localconfig::javamemorymax,
         javamemorymin  => $localconfig::javamemorymin,
         javapermsize   => $localconfig::javapermsize,
-        javagclog      => 'gc.log'
+        javagclog      => 'gc.log',
+        yjp_agent_module  => $yjp_agent_module,
+        yjp_snapshots_dir => $yjp_snapshots_dir
     }
     
     oae::app::server::sling_config {
@@ -188,6 +196,14 @@ node oaeappservernode inherits oaenode {
         ensure => link,
         target => "/mnt/sakaioae-files/bodies",
         require => Nfs::Mount['/mnt/sakaioae-files'],
+    }
+    
+    class { 'yourkit':
+      user            => $oae::params::user,
+      group           => $oae::params::user,
+      remoteFileName  => $yjp_remote_name,
+      localFileName   => $yjp_filename,
+      rootDir         => $yjp_parent
     }
 }
 
@@ -350,45 +366,44 @@ node 'oae-db0.localdomain' inherits oaenode {
     class { 'postgres::repos': stage => init }
     class { 'postgres': }
 
-    postgres::database { $localconfig::db:
+    postgres::database { $db:
         ensure => present,
         require => Class['Postgres'],
     }
 
-    postgres::role { $localconfig::db_user:
+    postgres::role { $db_user:
         ensure   => present,
-        password => $localconfig::db_password,
-        require  => Postgres::Database[$localconfig::db],
+        password => $db_password,
+        require  => Postgres::Database[$db],
     }
 
     postgres::role { 'nakrole':
         ensure   => present,
-        password => $localconfig::db_password,
-        require  => Postgres::Database[$localconfig::db],
+        password => $db_password,
+        require  => Postgres::Database[$db],
     }
 
     postgres::clientauth { "all-md5":
        type => 'host',
-       db   => $localconfig::db,
-       user => $localconfig::db_user,
+       db   => $db,
+       user => $db_user,
        address => "0.0.0.0/0",
        method  => 'md5',
     }
 
     postgres::clientauth { "all-ident":
        type => 'host',
-       db   => $localconfig::db,
-       user => $localconfig::db_user,
+       db   => $db,
+       user => $db_user,
        address => "0.0.0.0/32",
        method  => 'ident',
     }
  
-    postgres::backup::simple { $localconfig::db: }
+    postgres::backup::simple { $db: }
     
     class { 'munin::client':
       allowed_ip_regex => '.*'
     }
-    
     
     # Add DB user automation scripts and environment
     file { "/home/${localconfig::user}/.pgpass":
@@ -396,7 +411,7 @@ node 'oae-db0.localdomain' inherits oaenode {
       owner   => $localconfig::user,
       group   => $localconfig::group,
       mode    => 600,
-      content => template('postgres/pgpass.erb')
+      content => template('localconfig/pgpass.erb')
     }
     
     file { "/home/${localconfig::user}/.oae":
@@ -427,7 +442,7 @@ node 'oae-db0.localdomain' inherits oaenode {
       owner   => $localconfig::user,
       group   => $localconfig::group,
       mode    => 644,
-      content => template("oae/drop_all_tables.sql.erb"),
+      content => template("localconfig/drop_all_tables.sql.erb"),
       require => File["/home/${localconfig::user}/.oae/scripts"],
     }
 }

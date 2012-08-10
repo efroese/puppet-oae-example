@@ -27,7 +27,7 @@ class solr::common (
     $basedir           = '/usr/local/solr',
     $user              = 'root',
     $group             = 'root',
-    $solr_tarball      = 'http://nodeload.github.com/sakaiproject/solr/tarball/master',
+    $solr_tarball      = 'https://nodeload.github.com/sakaiproject/nakamura/tarball/master',
     $solr_home_tarball = "http://dl.dropbox.com/u/24606888/puppet-oae-files/home0.tgz",
     $solrconfig        = 'solr/solrconfig.xml.erb', 
     $master_url        = 'set the master url') {
@@ -98,14 +98,14 @@ class solr::common (
     # Copy the configuration files.
     # /usr/local/solr/home0/conf/{stopwords,synonyms,protwords,...}.txt
     exec { 'copy-solr-resources':
-        command => "cp ${basedir}/solr-source/src/main/resources/*.txt ${solr_confdir}",
+        command => "cp ${basedir}/solr-source/bundles/solr/src/main/resources/*.txt ${solr_confdir}",
         creates => "${solr_confdir}/stopwords.txt",
         require => [ Exec['mv-solr-source'], File[$solr_confdir], ],
     }
 
     # /usr/local/solr/home0/conf/schema.xml
     file { "${solr_confdir}/schema.xml":
-        source => "${basedir}/solr-source/src/main/resources/schema.xml",
+        source => "${basedir}/solr-source/bundles/solr/src/main/resources/schema.xml",
         require => [ Exec['mv-solr-source'], File[$solr_confdir], ],
     }
 

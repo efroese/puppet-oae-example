@@ -16,6 +16,8 @@
 #
 # $javapermsize::  The max java perm gen space
 #
+# $javagclog::     The location of the verbosegc logs (optional)
+#
 # $sparseconfig_properties_template:: The template to use to render sparseconfig.properties (optional)
 #
 # $setenv_template::  The template to use to render the setenv.sh file. (optional)
@@ -42,6 +44,7 @@ class oae::app::server( $downloadurl = '',
                         $javamemorymax,
                         $javamemorymin,
                         $javapermsize,
+                        $javagclog = false,
                         $setenv_template ='oae/setenv.sh.erb',
                         $sparseconfig_properties_template = undef,
                         $store_dir=undef) {

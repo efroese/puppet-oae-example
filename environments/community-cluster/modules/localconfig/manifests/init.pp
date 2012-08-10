@@ -16,7 +16,7 @@ class localconfig {
     # Database setup
     $db          = 'nakamura'
     $db_server   = 'OAE-Postgres-566174176.us-west-1.elb.amazonaws.com'
-    $db_url      = "jdbc:postgresql://${db_server}/${db}?charSet\\=UTF-8&tcpKeepAlive=true"
+    $db_url      = "jdbc:postgresql://${db_server}/${db}?charSet\\=UTF-8&tcpKeepAlive\\=true"
     $db_driver   = 'org.postgresql.Driver'
     $db_user     = 'nakamura'
     $db_password = 'ironchef'
@@ -27,6 +27,9 @@ class localconfig {
     #$app_server1 = 'ec2-204-236-168-81.us-west-1.compute.amazonaws.com'
     $app_server0 = 'ip-10-168-9-8.us-west-1.compute.internal'
     $app_server1 = 'ip-10-168-249-50.us-west-1.compute.internal'
+
+    $app_server0_external = 'ec2-50-18-147-148.us-west-1.compute.amazonaws.com'
+    $app_server1_external = 'ec2-204-236-168-81.us-west-1.compute.amazonaws.com'
 
     # These will eventually change.
     $app_server0_ip = dnsLookup($app_server0)
@@ -40,9 +43,9 @@ class localconfig {
     $apache_lb_members_untrusted = ['oae-appservers-untrusted-414965918.us-west-1.elb.amazonaws.com:8082']
     $apache_lb_standbyurl = ""
 
-    $javamemorymax = '6144'
-    $javamemorymin = '256'
-    $javapermsize  = '256'
+    $javamemorymax = '4096'
+    $javamemorymin = '4096'
+    $javapermsize  = '512'
 
     # oae server protection service
     $serverprotectsec = 'pi34ht5p395hc24nw4tbc42twh'
@@ -56,4 +59,8 @@ class localconfig {
 
     # NFS
     $nfs_server_ip = '10.171.118.239'
+    
+    # Preview Processor
+    $preview_processor_url = 'OAE-Preview-2008250595.us-west-1.elb.amazonaws.com'
+    
 }

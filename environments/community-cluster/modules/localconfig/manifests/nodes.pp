@@ -101,6 +101,7 @@ node 'oae-apache1.localdomain' inherits oaenode {
 # OAE app nodes
 node oaeappservernode inherits oaenode {
 
+    # YJP variables are for the setenv.sh.erb template executed by oae::app::server to enable YourKit
     $yjp_parent = '/usr/local/yourkit'
     $yjp_filename = 'yjp-11.0.8'
     $yjp_remote_name = 'yjp-11.0.8-linux'
@@ -113,8 +114,7 @@ node oaeappservernode inherits oaenode {
         javamemorymin  => $localconfig::javamemorymin,
         javapermsize   => $localconfig::javapermsize,
         javagclog      => 'gc.log',
-        yjp_agent_module  => $yjp_agent_module,
-        yjp_snapshots_dir => $yjp_snapshots_dir
+        setenv_template => 'localconfig/setenv.sh.erb'        
     }
     
     oae::app::server::sling_config {
@@ -204,6 +204,13 @@ node oaeappservernode inherits oaenode {
       remoteFileName  => $yjp_remote_name,
       localFileName   => $yjp_filename,
       rootDir         => $yjp_parent
+    }
+    
+    file { $yjp_snapshots_dir:
+      ensure    => directory,
+      owner     => $oae::params::user,
+      group     => $oae::params::user,
+      mode      => '0755',
     }
 }
 

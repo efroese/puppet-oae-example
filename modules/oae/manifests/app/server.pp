@@ -22,12 +22,6 @@
 #
 # $setenv_template::  The template to use to render the setenv.sh file. (optional)
 #
-# $yjp_agent_module::     If YourKit is installed on the app server, this should be the path to the java agent module. (optional)
-# 
-# $yjp_enabled::  Whether or not YourKit Java Profiling should be enabled automatically when the app server starts up. (optional)
-#
-# $yjp_snapshots_dir::    If YourKit is installed on the app server, this should be the path where profiling snapshots should be taken. (optional)
-#
 # == Actions:
 #   Install a Sakai OAE app jar and start it up
 #
@@ -53,17 +47,14 @@ class oae::app::server( $downloadurl = '',
                         $javagclog = false,
                         $setenv_template ='oae/setenv.sh.erb',
                         $sparseconfig_properties_template = undef,
-                        $store_dir=undef,
-                        $yjp_enabled = false,
-                        $yjp_agent_module = false,
-                        $yjp_snapshots_dir = false) {
+                        $store_dir=undef) {
 
     Class['oae::app::setup'] -> Class['oae::app::server']
 
     class { 'oae::app::setup':
         store_dir => $store_dir,
     }
-    
+
     file { "${oae::params::basedir}/sling/nakamura.properties":
         ensure  => present,
         owner   => $oae::params::user,
@@ -126,7 +117,6 @@ class oae::app::server( $downloadurl = '',
         mode    => '0755',
         content => template('oae/sakaioae.sh.erb'),
         notify  => Service['sakaioae'],
-        require => Class['Yourkit'],
     }
 
     service { 'sakaioae':
@@ -205,15 +195,5 @@ class oae::app::server( $downloadurl = '',
     exec { "chown_sling_config_org_apache":
         refreshonly => true,
         command => "chown -R ${oae::params::user}:${oae::params::group} ${oae::params::basedir}/sling/config/org/apache",
-    }
-    
-    # Set up the YourKit snapshot directory if needed
-    if $yjp_snapshots_dir {
-      file { $yjp_snapshots_dir:
-        ensure    => directory,
-        owner     => $oae::params::user,
-        group     => $oae::params::user,
-        mode      => '0755',
-      }
     }
 }

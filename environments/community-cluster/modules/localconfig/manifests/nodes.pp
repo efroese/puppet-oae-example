@@ -91,17 +91,30 @@ node 'oae-apache1.localdomain' inherits oaenode {
         params     => ["retry=20", "min=3", "flushpackets=auto"],
         standbyurl => $localconfig::apache_lb_standbyurl,
     }
+    
+    class { 'munin::client':
+      allowed_ip_regex => '.*'
+    }
 }
 
 ###########################################################################
 # OAE app nodes
 node oaeappservernode inherits oaenode {
 
+    # YJP variables are for the setenv.sh.erb template executed by oae::app::server to enable YourKit
+    $yjp_parent = '/usr/local/yourkit'
+    $yjp_filename = 'yjp-11.0.8'
+    $yjp_remote_name = 'yjp-11.0.8-linux'
+    $yjp_agent_module = "${yjp_parent}/${yjp_filename}/bin/linux-x86-64/libyjpagent.so"
+    $yjp_snapshots_dir = "/home/${oae::params::user}/Snapshots"
+    
     class { 'oae::app::server':
-        downloadurl    => 'http://source.sakaiproject.org/maven2/org/sakaiproject/nakamura/org.sakaiproject.nakamura.app/1.3.0/org.sakaiproject.nakamura.app-1.3.0.jar',
+        downloadurl    => 'http://source.sakaiproject.org/maven2/org/sakaiproject/nakamura/org.sakaiproject.nakamura.app/1.4.0/org.sakaiproject.nakamura.app-1.4.0.jar',
         javamemorymax  => $localconfig::javamemorymax,
         javamemorymin  => $localconfig::javamemorymin,
         javapermsize   => $localconfig::javapermsize,
+        javagclog      => 'gc.log',
+        setenv_template => 'localconfig/setenv.sh.erb'        
     }
     
     oae::app::server::sling_config {
@@ -121,8 +134,9 @@ node oaeappservernode inherits oaenode {
         config => {
             'disable.protection.for.dev.mode' => false,
             'trusted.hosts'  => [
-                "localhost\\ \\=\\ https://localhost:8082",
+                "localhost:8080\\ \\=\\ http://localhost:8082",
                 "${localconfig::http_name}\\ \\=\\ https://${localconfig::http_name_untrusted}",
+                "${localconfig::apache_lb_members[0]}\\ \\=\\ http://${localconfig::apache_lb_members_untrusted[0]}"
             ],
             'trusted.secret' => $localconfig::serverprotectsec,
         }
@@ -162,7 +176,14 @@ node oaeappservernode inherits oaenode {
             'bind-address' => $ipaddress,
         }
     }
-
+    
+    # Fix the max-calls limit on SlingMainServlet to avoid artificial boundaries
+    oae::app::server::sling_config { 'org.apache.sling.engine.impl.SlingMainServlet':
+      config => {
+        'sling.max.calls' => 20000
+      }
+    }
+    
     class { 'nfs::client': }
     nfs::mount { '/mnt/sakaioae-files':
         ensure      => present,
@@ -176,6 +197,21 @@ node oaeappservernode inherits oaenode {
         target => "/mnt/sakaioae-files/bodies",
         require => Nfs::Mount['/mnt/sakaioae-files'],
     }
+    
+    class { 'yourkit':
+      user            => $oae::params::user,
+      group           => $oae::params::user,
+      remoteFileName  => $yjp_remote_name,
+      localFileName   => $yjp_filename,
+      rootDir         => $yjp_parent
+    }
+    
+    file { $yjp_snapshots_dir:
+      ensure    => directory,
+      owner     => $oae::params::user,
+      group     => $oae::params::user,
+      mode      => '0755',
+    }
 }
 
 node 'oae-app0.localdomain' inherits oaeappservernode {
@@ -185,6 +221,19 @@ node 'oae-app0.localdomain' inherits oaeappservernode {
         tcp_address => $ipaddress,
         remote_object_port => $localconfig::ehcache_remote_object_port,
     }
+    
+    class { 'munin::server':
+      allowed_ip_regex => '.*',
+      nodes => [
+        { 'name' => 'app0.oae-performance.sakaiproject.org', 'address' => $localconfig::app_server0_external },
+        { 'name' => 'app1.oae-performance.sakaiproject.org', 'address' => $localconfig::app_server1_external },
+        { 'name' => 'solr.oae-performance.sakaiproject.org', 'address' => $localconfig::solr_master },
+        { 'name' => 'postgres.oae-performance.sakaiproject.org', 'address' => $localconfig::db_server },
+        { 'name' => 'preview.oae-performance.sakaiproject.org', 'address' => $localconfig::preview_processor_url },
+        { 'name' => 'apache.oae-performance.sakaiproject.org', 'address' => $localconfig::http_name }
+      ]
+    }
+
 }
 
 node 'oae-app1.localdomain' inherits oaeappservernode {
@@ -193,6 +242,25 @@ node 'oae-app1.localdomain' inherits oaeappservernode {
         peers       => [ $localconfig::app_server0_ip, ],
         tcp_address => $ipaddress,
         remote_object_port => $localconfig::ehcache_remote_object_port,
+    }
+    
+    class { 'munin::client':
+      allowed_ip_regex => '.*'
+    }
+    
+    file { "/home/${localconfig::user}/.oae":
+      ensure  => directory,
+      owner   => $localconfig::user,
+      group   => $localconfig::group,
+      mode    => 644
+    }
+    
+    file { "/home/${localconfig::user}/.oae/data":
+      ensure  => directory,
+      owner   => $localconfig::user,
+      group   => $localconfig::group,
+      mode    => 644,
+      require => File["/home/${localconfig::user}/.oae"],
     }
 }
 
@@ -217,10 +285,28 @@ node 'oae-solr0.localdomain' inherits solrnode {
         tomcat_user  => $localconfig::user,
         tomcat_group => $localconfig::group,
         tomcat_home  => "${localconfig::basedir}/tomcat",
-        solr_tarball => 'http://nodeload.github.com/sakaiproject/solr/tarball/org.sakaiproject.nakamura.solr-1.4.2',
+        solr_tarball => 'https://nodeload.github.com/sakaiproject/nakamura/tarball/1.4.0-release-a',
         require      => Class['Tomcat6'],
     }
-
+    
+    class { 'munin::client':
+      allowed_ip_regex => '.*'
+    }
+    
+    file { "/home/${localconfig::user}/.oae":
+      ensure  => directory,
+      owner   => $localconfig::user,
+      group   => $localconfig::group,
+      mode    => 644
+    }
+    
+    file { "/home/${localconfig::user}/.oae/data":
+      ensure  => directory,
+      owner   => $localconfig::user,
+      group   => $localconfig::group,
+      mode    => 644,
+      require => File["/home/${localconfig::user}/.oae"],
+    }
 }
 
 # node /oae-solr[1-3].localdomain/ inherits solrnode {
@@ -242,6 +328,10 @@ node 'oae-solr0.localdomain' inherits solrnode {
 node 'oae-preview.localdomain' inherits oaenode {
     class { 'oae::preview_processor::init':
         upload_url   => "https://${localconfig::http_name}/",
+    }
+    
+    class { 'munin::client':
+      allowed_ip_regex => '.*'
     }
 }
 
@@ -276,41 +366,90 @@ node 'oae-nfs.localdomain' inherits oaenode {
 # Postgres Database Server
 node 'oae-db0.localdomain' inherits oaenode {
 
+    $db           = $localconfig::db
+    $db_user      = $localconfig::db_user
+    $db_password  = $localconfig::db_password
+
     class { 'postgres::repos': stage => init }
     class { 'postgres': }
 
-    postgres::database { $localconfig::db:
+    postgres::database { $db:
         ensure => present,
         require => Class['Postgres'],
     }
 
-    postgres::role { $localconfig::db_user:
+    postgres::role { $db_user:
         ensure   => present,
-        password => $localconfig::db_password,
-        require  => Postgres::Database[$localconfig::db],
+        password => $db_password,
+        require  => Postgres::Database[$db],
     }
 
     postgres::role { 'nakrole':
         ensure   => present,
-        password => $localconfig::db_password,
-        require  => Postgres::Database[$localconfig::db],
+        password => $db_password,
+        require  => Postgres::Database[$db],
     }
 
-    postgres::clientauth { "host-${localconfig::db}-${localconfig::db_user}-${localconfig::app_server0}-md5":
+    postgres::clientauth { "all-md5":
        type => 'host',
-       db   => $localconfig::db,
-       user => $localconfig::db_user,
-       address => "${localconfig::app_server0_ip}/32",
+       db   => $db,
+       user => $db_user,
+       address => "0.0.0.0/0",
        method  => 'md5',
     }
 
-    postgres::clientauth { "host-${localconfig::db}-${localconfig::db_user}-${localconfig::app_server1}-md5":
+    postgres::clientauth { "all-ident":
        type => 'host',
-       db   => $localconfig::db,
-       user => $localconfig::db_user,
-       address => "${localconfig::app_server1_ip}/32",
-       method  => 'md5',
+       db   => $db,
+       user => $db_user,
+       address => "0.0.0.0/32",
+       method  => 'ident',
     }
-
-    postgres::backup::simple { $localconfig::db: }
+ 
+    postgres::backup::simple { $db: }
+    
+    class { 'munin::client':
+      allowed_ip_regex => '.*'
+    }
+    
+    # Add DB user automation scripts and environment
+    file { "/home/${localconfig::user}/.pgpass":
+      ensure  => present,
+      owner   => $localconfig::user,
+      group   => $localconfig::group,
+      mode    => 600,
+      content => template('localconfig/pgpass.erb')
+    }
+    
+    file { "/home/${localconfig::user}/.oae":
+      ensure  => directory,
+      owner   => $localconfig::user,
+      group   => $localconfig::group,
+      mode    => 644
+    }
+    
+    file { "/home/${localconfig::user}/.oae/scripts":
+      ensure  => directory,
+      owner   => $localconfig::user,
+      group   => $localconfig::group,
+      mode    => 644,
+      require => File["/home/${localconfig::user}/.oae"],
+    }
+    
+    file { "/home/${localconfig::user}/.oae/data":
+      ensure  => directory,
+      owner   => $localconfig::user,
+      group   => $localconfig::group,
+      mode    => 644,
+      require => File["/home/${localconfig::user}/.oae"],
+    }
+    
+    file { "/home/${localconfig::user}/.oae/scripts/drop_all_tables.sql":
+      ensure  => present,
+      owner   => $localconfig::user,
+      group   => $localconfig::group,
+      mode    => 644,
+      content => template("localconfig/drop_all_tables.sql.erb"),
+      require => File["/home/${localconfig::user}/.oae/scripts"],
+    }
 }

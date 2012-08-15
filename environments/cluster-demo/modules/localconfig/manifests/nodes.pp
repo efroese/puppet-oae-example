@@ -203,7 +203,7 @@ node 'oae-solr0.localdomain' inherits solrnode {
         tomcat_user  => $localconfig::user,
         tomcat_group => $localconfig::group,
         tomcat_home  => "${localconfig::basedir}/tomcat",
-        solr_tarball => 'http://nodeload.github.com/sakaiproject/solr/tarball/org.sakaiproject.nakamura.solr-1.4.2',
+        solr_tarball => 'https://nodeload.github.com/sakaiproject/nakamura/tarball/1.4.0-release-a',
         require      => Class['Tomcat6'],
     }
 

@@ -62,11 +62,12 @@ class tomcat6 ( $parentdir               = '/usr/local',
                 $tomcat_user             = 'root',
                 $tomcat_group            = 'root',
                 $admin_user              = 'tomcat',
-                $admin_password          = 'tomcat'
+                $admin_password          = 'tomcat',
+                $javagclog               = "${parentdir}/tomcat/gc.log"
              ) {
-                    
+    
     $basedir     = "${parentdir}/tomcat"
-
+    
     archive::download { "apache-tomcat-${tomcat_version}.tar.gz":
         ensure        => present,
         url           => "${mirror}/tomcat-${tomcat_major_version}/v${tomcat_version}/bin/apache-tomcat-${tomcat_version}.tar.gz",

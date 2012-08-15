@@ -42,7 +42,7 @@ class solr::tomcat (
     $basedir           = '/usr/local/solr',
     $user              = 'root',
     $group             = 'root',
-    $solr_tarball      = "http://nodeload.github.com/sakaiproject/solr/tarball/master",
+    $solr_tarball      = "https://nodeload.github.com/sakaiproject/nakamura/tarball/1.4.0-release-a",
     $solr_home_tarball = "http://dl.dropbox.com/u/24606888/puppet-oae-files/home0.tgz",
     $solrconfig        = 'solr/solrconfig.xml.erb',
     $master_url        = 'set the master url',

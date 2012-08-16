@@ -144,6 +144,21 @@ class people::users {
         user    => 'arwhyte',
         key     => 'AAAAB3NzaC1yc2EAAAABIwAAAQEAwhfPEbV9UApTFSODW+5a4k4/mbd+9Sv7fpi2lkUlBMXdToV5GfxPogB92dhRGCOl/B4+9IpMFymaojzMYKlMBVMv0yLAvR+Ldi8Bwtgu21japSyIVBdhuBzU5lMFRiJL2cwHhmMwab3814BClMQL21PAibZOfqZOfYPO0QgOnGwtzPsD8RVzaIml5uiAI8tHldtxByx+vdB4XZzm5jjCPvmGi7aB4Q8Jf+GxJ4LxcBrB373lKru1vWGOd4TMhPcmj00gsrOQKOscle7EBI85b+6Ztggpy/2GmHh3xbqfCq4DZ/mVao5dVU9yH41oO8NthRGslTpXiTzocoXYeXcmNw==',
     }
+
+    @group { 'simong': gid => 798 }
+    @user { 'simong':
+        ensure     => present,
+        uid        => 798,
+        groups     => [ 'wheel' ],
+        home       => '/home/simong',
+        managehome => true,
+    }
+    @ssh_authorized_key { 'simong-public':
+        ensure  => present,
+        type    => 'ssh-rsa',
+        user    => 'simong',
+        key     => 'AAAAB3NzaC1yc2EAAAABIwAAAQEA0soT8Mx3eHVbfpqevzdoVSNU7QlQETqqH1N9vIMNucjT4/lEd2Hwb+taHNtx/PA8x4vPIoOjpAp2A9uzjgjLiKZ9spKt3+P+TrmqWysgImFDAIQ0isrA+IsQpjWPB1bxpnoNihiAnYAG5A3G4r6WByVVnmZumPCzDTsKda5USoyu0pNIZMoCUVMZLiFiDfORje83AH0Z81E7DDF6Gatw4vJhtR/FApgGm0MgDjfjW73Jww3PmQkgB4cIzLFugc87xWEDYbrVglg/nDqzPLMyjqnAeaKMUe6ztVGmIGISAoqnUFB5wnD9Z2Is3CQMszsh/tuV1ROXa1o88Bx0l7uVZQ==',
+    }
     
     @ssh_authorized_key { 'ec2-user-public':
         ensure  => present,

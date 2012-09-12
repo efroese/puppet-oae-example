@@ -16,6 +16,7 @@ node basenode {
 
     package { 'git' : ensure => installed }
     package { 'java-1.6.0-openjdk': ensure => installed }
+    package { 'bash-completion': ensure => installed }
 
     class { 'ntp':
         time_zone =>  '/usr/share/zoneinfo/America/Phoenix',
